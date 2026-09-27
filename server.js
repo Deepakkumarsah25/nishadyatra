@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const path = require("path");
-
+const sankalpRoutes = require("./routes/sankalpRoutes");
 dotenv.config();
 
 const app = express();
@@ -10,7 +10,7 @@ const app = express();
 // ================================
 // Environment Variables
 // ================================
-const PORT = process.env.PORT || 6000;
+const PORT = process.env.PORT || 3000;
 const MONGODB_URI = process.env.MONGODB_URI;
 
 // ================================
@@ -34,6 +34,7 @@ app.use(
   express.static(path.join(__dirname, "uploads"))
 );
 
+app.use("/sankalp-yatra", sankalpRoutes);
 // ================================
 // MongoDB Connection
 // ================================

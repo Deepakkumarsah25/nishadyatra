@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>संकल्प यात्रा से जुड़ें</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@500;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+    :root {
+      --red: #D72A2A;
+      --red-deep: #8C1A1A;
+      --gold: #E7A93C;
+      --cream: #FBF4EC;
+      --ink: #2A1414;
+      --ink-soft: #6B4F4F;
+      --line: #E9D9C8;
+      --white: #FFFFFF;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Noto Sans Devanagari', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+    h1,
+    h2,
+    h3,
+    .brand {
+      font-family: 'Noto Serif Devanagari', serif;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* ================= HEADER ================= */
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+
+      background: rgba(251, 244, 236, 0.96);
+      backdrop-filter: blur(10px);
+
+      border-bottom: 1px solid var(--line);
+    }
+
+    nav {
+      max-width: 1120px;
+      margin: auto;
+      padding: 12px 24px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      color: var(--red-deep);
+      font-size: 1.12rem;
+      font-weight: 700;
+    }
+
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+
+      border-radius: 50%;
+
+      background:
+        conic-gradient(
+          from 210deg,
+          var(--red),
+          var(--gold),
+          var(--red)
+        );
+
+      color: white;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-family: 'Noto Serif Devanagari', serif;
+      font-weight: 800;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+
+      padding: 9px 18px;
+
+      border: 1px solid var(--line);
+      border-radius: 999px;
+
+      color: var(--red-deep);
+      background: white;
+
+      font-weight: 600;
+
+      transition: 0.2s;
+    }
+
+    .back-btn:hover {
+      background: var(--red);
+      color: white;
+      border-color: var(--red);
+    }
+
+    /* ================= HERO ================= */
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+
+      text-align: center;
+
+      padding: 75px 20px 55px;
+
+      background:
+        radial-gradient(
+          ellipse at 15% 0%,
+          rgba(215, 42, 42, 0.15),
+          transparent 55%
+        ),
+        radial-gradient(
+          ellipse at 90% 0%,
+          rgba(231, 169, 60, 0.18),
+          transparent 50%
+        );
+    }
+
+    .kicker {
+      display: inline-block;
+
+      padding: 7px 16px;
+
+      border: 1px solid var(--line);
+      border-radius: 999px;
+
+      background: white;
+
+      color: var(--red-deep);
+
+      font-size: 0.88rem;
+      font-weight: 600;
+
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      color: var(--red-deep);
+
+      font-size: clamp(2rem, 5vw, 3.4rem);
+
+      line-height: 1.25;
+
+      margin-bottom: 16px;
+    }
+
+    .hero h1 span {
+      color: var(--gold);
+    }
+
+    .hero p {
+      max-width: 650px;
+
+      margin: auto;
+
+      color: var(--ink-soft);
+
+      font-size: 1rem;
+    }
+
+    /* ================= FORM AREA ================= */
+
+    .form-section {
+      padding: 20px 20px 80px;
+    }
+
+    .form-card {
+      max-width: 780px;
+      margin: auto;
+
+      background: var(--white);
+
+      border: 1px solid var(--line);
+      border-radius: 20px;
+
+      padding: 38px;
+
+      box-shadow:
+        0 25px 60px rgba(140, 26, 26, 0.10);
+    }
+
+    .form-heading {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .form-heading .icon {
+      width: 58px;
+      height: 58px;
+
+      margin: 0 auto 14px;
+
+      border-radius: 50%;
+
+      background: rgba(215, 42, 42, 0.09);
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 1.6rem;
+    }
+
+    .form-heading h2 {
+      color: var(--red-deep);
+
+      font-size: 1.7rem;
+
+      margin-bottom: 6px;
+    }
+
+    .form-heading p {
+      color: var(--ink-soft);
+      font-size: 0.92rem;
+    }
+
+    /* ================= FORM GRID ================= */
+
+    .form-grid {
+      display: grid;
+
+      grid-template-columns: 1fr 1fr;
+
+      gap: 22px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+
+      gap: 7px;
+    }
+
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      color: var(--red-deep);
+
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    label span {
+      color: var(--red);
+    }
+
+    input,
+    textarea {
+      width: 100%;
+
+      padding: 13px 15px;
+
+      border: 1.5px solid var(--line);
+      border-radius: 10px;
+
+      background: var(--cream);
+
+      color: var(--ink);
+
+      font-family: inherit;
+      font-size: 0.95rem;
+
+      outline: none;
+
+      transition:
+        border-color 0.2s,
+        box-shadow 0.2s,
+        background 0.2s;
+    }
+
+    input {
+      height: 48px;
+    }
+
+    textarea {
+      min-height: 115px;
+      resize: vertical;
+    }
+
+    input:focus,
+    textarea:focus {
+      background: white;
+
+      border-color: var(--red);
+
+      box-shadow:
+        0 0 0 3px rgba(215, 42, 42, 0.10);
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #A89191;
+    }
+
+    /* ================= CONSENT ================= */
+
+    .consent {
+      margin-top: 25px;
+
+      padding: 14px 16px;
+
+      background: var(--cream);
+
+      border: 1px solid var(--line);
+      border-radius: 10px;
+
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .consent input {
+      width: 18px;
+      height: 18px;
+
+      margin-top: 3px;
+
+      accent-color: var(--red);
+      flex-shrink: 0;
+    }
+
+    .consent label {
+      color: var(--ink-soft);
+
+      font-size: 0.82rem;
+      font-weight: 400;
+
+      line-height: 1.5;
+    }
+
+    /* ================= BUTTON ================= */
+
+    .submit-wrapper {
+      margin-top: 28px;
+      text-align: center;
+    }
+
+    .submit-btn {
+      width: 100%;
+
+      padding: 15px 24px;
+
+      border: none;
+      border-radius: 11px;
+
+      background: var(--red);
+
+      color: white;
+
+      font-family: inherit;
+
+      font-size: 1rem;
+      font-weight: 700;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 10px 24px rgba(215, 42, 42, 0.25);
+
+      transition:
+        transform 0.2s,
+        background 0.2s,
+        box-shadow 0.2s;
+    }
+
+    .submit-btn:hover {
+      background: var(--red-deep);
+
+      transform: translateY(-2px);
+
+      box-shadow:
+        0 14px 30px rgba(140, 26, 26, 0.28);
+    }
+
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+
+    /* ================= FOOT NOTE ================= */
+
+    .secure-note {
+      margin-top: 18px;
+
+      text-align: center;
+
+      color: var(--ink-soft);
+
+      font-size: 0.78rem;
+    }
+
+    /* ================= FOOTER ================= */
+
+    footer {
+      background: #210606;
+
+      color: #E9CFCF;
+
+      padding: 30px 20px;
+
+      text-align: center;
+    }
+
+    footer strong {
+      color: white;
+
+      font-family: 'Noto Serif Devanagari', serif;
+    }
+
+    /* ================= MOBILE ================= */
+
+    @media (max-width: 650px) {
+
+      nav {
+        padding: 11px 16px;
+      }
+
+      .brand {
+        font-size: 0.98rem;
+      }
+
+      .brand-mark {
+        width: 32px;
+        height: 32px;
+        font-size: 0.85rem;
+      }
+
+      .back-btn {
+        padding: 8px 13px;
+        font-size: 0.82rem;
+      }
+
+      .hero {
+        padding: 55px 18px 42px;
+      }
+
+      .hero h1 {
+        font-size: 2rem;
+      }
+
+      .form-section {
+        padding: 12px 14px 55px;
+      }
+
+      .form-card {
+        padding: 25px 18px;
+
+        border-radius: 16px;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+
+        gap: 18px;
+      }
+
+      .form-group.full {
+        grid-column: auto;
+      }
+
+      .form-heading {
+        margin-bottom: 25px;
+      }
+
+      .form-heading h2 {
+        font-size: 1.45rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <nav>
+
+      <a href="/" class="brand">
+        <span class="brand-mark">नि</span>
+        निषाद संकल्प अभियान
+      </a>
+
+      <a href="/" class="back-btn">
+        ← वापस जाएँ
+      </a>
+
+    </nav>
+  </header>
+
+
+  <!-- HERO -->
+  <section class="hero">
+
+    <span class="kicker">
+      समाज सेवा • एकता • संकल्प
+    </span>
+
+    <h1>
+      संकल्प यात्रा से <span>जुड़ें</span>
+    </h1>
+
+    <p>
+      निषाद संकल्प अभियान से जुड़ने के लिए नीचे अपना विवरण भरें।
+      आपका सहयोग और सहभागिता इस यात्रा को और मजबूत बनाएगी।
+    </p>
+
+  </section>
+
+
+  <!-- FORM -->
+  <section class="form-section">
+
+    <div class="form-card">
+
+      <div class="form-heading">
+
+        <div class="icon">
+          🤝
+        </div>
+
+        <h2>
+          अपना विवरण दर्ज करें
+        </h2>
+
+        <p>
+          सभी जानकारी सही एवं स्पष्ट रूप से भरें
+        </p>
+
+      </div>
+
+
+      <form action="/sankalp-yatra/register" method="POST">
+
+        <div class="form-grid">
+
+          <!-- NAME -->
+          <div class="form-group">
+
+            <label for="name">
+              पूरा नाम <span>*</span>
+            </label>
+
+            <input
+              type="text"
+              id="name"
+              name="name"
+              placeholder="अपना पूरा नाम दर्ज करें"
+              required
+              maxlength="100"
+            >
+
+          </div>
+
+
+          <!-- AGE -->
+          <div class="form-group">
+
+            <label for="age">
+              उम्र <span>*</span>
+            </label>
+
+            <input
+              type="number"
+              id="age"
+              name="age"
+              placeholder="उम्र दर्ज करें"
+              min="1"
+              max="120"
+              required
+            >
+
+          </div>
+
+
+          <!-- MOBILE -->
+          <div class="form-group">
+
+            <label for="mobile">
+              मोबाइल नंबर <span>*</span>
+            </label>
+
+            <input
+              type="tel"
+              id="mobile"
+              name="mobile"
+              placeholder="10 अंकों का मोबाइल नंबर"
+              pattern="[6-9][0-9]{9}"
+              maxlength="10"
+              inputmode="numeric"
+              required
+            >
+
+          </div>
+
+
+          <!-- EMAIL -->
+          <div class="form-group">
+
+            <label for="email">
+              ईमेल
+            </label>
+
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="example@email.com"
+              maxlength="150"
+            >
+
+          </div>
+
+
+          <!-- ADDRESS -->
+          <div class="form-group full">
+
+            <label for="address">
+              पूरा पता <span>*</span>
+            </label>
+
+            <textarea
+              id="address"
+              name="address"
+              placeholder="मकान नंबर, मोहल्ला / गाँव, शहर, जिला, राज्य आदि"
+              maxlength="500"
+              required
+            ></textarea>
+
+          </div>
+
+        </div>
+
+
+        <!-- CONSENT -->
+        <div class="consent">
+
+          <input
+            type="checkbox"
+            id="consent"
+            name="consent"
+            value="yes"
+            required
+          >
+
+          <label for="consent">
+            मैं सहमत हूँ कि मेरे द्वारा दी गई जानकारी का उपयोग
+            निषाद संकल्प अभियान से संबंधित संपर्क एवं आवश्यक
+            जानकारी साझा करने के लिए किया जा सकता है।
+          </label>
+
+        </div>
+
+
+        <!-- SUBMIT -->
+        <div class="submit-wrapper">
+
+          <button
+            type="submit"
+            class="submit-btn"
+          >
+            संकल्प यात्रा से जुड़ें
+          </button>
+
+        </div>
+
+
+        <p class="secure-note">
+          🔒 आपकी जानकारी सुरक्षित रूप से दर्ज की जाएगी।
+        </p>
+
+      </form>
+
+    </div>
+
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer>
+
+    <strong>
+      निषाद संकल्प अभियान
+    </strong>
+
+    <div>
+      समाज सेवा • शिक्षा • एकता
+    </div>
+
+  </footer>
+
+</body>
+</html>
