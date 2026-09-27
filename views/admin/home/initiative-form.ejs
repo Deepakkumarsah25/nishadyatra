@@ -1,0 +1,173 @@
+<%- include("../common/header") %>
+<%- include("../common/sidebar") %>
+
+<div class="admin-main">
+  <!-- Topbar -->
+  <header class="admin-topbar">
+    <div class="topbar-left">
+      <button type="button" class="mobile-menu-trigger" id="adminMobileMenuBtn" aria-label="Menu">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="page-heading">
+        <h1>
+          <a href="/admin/home/initiatives" style="color: var(--admin-text-muted); margin-right: 6px;">←</a>
+          <%= isEdit ? 'पहल कार्ड संपादित करें' : 'नई पहल कार्ड जोड़ें' %>
+        </h1>
+        <p>होम पेज कार्ड और उसके पॉपअप मॉडल (Action Modal) दोनों का डेटा नियंत्रित करें</p>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <a href="/admin/home/initiatives" class="btn-admin btn-admin-outline">वापस सूची पर जाएं</a>
+    </div>
+  </header>
+
+  <!-- Body -->
+  <div class="admin-body">
+    <% if (error) { %>
+      <div class="admin-alert admin-alert-error">⚠ <%= error %></div>
+    <% } %>
+
+    <div class="admin-card" style="max-width: 920px; margin: 0 auto;">
+      <div class="admin-card-header">
+        <h3>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+          पहल कार्ड एवं मॉडल विवरण
+        </h3>
+      </div>
+
+      <div class="admin-card-body">
+        <form action="<%= isEdit ? '/admin/home/initiatives/edit/' + initiative._id : '/admin/home/initiatives/new' %>" method="POST">
+          
+          <!-- Section 1: Card Front Details -->
+          <div style="font-size: 14px; font-weight: 800; color: var(--admin-primary-dark); margin-bottom: 14px; padding-bottom: 6px; border-bottom: 1px solid var(--admin-border-subtle);">
+            भाग 1: होम पेज कार्ड पर दिखने वाला विवरण (Card Front)
+          </div>
+
+          <div class="form-grid-3">
+            <div class="form-group">
+              <label for="key">यूनिक कुंजी (Unique Key) *</label>
+              <input type="text" id="key" name="key" class="form-control" placeholder="उदा. youth-wing" value="<%= initiative ? initiative.key : '' %>" required <%= isEdit ? 'readonly style="background:#f5eee8;"' : '' %> />
+              <div class="form-hint">केवल छोटे अक्षर व हाइफ़न (e.g. social-rights, youth-wing)</div>
+            </div>
+
+            <div class="form-group">
+              <label for="cardTag">कार्ड टैग (Tag) *</label>
+              <input type="text" id="cardTag" name="cardTag" class="form-control" placeholder="उदा. शिक्षा संवर्धन" value="<%= initiative ? initiative.cardTag : '' %>" required />
+            </div>
+
+            <div class="form-group">
+              <label for="iconKey">आइकॉन प्रकार (Icon)</label>
+              <select id="iconKey" name="iconKey" class="form-control">
+                <option value="scale" <%= initiative && initiative.iconKey === 'scale' ? 'selected' : '' %>>⚖️ न्याय / अधिकार (Scale)</option>
+                <option value="school" <%= initiative && initiative.iconKey === 'school' ? 'selected' : '' %>>🎓 शिक्षा / युवा (Cap)</option>
+                <option value="trending" <%= initiative && initiative.iconKey === 'trending' ? 'selected' : '' %>>📈 आर्थिक / स्वरोजगार (Growth)</option>
+                <option value="water" <%= initiative && initiative.iconKey === 'water' ? 'selected' : '' %>>💧 जल / नदी संरक्षण (Water)</option>
+                <option value="hospital" <%= initiative && initiative.iconKey === 'hospital' ? 'selected' : '' %>>🏥 आपदा / राहत दल (Relief)</option>
+                <option value="flag" <%= initiative && initiative.iconKey === 'flag' ? 'selected' : '' %>>🚩 सांस्कृतिक उत्सव / गौरव (Flag)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="title">कार्ड मुख्य शीर्षक (Card Title) *</label>
+              <input type="text" id="title" name="title" class="form-control" placeholder="उदा. शिक्षा सहायता एवं युवा मार्गदर्शन" value="<%= initiative ? initiative.title : '' %>" required />
+            </div>
+
+            <div class="form-group">
+              <label for="btnText">कार्ड बटन का नाम (Button Label) *</label>
+              <input type="text" id="btnText" name="btnText" class="form-control" placeholder="उदा. युवा विंग से संपर्क करें" value="<%= initiative ? initiative.btnText : 'सहयोग दें या जुड़ें' %>" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="description">कार्ड संक्षिप्त विवरण (Card Description) *</label>
+            <textarea id="description" name="description" class="form-control" rows="2" placeholder="कार्ड पर दिखने वाला 2 पंक्तियों का संक्षिप्त परिचय लिखें..." required><%= initiative ? initiative.description : '' %></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="points">कार्ड मुख्य बिंदु (Bullet Points - प्रत्येक लाइन एक नया बिंदु)</label>
+            <textarea id="points" name="points" class="form-control" rows="3" placeholder="प्रत्येक पंक्ति में एक मुख्य बिंदु लिखें..."><%= initiative && initiative.points ? initiative.points.join('\n') : '' %></textarea>
+            <div class="form-hint">हर नई लाइन पर एक बुलेट पॉइंट बनेगा।</div>
+          </div>
+
+          <!-- Section 2: Action Modal Popup Details -->
+          <div style="font-size: 14px; font-weight: 800; color: var(--admin-primary-dark); margin: 26px 0 14px; padding-bottom: 6px; border-bottom: 1px solid var(--admin-border-subtle);">
+            भाग 2: बटन दबाने पर खुलने वाले पॉपअप मॉडल का विवरण (Action Modal Popup)
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="modalTag">मॉडल प्रकोष्ठ टैग (Modal Tag)</label>
+              <input type="text" id="modalTag" name="modalTag" class="form-control" placeholder="उदा. शिक्षा व युवा प्रकोष्ठ" value="<%= initiative ? initiative.modalTag : '' %>" />
+            </div>
+
+            <div class="form-group">
+              <label for="modalTitle">मॉडल मुख्य शीर्षक (Modal Heading)</label>
+              <input type="text" id="modalTitle" name="modalTitle" class="form-control" placeholder="उदा. युवा विंग मार्गदर्शन एवं छात्र सहायता" value="<%= initiative ? initiative.modalTitle : '' %>" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="modalDescription">मॉडल विस्तृत विवरण (Modal Long Description)</label>
+            <textarea id="modalDescription" name="modalDescription" class="form-control" rows="3" placeholder="मॉडल में दिखाया जाने वाला विस्तृत विवरण..."><%= initiative ? initiative.modalDescription : '' %></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="modalHighlights">मॉडल मुख्य विशेषताएं (Modal Highlights - प्रति पंक्ति एक)</label>
+            <textarea id="modalHighlights" name="modalHighlights" class="form-control" rows="3" placeholder="हर नई लाइन पर एक विशेष सुविधा या कार्य लिखें..."><%= initiative && initiative.modalHighlights ? initiative.modalHighlights.join('\n') : '' %></textarea>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="helplineText">मॉडल हेल्पलाइन प्रदर्शित टेक्स्ट</label>
+              <input type="text" id="helplineText" name="helplineText" class="form-control" placeholder="युवा विंग हेल्पलाइन: +91 99999 99998" value="<%= initiative ? initiative.helplineText : '' %>" />
+            </div>
+
+            <div class="form-group">
+              <label for="helplineTel">कॉल करने हेतु नंबर (Dial Number)</label>
+              <input type="text" id="helplineTel" name="helplineTel" class="form-control" placeholder="+919999999998" value="<%= initiative ? initiative.helplineTel : '' %>" />
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="formTitle">मॉडल फॉर्म का शीर्षक (Form Title)</label>
+              <input type="text" id="formTitle" name="formTitle" class="form-control" placeholder="विद्यार्थी मार्गदर्शन आवेदन फॉर्म" value="<%= initiative ? initiative.formTitle : '' %>" />
+            </div>
+
+            <div class="form-group">
+              <label for="formSubmitText">मॉडल फॉर्म सबमिट बटन टेक्स्ट</label>
+              <input type="text" id="formSubmitText" name="formSubmitText" class="form-control" placeholder="युवा विंग से मार्गदर्शन प्राप्त करें" value="<%= initiative ? initiative.formSubmitText : '' %>" />
+            </div>
+          </div>
+
+          <!-- Section 3: Order and Status -->
+          <div class="form-grid-2" style="margin-top: 14px;">
+            <div class="form-group">
+              <label for="order">प्रदर्शन क्रम (Order)</label>
+              <input type="number" id="order" name="order" class="form-control" value="<%= initiative ? initiative.order : 0 %>" min="0" />
+            </div>
+
+            <div class="form-group" style="display: flex; align-items: center; gap: 12px; margin-top: 26px;">
+              <input type="checkbox" id="isActive" name="isActive" value="true" <%= !initiative || initiative.isActive ? 'checked' : '' %> style="width: 18px; height: 18px; accent-color: var(--admin-primary); cursor: pointer;" />
+              <label for="isActive" style="margin-bottom: 0; cursor: pointer; font-size: 14px;">इस पहल कार्ड को वेबसाइट पर सक्रिय (Active) रखें</label>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div style="display: flex; gap: 12px; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--admin-border-subtle);">
+            <button type="submit" class="btn-admin btn-admin-primary">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+              <span><%= isEdit ? 'अपडेट सुरक्षित करें' : 'पहल कार्ड सहेजें' %></span>
+            </button>
+            <a href="/admin/home/initiatives" class="btn-admin btn-admin-outline">रद्द करें</a>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include("../common/footer") %>

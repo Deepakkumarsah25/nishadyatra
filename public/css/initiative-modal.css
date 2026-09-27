@@ -1,0 +1,365 @@
+/* ==========================================================================
+   INITIATIVE-MODAL.CSS - Interactive Modal for What-We-Do Action Buttons
+   ========================================================================== */
+
+/* Modal Backdrop */
+.initiative-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(30, 16, 16, 0.65);
+  backdrop-filter: blur(5px);
+  z-index: 1100;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.initiative-modal-backdrop.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Modal Dialog Window */
+.initiative-modal-window {
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 25px 60px rgba(42, 27, 27, 0.28);
+  width: min(720px, 100%);
+  max-height: min(88vh, 760px);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  transform: translateY(24px) scale(0.97);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.initiative-modal-backdrop.active .initiative-modal-window {
+  transform: translateY(0) scale(1);
+}
+
+/* Modal Top Accent Line */
+.initiative-modal-window::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, var(--dark-red), var(--primary-red), var(--accent-gold), var(--primary-red));
+  z-index: 10;
+}
+
+/* Modal Header */
+.initiative-modal-header {
+  padding: 24px 28px 18px 28px;
+  background: linear-gradient(135deg, var(--bg-primary) 0%, #f4e8dc 100%);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.modal-header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.modal-category-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--primary-red), var(--dark-red));
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(215, 42, 42, 0.25);
+}
+
+.modal-category-icon svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+.modal-category-tag {
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: var(--accent-gold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  line-height: 1.3;
+  margin: 0;
+}
+
+.modal-close-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border-subtle);
+  background: #ffffff;
+  color: var(--text-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+}
+
+.modal-close-btn:hover {
+  background: var(--primary-red);
+  color: #ffffff;
+  border-color: var(--primary-red);
+  transform: rotate(90deg);
+}
+
+.modal-close-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+/* Modal Body Scrollable */
+.initiative-modal-body {
+  padding: 24px 28px;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.modal-overview-desc {
+  font-size: 0.98rem;
+  line-height: 1.65;
+  color: var(--text-brown);
+  margin: 0;
+}
+
+/* Highlights List Box */
+.modal-highlights-card {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+}
+
+.modal-card-label {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--dark-red);
+  margin: 0 0 12px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modal-highlights-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modal-highlight-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.92rem;
+  color: var(--text-dark);
+  line-height: 1.45;
+}
+
+.modal-highlight-item svg {
+  width: 18px;
+  height: 18px;
+  fill: var(--primary-red);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Modal Contact Helpline Bar */
+.modal-helpline-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.modal-helpline-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  background: #ffffff;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  color: var(--text-dark);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 700;
+  transition: all var(--transition-fast);
+}
+
+.modal-helpline-btn:hover {
+  background: var(--bg-primary);
+  border-color: var(--primary-red);
+  color: var(--primary-red);
+  transform: translateY(-2px);
+}
+
+.modal-helpline-btn svg {
+  width: 17px;
+  height: 17px;
+  fill: var(--primary-red);
+}
+
+/* Quick Action Form inside Modal */
+.modal-form-card {
+  background: #ffffff;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.modal-form-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin: 0 0 4px 0;
+}
+
+.modal-form-sub {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin: 0 0 16px 0;
+}
+
+.modal-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.modal-field.full-width {
+  grid-column: 1 / -1;
+}
+
+.modal-field label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.modal-field input,
+.modal-field select,
+.modal-field textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong);
+  font-family: inherit;
+  font-size: 0.9rem;
+  background: #ffffff;
+  color: var(--text-dark);
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.modal-field textarea {
+  resize: vertical;
+  min-height: 70px;
+}
+
+.modal-field input:focus,
+.modal-field select:focus,
+.modal-field textarea:focus {
+  border-color: var(--primary-red);
+  box-shadow: 0 0 0 3px rgba(215, 42, 42, 0.12);
+}
+
+.modal-submit-btn {
+  width: 100%;
+}
+
+.modal-success-banner {
+  display: none;
+  padding: 16px;
+  background: #edf7ed;
+  border: 1px solid #c8e6c9;
+  border-radius: var(--radius-md);
+  color: #1e4620;
+  font-weight: 700;
+  font-size: 0.92rem;
+  text-align: center;
+}
+
+/* Modal Footer */
+.initiative-modal-footer {
+  padding: 14px 28px;
+  background: var(--bg-primary);
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .initiative-modal-window {
+    max-height: 92vh;
+    border-radius: var(--radius-md);
+  }
+
+  .initiative-modal-header {
+    padding: 18px 20px;
+  }
+
+  .initiative-modal-body {
+    padding: 18px 20px;
+  }
+
+  .modal-form-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .modal-helpline-row {
+    flex-direction: column;
+  }
+
+  .modal-helpline-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

@@ -1,0 +1,129 @@
+<!-- ==========================================================================
+     QUICK ACTION SIDEBAR / DRAWER (Dynamic)
+     ========================================================================== -->
+
+<!-- Floating Sidebar Trigger Button -->
+<button type="button" class="sidebar-dock-trigger" id="sidebarTrigger" aria-label="त्वरित सेवाएं और सहायता खोलें">
+  <div class="sidebar-dock-icon">
+    <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h11" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" fill="none"/></svg>
+  </div>
+  <span class="sidebar-dock-label">त्वरित सेवाएं</span>
+</button>
+
+<!-- Backdrop Overlay -->
+<div class="sidebar-backdrop" id="sidebarBackdrop" tabindex="-1"></div>
+
+<!-- Sliding Sidebar Panel -->
+<aside class="sidebar-panel" id="sidebarPanel" aria-hidden="true" role="dialog" aria-labelledby="sidebarBrandTitle">
+  
+  <!-- Sidebar Header -->
+  <div class="sidebar-header">
+    <div class="sidebar-brand-box">
+      <div class="sidebar-brand-mark">नि</div>
+      <div>
+        <div class="sidebar-brand-title" id="sidebarBrandTitle"><%= typeof quickInfo !== 'undefined' && quickInfo.sidebarTitle ? quickInfo.sidebarTitle : 'निषाद संकल्प अभियान' %></div>
+        <div class="sidebar-brand-subtitle"><%= typeof quickInfo !== 'undefined' && quickInfo.sidebarSubtitle ? quickInfo.sidebarSubtitle : 'त्वरित सेवा एवं सहायता केंद्र' %></div>
+      </div>
+    </div>
+    <button type="button" class="sidebar-close-btn" id="sidebarClose" aria-label="बंद करें">
+      <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+
+  <!-- Sidebar Body -->
+  <div class="sidebar-body">
+    
+    <!-- Action Card: Online Pledge -->
+    <div class="sidebar-action-card">
+      <h3 class="sidebar-card-title">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="var(--primary-red)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+        <%= typeof quickInfo !== 'undefined' && quickInfo.pledgeBoxTitle ? quickInfo.pledgeBoxTitle : 'अभियान से संकल्पबद्ध जुड़ें' %>
+      </h3>
+      <p class="sidebar-card-desc">
+        <%= typeof quickInfo !== 'undefined' && quickInfo.pledgeBoxDesc ? quickInfo.pledgeBoxDesc : 'समाज के उत्थान और सशक्तिकरण के लिए अपना ऑनलाइन संकल्प दर्ज करें।' %>
+      </p>
+
+      <form class="sidebar-form" id="sidebarMembershipForm">
+        <div class="sidebar-input-group">
+          <label for="pledgeName">पूरा नाम *</label>
+          <input type="text" id="pledgeName" placeholder="अपना नाम दर्ज करें" required />
+        </div>
+
+        <div class="sidebar-input-group">
+          <label for="pledgePhone">मोबाइल नंबर *</label>
+          <input type="tel" id="pledgePhone" placeholder="10 अंकों का मोबाइल नंबर" pattern="[0-9]{10}" required />
+        </div>
+
+        <div class="sidebar-input-group">
+          <label for="pledgeDistrict">जिला / क्षेत्र</label>
+          <select id="pledgeDistrict">
+            <option value="प्रयागराज">प्रयागराज</option>
+            <option value="वाराणसी">वाराणसी</option>
+            <option value="गोरखपुर">गोरखपुर</option>
+            <option value="अयोध्या">अयोध्या</option>
+            <option value="मिर्ज़ापुर">मिर्ज़ापुर</option>
+            <option value="अन्य जिला">अन्य जिला</option>
+          </select>
+        </div>
+
+        <button type="submit" class="ny-btn ny-btn-primary sidebar-submit-btn">
+          <span>संकल्प दर्ज करें</span>
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+        </button>
+      </form>
+
+      <div id="sidebarFormSuccess" style="display:none; padding: 14px; background: #e8f5e9; border: 1px solid #c8e6c9; border-radius: 8px; color: #2e7d32; font-weight: 700; font-size: 0.9rem; text-align: center; margin-top: 10px;">
+        ✓ आपका संकल्प सफलतापूर्वक दर्ज कर लिया गया है। हमारे प्रतिनिधि शीघ्र संपर्क करेंगे।
+      </div>
+    </div>
+
+    <!-- Live Announcements Feed -->
+    <div>
+      <h4 style="font-size: 0.95rem; font-weight: 800; color: var(--text-dark); margin: 0 0 10px 0;">
+        📢 ताजा गतिविधियां एवं सूचनाएं
+      </h4>
+      <div class="sidebar-notice-list">
+        <% if (typeof notices !== 'undefined' && notices && notices.length > 0) { %>
+          <% notices.forEach(function(item) { %>
+            <div class="sidebar-notice-item">
+              <% if (item.dateText) { %>
+                <span class="sidebar-notice-date"><%= item.dateText %></span>
+              <% } %>
+              <p class="sidebar-notice-text"><%= item.title %></p>
+            </div>
+          <% }); %>
+        <% } else { %>
+          <div class="sidebar-notice-item">
+            <p class="sidebar-notice-text">शीघ्र ही आगामी शिविरों की सूचना दी जाएगी।</p>
+          </div>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Direct Helpline Support -->
+    <div class="sidebar-contact-box">
+      <h4 style="font-size: 0.92rem; font-weight: 800; color: var(--text-dark); margin: 0 0 4px 0;">
+        📞 त्वरित संपर्क व सहायता
+      </h4>
+      <% const telLink = (typeof quickInfo !== 'undefined' && quickInfo.helplineTel) ? quickInfo.helplineTel : '+919999999999'; %>
+      <% const telText = (typeof quickInfo !== 'undefined' && quickInfo.helplineText) ? quickInfo.helplineText : 'हेल्पलाइन: +91 99999 99999'; %>
+      <% const mailAddr = (typeof quickInfo !== 'undefined' && quickInfo.email) ? quickInfo.email : 'info@nishadsankalp.org'; %>
+
+      <a href="tel:<%= telLink %>" class="sidebar-contact-link">
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        <span><%= telText %></span>
+      </a>
+      <a href="mailto:<%= mailAddr %>" class="sidebar-contact-link">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6" stroke="var(--primary-red)" fill="none" stroke-width="1.8"/></svg>
+        <span><%= mailAddr %></span>
+      </a>
+    </div>
+
+  </div>
+
+  <!-- Sidebar Footer -->
+  <div class="sidebar-footer">
+    <%= typeof quickInfo !== 'undefined' && quickInfo.sidebarFooterText ? quickInfo.sidebarFooterText : '॥ जन-सेवा ही सच्चा संकल्प है ॥' %>
+  </div>
+
+</aside>

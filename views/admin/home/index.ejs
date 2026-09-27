@@ -1,0 +1,307 @@
+<%- include("../common/header") %>
+<%- include("../common/sidebar") %>
+
+<div class="admin-main">
+  <!-- Topbar -->
+  <header class="admin-topbar">
+    <div class="topbar-left">
+      <button type="button" class="mobile-menu-trigger" id="adminMobileMenuBtn" aria-label="Menu">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="page-heading">
+        <h1>
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--admin-primary)" stroke-width="2.2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          होम पेज प्रबंधन (Home Page Content Manager)
+        </h1>
+        <p>होम पेज के सभी सेक्शंस, टेक्स्ट, बैनर और फॉर्म्स को सीधे यहाँ से नियंत्रित करें</p>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <a href="/" target="_blank" class="view-site-btn">
+        <span>वेबसाइट लाइव देखें</span>
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/></svg>
+      </a>
+      <div class="admin-user-pill">
+        <div class="admin-user-avatar"><%= (admin && admin.name ? admin.name.charAt(0) : 'A').toUpperCase() %></div>
+        <div class="admin-user-info">
+          <strong><%= admin && admin.name ? admin.name : 'Admin' %></strong>
+          <small><%= admin && admin.role ? admin.role : 'Superadmin' %></small>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Body -->
+  <div class="admin-body">
+    <!-- Quick Statistics Grid -->
+    <style>
+      .home-stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 28px;
+      }
+      .home-stat-box {
+        background: #ffffff;
+        border: 1px solid var(--admin-border);
+        border-radius: 12px;
+        padding: 18px 20px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.02);
+      }
+      .stat-box-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background: var(--admin-primary-light);
+        color: var(--admin-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .stat-box-icon svg {
+        width: 24px;
+        height: 24px;
+      }
+      .stat-box-content strong {
+        display: block;
+        font-size: 24px;
+        font-weight: 800;
+        color: var(--admin-text-dark);
+        line-height: 1.1;
+      }
+      .stat-box-content span {
+        font-size: 12px;
+        color: var(--admin-text-muted);
+        font-weight: 600;
+      }
+
+      .modules-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+      .module-card {
+        background: #ffffff;
+        border: 1px solid var(--admin-border);
+        border-radius: 14px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+      .module-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(215, 42, 42, 0.08);
+        border-color: var(--admin-primary-border);
+      }
+      .module-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+      .module-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, var(--admin-primary), var(--admin-primary-dark));
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .module-icon svg {
+        width: 22px;
+        height: 22px;
+      }
+      .module-title h3 {
+        font-size: 16px;
+        font-weight: 800;
+        color: var(--admin-text-dark);
+        margin-bottom: 4px;
+      }
+      .module-title p {
+        font-size: 13px;
+        color: var(--admin-text-muted);
+        line-height: 1.5;
+      }
+      .module-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 18px;
+        padding-top: 16px;
+        border-top: 1px solid var(--admin-border-subtle);
+      }
+
+      @media (max-width: 900px) {
+        .home-stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .modules-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+
+    <div class="home-stats-grid">
+      <div class="home-stat-box">
+        <div class="stat-box-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        </div>
+        <div class="stat-box-content">
+          <strong><%= stats.heroSlidesCount %></strong>
+          <span>हीरो स्लाइडें (Hero Slides)</span>
+        </div>
+      </div>
+
+      <div class="home-stat-box">
+        <div class="stat-box-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+        </div>
+        <div class="stat-box-content">
+          <strong><%= stats.initiativesCount %></strong>
+          <span>कार्य एवं पहल (Initiatives)</span>
+        </div>
+      </div>
+
+      <div class="home-stat-box">
+        <div class="stat-box-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="stat-box-content">
+          <strong><%= stats.pillarsCount %></strong>
+          <span>प्रतिबद्धता आधार (Pillars)</span>
+        </div>
+      </div>
+
+      <div class="home-stat-box">
+        <div class="stat-box-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </div>
+        <div class="stat-box-content">
+          <strong><%= stats.noticesCount %></strong>
+          <span>ताजा सूचनाएं (Notices)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Manager Sections Grid -->
+    <div class="modules-grid">
+      <!-- 1. Hero Slider Manager -->
+      <div class="module-card">
+        <div>
+          <div class="module-header">
+            <div class="module-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            </div>
+            <div class="module-title">
+              <h3>1. मुख्य हीरो स्लाइडर (Hero Slider)</h3>
+              <p>होम पेज का मुख्य फुल-स्क्रीन बैनर, मुख्य शीर्षक, टैगलाइन, बैकग्राउंड फोटो और दोनों कॉल-टू-एक्शन बटन को जोड़ें या बदलें।</p>
+            </div>
+          </div>
+        </div>
+        <div class="module-actions">
+          <a href="/admin/home/hero" class="btn-admin btn-admin-primary">
+            <span>स्लाइडर प्रबंधित करें</span>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="/admin/home/hero/new" class="btn-admin btn-admin-outline">नई स्लाइड जोड़ें</a>
+        </div>
+      </div>
+
+      <!-- 2. What We Do & Initiatives Manager -->
+      <div class="module-card">
+        <div>
+          <div class="module-header">
+            <div class="module-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            </div>
+            <div class="module-title">
+              <h3>2. कार्यक्षेत्र एवं पहल (What We Do)</h3>
+              <p>सामाजिक अधिकार, युवा मार्गदर्शन, मत्स्य संपदा, नदी संरक्षण, बाढ़ राहत और सांस्कृतिक उत्सव के 6 कार्ड्स व उनके पॉपअप मॉडल का विवरण बदलें।</p>
+            </div>
+          </div>
+        </div>
+        <div class="module-actions">
+          <a href="/admin/home/initiatives" class="btn-admin btn-admin-primary">
+            <span>पहल प्रबंधित करें</span>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="/admin/home/initiatives/new" class="btn-admin btn-admin-outline">नया कार्ड जोड़ें</a>
+        </div>
+      </div>
+
+      <!-- 3. Why Choose Us Section -->
+      <div class="module-card">
+        <div>
+          <div class="module-header">
+            <div class="module-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div class="module-title">
+              <h3>3. प्रतिबद्धता एवं अटूट विश्वास (Why Choose Us)</h3>
+              <p>धरातलीय सक्रियता, निःस्वार्थ नेतृत्व, सटीक परिणाम के 4 आधार स्तंभ, प्रेरक उद्धरण (Quote) और संकल्प कार्ड के बिंदु संपादित करें।</p>
+            </div>
+          </div>
+        </div>
+        <div class="module-actions">
+          <a href="/admin/home/why-choose" class="btn-admin btn-admin-primary">
+            <span>प्रतिबद्धता सेक्शन बदलें</span>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- 4. Notices & Quick Sidebar -->
+      <div class="module-card">
+        <div>
+          <div class="module-header">
+            <div class="module-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            </div>
+            <div class="module-title">
+              <h3>4. ताजा सूचनाएं व साइडबार संपर्क (Notices & Sidebar)</h3>
+              <p>फ्लोटिंग साइडबार में आने वाली ताजा सूचनाएं, शिविर की तिथियां, हेल्पलाइन फोन नंबर, ईमेल और संकल्प फॉर्म की सेटिंग्स प्रबंधित करें।</p>
+            </div>
+          </div>
+        </div>
+        <div class="module-actions">
+          <a href="/admin/home/notices" class="btn-admin btn-admin-primary">
+            <span>सूचनाएं व संपर्क बदलें</span>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- 5. User Inquiries & Pledges -->
+      <div class="module-card" style="grid-column: 1 / -1;">
+        <div>
+          <div class="module-header">
+            <div class="module-icon" style="background: linear-gradient(135deg, #10b981, #059669);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <div class="module-title">
+              <h3>5. प्राप्त ऑनलाइन संकल्प एवं सहायता अनुरोध (Pledges & Inquiries)</h3>
+              <p>साइट विजिटर्स द्वारा साइडबार व विभिन्न पहल से भेजे गए संकल्प पत्र, संपर्क विवरण व समस्याओं की सूची देखें। (<%= stats.newInquiriesCount %> नए अनुरोध प्रतीक्षारत)</p>
+            </div>
+          </div>
+        </div>
+        <div class="module-actions">
+          <a href="/admin/home/inquiries" class="btn-admin btn-admin-primary">
+            <span>सभी संकल्प व अनुरोध देखें (<%= stats.inquiriesCount %>)</span>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include("../common/footer") %>

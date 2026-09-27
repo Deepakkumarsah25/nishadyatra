@@ -1,0 +1,23 @@
+    </div><!-- /.admin-main -->
+  </div><!-- /.dashboard-layout -->
+
+  <script>
+    // Mobile Sidebar Toggle
+    const mobileBtn = document.getElementById("adminMobileMenuBtn");
+    const sidebar = document.getElementById("adminSidebar");
+    const backdrop = document.getElementById("adminSidebarBackdrop");
+
+    if (mobileBtn && sidebar && backdrop) {
+      mobileBtn.addEventListener("click", () => {
+        sidebar.classList.toggle("open");
+        backdrop.classList.toggle("open");
+      });
+
+      backdrop.addEventListener("click", () => {
+        sidebar.classList.remove("open");
+        backdrop.classList.remove("open");
+      });
+    }
+  </script>
+</body>
+</html>
