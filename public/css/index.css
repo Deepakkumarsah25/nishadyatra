@@ -1,0 +1,187 @@
+/* ==========================================================================
+   INDEX.CSS - Global Design Tokens & Layout Utilities
+   ========================================================================== */
+
+:root {
+  --bg-primary: #fbf4ec;
+  --bg-card: #ffffff;
+  --bg-card-alt: #fdfaf6;
+  --border-subtle: #ead8c5;
+  --border-strong: #d9c1ab;
+
+  --primary-red: #d72a2a;
+  --dark-red: #8c1a1a;
+  --deep-red: #651111;
+  --accent-gold: #c97d10;
+
+  --text-dark: #2a1b1b;
+  --text-brown: #6b4f4f;
+  --text-muted: #876f62;
+  --text-light: #ffffff;
+
+  --shadow-sm: 0 2px 8px rgba(107, 79, 79, 0.06);
+  --shadow-md: 0 8px 24px rgba(140, 26, 26, 0.08);
+  --shadow-lg: 0 16px 40px rgba(140, 26, 26, 0.12);
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  --font-main: 'Mukta', 'Noto Sans Devanagari', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Rozha One', Georgia, serif;
+}
+
+/* Base resets & typography */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-main);
+  background-color: var(--bg-primary);
+  color: var(--text-dark);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Layout container */
+.ny-container {
+  width: min(1200px, calc(100% - 40px));
+  margin-inline: auto;
+}
+
+@media (max-width: 768px) {
+  .ny-container {
+    width: calc(100% - 28px);
+  }
+}
+
+/* Common Section Header */
+.section-header {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto 52px auto;
+}
+
+.section-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: rgba(215, 42, 42, 0.08);
+  border: 1px solid rgba(215, 42, 42, 0.2);
+  border-radius: var(--radius-full);
+  color: var(--primary-red);
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.section-tag svg {
+  width: 15px;
+  height: 15px;
+  fill: currentColor;
+}
+
+.section-title {
+  font-size: clamp(1.85rem, 3.2vw, 2.75rem);
+  font-weight: 800;
+  color: var(--text-dark);
+  line-height: 1.25;
+  margin: 0 0 16px 0;
+  letter-spacing: -0.01em;
+}
+
+.section-title .text-highlight {
+  color: var(--primary-red);
+  position: relative;
+  display: inline-block;
+}
+
+.section-title .text-highlight::after {
+  content: "";
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-red), transparent);
+  border-radius: 2px;
+  opacity: 0.45;
+}
+
+.section-subtitle {
+  font-size: clamp(1rem, 1.3vw, 1.15rem);
+  color: var(--text-brown);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Global button styles */
+.ny-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 26px;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: inherit;
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.ny-btn-primary {
+  background: linear-gradient(135deg, var(--primary-red) 0%, var(--dark-red) 100%);
+  color: #ffffff;
+  box-shadow: 0 6px 18px rgba(215, 42, 42, 0.28);
+}
+
+.ny-btn-primary:hover {
+  background: linear-gradient(135deg, #e43333 0%, #991d1d 100%);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(215, 42, 42, 0.35);
+}
+
+.ny-btn-outline {
+  background: transparent;
+  border-color: var(--primary-red);
+  color: var(--primary-red);
+}
+
+.ny-btn-outline:hover {
+  background: rgba(215, 42, 42, 0.08);
+  color: var(--dark-red);
+  transform: translateY(-2px);
+}
+
+.ny-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+  transition: transform var(--transition-fast);
+}
+
+.ny-btn:hover svg {
+  transform: translateX(3px);
+}
