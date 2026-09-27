@@ -1,0 +1,1135 @@
+/* =========================================================
+   NAVBAR - FIXED + FULL RESPONSIVE
+   ========================================================= */
+
+/* =========================================================
+   GLOBAL
+   ========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+
+  margin: 0;
+  padding: 0;
+
+  overflow-x: hidden;
+}
+
+/* =========================================================
+   NAVBAR HEIGHT VARIABLES
+   ========================================================= */
+
+:root {
+  --navbar-height: 64px;
+  --mobile-navbar-height: 60px;
+
+  --navbar-bg: rgba(251, 244, 236, 0.97);
+  --navbar-border: #e9d9c8;
+
+  --primary-red: #d72a2a;
+  --dark-red: #8c1a1a;
+  --text-brown: #6b4f4f;
+}
+
+/* =========================================================
+   BODY SCROLL LOCK
+   ========================================================= */
+
+body.drawer-open {
+  overflow: hidden !important;
+  touch-action: none;
+}
+
+/* =========================================================
+   FIXED HEADER
+   ========================================================= */
+
+.site-header {
+  position: fixed;
+
+  top: 0;
+  left: 0;
+  right: 0;
+
+  width: 100%;
+
+  /*
+    IMPORTANT:
+    Height fixed rahegi.
+    11vh nahi use karna.
+  */
+  height: var(--navbar-height);
+
+  min-height: var(--navbar-height);
+
+  z-index: 2000;
+
+  background: var(--navbar-bg);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  border-bottom:
+    1px solid var(--navbar-border);
+
+  /*
+    Safe area sirf top me
+  */
+  padding-top:
+    env(
+      safe-area-inset-top,
+      0px
+    );
+
+  /*
+    Content clipping nahi hoga
+  */
+  overflow: visible;
+
+  isolation: isolate;
+}
+
+/* =========================================================
+   NAVBAR CONTAINER
+   ========================================================= */
+
+.navbar {
+  width: 100%;
+
+  max-width: 1200px;
+
+  /*
+    Header ke andar exact height
+  */
+  height: 100%;
+
+  min-height: var(--navbar-height);
+
+  margin: 0 auto;
+
+  padding-left: 24px;
+  padding-right: 24px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 16px;
+
+  overflow: visible;
+}
+
+/* =========================================================
+   BRAND
+   ========================================================= */
+
+.brand {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: flex-start;
+
+  gap: 10px;
+
+  color: var(--dark-red);
+
+  font-family:
+    "Noto Serif Devanagari",
+    serif;
+
+  font-weight: 700;
+
+  font-size:
+    clamp(
+      0.9rem,
+      2vw,
+      1.12rem
+    );
+
+  line-height: 1;
+
+  text-decoration: none;
+
+  white-space: nowrap;
+
+  min-width: 0;
+
+  /*
+    Brand available space lega
+    lekin hamburger ko push nahi karega
+  */
+  flex: 1 1 auto;
+
+  overflow: hidden;
+}
+
+/* Brand text */
+
+.brand > span:last-child {
+  min-width: 0;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+/* =========================================================
+   BRAND CIRCLE
+   ========================================================= */
+
+.brand-mark {
+  width: 40px;
+
+  height: 40px;
+
+  min-width: 40px;
+
+  flex: 0 0 40px;
+
+  border-radius: 50%;
+
+  background:
+    conic-gradient(
+      from 210deg,
+      #d72a2a,
+      #e7a93c,
+      #d72a2a
+    );
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: #fff;
+
+  font-family:
+    "Noto Serif Devanagari",
+    serif;
+
+  font-size: 0.95rem;
+
+  font-weight: 800;
+
+  line-height: 1;
+}
+
+/* =========================================================
+   DESKTOP NAVIGATION
+   ========================================================= */
+
+.nav-links {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 4px;
+
+  list-style: none;
+
+  margin: 0;
+
+  padding: 0;
+}
+
+.nav-links li {
+  margin: 0;
+
+  padding: 0;
+}
+
+.nav-links a {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-height: 42px;
+
+  padding:
+    9px 16px;
+
+  border-radius: 999px;
+
+  color: var(--text-brown);
+
+  font-size: 0.95rem;
+
+  font-weight: 600;
+
+  line-height: 1.2;
+
+  text-align: center;
+
+  text-decoration: none;
+
+  white-space: nowrap;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.nav-links a:hover,
+.nav-links a:focus-visible {
+  background: var(--primary-red);
+
+  color: #fff;
+}
+
+/* =========================================================
+   HAMBURGER BUTTON
+   ========================================================= */
+
+.burger {
+  display: none;
+
+  width: 44px;
+
+  height: 44px;
+
+  min-width: 44px;
+
+  min-height: 44px;
+
+  flex: 0 0 44px;
+
+  padding: 0;
+
+  margin: 0;
+
+  border: 0;
+
+  outline: none;
+
+  background: transparent;
+
+  cursor: pointer;
+
+  border-radius: 8px;
+
+  position: relative;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex-direction: column;
+
+  gap: 0;
+
+  z-index: 2300;
+
+  -webkit-tap-highlight-color: transparent;
+
+  touch-action: manipulation;
+}
+
+/* Hamburger hover */
+
+.burger:hover {
+  background:
+    rgba(
+      215,
+      42,
+      42,
+      0.08
+    );
+}
+
+/* Hamburger focus */
+
+.burger:focus-visible {
+  outline:
+    2px solid var(--primary-red);
+
+  outline-offset: 2px;
+}
+
+/* =========================================================
+   HAMBURGER LINES
+   ========================================================= */
+
+.burger span {
+  display: block;
+
+  width: 26px;
+
+  height: 3px;
+
+  margin: 3px 0;
+
+  flex-shrink: 0;
+
+  border-radius: 5px;
+
+  background: var(--dark-red);
+
+  transition:
+    transform 0.3s ease,
+    opacity 0.25s ease;
+}
+
+/* =========================================================
+   HAMBURGER -> X
+   ========================================================= */
+
+.burger.open span:nth-child(1) {
+  transform:
+    translateY(6px)
+    rotate(45deg);
+}
+
+.burger.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.burger.open span:nth-child(3) {
+  transform:
+    translateY(-6px)
+    rotate(-45deg);
+}
+
+/* =========================================================
+   DRAWER OVERLAY
+   ========================================================= */
+
+.drawer-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  width: 100%;
+
+  height: 100%;
+
+  background:
+    rgba(
+      0,
+      0,
+      0,
+      0.45
+    );
+
+  opacity: 0;
+
+  visibility: hidden;
+
+  pointer-events: none;
+
+  touch-action: none;
+
+  overscroll-behavior: none;
+
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+
+  /*
+    Overlay navbar ke neeche
+  */
+  z-index: 1900;
+}
+
+.drawer-overlay.open {
+  opacity: 1;
+
+  visibility: visible;
+
+  pointer-events: auto;
+}
+
+/* =========================================================
+   TABLET + MOBILE
+   ========================================================= */
+
+@media (max-width: 860px) {
+
+  :root {
+    --mobile-navbar-height: 60px;
+  }
+
+  /* -------------------------------------------------------
+     HEADER
+     ------------------------------------------------------- */
+
+  .site-header {
+    height:
+      calc(
+        var(--mobile-navbar-height) +
+        env(
+          safe-area-inset-top,
+          0px
+        )
+      );
+
+    min-height:
+      calc(
+        var(--mobile-navbar-height) +
+        env(
+          safe-area-inset-top,
+          0px
+        )
+      );
+
+    top: 0;
+
+    left: 0;
+
+    right: 0;
+  }
+
+  /* -------------------------------------------------------
+     NAVBAR
+     ------------------------------------------------------- */
+
+  .navbar {
+    width: 100%;
+
+    height:
+      var(--mobile-navbar-height);
+
+    min-height:
+      var(--mobile-navbar-height);
+
+    padding-top: 0;
+
+    padding-bottom: 0;
+
+    padding-left:
+      max(
+        10px,
+        env(
+          safe-area-inset-left,
+          0px
+        )
+      );
+
+    padding-right:
+      max(
+        10px,
+        env(
+          safe-area-inset-right,
+          0px
+        )
+      );
+
+    gap: 8px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+  }
+
+  /* -------------------------------------------------------
+     BRAND
+     ------------------------------------------------------- */
+
+  .brand {
+    min-width: 0;
+
+    flex: 1 1 auto;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-start;
+
+    gap: 8px;
+
+    font-size:
+      clamp(
+        0.82rem,
+        3.5vw,
+        1rem
+      );
+
+    line-height: 1;
+  }
+
+  .brand-mark {
+    width: 34px;
+
+    height: 34px;
+
+    min-width: 34px;
+
+    flex: 0 0 34px;
+  }
+
+  /* -------------------------------------------------------
+     HAMBURGER
+     ------------------------------------------------------- */
+
+  .burger {
+    display: flex;
+
+    width: 44px;
+
+    height: 44px;
+
+    min-width: 44px;
+
+    min-height: 44px;
+
+    flex: 0 0 44px;
+
+    flex-shrink: 0;
+
+    margin-left: auto;
+
+    padding: 0;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-direction: column;
+
+    position: relative;
+
+    right: 0;
+
+    z-index: 2300;
+  }
+
+  .burger span {
+    width: 26px;
+
+    height: 3px;
+
+    margin: 3px 0;
+  }
+
+  /* =======================================================
+     RIGHT SIDE DRAWER
+     ======================================================= */
+
+  .nav-links {
+    position: fixed;
+
+    /*
+      Navbar ke exactly neeche
+    */
+    top:
+      calc(
+        var(--mobile-navbar-height) +
+        env(
+          safe-area-inset-top,
+          0px
+        )
+      );
+
+    right: 0;
+
+    left: auto;
+
+    width:
+      min(
+        320px,
+        85vw
+      );
+
+    height:
+      calc(
+        100dvh -
+        var(--mobile-navbar-height) -
+        env(
+          safe-area-inset-top,
+          0px
+        )
+      );
+
+    max-height:
+      calc(
+        100dvh -
+        var(--mobile-navbar-height) -
+        env(
+          safe-area-inset-top,
+          0px
+        )
+      );
+
+    margin: 0;
+
+    padding-top: 14px;
+
+    padding-left: 16px;
+
+    padding-right: 16px;
+
+    padding-bottom:
+      calc(
+        25px +
+        env(
+          safe-area-inset-bottom,
+          0px
+        )
+      );
+
+    background: #fbf4ec;
+
+    border-left:
+      1px solid var(--navbar-border);
+
+    border-top:
+      1px solid var(--navbar-border);
+
+    box-shadow:
+      -10px 10px 30px
+      rgba(
+        0,
+        0,
+        0,
+        0.20
+      );
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+    justify-content: flex-start;
+
+    gap: 6px;
+
+    overflow-y: auto;
+
+    overflow-x: hidden;
+
+    touch-action: pan-y;
+
+    overscroll-behavior: contain;
+
+    /*
+      CLOSED
+      Right side ke bahar
+    */
+    transform:
+      translate3d(
+        100%,
+        0,
+        0
+      );
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transition:
+      transform 0.3s ease,
+      opacity 0.25s ease,
+      visibility 0.3s ease;
+
+    z-index: 2100;
+  }
+
+  /* -------------------------------------------------------
+     DRAWER OPEN
+     ------------------------------------------------------- */
+
+  .nav-links.open {
+    transform:
+      translate3d(
+        0,
+        0,
+        0
+      );
+
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+  }
+
+  /* -------------------------------------------------------
+     DRAWER ITEMS
+     ------------------------------------------------------- */
+
+  .nav-links li {
+    width: 100%;
+
+    flex-shrink: 0;
+
+    list-style: none;
+
+    margin: 0;
+
+    padding: 0;
+  }
+
+  .nav-links a {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 100%;
+
+    min-height: 52px;
+
+    padding:
+      14px 16px;
+
+    border-radius: 10px;
+
+    border-bottom:
+      1px solid var(--navbar-border);
+
+    color: var(--text-brown);
+
+    font-size: 1rem;
+
+    font-weight: 600;
+
+    line-height: 1.3;
+
+    text-align: center;
+
+    text-decoration: none;
+
+    white-space: normal;
+
+    transition:
+      background 0.2s ease,
+      color 0.2s ease,
+      padding-left 0.2s ease;
+  }
+
+  .nav-links a:hover,
+  .nav-links a:focus-visible {
+    background:
+      var(--primary-red);
+
+    color: #fff;
+
+    padding-left: 16px;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+  :root {
+    --mobile-navbar-height: 58px;
+  }
+
+  .site-header {
+    height:
+      calc(
+        var(--mobile-navbar-height) +
+        env(
+          safe-area-inset-top,
+          0px
+        )
+      );
+
+    min-height:
+      calc(
+        var(--mobile-navbar-height) +
+        env(
+          safe-area-inset-top,
+          0px
+        )
+      );
+  }
+
+  .navbar {
+    height:
+      var(--mobile-navbar-height);
+
+    min-height:
+      var(--mobile-navbar-height);
+
+    padding-left:
+      max(
+        10px,
+        env(
+          safe-area-inset-left,
+          0px
+        )
+      );
+
+    padding-right:
+      max(
+        14px,
+        env(
+          safe-area-inset-right,
+          0px
+        )
+      );
+
+    gap: 6px;
+  }
+
+  .brand {
+    font-size: 0.88rem;
+
+    gap: 7px;
+  }
+
+  .brand-mark {
+    width: 33px;
+
+    height: 33px;
+
+    min-width: 33px;
+
+    flex: 0 0 33px;
+
+    font-size: 0.82rem;
+  }
+
+  .burger {
+    width: 44px;
+
+    height: 44px;
+
+    min-width: 44px;
+
+    min-height: 44px;
+
+    flex: 0 0 44px;
+  }
+
+  .burger span {
+    width: 25px;
+
+    height: 3px;
+  }
+
+  .nav-links {
+    width: 86vw;
+
+    max-width: 310px;
+  }
+}
+
+/* =========================================================
+   VERY SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 360px) {
+
+  :root {
+    --mobile-navbar-height: 56px;
+  }
+
+  .site-header {
+    height:
+      calc(
+        var(--mobile-navbar-height) +
+        env(
+          safe-area-inset-top,
+          0px
+        )
+      );
+
+    min-height:
+      calc(
+        var(--mobile-navbar-height) +
+        env(
+          safe-area-inset-top,
+          0px
+        )
+      );
+  }
+
+  .navbar {
+    height:
+      var(--mobile-navbar-height);
+
+    min-height:
+      var(--mobile-navbar-height);
+
+    padding-left:
+      max(
+        7px,
+        env(
+          safe-area-inset-left,
+          0px
+        )
+      );
+
+    padding-right:
+      max(
+        10px,
+        env(
+          safe-area-inset-right,
+          0px
+        )
+      );
+
+    gap: 4px;
+  }
+
+  .brand {
+    font-size: 0.78rem;
+
+    gap: 6px;
+  }
+
+  .brand-mark {
+    width: 31px;
+
+    height: 31px;
+
+    min-width: 31px;
+
+    flex: 0 0 31px;
+
+    font-size: 0.75rem;
+  }
+
+  .burger {
+    display: flex;
+
+    width: 42px;
+
+    height: 42px;
+
+    min-width: 42px;
+
+    min-height: 42px;
+
+    flex: 0 0 42px;
+  }
+
+  .burger span {
+    width: 23px;
+
+    height: 3px;
+
+    margin: 3px 0;
+  }
+
+  .nav-links {
+    width: 88vw;
+
+    max-width: 300px;
+  }
+}
+
+/* =========================================================
+   EXTRA SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 320px) {
+
+  :root {
+    --mobile-navbar-height: 54px;
+  }
+
+  .site-header {
+    height:
+      calc(
+        var(--mobile-navbar-height) +
+        env(
+          safe-area-inset-top,
+          0px
+        )
+      );
+
+    min-height:
+      calc(
+        var(--mobile-navbar-height) +
+        env(
+          safe-area-inset-top,
+          0px
+        )
+      );
+  }
+
+  .navbar {
+    height:
+      var(--mobile-navbar-height);
+
+    min-height:
+      var(--mobile-navbar-height);
+
+    padding-left: 6px;
+
+    padding-right: 8px;
+
+    gap: 3px;
+  }
+
+  .brand {
+    font-size: 0.74rem;
+
+    gap: 5px;
+  }
+
+  .brand-mark {
+    width: 30px;
+
+    height: 30px;
+
+    min-width: 30px;
+
+    flex: 0 0 30px;
+  }
+
+  .burger {
+    width: 42px;
+
+    height: 42px;
+
+    min-width: 42px;
+
+    min-height: 42px;
+
+    flex: 0 0 42px;
+  }
+
+  .burger span {
+    width: 22px;
+
+    height: 3px;
+  }
+
+  .nav-links {
+    width: 90vw;
+
+    max-width: 290px;
+  }
+}
+
+/* =========================================================
+   LARGE DESKTOP
+   ========================================================= */
+
+@media (min-width: 1200px) {
+
+  .navbar {
+    padding-left: 0;
+
+    padding-right: 0;
+  }
+}

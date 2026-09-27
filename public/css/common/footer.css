@@ -1,0 +1,355 @@
+/* =========================================
+   NISHAD SANKALP ABHIYAN
+   MODERN LIGHT FOOTER
+   ========================================= */
+
+:root {
+  --footer-bg: #fbf4ec;
+  --footer-border: #ead8c5;
+  --footer-red: #d72a2a;
+  --footer-dark-red: #8c1a1a;
+  --footer-text: #6b4f4f;
+  --footer-muted: #876f62;
+}
+
+/* Footer */
+
+.site-footer {
+  width: 100%;
+  margin-top: 70px;
+
+  background: var(--footer-bg);
+
+  border-top: 1px solid var(--footer-border);
+
+  color: var(--footer-text);
+}
+
+/* Red top line */
+
+.site-footer::before {
+  content: "";
+
+  display: block;
+
+  width: 100%;
+  height: 3px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--footer-red),
+    var(--footer-dark-red),
+    var(--footer-red),
+    transparent
+  );
+}
+
+/* =========================================
+   MAIN
+   ========================================= */
+
+.footer-main {
+  width: min(1100px, calc(100% - 48px));
+
+  margin: 0 auto;
+
+  padding: 45px 0 35px;
+
+  display: grid;
+
+  grid-template-columns:
+    1.7fr
+    1fr
+    1fr;
+
+  gap: 70px;
+}
+
+/* =========================================
+   BRAND
+   ========================================= */
+
+.footer-brand {
+  max-width: 400px;
+}
+
+.footer-logo {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  text-decoration: none;
+
+  color: var(--footer-dark-red);
+
+  font-size: 19px;
+
+  font-weight: 800;
+}
+
+.footer-logo-mark {
+  width: 40px;
+  height: 40px;
+
+  flex: 0 0 40px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: var(--footer-red);
+
+  color: #ffffff;
+
+  font-size: 19px;
+
+  font-weight: 800;
+
+  box-shadow:
+    0 5px 12px rgba(215, 42, 42, 0.16);
+}
+
+.footer-brand p {
+  margin: 16px 0 0;
+
+  color: var(--footer-muted);
+
+  font-size: 14px;
+
+  line-height: 1.8;
+}
+
+/* =========================================
+   HEADINGS
+   ========================================= */
+
+.footer-links h3,
+.footer-contact h3 {
+  position: relative;
+
+  margin: 2px 0 18px;
+
+  color: var(--footer-dark-red);
+
+  font-size: 16px;
+
+  font-weight: 800;
+}
+
+.footer-links h3::after,
+.footer-contact h3::after {
+  content: "";
+
+  display: block;
+
+  width: 28px;
+  height: 2px;
+
+  margin-top: 7px;
+
+  border-radius: 10px;
+
+  background: var(--footer-red);
+}
+
+/* =========================================
+   LINKS
+   ========================================= */
+
+.footer-links {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: flex-start;
+}
+
+.footer-links a,
+.footer-contact a,
+.footer-contact span {
+  margin-bottom: 11px;
+
+  color: var(--footer-muted);
+
+  text-decoration: none;
+
+  font-size: 14px;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.footer-links a:hover,
+.footer-contact a:hover {
+  color: var(--footer-red);
+
+  transform: translateX(3px);
+}
+
+/* =========================================
+   CONTACT
+   ========================================= */
+
+.footer-contact {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: flex-start;
+}
+
+/* =========================================
+   BOTTOM
+   ========================================= */
+
+.footer-bottom {
+  width: min(1100px, calc(100% - 48px));
+
+  margin: 0 auto;
+
+  padding: 17px 0;
+
+  border-top: 1px solid var(--footer-border);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  color: #927b6e;
+
+  font-size: 12px;
+}
+
+.footer-bottom span:first-child {
+  color: var(--footer-text);
+}
+
+/* =========================================
+   TABLET
+   ========================================= */
+
+@media (max-width: 800px) {
+
+  .footer-main {
+    grid-template-columns: 1.5fr 1fr;
+
+    gap: 40px;
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+
+    max-width: 600px;
+  }
+}
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media (max-width: 600px) {
+
+  .site-footer {
+    margin-top: 50px;
+  }
+
+  .footer-main {
+    width: calc(100% - 32px);
+
+    padding: 38px 0 28px;
+
+    grid-template-columns: 1fr;
+
+    gap: 30px;
+
+    text-align: center;
+  }
+
+  .footer-brand {
+    max-width: 100%;
+  }
+
+  .footer-logo {
+    justify-content: center;
+
+    font-size: 17px;
+  }
+
+  .footer-brand p {
+    max-width: 450px;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    font-size: 13px;
+  }
+
+  .footer-links,
+  .footer-contact {
+    align-items: center;
+  }
+
+  .footer-links h3,
+  .footer-contact h3 {
+    margin-bottom: 15px;
+  }
+
+  .footer-links a,
+  .footer-contact a,
+  .footer-contact span {
+    font-size: 13px;
+  }
+
+  .footer-bottom {
+    width: calc(100% - 32px);
+
+    padding: 15px 0 20px;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    text-align: center;
+
+    gap: 6px;
+  }
+}
+
+/* =========================================
+   SMALL MOBILE
+   ========================================= */
+
+@media (max-width: 380px) {
+
+  .footer-main {
+    width: calc(100% - 24px);
+  }
+
+  .footer-bottom {
+    width: calc(100% - 24px);
+  }
+
+  .footer-logo {
+    font-size: 15px;
+  }
+
+  .footer-logo-mark {
+    width: 36px;
+    height: 36px;
+
+    flex-basis: 36px;
+
+    font-size: 17px;
+  }
+}
