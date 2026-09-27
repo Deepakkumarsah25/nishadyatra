@@ -3,7 +3,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const path = require("path");
-
+const sankalpRoutes = require("./routes/sankalpRoutes");
+const videoNewsRoutes = require("./routes/news/videoNewsRoutes");
 dotenv.config();
 
 const app = express();
@@ -83,17 +84,15 @@ app.use(
 // ========================================
 
 app.use(express.static(path.join(__dirname, "public")));
-
+app.use("/sankalp-yatra", sankalpRoutes);
 app.use(
   "/uploads",
   express.static(path.join(__dirname, "uploads"))
 );
 
-// ========================================
-// Session
-// ========================================
-
+// ================================
 app.use(sessionConfig);
+app.use(videoNewsRoutes);
 
 // ========================================
 // Admin Routes
