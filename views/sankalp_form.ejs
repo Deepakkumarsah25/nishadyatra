@@ -1,732 +1,1421 @@
 <!DOCTYPE html>
 <html lang="hi">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>संकल्प यात्रा से जुड़ें</title>
+  <title><%= title || "संकल्प यात्रा से जुड़ें" %></title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <meta
+    name="description"
+    content="संकल्प यात्रा से जुड़ने के लिए अपना विवरण दर्ज करें।"
+  >
 
   <link
-    href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@500;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@500;600;700;800&display=swap"
     rel="stylesheet"
   >
 
   <style>
+
     :root {
-      --red: #D72A2A;
-      --red-deep: #8C1A1A;
-      --gold: #E7A93C;
-      --cream: #FBF4EC;
-      --ink: #2A1414;
-      --ink-soft: #6B4F4F;
-      --line: #E9D9C8;
-      --white: #FFFFFF;
+      --red: #d72a2a;
+      --red-deep: #8c1a1a;
+      --gold: #e7a93c;
+      --cream: #fbf4ec;
+      --ink: #2a1414;
+      --ink-soft: #6b4f4f;
+      --line: #e9d9c8;
+      --card: #ffffff;
+      --white: #ffffff;
     }
 
     * {
-      box-sizing: border-box;
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
-      font-family: 'Noto Sans Devanagari', sans-serif;
-      background: var(--cream);
-      color: var(--ink);
       min-height: 100vh;
-    }
-
-    h1,
-    h2,
-    h3,
-    .brand {
-      font-family: 'Noto Serif Devanagari', serif;
-    }
-
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    /* ================= HEADER ================= */
-
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-
-      background: rgba(251, 244, 236, 0.96);
-      backdrop-filter: blur(10px);
-
-      border-bottom: 1px solid var(--line);
-    }
-
-    nav {
-      max-width: 1120px;
-      margin: auto;
-      padding: 12px 24px;
-
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-
-      color: var(--red-deep);
-      font-size: 1.12rem;
-      font-weight: 700;
-    }
-
-    .brand-mark {
-      width: 36px;
-      height: 36px;
-
-      border-radius: 50%;
 
       background:
-        conic-gradient(
-          from 210deg,
-          var(--red),
-          var(--gold),
-          var(--red)
-        );
+        radial-gradient(
+          circle at top left,
+          rgba(231, 169, 60, 0.12),
+          transparent 30%
+        ),
+        var(--cream);
 
-      color: white;
+      color: var(--ink);
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      font-family:
+        "Noto Sans Devanagari",
+        sans-serif;
 
-      font-family: 'Noto Serif Devanagari', serif;
-      font-weight: 800;
+      line-height: 1.6;
     }
 
-    .back-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
 
-      padding: 9px 18px;
+    /* =================================
+       MAIN
+    ================================= */
 
-      border: 1px solid var(--line);
-      border-radius: 999px;
+    .sankalp-main {
+      width: 100%;
 
-      color: var(--red-deep);
-      background: white;
-
-      font-weight: 600;
-
-      transition: 0.2s;
+      padding:
+        42px 18px 55px;
     }
 
-    .back-btn:hover {
-      background: var(--red);
-      color: white;
-      border-color: var(--red);
+
+    .sankalp-container {
+      width: 100%;
+      max-width: 760px;
+
+      margin: auto;
     }
 
-    /* ================= HERO ================= */
 
-    .hero {
-      position: relative;
-      overflow: hidden;
+    /* =================================
+       HERO
+    ================================= */
 
+    .sankalp-hero {
       text-align: center;
 
-      padding: 75px 20px 55px;
-
-      background:
-        radial-gradient(
-          ellipse at 15% 0%,
-          rgba(215, 42, 42, 0.15),
-          transparent 55%
-        ),
-        radial-gradient(
-          ellipse at 90% 0%,
-          rgba(231, 169, 60, 0.18),
-          transparent 50%
-        );
+      margin-bottom: 24px;
     }
 
-    .kicker {
+
+    .sankalp-kicker {
       display: inline-block;
 
-      padding: 7px 16px;
+      color: var(--red);
 
-      border: 1px solid var(--line);
-      border-radius: 999px;
+      background:
+        rgba(215, 42, 42, 0.07);
 
-      background: white;
+      padding: 5px 11px;
 
-      color: var(--red-deep);
+      border-radius: 30px;
 
-      font-size: 0.88rem;
-      font-weight: 600;
+      font-size: 0.72rem;
 
-      margin-bottom: 20px;
+      font-weight: 700;
+
+      margin-bottom: 10px;
     }
 
-    .hero h1 {
-      color: var(--red-deep);
 
-      font-size: clamp(2rem, 5vw, 3.4rem);
+    .sankalp-hero h1 {
+      font-family:
+        "Noto Serif Devanagari",
+        serif;
+
+      font-size:
+        clamp(1.7rem, 4vw, 2.3rem);
 
       line-height: 1.25;
 
-      margin-bottom: 16px;
+      font-weight: 800;
+
+      color: var(--ink);
+
+      margin-bottom: 7px;
     }
 
-    .hero h1 span {
-      color: var(--gold);
-    }
 
-    .hero p {
-      max-width: 650px;
-
-      margin: auto;
-
-      color: var(--ink-soft);
-
-      font-size: 1rem;
-    }
-
-    /* ================= FORM AREA ================= */
-
-    .form-section {
-      padding: 20px 20px 80px;
-    }
-
-    .form-card {
-      max-width: 780px;
-      margin: auto;
-
-      background: var(--white);
-
-      border: 1px solid var(--line);
-      border-radius: 20px;
-
-      padding: 38px;
-
-      box-shadow:
-        0 25px 60px rgba(140, 26, 26, 0.10);
-    }
-
-    .form-heading {
-      text-align: center;
-      margin-bottom: 32px;
-    }
-
-    .form-heading .icon {
-      width: 58px;
-      height: 58px;
-
-      margin: 0 auto 14px;
-
-      border-radius: 50%;
-
-      background: rgba(215, 42, 42, 0.09);
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      font-size: 1.6rem;
-    }
-
-    .form-heading h2 {
-      color: var(--red-deep);
-
-      font-size: 1.7rem;
-
-      margin-bottom: 6px;
-    }
-
-    .form-heading p {
-      color: var(--ink-soft);
-      font-size: 0.92rem;
-    }
-
-    /* ================= FORM GRID ================= */
-
-    .form-grid {
-      display: grid;
-
-      grid-template-columns: 1fr 1fr;
-
-      gap: 22px;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-
-      gap: 7px;
-    }
-
-    .form-group.full {
-      grid-column: 1 / -1;
-    }
-
-    label {
-      color: var(--red-deep);
-
-      font-size: 0.9rem;
-      font-weight: 600;
-    }
-
-    label span {
+    .sankalp-hero h1 span {
       color: var(--red);
     }
 
-    input,
-    textarea {
+
+    .sankalp-hero p {
+      max-width: 580px;
+
+      margin: auto;
+
+      color: var(--ink-soft);
+
+      font-size: 0.9rem;
+
+      line-height: 1.7;
+    }
+
+
+    /* =================================
+       FORM CARD
+    ================================= */
+
+    .sankalp-form-card {
+      background: var(--card);
+
+      border:
+        1px solid var(--line);
+
+      border-radius: 15px;
+
+      padding: 25px;
+
+      box-shadow:
+        0 12px 35px
+        rgba(42, 20, 20, 0.07);
+    }
+
+
+    .sankalp-form-heading {
+      margin-bottom: 20px;
+
+      padding-bottom: 13px;
+
+      border-bottom:
+        1px solid var(--line);
+    }
+
+
+    .sankalp-form-heading h2 {
+      font-family:
+        "Noto Serif Devanagari",
+        serif;
+
+      font-size: 1.15rem;
+
+      font-weight: 800;
+
+      color: var(--ink);
+    }
+
+
+    .sankalp-form-heading p {
+      margin-top: 2px;
+
+      color: var(--ink-soft);
+
+      font-size: 0.76rem;
+    }
+
+
+    /* =================================
+       FORM GRID
+    ================================= */
+
+    .sankalp-form-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+      gap: 15px 18px;
+    }
+
+
+    .sankalp-form-group {
+      width: 100%;
+    }
+
+
+    .sankalp-form-group label {
+      display: block;
+
+      margin-bottom: 5px;
+
+      color: var(--ink);
+
+      font-size: 0.82rem;
+
+      font-weight: 700;
+    }
+
+
+    .sankalp-form-group label span {
+      color: var(--red);
+    }
+
+
+    .sankalp-form-group input,
+    .sankalp-form-group select {
+
       width: 100%;
 
-      padding: 13px 15px;
+      height: 43px;
 
-      border: 1.5px solid var(--line);
-      border-radius: 10px;
+      padding: 8px 11px;
+
+      border:
+        1.5px solid var(--line);
+
+      border-radius: 8px;
 
       background: var(--cream);
 
       color: var(--ink);
 
       font-family: inherit;
-      font-size: 0.95rem;
+
+      font-size: 0.86rem;
 
       outline: none;
 
       transition:
-        border-color 0.2s,
-        box-shadow 0.2s,
-        background 0.2s;
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
     }
 
-    input {
-      height: 48px;
+
+    .sankalp-form-group input::placeholder {
+      color: #a68d8d;
     }
 
-    textarea {
-      min-height: 115px;
-      resize: vertical;
-    }
 
-    input:focus,
-    textarea:focus {
-      background: white;
+    .sankalp-form-group input:focus,
+    .sankalp-form-group select:focus {
+
+      background: var(--white);
 
       border-color: var(--red);
 
       box-shadow:
-        0 0 0 3px rgba(215, 42, 42, 0.10);
+        0 0 0 3px
+        rgba(215, 42, 42, 0.08);
     }
 
-    input::placeholder,
-    textarea::placeholder {
-      color: #A89191;
+
+    .sankalp-form-group select {
+      cursor: pointer;
     }
 
-    /* ================= CONSENT ================= */
 
-    .consent {
-      margin-top: 25px;
+    /* =================================
+       CONSENT
+    ================================= */
 
-      padding: 14px 16px;
+    .sankalp-consent {
 
-      background: var(--cream);
-
-      border: 1px solid var(--line);
-      border-radius: 10px;
+      margin-top: 20px;
 
       display: flex;
-      gap: 10px;
+
       align-items: flex-start;
+
+      gap: 9px;
+
+      padding: 12px;
+
+      background: #fffaf5;
+
+      border:
+        1px solid var(--line);
+
+      border-radius: 8px;
     }
 
-    .consent input {
-      width: 18px;
-      height: 18px;
+
+    .sankalp-consent input {
+
+      width: 17px;
+      height: 17px;
 
       margin-top: 3px;
 
       accent-color: var(--red);
+
       flex-shrink: 0;
+
+      cursor: pointer;
     }
 
-    .consent label {
+
+    .sankalp-consent label {
+
       color: var(--ink-soft);
 
-      font-size: 0.82rem;
-      font-weight: 400;
+      font-size: 0.76rem;
 
-      line-height: 1.5;
+      line-height: 1.6;
+
+      cursor: pointer;
     }
 
-    /* ================= BUTTON ================= */
 
-    .submit-wrapper {
-      margin-top: 28px;
-      text-align: center;
+    /* =================================
+       SUBMIT
+    ================================= */
+
+    .sankalp-submit-wrapper {
+
+      display: flex;
+
+      justify-content: center;
+
+      margin-top: 20px;
     }
 
-    .submit-btn {
-      width: 100%;
 
-      padding: 15px 24px;
+    .sankalp-submit-btn {
+
+      min-width: 230px;
 
       border: none;
-      border-radius: 11px;
 
-      background: var(--red);
+      border-radius: 8px;
+
+      padding: 10px 22px;
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--red),
+          var(--red-deep)
+        );
 
       color: white;
 
       font-family: inherit;
 
-      font-size: 1rem;
+      font-size: 0.88rem;
+
       font-weight: 700;
 
       cursor: pointer;
 
       box-shadow:
-        0 10px 24px rgba(215, 42, 42, 0.25);
+        0 7px 18px
+        rgba(140, 26, 26, 0.18);
 
       transition:
-        transform 0.2s,
-        background 0.2s,
-        box-shadow 0.2s;
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
     }
 
-    .submit-btn:hover {
-      background: var(--red-deep);
 
-      transform: translateY(-2px);
+    .sankalp-submit-btn:hover {
+
+      transform:
+        translateY(-1px);
 
       box-shadow:
-        0 14px 30px rgba(140, 26, 26, 0.28);
+        0 10px 23px
+        rgba(140, 26, 26, 0.23);
     }
 
-    .submit-btn:active {
+
+    .sankalp-submit-btn:active {
       transform: translateY(0);
     }
 
-    /* ================= FOOT NOTE ================= */
 
-    .secure-note {
-      margin-top: 18px;
+    .sankalp-required-note {
 
-      text-align: center;
-
-      color: var(--ink-soft);
-
-      font-size: 0.78rem;
-    }
-
-    /* ================= FOOTER ================= */
-
-    footer {
-      background: #210606;
-
-      color: #E9CFCF;
-
-      padding: 30px 20px;
+      margin-top: 13px;
 
       text-align: center;
+
+      color: #8a7272;
+
+      font-size: 0.7rem;
     }
 
-    footer strong {
-      color: white;
 
-      font-family: 'Noto Serif Devanagari', serif;
-    }
+    /* =================================
+       MOBILE
+    ================================= */
 
-    /* ================= MOBILE ================= */
+    @media (max-width: 600px) {
 
-    @media (max-width: 650px) {
-
-      nav {
-        padding: 11px 16px;
+      .sankalp-main {
+        padding:
+          28px 12px 40px;
       }
 
-      .brand {
-        font-size: 0.98rem;
+
+      .sankalp-hero {
+        margin-bottom: 18px;
       }
 
-      .brand-mark {
-        width: 32px;
-        height: 32px;
-        font-size: 0.85rem;
+
+      .sankalp-hero h1 {
+        font-size: 1.55rem;
       }
 
-      .back-btn {
-        padding: 8px 13px;
-        font-size: 0.82rem;
+
+      .sankalp-hero p {
+
+        font-size: 0.78rem;
+
+        padding:
+          0 8px;
       }
 
-      .hero {
-        padding: 55px 18px 42px;
+
+      .sankalp-form-card {
+
+        padding:
+          17px 14px;
+
+        border-radius: 12px;
       }
 
-      .hero h1 {
-        font-size: 2rem;
+
+      .sankalp-form-heading {
+        margin-bottom: 17px;
       }
 
-      .form-section {
-        padding: 12px 14px 55px;
+
+      .sankalp-form-heading h2 {
+        font-size: 1rem;
       }
 
-      .form-card {
-        padding: 25px 18px;
 
-        border-radius: 16px;
+      .sankalp-form-heading p {
+        font-size: 0.7rem;
       }
 
-      .form-grid {
+
+      .sankalp-form-grid {
+
         grid-template-columns: 1fr;
 
-        gap: 18px;
+        gap: 13px;
       }
 
-      .form-group.full {
-        grid-column: auto;
+
+      .sankalp-form-group label {
+        font-size: 0.78rem;
       }
 
-      .form-heading {
-        margin-bottom: 25px;
+
+      .sankalp-form-group input,
+      .sankalp-form-group select {
+
+        height: 42px;
+
+        font-size: 0.83rem;
       }
 
-      .form-heading h2 {
-        font-size: 1.45rem;
+
+      .sankalp-consent {
+
+        margin-top: 17px;
+
+        padding: 10px;
+      }
+
+
+      .sankalp-consent label {
+        font-size: 0.7rem;
+      }
+
+
+      .sankalp-submit-wrapper {
+        margin-top: 17px;
+      }
+
+
+      .sankalp-submit-btn {
+
+        width: 100%;
+
+        min-width: 0;
+
+        padding:
+          10px 15px;
+
+        font-size: 0.84rem;
       }
     }
+
+
+    @media (max-width: 360px) {
+
+      .sankalp-hero h1 {
+        font-size: 1.4rem;
+      }
+
+
+      .sankalp-form-card {
+        padding: 15px 11px;
+      }
+    }
+
   </style>
+
 </head>
+
 
 <body>
 
-  <!-- HEADER -->
-  <header>
-    <nav>
 
-      <a href="/" class="brand">
-        <span class="brand-mark">नि</span>
-        निषाद संकल्प अभियान
-      </a>
+  <!-- =================================
+       REUSABLE NAVBAR
+  ================================= -->
 
-      <a href="/" class="back-btn">
-        ← वापस जाएँ
-      </a>
-
-    </nav>
-  </header>
+  <%- include("common/navbar") %>
 
 
-  <!-- HERO -->
-  <section class="hero">
+  <!-- =================================
+       MAIN CONTENT
+  ================================= -->
 
-    <span class="kicker">
-      समाज सेवा • एकता • संकल्प
-    </span>
+  <main class="sankalp-main">
 
-    <h1>
-      संकल्प यात्रा से <span>जुड़ें</span>
-    </h1>
-
-    <p>
-      निषाद संकल्प अभियान से जुड़ने के लिए नीचे अपना विवरण भरें।
-      आपका सहयोग और सहभागिता इस यात्रा को और मजबूत बनाएगी।
-    </p>
-
-  </section>
+    <div class="sankalp-container">
 
 
-  <!-- FORM -->
-  <section class="form-section">
+      <!-- HERO -->
 
-    <div class="form-card">
+      <section class="sankalp-hero">
 
-      <div class="form-heading">
-
-        <div class="icon">
-          🤝
+        <div class="sankalp-kicker">
+          संकल्प • सहभागिता • सेवा
         </div>
 
-        <h2>
-          अपना विवरण दर्ज करें
-        </h2>
+
+        <h1>
+          संकल्प यात्रा से
+          <span>जुड़ें</span>
+        </h1>
+
 
         <p>
-          सभी जानकारी सही एवं स्पष्ट रूप से भरें
+          नीचे दी गई जानकारी भरकर अपना विवरण दर्ज करें।
         </p>
 
-      </div>
+      </section>
 
 
-      <form action="/sankalp-yatra/register" method="POST">
 
-        <div class="form-grid">
+      <!-- FORM CARD -->
 
-          <!-- NAME -->
-          <div class="form-group">
-
-            <label for="name">
-              पूरा नाम <span>*</span>
-            </label>
-
-            <input
-              type="text"
-              id="name"
-              name="name"
-              placeholder="अपना पूरा नाम दर्ज करें"
-              required
-              maxlength="100"
-            >
-
-          </div>
+      <section class="sankalp-form-card">
 
 
-          <!-- AGE -->
-          <div class="form-group">
+        <div class="sankalp-form-heading">
 
-            <label for="age">
-              उम्र <span>*</span>
-            </label>
+          <h2>
+            अपना विवरण दर्ज करें
+          </h2>
 
-            <input
-              type="number"
-              id="age"
-              name="age"
-              placeholder="उम्र दर्ज करें"
-              min="1"
-              max="120"
-              required
-            >
-
-          </div>
-
-
-          <!-- MOBILE -->
-          <div class="form-group">
-
-            <label for="mobile">
-              मोबाइल नंबर <span>*</span>
-            </label>
-
-            <input
-              type="tel"
-              id="mobile"
-              name="mobile"
-              placeholder="10 अंकों का मोबाइल नंबर"
-              pattern="[6-9][0-9]{9}"
-              maxlength="10"
-              inputmode="numeric"
-              required
-            >
-
-          </div>
-
-
-          <!-- EMAIL -->
-          <div class="form-group">
-
-            <label for="email">
-              ईमेल
-            </label>
-
-            <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="example@email.com"
-              maxlength="150"
-            >
-
-          </div>
-
-
-          <!-- ADDRESS -->
-          <div class="form-group full">
-
-            <label for="address">
-              पूरा पता <span>*</span>
-            </label>
-
-            <textarea
-              id="address"
-              name="address"
-              placeholder="मकान नंबर, मोहल्ला / गाँव, शहर, जिला, राज्य आदि"
-              maxlength="500"
-              required
-            ></textarea>
-
-          </div>
+          <p>
+            कृपया सभी आवश्यक जानकारी सही-सही भरें।
+          </p>
 
         </div>
 
 
-        <!-- CONSENT -->
-        <div class="consent">
 
-          <input
-            type="checkbox"
-            id="consent"
-            name="consent"
-            value="yes"
+        <form
+          action="/sankalp-yatra/register"
+          method="POST"
+          autocomplete="on"
+        >
+
+
+          <div class="sankalp-form-grid">
+
+
+            <!-- NAME -->
+
+            <div class="sankalp-form-group">
+
+              <label for="name">
+                नाम <span>*</span>
+              </label>
+
+              <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="अपना पूरा नाम"
+                maxlength="100"
+                autocomplete="name"
+                required
+              >
+
+            </div>
+
+
+
+            <!-- AGE -->
+
+            <div class="sankalp-form-group">
+
+              <label for="age">
+                उम्र <span>*</span>
+              </label>
+
+              <input
+                type="number"
+                id="age"
+                name="age"
+                placeholder="अपनी उम्र"
+                min="1"
+                max="120"
+                inputmode="numeric"
+                required
+              >
+
+            </div>
+
+
+
+            <!-- MOBILE -->
+
+            <div class="sankalp-form-group">
+
+              <label for="mobile">
+                मोबाइल नंबर <span>*</span>
+              </label>
+
+              <input
+                type="tel"
+                id="mobile"
+                name="mobile"
+                placeholder="10 अंकों का मोबाइल नंबर"
+                pattern="[6-9][0-9]{9}"
+                maxlength="10"
+                minlength="10"
+                inputmode="numeric"
+                autocomplete="tel"
+                required
+              >
+
+            </div>
+
+
+
+            <!-- EMAIL -->
+
+            <div class="sankalp-form-group">
+
+              <label for="email">
+                ईमेल
+              </label>
+
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="example@email.com"
+                maxlength="150"
+                autocomplete="email"
+              >
+
+            </div>
+
+
+
+            <!-- VILLAGE -->
+
+            <div class="sankalp-form-group">
+
+              <label for="village">
+                गाँव <span>*</span>
+              </label>
+
+              <input
+                type="text"
+                id="village"
+                name="village"
+                placeholder="गाँव का नाम"
+                maxlength="100"
+                autocomplete="address-level4"
+                required
+              >
+
+            </div>
+
+
+
+            <!-- STATE -->
+
+            <div class="sankalp-form-group">
+
+              <label for="state">
+                राज्य <span>*</span>
+              </label>
+
+              <select
+                id="state"
+                name="state"
+                required
+              >
+
+                <!-- Bihar PRESELECTED -->
+
+                <option
+                  value="Bihar"
+                  selected
+                >
+                  बिहार
+                </option>
+
+
+                <option value="Andhra Pradesh">
+                  आंध्र प्रदेश
+                </option>
+
+                <option value="Arunachal Pradesh">
+                  अरुणाचल प्रदेश
+                </option>
+
+                <option value="Assam">
+                  असम
+                </option>
+
+                <option value="Chhattisgarh">
+                  छत्तीसगढ़
+                </option>
+
+                <option value="Goa">
+                  गोवा
+                </option>
+
+                <option value="Gujarat">
+                  गुजरात
+                </option>
+
+                <option value="Haryana">
+                  हरियाणा
+                </option>
+
+                <option value="Himachal Pradesh">
+                  हिमाचल प्रदेश
+                </option>
+
+                <option value="Jharkhand">
+                  झारखंड
+                </option>
+
+                <option value="Karnataka">
+                  कर्नाटक
+                </option>
+
+                <option value="Kerala">
+                  केरल
+                </option>
+
+                <option value="Madhya Pradesh">
+                  मध्य प्रदेश
+                </option>
+
+                <option value="Maharashtra">
+                  महाराष्ट्र
+                </option>
+
+                <option value="Manipur">
+                  मणिपुर
+                </option>
+
+                <option value="Meghalaya">
+                  मेघालय
+                </option>
+
+                <option value="Mizoram">
+                  मिजोरम
+                </option>
+
+                <option value="Nagaland">
+                  नागालैंड
+                </option>
+
+                <option value="Odisha">
+                  ओडिशा
+                </option>
+
+                <option value="Punjab">
+                  पंजाब
+                </option>
+
+                <option value="Rajasthan">
+                  राजस्थान
+                </option>
+
+                <option value="Sikkim">
+                  सिक्किम
+                </option>
+
+                <option value="Tamil Nadu">
+                  तमिलनाडु
+                </option>
+
+                <option value="Telangana">
+                  तेलंगाना
+                </option>
+
+                <option value="Tripura">
+                  त्रिपुरा
+                </option>
+
+                <option value="Uttar Pradesh">
+                  उत्तर प्रदेश
+                </option>
+
+                <option value="Uttarakhand">
+                  उत्तराखंड
+                </option>
+
+                <option value="West Bengal">
+                  पश्चिम बंगाल
+                </option>
+
+
+                <!-- UNION TERRITORIES -->
+
+                <option value="Andaman and Nicobar Islands">
+                  अंडमान और निकोबार द्वीपसमूह
+                </option>
+
+                <option value="Chandigarh">
+                  चंडीगढ़
+                </option>
+
+                <option value="Dadra and Nagar Haveli and Daman and Diu">
+                  दादरा और नगर हवेली और दमन और दीव
+                </option>
+
+                <option value="Delhi">
+                  दिल्ली
+                </option>
+
+                <option value="Jammu and Kashmir">
+                  जम्मू और कश्मीर
+                </option>
+
+                <option value="Ladakh">
+                  लद्दाख
+                </option>
+
+                <option value="Lakshadweep">
+                  लक्षद्वीप
+                </option>
+
+                <option value="Puducherry">
+                  पुडुचेरी
+                </option>
+
+              </select>
+
+            </div>
+
+
+
+            <!-- DISTRICT -->
+
+            <div
+              class="sankalp-form-group"
+              id="district-group"
+            >
+
+              <label for="district">
+                जिला <span>*</span>
+              </label>
+
+              <input
+                type="text"
+                id="district"
+                name="district"
+                placeholder="जिले का नाम"
+                maxlength="100"
+                required
+              >
+
+            </div>
+
+
+
+            <!-- BLOCK -->
+
+            <div class="sankalp-form-group">
+
+              <label for="block">
+                ब्लॉक <span>*</span>
+              </label>
+
+              <input
+                type="text"
+                id="block"
+                name="block"
+                placeholder="ब्लॉक का नाम"
+                maxlength="100"
+                required
+              >
+
+            </div>
+
+
+          </div>
+
+
+
+          <!-- CONSENT -->
+
+          <div class="sankalp-consent">
+
+            <input
+              type="checkbox"
+              id="consent"
+              name="consent"
+              value="yes"
+              required
+            >
+
+            <label for="consent">
+
+              मैं सहमत हूँ कि मेरे द्वारा दी गई जानकारी का उपयोग
+              निषाद संकल्प अभियान से संबंधित संपर्क एवं आवश्यक
+              जानकारी साझा करने के लिए किया जा सकता है।
+
+            </label>
+
+          </div>
+
+
+
+          <!-- SUBMIT -->
+
+          <div class="sankalp-submit-wrapper">
+
+            <button
+              type="submit"
+              class="sankalp-submit-btn"
+            >
+              संकल्प यात्रा से जुड़ें
+            </button>
+
+          </div>
+
+
+          <div class="sankalp-required-note">
+
+            * चिन्हित सभी जानकारी भरना आवश्यक है।
+
+          </div>
+
+
+        </form>
+
+      </section>
+
+    </div>
+
+  </main>
+
+
+  <!-- =================================
+       REUSABLE FOOTER
+  ================================= -->
+
+  <%- include("common/footer") %>
+
+
+
+  <!-- =================================
+       JAVASCRIPT
+  ================================= -->
+
+  <script>
+
+    /*
+    =====================================
+    STATE
+    =====================================
+    */
+
+    const stateSelect =
+      document.getElementById("state");
+
+
+    const districtGroup =
+      document.getElementById(
+        "district-group"
+      );
+
+
+
+    /*
+    =====================================
+    ONLY THESE 3 STATES
+    HAVE DISTRICT DROPDOWN
+    =====================================
+    */
+
+    const dropdownStates = {
+
+
+      /* ================================
+         BIHAR
+      ================================= */
+
+      "Bihar": [
+
+        "अररिया",
+        "अरवल",
+        "औरंगाबाद",
+        "बांका",
+        "बेगूसराय",
+        "भागलपुर",
+        "भोजपुर",
+        "बक्सर",
+        "दरभंगा",
+        "पूर्वी चंपारण",
+        "गया",
+        "गोपालगंज",
+        "जमुई",
+        "जहानाबाद",
+        "कैमूर",
+        "कटिहार",
+        "खगड़िया",
+        "किशनगंज",
+        "लखीसराय",
+        "मधेपुरा",
+        "मधुबनी",
+        "मुंगेर",
+        "मुजफ्फरपुर",
+        "नालंदा",
+        "नवादा",
+        "पटना",
+        "पूर्णिया",
+        "रोहतास",
+        "सहरसा",
+        "समस्तीपुर",
+        "सारण",
+        "शेखपुरा",
+        "शिवहर",
+        "सीतामढ़ी",
+        "सिवान",
+        "सुपौल",
+        "वैशाली",
+        "पश्चिमी चंपारण"
+
+      ],
+
+
+
+      /* ================================
+         JHARKHAND
+      ================================= */
+
+      "Jharkhand": [
+
+        "बोकारो",
+        "चतरा",
+        "देवघर",
+        "धनबाद",
+        "दुमका",
+        "पूर्वी सिंहभूम",
+        "गढ़वा",
+        "गिरिडीह",
+        "गोड्डा",
+        "गुमला",
+        "हजारीबाग",
+        "जामताड़ा",
+        "खूंटी",
+        "कोडरमा",
+        "लातेहार",
+        "लोहरदगा",
+        "पाकुड़",
+        "पलामू",
+        "रामगढ़",
+        "रांची",
+        "साहिबगंज",
+        "सरायकेला-खरसावां",
+        "सिमडेगा",
+        "पश्चिमी सिंहभूम"
+
+      ],
+
+
+
+      /* ================================
+         UTTAR PRADESH
+      ================================= */
+
+      "Uttar Pradesh": [
+
+        "आगरा",
+        "अलीगढ़",
+        "अम्बेडकर नगर",
+        "अमेठी",
+        "अमरोहा",
+        "औरैया",
+        "अयोध्या",
+        "आजमगढ़",
+        "बागपत",
+        "बहराइच",
+        "बलिया",
+        "बलरामपुर",
+        "बाँदा",
+        "बाराबंकी",
+        "बरेली",
+        "बस्ती",
+        "बिजनौर",
+        "बदायूं",
+        "बुलंदशहर",
+        "चंदौली",
+        "चित्रकूट",
+        "देवरिया",
+        "एटा",
+        "इटावा",
+        "फर्रुखाबाद",
+        "फतेहपुर",
+        "फिरोजाबाद",
+        "गौतम बुद्ध नगर",
+        "गाजियाबाद",
+        "गाजीपुर",
+        "गोंडा",
+        "गोरखपुर",
+        "हमीरपुर",
+        "हापुड़",
+        "हरदोई",
+        "हाथरस",
+        "जालौन",
+        "जौनपुर",
+        "झांसी",
+        "कन्नौज",
+        "कानपुर देहात",
+        "कानपुर नगर",
+        "कासगंज",
+        "कौशाम्बी",
+        "कुशीनगर",
+        "लखीमपुर खीरी",
+        "ललितपुर",
+        "लखनऊ",
+        "महराजगंज",
+        "महोबा",
+        "मैनपुरी",
+        "मथुरा",
+        "मऊ",
+        "मेरठ",
+        "मिर्जापुर",
+        "मुरादाबाद",
+        "मुजफ्फरनगर",
+        "पीलीभीत",
+        "प्रतापगढ़",
+        "प्रयागराज",
+        "रायबरेली",
+        "रामपुर",
+        "सहारनपुर",
+        "संभल",
+        "संत कबीर नगर",
+        "संत रविदास नगर",
+        "शाहजहांपुर",
+        "शामली",
+        "श्रावस्ती",
+        "सिद्धार्थनगर",
+        "सीतापुर",
+        "सोनभद्र",
+        "सुल्तानपुर",
+        "उन्नाव",
+        "वाराणसी"
+
+      ]
+
+    };
+
+
+
+    /*
+    =====================================
+    CHANGE STATE
+    =====================================
+    */
+
+    function updateDistrictField() {
+
+      const selectedState =
+        stateSelect.value;
+
+
+      /*
+      -------------------------------------
+      UP / BIHAR / JHARKHAND
+      => SELECT DROPDOWN
+      -------------------------------------
+      */
+
+      if (
+        dropdownStates[selectedState]
+      ) {
+
+        const districts =
+          dropdownStates[selectedState];
+
+
+        districtGroup.innerHTML = `
+
+          <label for="district">
+            जिला <span>*</span>
+          </label>
+
+          <select
+            id="district"
+            name="district"
             required
           >
 
-          <label for="consent">
-            मैं सहमत हूँ कि मेरे द्वारा दी गई जानकारी का उपयोग
-            निषाद संकल्प अभियान से संबंधित संपर्क एवं आवश्यक
-            जानकारी साझा करने के लिए किया जा सकता है।
-          </label>
+            <option value="">
+              जिला चुनें
+            </option>
 
-        </div>
+          </select>
 
-
-        <!-- SUBMIT -->
-        <div class="submit-wrapper">
-
-          <button
-            type="submit"
-            class="submit-btn"
-          >
-            संकल्प यात्रा से जुड़ें
-          </button>
-
-        </div>
+        `;
 
 
-        <p class="secure-note">
-          🔒 आपकी जानकारी सुरक्षित रूप से दर्ज की जाएगी।
-        </p>
-
-      </form>
-
-    </div>
-
-  </section>
+        const districtSelect =
+          document.getElementById(
+            "district"
+          );
 
 
-  <!-- FOOTER -->
-  <footer>
+        districts.forEach(
+          function (district) {
 
-    <strong>
-      निषाद संकल्प अभियान
-    </strong>
+            const option =
+              document.createElement(
+                "option"
+              );
 
-    <div>
-      समाज सेवा • शिक्षा • एकता
-    </div>
 
-  </footer>
+            option.value =
+              district;
+
+
+            option.textContent =
+              district;
+
+
+            districtSelect.appendChild(
+              option
+            );
+
+          }
+        );
+
+
+        return;
+      }
+
+
+
+      /*
+      -------------------------------------
+      OTHER STATES
+      => MANUAL INPUT
+      -------------------------------------
+      */
+
+      districtGroup.innerHTML = `
+
+        <label for="district">
+          जिला <span>*</span>
+        </label>
+
+        <input
+          type="text"
+          id="district"
+          name="district"
+          placeholder="जिले का नाम"
+          maxlength="100"
+          required
+        >
+
+      `;
+    }
+
+
+
+    /*
+    =====================================
+    STATE CHANGE EVENT
+    =====================================
+    */
+
+    stateSelect.addEventListener(
+      "change",
+      updateDistrictField
+    );
+
+
+
+    /*
+    =====================================
+    BIHAR PRESELECTED
+    =====================================
+    */
+
+    updateDistrictField();
+
+
+
+    /*
+    =====================================
+    MOBILE NUMBER
+    =====================================
+    */
+
+    const mobileInput =
+      document.getElementById(
+        "mobile"
+      );
+
+
+    mobileInput.addEventListener(
+      "input",
+      function () {
+
+        this.value =
+          this.value
+            .replace(/\D/g, "")
+            .slice(0, 10);
+
+      }
+    );
+
+
+
+    /*
+    =====================================
+    AGE
+    =====================================
+    */
+
+    const ageInput =
+      document.getElementById(
+        "age"
+      );
+
+
+    ageInput.addEventListener(
+      "input",
+      function () {
+
+        if (this.value > 120) {
+          this.value = 120;
+        }
+
+
+        if (
+          this.value < 1 &&
+          this.value !== ""
+        ) {
+
+          this.value = 1;
+
+        }
+
+      }
+    );
+
+  </script>
 
 </body>
+
 </html>
