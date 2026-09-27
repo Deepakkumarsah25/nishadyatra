@@ -1,13 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title><%= typeof title !== 'undefined' ? title : 'निषाद संकल्प अभियान' %> - एकता, शिक्षा और सशक्तिकरण</title>
+
+    <!-- Google Fonts for authentic Devanagari typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800;900&family=Rozha+One&display=swap" rel="stylesheet" />
+
+    <!-- Core Global CSS -->
+    <link rel="stylesheet" href="/css/index.css" />
+
+    <!-- Modular Component CSS -->
+    <link rel="stylesheet" href="/css/hero.css" />
+    <link rel="stylesheet" href="/css/sidebar.css" />
+    <link rel="stylesheet" href="/css/what-we-do.css" />
+    <link rel="stylesheet" href="/css/why-choose.css" />
+    <link rel="stylesheet" href="/css/initiative-modal.css" />
   </head>
   <body>
-    <%- include("common/navbar") %> 
-    <%- include("herosection/herosection") %>
+    <!-- Top Navigation Bar -->
+    <%- include("common/navbar") %>
+
+    <!-- Quick Action / Helpline Sidebar Drawer -->
+    <%- include("components/sidebar") %>
+
+    <!-- Dynamic Initiative Action Modal -->
+    <%- include("components/initiative-modal") %>
+
+    <!-- Main Content Area -->
+    <main id="main-content">
+      <!-- 1. Hero Section -->
+      <%- include("components/hero") %>
+
+      <!-- 2. What We Do Section -->
+      <%- include("components/what-we-do") %>
+
+      <!-- 3. Why Choose Us Section -->
+      <%- include("components/why-choose") %>
+    </main>
+
+    <!-- Footer -->
     <%- include("common/footer") %>
+
+    <!-- Dynamic Data for Client-Side Modal -->
+    <script>
+      window.INITIATIVES_DATA = <%- JSON.stringify(typeof initiativesModalMap !== 'undefined' ? initiativesModalMap : {}) %>;
+    </script>
+
+    <!-- Modular Component JavaScript -->
+    <script src="/js/hero.js"></script>
+    <script src="/js/sidebar.js"></script>
+    <script src="/js/initiative-modal.js"></script>
+    <script src="/js/index.js"></script>
   </body>
 </html>

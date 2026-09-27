@@ -1,0 +1,120 @@
+<%- include("../common/header") %>
+<%- include("../common/sidebar") %>
+
+<div class="admin-main">
+  <!-- Topbar -->
+  <header class="admin-topbar">
+    <div class="topbar-left">
+      <button type="button" class="mobile-menu-trigger" id="adminMobileMenuBtn" aria-label="Menu">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="page-heading">
+        <h1>
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--admin-primary)" stroke-width="2.2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+          कार्यक्षेत्र एवं प्रमुख पहल प्रबंधन (What We Do)
+        </h1>
+        <p>होम पेज के 6 प्रमुख कार्य कार्ड्स और उनके पॉपअप मॉडल (Modal) की जानकारी बदलें</p>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <a href="/admin/home/initiatives/new" class="btn-admin btn-admin-primary">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <span>नई पहल जोड़ें</span>
+      </a>
+      <a href="/#what-we-do" target="_blank" class="view-site-btn">सेक्शन देखें</a>
+    </div>
+  </header>
+
+  <!-- Body -->
+  <div class="admin-body">
+    <% if (message) { %>
+      <div class="admin-alert admin-alert-success">✓ <%= message %></div>
+    <% } %>
+    <% if (error) { %>
+      <div class="admin-alert admin-alert-error">⚠ <%= error %></div>
+    <% } %>
+
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <h3>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          कुल उपलब्ध पहल कार्ड्स (<%= initiatives.length %>)
+        </h3>
+        <span style="font-size: 12px; color: var(--admin-text-muted);">कार्ड पर क्लिक करने पर उसका डायनामिक एक्शन मॉडल खुलेगा</span>
+      </div>
+
+      <div class="admin-table-wrapper">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th style="width: 60px;">क्रम</th>
+              <th>कुंजी (Key)</th>
+              <th>टैग</th>
+              <th>शीर्षक एवं संक्षिप्त विवरण</th>
+              <th>बटन का नाम</th>
+              <th>मॉडल हेल्पलाइन</th>
+              <th style="width: 90px;">स्थिति</th>
+              <th style="width: 160px; text-align: right;">क्रियाएं</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (initiatives && initiatives.length > 0) { %>
+              <% initiatives.forEach(function(item) { %>
+                <tr>
+                  <td><strong>#<%= item.order %></strong></td>
+                  <td>
+                    <code style="background: #f4ece6; padding: 2px 6px; border-radius: 4px; font-size: 11px; color: var(--admin-primary-dark);"><%= item.key %></code>
+                  </td>
+                  <td>
+                    <span style="display:inline-block; font-size: 11px; font-weight: 700; background: var(--admin-primary-light); color: var(--admin-primary); padding: 2px 8px; border-radius: 4px;">
+                      <%= item.cardTag %>
+                    </span>
+                  </td>
+                  <td>
+                    <div style="font-weight: 700; font-size: 13px; color: var(--admin-text-dark); margin-bottom: 3px;">
+                      <%= item.title %>
+                    </div>
+                    <div style="font-size: 11px; color: var(--admin-text-muted); line-height: 1.4; max-width: 380px;">
+                      <%= item.description ? item.description.substring(0, 90) + '...' : '' %>
+                    </div>
+                  </td>
+                  <td>
+                    <span style="font-size: 12px; font-weight: 600; color: #443232;"><%= item.btnText %></span>
+                  </td>
+                  <td>
+                    <div style="font-size: 11px; color: var(--admin-text-dark);">
+                      <%= item.helplineText || 'डिफ़ॉल्ट' %>
+                    </div>
+                  </td>
+                  <td>
+                    <form action="/admin/home/initiatives/toggle/<%= item._id %>" method="POST" style="display:inline;">
+                      <button type="submit" class="badge-status <%= item.isActive ? 'badge-active' : 'badge-inactive' %>" style="border:none; cursor:pointer;" title="स्थिति बदलने के लिए क्लिक करें">
+                        <%= item.isActive ? 'सक्रिय' : 'छिपा हुआ' %>
+                      </button>
+                    </form>
+                  </td>
+                  <td style="text-align: right;">
+                    <div style="display: inline-flex; gap: 6px;">
+                      <a href="/admin/home/initiatives/edit/<%= item._id %>" class="btn-admin btn-admin-outline btn-admin-sm">संपादित करें</a>
+                      <form action="/admin/home/initiatives/delete/<%= item._id %>" method="POST" onsubmit="return confirm('क्या आप वास्तव में इस पहल कार्ड को हटाना चाहते हैं?');" style="display:inline;">
+                        <button type="submit" class="btn-admin btn-admin-danger btn-admin-sm">हटाएं</button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+              <% }); %>
+            <% } else { %>
+              <tr>
+                <td colspan="8" style="text-align:center; padding: 40px; color: var(--admin-text-muted);">
+                  कोई पहल कार्ड नहीं मिला। नया कार्ड जोड़ने के लिए ऊपर दिए गए बटन पर क्लिक करें।
+                </td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include("../common/footer") %>
