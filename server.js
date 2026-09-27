@@ -112,6 +112,10 @@ app.get("/api/test", (req, res) => {
 // Home
 // ========================================
 
+app.get("/video",(req,res)=>{
+  res.render("videos/kalash-yatra.ejs")
+})
+
 app.get("/", (req, res) => {
   res.render("index", {
     title: "Home",
