@@ -1,71 +1,533 @@
-<!doctype html>
+<%
+function ytId(url){ try{ const u=new URL(url); if(u.hostname==='youtu.be') return u.pathname.slice(1); return u.searchParams.get('v') || u.pathname.split('/').filter(Boolean).pop() || ''; }catch(e){ return ''; } }
+function fmtDate(d){ try{ return new Date(d).toLocaleDateString('hi-IN',{day:'numeric',month:'short',year:'numeric'}); }catch(e){ return ''; } }
+function hay(n){
+  return [(n.title||''),(n.description||''),(n.category||'')].join(' ').toLowerCase();
+}
+function getYoutubeId(n){
+  if (n.youtubeId) return n.youtubeId;
+  if (n.youtubeUrl) {
+    try {
+      const u = new URL(n.youtubeUrl);
+      if (u.hostname === 'youtu.be') return u.pathname.slice(1);
+      return u.searchParams.get('v') || u.pathname.split('/').filter(Boolean).pop() || '';
+    } catch(e) {}
+  }
+  return '';
+}
+function isYoutube(n){
+  return String(n.videoType || '').toLowerCase() === 'youtube' || !!getYoutubeId(n);
+}
+function isUpload(n){
+  return !isYoutube(n) && !!n.videoUrl;
+}
+function mediaPath(n){ return n.videoUrl || ''; }
+function thumbnailPath(n){ return n.thumbnail || ''; }
+function metaLine(n){ return [(n.category||''), fmtDate(n.publishedAt||n.createdAt)].filter(Boolean).join(' · '); }
+
+const items = Array.isArray(news) ? news : [];
+const videos = items;
+const youtubeCount = items.filter(isYoutube).length;
+const uploadCount = items.filter(isUpload).length;
+const cats = [...new Set(items.slice(1).map(n => (n.category||'').trim()).filter(Boolean))];
+const featured = items[0] || null;
+const gridItems = items.slice(1);
+const tickerItems = items.slice(0, 6);
+const stats = [
+  { n: items.length, label: 'प्रकाशित वीडियो' },
+  { n: youtubeCount, label: 'YouTube वीडियो' },
+  { n: uploadCount, label: 'अपलोड वीडियो' },
+  { n: cats.length, label: 'श्रेणियाँ' }
+];
+%><!doctype html>
 <html lang="hi">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title><%= title %> | निषाद संकल्प अभियान</title>
+  <title><%= title || "समाचार" %> | निषाद संकल्प अभियान</title>
+  <meta name="description" content="निषाद संकल्प अभियान की ताज़ा खबरें, कहानियाँ, वीडियो और ज़मीनी अपडेट।">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Rozha+One&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/news/video_news.css">
+  <script src="https://unpkg.com/lenis@1/dist/lenis.min.js" defer></script>
 </head>
 <body>
 <%- include('../common/navbar') %>
-<main>
-  <section class="hero">
-    <div class="hero-inner">
-      <span class="eyebrow">निषाद संकल्प अभियान · NEWSROOM</span>
-      <h1>समाचार और वीडियो</h1>
-      <p>अभियान की ताज़ा खबरें, कहानियाँ और ज़मीनी अपडेट।</p>
-      <div class="hero-meta"><span class="live-dot"></span> <%= news.length %> प्रकाशित अपडेट</div>
-    </div>
-    <div class="hero-shape"></div>
-  </section>
-  <section class="content">
-    <div class="section-top">
-      <div><span class="eyebrow">LATEST UPDATES</span><h2>ताज़ा समाचार</h2></div>
-      <label class="search">⌕ <input id="search" placeholder="समाचार खोजें…" aria-label="समाचार खोजें"></label>
-    </div>
-    <% if (!news.length) { %>
-      <div class="empty"><span>✦</span><h2>जल्द आ रहे हैं नए अपडेट</h2><p>अभियान की ताज़ा खबरों के लिए फिर से यहाँ आएँ।</p></div>
-    <% } else { %>
-      <div class="news-grid" id="grid">
-      <% news.forEach((item) => { const yid = item.mediaType === 'youtube' ? (() => { try { const u = new URL(item.youtubeUrl); return u.hostname === 'youtu.be' ? u.pathname.slice(1) : (u.searchParams.get('v') || u.pathname.split('/').pop()); } catch(e) { return ''; } })() : ''; %>
-        <article class="card" data-search="<%= (item.title+' '+item.summary+' '+item.category+' '+item.state+' '+item.district).toLowerCase() %>">
-          <% if (item.mediaType !== 'article') { %>
-            <div class="media">
-              <% if (item.thumbnailPath) { %><img src="<%= item.thumbnailPath %>" alt="<%= item.title %>" loading="lazy">
-              <% } else if (yid) { %><img src="https://i.ytimg.com/vi/<%= yid %>/hqdefault.jpg" alt="<%= item.title %>" loading="lazy">
-              <% } else { %><div class="video-placeholder">N</div><% } %>
-              <span class="video-badge">▶ <%= item.mediaType === 'youtube' ? 'VIDEO' : 'अपलोड वीडियो' %></span>
-              <% if (item.mediaType === 'youtube') { %><button class="play" type="button" data-youtube="<%= yid %>" data-title="<%= item.title %>" aria-label="वीडियो चलाएँ">▶</button>
-              <% } else { %><button class="play" type="button" data-upload="<%= item.videoPath %>" data-title="<%= item.title %>" aria-label="वीडियो चलाएँ">▶</button><% } %>
-            </div>
-          <% } else if (item.thumbnailPath) { %>
-            <div class="media"><img src="<%= item.thumbnailPath %>" alt="<%= item.title %>" loading="lazy"><span class="video-badge">समाचार</span></div>
-          <% } %>
-          <div class="card-body">
-            <div class="card-meta"><span><%= item.category %></span><time><%= new Date(item.publishedAt || item.createdAt).toLocaleDateString('hi-IN', { day: 'numeric', month: 'short', year: 'numeric' }) %></time></div>
-            <h3><%= item.title %></h3>
-            <% if (item.summary) { %><p class="summary"><%= item.summary %></p><% } %>
-            <details><summary>पूरी खबर पढ़ें <span>＋</span></summary><div class="story"><%= item.content %></div></details>
-            <% if (item.state || item.district) { %><div class="location">⌖ <%= [item.district, item.state].filter(Boolean).join(' · ') %></div><% } %>
-          </div>
-        </article>
-      <% }) %>
+<main class="nx-root">
+
+  <% if (items.length) { %>
+  <!-- ══ ताज़ा सुर्खियाँ · NEWS TICKER ══ -->
+  <div class="nx-ticker" data-testid="news-ticker" aria-label="ताज़ा सुर्खियाँ">
+    <div class="nx-ticker-label"><span class="nx-live-dot" aria-hidden="true"></span>ताज़ा खबर</div>
+    <div class="nx-ticker-viewport">
+      <div class="nx-ticker-track">
+        <% for (let pass = 0; pass < 2; pass++) { %>
+        <div class="nx-ticker-strip" <%- pass === 1 ? 'aria-hidden="true"' : '' %>>
+          <% tickerItems.forEach(n => { %>
+          <span class="nx-ticker-item">
+            <a href="#nx-grid" class="nx-ticker-link" data-scroll-grid data-testid="ticker-link"><%= n.title %></a>
+            <span class="nx-ticker-sep" aria-hidden="true">◆</span>
+          </span>
+          <% }) %>
+        </div>
+        <% } %>
       </div>
-      <div class="empty" id="noResults" hidden><h2>कोई खबर नहीं मिली</h2><p>दूसरे शब्द से खोजकर देखें।</p></div>
-    <% } %>
+    </div>
+  </div>
+  <% } %>
+
+  <!-- ══ HERO ══ -->
+  <section class="nx-hero">
+    <div class="nx-hero-bg" aria-hidden="true">
+      <span class="nx-ring nx-ring-1"></span>
+      <span class="nx-ring nx-ring-2"></span>
+      <span class="nx-ring nx-ring-3"></span>
+      <span class="nx-hero-glow"></span>
+    </div>
+    <div class="nx-hero-inner nx-wrap">
+      <span class="nx-eyebrow nx-eyebrow-hero nx-fade" style="--d:.05s">निषाद संकल्प अभियान · NEWSROOM</span>
+      <h1 class="nx-hero-title">
+        <span class="nx-line" style="--d:.16s"><span>समाचार</span></span>
+        <span class="nx-line" style="--d:.30s"><span>और <em class="nx-outline">वीडियो</em></span></span>
+      </h1>
+      <p class="nx-hero-sub nx-fade" style="--d:.48s">अभियान की ताज़ा खबरें, कहानियाँ और ज़मीनी अपडेट — सीधे मैदान से।</p>
+      <div class="nx-hero-meta nx-fade" style="--d:.62s">
+        <% if (items.length) { %>
+        <span class="nx-live-chip" data-testid="hero-published-count"><span class="nx-live-dot" aria-hidden="true"></span><%= items.length %> प्रकाशित अपडेट</span>
+        <% } %>
+        <span class="nx-hero-date">आज · <%= fmtDate(Date.now()) %></span>
+      </div>
+    </div>
   </section>
+
+  <% if (!items.length) { %>
+  <!-- ══ EMPTY STATE ══ -->
+  <section class="nx-section">
+    <div class="nx-empty nx-reveal" data-testid="empty-state">
+      <svg class="nx-empty-star" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8L12 2z" fill="currentColor"/></svg>
+      <h2>जल्द आ रहे हैं नए अपडेट</h2>
+      <p>अभियान की ताज़ा खबरों के लिए फिर से यहाँ आएँ।</p>
+    </div>
+  </section>
+  <% } else { %>
+
+
+
+  <% if (featured) { %>
+  <!-- ══ मुख्य खबर · FEATURED ══ -->
+  <section class="nx-section nx-featured-wrap">
+    <article class="nx-featured nx-reveal" data-testid="featured-story">
+      <% const fyid = getYoutubeId(featured); %>
+      <div class="nx-featured-media nx-vmedia"
+           data-youtube="<%= fyid %>"
+           data-upload="<%= mediaPath(featured) %>"
+           data-title="<%= featured.title %>"
+           data-meta="<%= metaLine(featured) %>"
+           data-preview="1">
+        <% if (thumbnailPath(featured)) { %>
+          <img src="<%= thumbnailPath(featured) %>" alt="<%= featured.title %>" loading="eager">
+        <% } else if (isYoutube(featured) && fyid) { %>
+          <img src="https://i.ytimg.com/vi/<%= fyid %>/maxresdefault.jpg" alt="<%= featured.title %>" loading="eager" onerror="this.src='https://i.ytimg.com/vi/<%= fyid %>/hqdefault.jpg'">
+        <% } else { %>
+          <div class="nx-media-fallback">नि</div>
+        <% } %>
+        <span class="nx-flag" aria-hidden="true">मुख्य खबर</span>
+        <% if (true) { %>
+        <button class="nx-play nx-play-lg" type="button" aria-label="वीडियो चलाएँ" data-testid="featured-play">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        </button>
+        <% } %>
+      </div>
+      <div class="nx-featured-body">
+        <span class="nx-eyebrow">FEATURED · मुख्य कहानी</span>
+        <div class="nx-meta-row">
+          <span class="nx-chip nx-chip-solid"><%= featured.category || 'वीडियो' %></span>
+          <time class="nx-meta-time"><%= fmtDate(featured.publishedAt || featured.createdAt) %></time>
+        </div>
+        <h2 class="nx-featured-title"><%= featured.title %></h2>
+        <% if (featured.description) { %><p class="nx-featured-summary"><%= featured.description %></p><% } %>
+        <details class="nx-story-details" data-testid="featured-story-toggle">
+          <summary>पूरी खबर पढ़ें <span class="nx-plus" aria-hidden="true">+</span></summary>
+          <div class="nx-story"><%= featured.description %></div>
+        </details>
+      </div>
+    </article>
+  </section>
+  <% } %>
+
+  <% if (videos.length) { %>
+  <!-- ══ वीडियो कॉर्नर ══ -->
+  <section class="nx-section nx-tight">
+    <div class="nx-section-top">
+      <div class="nx-reveal">
+        <span class="nx-eyebrow">VIDEO GALLERY</span>
+        <h2 class="nx-h2">वीडियो कॉर्नर</h2>
+      </div>
+      <div class="nx-row-nav nx-reveal" style="--d:.1s">
+        <button class="nx-nav-btn" id="vidPrev" type="button" aria-label="पिछले वीडियो" data-testid="video-row-prev">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.4 7.4L14 6l-6 6 6 6 1.4-1.4L10.8 12z" fill="currentColor"/></svg>
+        </button>
+        <button class="nx-nav-btn" id="vidNext" type="button" aria-label="अगले वीडियो" data-testid="video-row-next">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.6 16.6L10 18l6-6-6-6-1.4 1.4 4.6 4.6z" fill="currentColor"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="nx-video-row" id="videoRow" data-testid="video-row">
+      <% videos.forEach((v, i) => { const vyid = getYoutubeId(v); %>
+      <article class="nx-vcard nx-reveal" style="--d:<%= (i % 4) * 0.07 %>s" data-testid="video-card-<%= i %>">
+        <div class="nx-media nx-vmedia nx-vmedia-row"
+             data-youtube="<%= vyid %>"
+             data-upload="<%= mediaPath(v) %>"
+             data-title="<%= v.title %>"
+             data-meta="<%= metaLine(v) %>"
+             data-preview="1"
+             data-testid="video-media-<%= i %>">
+          <% if (thumbnailPath(v)) { %>
+            <img src="<%= thumbnailPath(v) %>" alt="<%= v.title %>" loading="lazy">
+          <% } else if (vyid) { %>
+            <img src="https://i.ytimg.com/vi/<%= vyid %>/hqdefault.jpg" alt="<%= v.title %>" loading="lazy">
+          <% } else { %>
+            <div class="nx-media-fallback">नि</div>
+          <% } %>
+          <span class="nx-badge">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+            <%= isYoutube(v) ? 'YouTube वीडियो' : 'अपलोड वीडियो' %>
+          </span>
+          <button class="nx-play" type="button" aria-label="वीडियो चलाएँ" data-testid="video-play-<%= i %>">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+          </button>
+        </div>
+        <div class="nx-vbody">
+          <div class="nx-vmeta"><span class="nx-vcat"><%= v.category || 'वीडियो' %></span><time><%= fmtDate(v.publishedAt || v.createdAt) %></time></div>
+          <h3 class="nx-vtitle"><%= v.title %></h3>
+        </div>
+      </article>
+      <% }) %>
+    </div>
+  </section>
+  <% } %>
+
+  <% if (gridItems.length) { %>
+  <!-- ══ ताज़ा समाचार · GRID ══ -->
+  <section class="nx-section nx-grid-section" id="nx-grid">
+    <div class="nx-section-top">
+      <div class="nx-reveal">
+        <span class="nx-eyebrow">LATEST UPDATES</span>
+        <h2 class="nx-h2">ताज़ा समाचार</h2>
+        <span class="nx-count" id="nxResultCount" data-testid="result-count"><%= gridItems.length %> खबरें</span>
+      </div>
+      <label class="nx-search nx-reveal" style="--d:.1s">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 10-.7.7l.27.28v.79l5 4.99L20.49 19zm-6 0A4.5 4.5 0 1114 9.5 4.5 4.5 0 019.5 14z" fill="currentColor"/></svg>
+        <input id="nxSearch" type="search" placeholder="समाचार खोजें…" aria-label="समाचार खोजें" data-testid="news-search-input">
+      </label>
+    </div>
+    <div class="nx-chips nx-reveal" id="nxChips" style="--d:.15s" data-testid="category-filter" role="group" aria-label="श्रेणी चुनें">
+      <button class="nx-chip is-active" type="button" data-cat="all" data-testid="filter-chip-all">सभी</button>
+      <% cats.forEach(c => { %>
+      <button class="nx-chip" type="button" data-cat="<%= c %>" data-testid="filter-chip-<%= c %>"><%= c %></button>
+      <% }) %>
+    </div>
+    <div class="nx-grid" id="nxGrid" data-testid="news-grid">
+      <% gridItems.forEach((item, i) => { const gid = getYoutubeId(item); %>
+      <article class="nx-card nx-reveal"
+               style="--d:<%= (i % 3) * 0.08 %>s"
+               data-search="<%= hay(item) %>"
+               data-category="<%= (item.category || '').trim() %>"
+               data-testid="news-card-<%= i %>">
+        <% if (true) { %>
+        <div class="nx-media nx-vmedia"
+             data-youtube="<%= gid %>"
+             data-upload="<%= mediaPath(item) %>"
+             data-title="<%= item.title %>"
+             data-meta="<%= metaLine(item) %>"
+             data-preview="1"
+             data-testid="card-video-media-<%= i %>">
+          <% if (thumbnailPath(item)) { %>
+            <img src="<%= thumbnailPath(item) %>" alt="<%= item.title %>" loading="lazy">
+          <% } else if (gid) { %>
+            <img src="https://i.ytimg.com/vi/<%= gid %>/hqdefault.jpg" alt="<%= item.title %>" loading="lazy">
+          <% } else { %>
+            <div class="nx-media-fallback">नि</div>
+          <% } %>
+          <span class="nx-badge">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+            <%= isYoutube(item) ? 'YouTube वीडियो' : 'अपलोड वीडियो' %>
+          </span>
+          <button class="nx-play" type="button" aria-label="वीडियो चलाएँ" data-testid="card-video-play-<%= i %>">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+          </button>
+        </div>
+        <% } else if (thumbnailPath(item)) { %>
+        <div class="nx-media">
+          <img src="<%= thumbnailPath(item) %>" alt="<%= item.title %>" loading="lazy">
+          <span class="nx-badge">समाचार</span>
+        </div>
+        <% } %>
+        <div class="nx-card-body">
+          <div class="nx-card-meta">
+            <span class="nx-cat"><%= item.category || 'समाचार' %></span>
+            <time><%= fmtDate(item.publishedAt || item.createdAt) %></time>
+          </div>
+          <h3 class="nx-card-title"><%= item.title %></h3>
+          <% if (item.description) { %><p class="nx-summary"><%= item.description %></p><% } %>
+          <details class="nx-story-details" data-testid="story-toggle-<%= i %>">
+            <summary>पूरी खबर पढ़ें <span class="nx-plus" aria-hidden="true">+</span></summary>
+            <div class="nx-story"><%= item.description || '' %></div>
+          </details>
+        </div>
+      </article>
+      <% }) %>
+    </div>
+    <div class="nx-empty" id="nxNoResults" hidden data-testid="no-results">
+      <svg class="nx-empty-star" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8L12 2z" fill="currentColor"/></svg>
+      <h2>कोई खबर नहीं मिली</h2>
+      <p>दूसरे शब्द से खोजकर देखें।</p>
+    </div>
+  </section>
+  <% } %>
+  <% } %>
 </main>
-<div class="modal" id="modal" aria-hidden="true"><button class="modal-close" id="close" aria-label="बंद करें">×</button><div class="player" id="player"></div><h2 id="modalTitle"></h2></div>
+
 <%- include('../common/footer') %>
+
+<!-- ══ वीडियो होवर प्रीव्यू (लिटिल पॉपअप) ══ -->
+<div class="nx-preview" id="nxPreview" aria-hidden="true" data-testid="video-preview-popup">
+  <div class="nx-preview-card">
+    <div class="nx-preview-media" id="nxPreviewMedia"></div>
+    <div class="nx-preview-cap">
+      <strong id="nxPreviewTitle"></strong>
+      <span>क्लिक करें — पूरा वीडियो देखें</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ फुल-स्क्रीन वीडियो मोडल ══ -->
+<div class="nx-modal" id="nxModal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="वीडियो प्लेयर" data-testid="video-modal">
+  <button class="nx-modal-close" id="nxModalClose" type="button" aria-label="बंद करें" data-testid="video-modal-close">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="currentColor"/></svg>
+  </button>
+  <div class="nx-modal-box">
+    <div class="nx-player" id="nxPlayer"></div>
+    <div class="nx-modal-caption">
+      <h2 id="nxModalTitle" data-testid="video-modal-title"></h2>
+      <span id="nxModalMeta"></span>
+    </div>
+  </div>
+</div>
+
 <script>
-const search = document.getElementById('search');
-search?.addEventListener('input', () => { const q = search.value.toLowerCase(); let count = 0; document.querySelectorAll('.card').forEach(c => { const show = c.dataset.search.includes(q); c.hidden = !show; if (show) count++; }); const empty = document.getElementById('noResults'); if (empty) empty.hidden = count !== 0; });
-const modal = document.getElementById('modal'), player = document.getElementById('player');
-document.addEventListener('click', e => { const b = e.target.closest('[data-youtube],[data-upload]'); if (!b) return; const title = b.dataset.title; document.getElementById('modalTitle').textContent = title; if (b.dataset.youtube) { const f = document.createElement('iframe'); f.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(b.dataset.youtube) + '?autoplay=1&rel=0'; f.title = title; f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'; f.allowFullscreen = true; player.replaceChildren(f); } else { const v = document.createElement('video'); v.src = b.dataset.upload; v.controls = true; v.autoplay = true; v.playsInline = true; player.replaceChildren(v); } modal.classList.add('open'); modal.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; });
-function closeModal() { modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true'); player.replaceChildren(); document.body.style.overflow = ''; }
-document.getElementById('close').addEventListener('click', closeModal); modal.addEventListener('click', e => { if (e.target === modal) closeModal(); }); document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+(function(){
+  'use strict';
+  const $  = (s, c) => (c || document).querySelector(s);
+  const $$ = (s, c) => Array.prototype.slice.call((c || document).querySelectorAll(s));
+  const fineHover = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ── Lenis smooth momentum scroll (CDN, optional) ── */
+  let lenis = null;
+  function initLenis(){
+    try {
+      if (window.Lenis && !reduce) {
+        lenis = new Lenis({ duration: 1.15, smoothWheel: true });
+        const raf = t => { lenis.raf(t); requestAnimationFrame(raf); };
+        requestAnimationFrame(raf);
+      }
+    } catch (e) {}
+  }
+  if (document.readyState === 'complete') initLenis();
+  else addEventListener('load', initLenis);
+
+  /* ── Ticker link → smooth scroll to grid ── */
+  $$('[data-scroll-grid]').forEach(a => a.addEventListener('click', e => {
+    e.preventDefault();
+    const g = $('#nxGrid');
+    if (!g) return;
+    if (lenis) lenis.scrollTo(g, { offset: -80 });
+    else g.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+  }));
+
+  /* ── Scroll reveals ── */
+  const revealIO = new IntersectionObserver(es => es.forEach(en => {
+    if (en.isIntersecting) { en.target.classList.add('in-view'); revealIO.unobserve(en.target); }
+  }), { threshold: 0.12, rootMargin: '0px 0px -36px 0px' });
+  $$('.nx-reveal').forEach(el => revealIO.observe(el));
+
+  /* ── Stat count-up ── */
+  function countUp(el){
+    const t = +el.dataset.count || 0;
+    if (reduce) { el.textContent = t; return; }
+    const s = performance.now(), d = 950;
+    (function step(n){
+      const p = Math.min(1, (n - s) / d);
+      el.textContent = Math.round(t * (1 - Math.pow(1 - p, 3)));
+      if (p < 1) requestAnimationFrame(step);
+    })(s);
+  }
+  const countIO = new IntersectionObserver(es => es.forEach(en => {
+    if (en.isIntersecting) { countUp(en.target); countIO.unobserve(en.target); }
+  }), { threshold: 0.5 });
+  $$('.nx-stat-num').forEach(el => countIO.observe(el));
+
+  /* ── Hero rings parallax ── */
+  const rings = $$('.nx-ring');
+  if (rings.length && !reduce) {
+    let ticking = false;
+    addEventListener('scroll', () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const y = window.scrollY || 0;
+        rings.forEach((r, i) => { r.style.transform = 'translate3d(0,' + (y * (0.05 + i * 0.035)).toFixed(1) + 'px,0)'; });
+        ticking = false;
+      });
+    }, { passive: true });
+  }
+
+  /* ── Search + category filter ── */
+  const searchInput = $('#nxSearch'), chipsWrap = $('#nxChips'),
+        grid = $('#nxGrid'), noRes = $('#nxNoResults'), countEl = $('#nxResultCount');
+  let activeCat = 'all';
+  function applyFilters(){
+    if (!grid) return;
+    const q = (searchInput ? searchInput.value : '').trim().toLowerCase();
+    let shown = 0;
+    $$('.nx-card', grid).forEach(c => {
+      const okQ = !q || (c.dataset.search || '').includes(q);
+      const okC = activeCat === 'all' || c.dataset.category === activeCat;
+      const show = okQ && okC;
+      c.classList.toggle('is-hidden', !show);
+      if (show) shown++;
+    });
+    if (noRes) noRes.hidden = shown !== 0;
+    if (countEl) countEl.textContent = shown + ' खबरें';
+  }
+  if (searchInput) searchInput.addEventListener('input', applyFilters);
+  if (chipsWrap) chipsWrap.addEventListener('click', e => {
+    const b = e.target.closest('.nx-chip');
+    if (!b) return;
+    $$('.nx-chip', chipsWrap).forEach(c => c.classList.remove('is-active'));
+    b.classList.add('is-active');
+    activeCat = b.dataset.cat;
+    applyFilters();
+  });
+
+  /* ── Full-screen video modal ── */
+  const modal = $('#nxModal'), player = $('#nxPlayer'),
+        mTitle = $('#nxModalTitle'), mMeta = $('#nxModalMeta');
+  function openModal(title, yt, up, meta){
+    mTitle.textContent = title || '';
+    mMeta.textContent = meta || '';
+    player.replaceChildren();
+    if (yt) {
+      const f = document.createElement('iframe');
+      f.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(yt) + '?autoplay=1&rel=0&playsinline=1';
+      f.title = title || 'वीडियो';
+      f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+      f.allowFullscreen = true;
+      player.appendChild(f);
+    } else if (up) {
+      const v = document.createElement('video');
+      v.src = up; v.controls = true; v.autoplay = true; v.playsInline = true;
+      player.appendChild(v);
+    }
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    if (lenis) lenis.stop();
+    hidePreview();
+  }
+  function closeModal(){
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    player.replaceChildren();
+    document.body.style.overflow = '';
+    if (lenis) lenis.start();
+  }
+  $('#nxModalClose').addEventListener('click', closeModal);
+  modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeModal(); hidePreview(); }
+  });
+  document.addEventListener('click', e => {
+    const m = e.target.closest('.nx-vmedia');
+    if (!m) return;
+    const yt = m.dataset.youtube, up = m.dataset.upload;
+    if (!yt && !up) return;
+    openModal(m.dataset.title, yt, up, m.dataset.meta);
+  });
+
+  /* ── Hover preview popup: little popup + muted autoplay preview ── */
+  const pv = $('#nxPreview'), pvMedia = $('#nxPreviewMedia'), pvTitle = $('#nxPreviewTitle');
+  let pvOn = false, tx = 0, ty = 0, cx = 0, cy = 0, raf = null;
+  function pvLoop(){
+    cx += (tx - cx) * 0.2;
+    cy += (ty - cy) * 0.2;
+    pv.style.transform = 'translate3d(' + cx.toFixed(1) + 'px,' + cy.toFixed(1) + 'px,0)';
+    raf = (pvOn || Math.abs(tx - cx) > 0.4 || Math.abs(ty - cy) > 0.4) ? requestAnimationFrame(pvLoop) : null;
+  }
+  function startPreview(m){
+    pvMedia.replaceChildren();
+    const yt = m.dataset.youtube, up = m.dataset.upload;
+    if (yt) {
+      const f = document.createElement('iframe');
+      f.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(yt) +
+              '?autoplay=1&mute=1&controls=0&loop=1&playlist=' + encodeURIComponent(yt) + '&modestbranding=1&rel=0&playsinline=1';
+      f.setAttribute('allow', 'autoplay; encrypted-media');
+      f.setAttribute('tabindex', '-1');
+      pvMedia.appendChild(f);
+    } else if (up) {
+      const v = document.createElement('video');
+      v.src = up; v.muted = true; v.loop = true; v.autoplay = true; v.playsInline = true;
+      pvMedia.appendChild(v);
+      const p = v.play(); if (p && p.catch) p.catch(function(){});
+    }
+    pvTitle.textContent = m.dataset.title || '';
+  }
+  if (fineHover) {
+    document.addEventListener('mouseover', e => {
+      const m = e.target.closest('.nx-vmedia');
+      if (!m || !pvOn) {
+        if (m && !pvOn) {
+          pvOn = true;
+          tx = cx = Math.min(innerWidth - 276, Math.max(8, e.clientX + 20));
+          ty = cy = Math.min(innerHeight - 224, Math.max(8, e.clientY + 20));
+          pv.classList.add('is-on');
+          pv.setAttribute('aria-hidden', 'false');
+          startPreview(m);
+          if (!raf) raf = requestAnimationFrame(pvLoop);
+        }
+      }
+    });
+    document.addEventListener('mousemove', e => {
+      if (!pvOn) return;
+      tx = Math.min(innerWidth - 276, Math.max(8, e.clientX + 20));
+      ty = Math.min(innerHeight - 224, Math.max(8, e.clientY + 20));
+      if (!raf) raf = requestAnimationFrame(pvLoop);
+    });
+    document.addEventListener('mouseout', e => {
+      const m = e.target.closest('.nx-vmedia');
+      if (!m || !pvOn) return;
+      const to = e.relatedTarget;
+      if (to && m.contains(to)) return;
+      hidePreview();
+    });
+  }
+  function hidePreview(){
+    if (!pvOn) return;
+    pvOn = false;
+    pv.classList.remove('is-on');
+    pv.setAttribute('aria-hidden', 'true');
+    setTimeout(() => { if (!pvOn) pvMedia.replaceChildren(); }, 260);
+  }
+
+  /* ── Video row arrows ── */
+  const row = $('#videoRow');
+  const step = () => (row ? (row.firstElementChild ? row.firstElementChild.offsetWidth + 18 : 348) : 348);
+  const prev = $('#vidPrev'), next = $('#vidNext');
+  if (prev) prev.addEventListener('click', () => row.scrollBy({ left: -step(), behavior: 'smooth' }));
+  if (next) next.addEventListener('click', () => row.scrollBy({ left:  step(), behavior: 'smooth' }));
+})();
 </script>
 </body>
 </html>

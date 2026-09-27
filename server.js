@@ -35,13 +35,16 @@ if (!process.env.SESSION_SECRET) {
 
 const sessionConfig = require("./config/session");
 const createDefaultAdmin = require("./config/createAdmin");
+const { seedHomeData } = require("./scripts/seedHomeData");
 
 // ========================================
-// Admin Routes
+// Routes
 // ========================================
 
 const adminAuthRoutes = require("./routes/admin/authRoutes");
 const adminDashboardRoutes = require("./routes/admin/dashboardRoutes");
+const adminHomeRoutes = require("./routes/admin/homeRoutes");
+const homeRoutes = require("./routes/homeRoutes");
 
 // ========================================
 // View Engine
@@ -93,8 +96,8 @@ app.use(videoNewsRoutes);
 // ========================================
 
 app.use("/admin", adminAuthRoutes);
-
 app.use("/admin", adminDashboardRoutes);
+app.use("/admin/home", adminHomeRoutes);
 
 // ========================================
 // Test API
@@ -108,14 +111,10 @@ app.get("/api/test", (req, res) => {
 });
 
 // ========================================
-// Home
+// Public Home & Form API Routes
 // ========================================
 
-app.get("/", (req, res) => {
-  res.render("index", {
-    title: "Home",
-  });
-});
+app.use("/", homeRoutes);
 
 // ========================================
 // 404 Handler
@@ -138,6 +137,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({
     success: false,
     message: "Internal Server Error",
+    error: err.message,
   });
 });
 
@@ -156,15 +156,17 @@ const startServer = async () => {
     // Automatically create admin if not exists
     await createDefaultAdmin();
 
-    app.listen(PORT, () => {
+    // Automatically seed default home page data if empty
+    await seedHomeData();
+
+    app.listen(PORT, "0.0.0.0", () => {
       console.log("================================");
-      console.log(`🚀 Server running on http://localhost:${PORT}`);
-      console.log(
-        `🔐 Admin Login: http://localhost:${PORT}/admin/login`
-      );
-      console.log(
-        `📊 Admin Dashboard: http://localhost:${PORT}/admin/dashboard`
-      );
+      console.log(`🚀 Server running!`);
+      console.log(`   ➜ Local:   http://localhost:${PORT}`);
+      console.log(`   ➜ Network: http:// 192.168.1.16:${PORT} (📱 Phone me chalane ke liye)`);
+      console.log(`   🔐 Admin Login: http://localhost:${PORT}/admin/login`);
+      console.log(`   📊 Admin Dashboard: http://localhost:${PORT}/admin/dashboard`);
+      console.log(`   🏡 Admin Home Manager: http://localhost:${PORT}/admin/home`);
       console.log("================================");
     });
   } catch (error) {
