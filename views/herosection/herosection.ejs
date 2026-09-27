@@ -1,0 +1,719 @@
+<!doctype html>
+<html lang="hi">
+
+<head>
+
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <title>निषाद संकल्प अभियान</title>
+
+
+  <!-- =====================================================
+       BOOTSTRAP CSS
+       ===================================================== -->
+
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
+
+
+  <style>
+
+    /* =====================================================
+       GLOBAL
+       ===================================================== */
+
+    * {
+      box-sizing: border-box;
+    }
+
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+
+    body {
+      margin: 0;
+      padding: 0;
+
+      overflow-x: hidden;
+
+      background: #fbf4ec;
+    }
+
+
+
+    /* =====================================================
+       HERO SECTION
+       ===================================================== */
+
+    .hero-section {
+
+      position: relative;
+
+      width: 100%;
+
+      /*
+        Fixed navbar ke liye space
+      */
+
+      padding-top: 64px;
+
+      overflow: hidden;
+
+      background: #fbf4ec;
+    }
+
+
+
+    /* =====================================================
+       CAROUSEL
+       ===================================================== */
+
+    .hero-carousel {
+
+      position: relative;
+
+      width: 100%;
+
+      overflow: hidden;
+    }
+
+
+    .hero-carousel .carousel-inner {
+
+      width: 100%;
+
+      overflow: hidden;
+    }
+
+
+
+    /* =====================================================
+       DESKTOP SLIDE
+
+       Height same rahegi = 500px
+       ===================================================== */
+
+    .hero-carousel .carousel-item {
+
+      position: relative;
+
+      width: 100%;
+
+      height: 500px;
+
+      overflow: hidden;
+
+      background: #ead8c5;
+    }
+
+
+
+    /* =====================================================
+       IMAGE
+
+       IMPORTANT:
+       - Full width
+       - Full height
+       - No crop
+       - No empty space
+       ===================================================== */
+
+    .hero-carousel .carousel-item img {
+
+      width: 100%;
+
+      height: 100%;
+
+      display: block;
+
+      /*
+        IMPORTANT
+
+        cover nahi lagana hai,
+        kyunki cover image ko crop karega.
+
+        fill se image poore section
+        mein fit hogi.
+      */
+
+      object-fit: fill;
+
+      object-position: center center;
+
+      user-select: none;
+
+      -webkit-user-drag: none;
+
+      /*
+        Image rendering better
+      */
+
+      image-rendering: auto;
+    }
+
+
+
+    /* =====================================================
+       IMAGE OVERLAY
+       ===================================================== */
+
+    .hero-carousel .carousel-item::after {
+
+      content: "";
+
+      position: absolute;
+
+      inset: 0;
+
+      pointer-events: none;
+
+      z-index: 2;
+
+      background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.02),
+        rgba(0, 0, 0, 0.10)
+      );
+    }
+
+
+
+    /* =====================================================
+       PREVIOUS / NEXT BUTTON
+       ===================================================== */
+
+    .hero-carousel .carousel-control-prev,
+    .hero-carousel .carousel-control-next {
+
+      width: 50px;
+
+      height: 50px;
+
+      top: 50%;
+
+      margin: 0 22px;
+
+      transform: translateY(-50%);
+
+      padding: 0;
+
+      border: none;
+
+      border-radius: 50%;
+
+      background: rgba(55, 31, 31, 0.55);
+
+      opacity: 0.85;
+
+      z-index: 10;
+
+      transition:
+        background 0.25s ease,
+        opacity 0.25s ease,
+        transform 0.25s ease;
+    }
+
+
+    .hero-carousel .carousel-control-prev:hover,
+    .hero-carousel .carousel-control-next:hover {
+
+      background: #d72a2a;
+
+      opacity: 1;
+    }
+
+
+    .hero-carousel .carousel-control-prev:hover {
+
+      transform:
+        translateY(-50%)
+        translateX(-2px);
+    }
+
+
+    .hero-carousel .carousel-control-next:hover {
+
+      transform:
+        translateY(-50%)
+        translateX(2px);
+    }
+
+
+
+    /* =====================================================
+       INDICATORS
+       ===================================================== */
+
+    .hero-carousel .carousel-indicators {
+
+      z-index: 10;
+
+      margin-bottom: 18px;
+    }
+
+
+    .hero-carousel .carousel-indicators button {
+
+      width: 8px;
+
+      height: 8px;
+
+      padding: 0;
+
+      margin: 0 5px;
+
+      border: 0;
+
+      border-radius: 20px;
+
+      background-color: #ffffff;
+
+      opacity: 0.65;
+
+      transition:
+        width 0.25s ease,
+        opacity 0.25s ease;
+    }
+
+
+    .hero-carousel .carousel-indicators button.active {
+
+      width: 25px;
+
+      background-color: #d72a2a;
+
+      opacity: 1;
+    }
+
+
+
+    /* =====================================================
+       TABLET
+       ===================================================== */
+
+    @media (max-width: 992px) {
+
+      .hero-section {
+
+        padding-top: 64px;
+      }
+
+
+      .hero-carousel .carousel-item {
+
+        /*
+          Tablet height fixed
+        */
+
+        height: 430px;
+      }
+
+
+      .hero-carousel .carousel-control-prev,
+      .hero-carousel .carousel-control-next {
+
+        width: 44px;
+
+        height: 44px;
+
+        margin: 0 14px;
+      }
+
+    }
+
+
+
+    /* =====================================================
+       MOBILE
+       ===================================================== */
+
+    @media (max-width: 768px) {
+
+      .hero-section {
+
+        /*
+          Mobile navbar
+        */
+
+        padding-top: 60px;
+      }
+
+
+      .hero-carousel .carousel-item {
+
+        /*
+          Mobile height fixed
+        */
+
+        height: 340px;
+      }
+
+
+      .hero-carousel .carousel-control-prev,
+      .hero-carousel .carousel-control-next {
+
+        width: 40px;
+
+        height: 40px;
+
+        margin: 0 8px;
+      }
+
+
+      .hero-carousel .carousel-indicators {
+
+        margin-bottom: 12px;
+      }
+
+
+      .hero-carousel .carousel-indicators button {
+
+        width: 7px;
+
+        height: 7px;
+
+        margin: 0 4px;
+      }
+
+
+      .hero-carousel .carousel-indicators button.active {
+
+        width: 21px;
+      }
+
+    }
+
+
+
+    /* =====================================================
+       SMALL MOBILE
+       ===================================================== */
+
+    @media (max-width: 480px) {
+
+      .hero-section {
+
+        padding-top: 60px;
+      }
+
+
+      .hero-carousel .carousel-item {
+
+        height: 270px;
+      }
+
+
+      .hero-carousel .carousel-control-prev,
+      .hero-carousel .carousel-control-next {
+
+        width: 34px;
+
+        height: 34px;
+
+        margin: 0 5px;
+      }
+
+
+      .hero-carousel .carousel-indicators {
+
+        margin-bottom: 9px;
+      }
+
+
+      .hero-carousel .carousel-indicators button {
+
+        width: 6px;
+
+        height: 6px;
+
+        margin: 0 3px;
+      }
+
+
+      .hero-carousel .carousel-indicators button.active {
+
+        width: 18px;
+      }
+
+    }
+
+
+
+    /* =====================================================
+       VERY SMALL MOBILE
+       ===================================================== */
+
+    @media (max-width: 360px) {
+
+      .hero-section {
+
+        padding-top: 58px;
+      }
+
+
+      .hero-carousel .carousel-item {
+
+        height: 230px;
+      }
+
+
+      .hero-carousel .carousel-control-prev,
+      .hero-carousel .carousel-control-next {
+
+        width: 31px;
+
+        height: 31px;
+
+        margin: 0 3px;
+      }
+
+    }
+
+
+
+    /* =====================================================
+       LANDSCAPE MOBILE
+       ===================================================== */
+
+    @media (
+      max-width: 900px
+    ) and (
+      orientation: landscape
+    ) {
+
+      .hero-carousel .carousel-item {
+
+        height: 300px;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+
+<body>
+
+
+  <!-- =====================================================
+       HERO / CAROUSEL
+       ===================================================== -->
+
+  <section class="hero-section">
+
+
+    <div
+      id="heroCarousel"
+
+      class="carousel slide carousel-fade hero-carousel"
+
+      data-bs-ride="carousel"
+
+      data-bs-interval="4000"
+
+      data-bs-pause="false"
+
+      data-bs-touch="true"
+
+      data-bs-wrap="true"
+    >
+
+
+      <!-- =================================================
+           INDICATORS
+           ================================================= -->
+
+      <div class="carousel-indicators">
+
+
+        <button
+          type="button"
+
+          data-bs-target="#heroCarousel"
+
+          data-bs-slide-to="0"
+
+          class="active"
+
+          aria-current="true"
+
+          aria-label="Slide 1"
+        ></button>
+
+
+        <button
+          type="button"
+
+          data-bs-target="#heroCarousel"
+
+          data-bs-slide-to="1"
+
+          aria-label="Slide 2"
+        ></button>
+
+
+        <button
+          type="button"
+
+          data-bs-target="#heroCarousel"
+
+          data-bs-slide-to="2"
+
+          aria-label="Slide 3"
+        ></button>
+
+
+      </div>
+
+
+
+      <!-- =================================================
+           SLIDES
+           ================================================= -->
+
+      <div class="carousel-inner">
+
+
+        <!-- =========================
+             SLIDE 1
+             ========================= -->
+
+        <div class="carousel-item active">
+
+          <img
+            src="https://images.unsplash.com/photo-1514222134-b57cbb8ce073?auto=format&fit=crop&w=1920&q=85"
+
+            alt="निषाद संकल्प अभियान"
+
+            loading="eager"
+          >
+
+        </div>
+
+
+
+        <!-- =========================
+             SLIDE 2
+             ========================= -->
+
+        <div class="carousel-item">
+
+          <img
+            src="https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1920&q=85"
+
+            alt="भारतीय संस्कृति"
+
+            loading="lazy"
+          >
+
+        </div>
+
+
+
+        <!-- =========================
+             SLIDE 3
+             ========================= -->
+
+        <div class="carousel-item">
+
+          <img
+            src="https://images.unsplash.com/photo-1532375810709-75b1da00537c?auto=format&fit=crop&w=1920&q=85"
+
+            alt="भारत की संस्कृति"
+
+            loading="lazy"
+          >
+
+        </div>
+
+
+      </div>
+
+
+
+      <!-- =================================================
+           PREVIOUS BUTTON
+           ================================================= -->
+
+      <button
+        class="carousel-control-prev"
+
+        type="button"
+
+        data-bs-target="#heroCarousel"
+
+        data-bs-slide="prev"
+
+        aria-label="Previous slide"
+      >
+
+        <span
+          class="carousel-control-prev-icon"
+          aria-hidden="true"
+        ></span>
+
+        <span class="visually-hidden">
+          Previous
+        </span>
+
+      </button>
+
+
+
+      <!-- =================================================
+           NEXT BUTTON
+           ================================================= -->
+
+      <button
+        class="carousel-control-next"
+
+        type="button"
+
+        data-bs-target="#heroCarousel"
+
+        data-bs-slide="next"
+
+        aria-label="Next slide"
+      >
+
+        <span
+          class="carousel-control-next-icon"
+          aria-hidden="true"
+        ></span>
+
+        <span class="visually-hidden">
+          Next
+        </span>
+
+      </button>
+
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =====================================================
+       BOOTSTRAP JS
+       ===================================================== -->
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js">
+  </script>
+
+
+</body>
+
+</html>
