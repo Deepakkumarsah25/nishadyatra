@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title><%= title %> | निषाद संकल्प अभियान</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/news/video_news.css">
+</head>
+<body>
+<%- include('../common/navbar') %>
+<main>
+  <section class="hero">
+    <div class="hero-inner">
+      <span class="eyebrow">निषाद संकल्प अभियान · NEWSROOM</span>
+      <h1>समाचार और वीडियो</h1>
+      <p>अभियान की ताज़ा खबरें, कहानियाँ और ज़मीनी अपडेट।</p>
+      <div class="hero-meta"><span class="live-dot"></span> <%= news.length %> प्रकाशित अपडेट</div>
+    </div>
+    <div class="hero-shape"></div>
+  </section>
+  <section class="content">
+    <div class="section-top">
+      <div><span class="eyebrow">LATEST UPDATES</span><h2>ताज़ा समाचार</h2></div>
+      <label class="search">⌕ <input id="search" placeholder="समाचार खोजें…" aria-label="समाचार खोजें"></label>
+    </div>
+    <% if (!news.length) { %>
+      <div class="empty"><span>✦</span><h2>जल्द आ रहे हैं नए अपडेट</h2><p>अभियान की ताज़ा खबरों के लिए फिर से यहाँ आएँ।</p></div>
+    <% } else { %>
+      <div class="news-grid" id="grid">
+      <% news.forEach((item) => { const yid = item.mediaType === 'youtube' ? (() => { try { const u = new URL(item.youtubeUrl); return u.hostname === 'youtu.be' ? u.pathname.slice(1) : (u.searchParams.get('v') || u.pathname.split('/').pop()); } catch(e) { return ''; } })() : ''; %>
+        <article class="card" data-search="<%= (item.title+' '+item.summary+' '+item.category+' '+item.state+' '+item.district).toLowerCase() %>">
+          <% if (item.mediaType !== 'article') { %>
+            <div class="media">
+              <% if (item.thumbnailPath) { %><img src="<%= item.thumbnailPath %>" alt="<%= item.title %>" loading="lazy">
+              <% } else if (yid) { %><img src="https://i.ytimg.com/vi/<%= yid %>/hqdefault.jpg" alt="<%= item.title %>" loading="lazy">
+              <% } else { %><div class="video-placeholder">N</div><% } %>
+              <span class="video-badge">▶ <%= item.mediaType === 'youtube' ? 'VIDEO' : 'अपलोड वीडियो' %></span>
+              <% if (item.mediaType === 'youtube') { %><button class="play" type="button" data-youtube="<%= yid %>" data-title="<%= item.title %>" aria-label="वीडियो चलाएँ">▶</button>
+              <% } else { %><button class="play" type="button" data-upload="<%= item.videoPath %>" data-title="<%= item.title %>" aria-label="वीडियो चलाएँ">▶</button><% } %>
+            </div>
+          <% } else if (item.thumbnailPath) { %>
+            <div class="media"><img src="<%= item.thumbnailPath %>" alt="<%= item.title %>" loading="lazy"><span class="video-badge">समाचार</span></div>
+          <% } %>
+          <div class="card-body">
+            <div class="card-meta"><span><%= item.category %></span><time><%= new Date(item.publishedAt || item.createdAt).toLocaleDateString('hi-IN', { day: 'numeric', month: 'short', year: 'numeric' }) %></time></div>
+            <h3><%= item.title %></h3>
+            <% if (item.summary) { %><p class="summary"><%= item.summary %></p><% } %>
+            <details><summary>पूरी खबर पढ़ें <span>＋</span></summary><div class="story"><%= item.content %></div></details>
+            <% if (item.state || item.district) { %><div class="location">⌖ <%= [item.district, item.state].filter(Boolean).join(' · ') %></div><% } %>
+          </div>
+        </article>
+      <% }) %>
+      </div>
+      <div class="empty" id="noResults" hidden><h2>कोई खबर नहीं मिली</h2><p>दूसरे शब्द से खोजकर देखें।</p></div>
+    <% } %>
+  </section>
+</main>
+<div class="modal" id="modal" aria-hidden="true"><button class="modal-close" id="close" aria-label="बंद करें">×</button><div class="player" id="player"></div><h2 id="modalTitle"></h2></div>
+<%- include('../common/footer') %>
+<script>
+const search = document.getElementById('search');
+search?.addEventListener('input', () => { const q = search.value.toLowerCase(); let count = 0; document.querySelectorAll('.card').forEach(c => { const show = c.dataset.search.includes(q); c.hidden = !show; if (show) count++; }); const empty = document.getElementById('noResults'); if (empty) empty.hidden = count !== 0; });
+const modal = document.getElementById('modal'), player = document.getElementById('player');
+document.addEventListener('click', e => { const b = e.target.closest('[data-youtube],[data-upload]'); if (!b) return; const title = b.dataset.title; document.getElementById('modalTitle').textContent = title; if (b.dataset.youtube) { const f = document.createElement('iframe'); f.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(b.dataset.youtube) + '?autoplay=1&rel=0'; f.title = title; f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'; f.allowFullscreen = true; player.replaceChildren(f); } else { const v = document.createElement('video'); v.src = b.dataset.upload; v.controls = true; v.autoplay = true; v.playsInline = true; player.replaceChildren(v); } modal.classList.add('open'); modal.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; });
+function closeModal() { modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true'); player.replaceChildren(); document.body.style.overflow = ''; }
+document.getElementById('close').addEventListener('click', closeModal); modal.addEventListener('click', e => { if (e.target === modal) closeModal(); }); document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>

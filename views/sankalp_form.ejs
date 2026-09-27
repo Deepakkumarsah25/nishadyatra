@@ -610,6 +610,13 @@
 
 
 
+        <% if (typeof error !== "undefined" && error) { %>
+          <p role="alert" style="margin:12px 0;padding:12px 14px;border-radius:10px;background:#fff0ef;color:#9b2025"><%= error %></p>
+        <% } %>
+        <% if (typeof success !== "undefined" && success) { %>
+          <p role="status" style="margin:12px 0;padding:12px 14px;border-radius:10px;background:#edf8ef;color:#267340">आपका पंजीकरण सफल रहा। संकल्प यात्रा से जुड़ने के लिए धन्यवाद।</p>
+        <% } %>
+
         <form
           action="/sankalp-yatra/register"
           method="POST"
