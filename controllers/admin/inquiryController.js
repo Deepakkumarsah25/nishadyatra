@@ -11,7 +11,7 @@ exports.getInquiries = async (req, res) => {
     const inquiries = await InitiativeInquiry.find(filter).sort({ createdAt: -1 });
 
     res.render("admin/home/inquiries", {
-      title: "प्राप्त संकल्प एवं सहायता अनुरोध (Pledges & Inquiries)",
+      title: "Received Pledges & Support Inquiries",
       admin: req.session.admin,
       inquiries,
       currentFilter: { status, type },

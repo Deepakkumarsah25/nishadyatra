@@ -16,9 +16,9 @@ const formatUptime = (seconds) => {
   const d = Math.floor(seconds / (3600 * 24));
   const h = Math.floor((seconds % (3600 * 24)) / 3600);
   const m = Math.floor((seconds % 3600) / 60);
-  if (d > 0) return `${d} दिन ${h} घंटे`;
-  if (h > 0) return `${h} घंटे ${m} मिनट`;
-  return `${m} मिनट`;
+  if (d > 0) return `${d}d ${h}h`;
+  if (h > 0) return `${h}h ${m}m`;
+  return `${m}m`;
 };
 
 exports.dashboard = async (req, res, next) => {
@@ -83,7 +83,7 @@ exports.dashboard = async (req, res, next) => {
     const pillarsCount = whyChooseDoc?.pillars?.length || 0;
 
     res.render("admin/dashboard/index", {
-      title: "डैशबोर्ड — मुख्य अवलोकन (Admin Dashboard)",
+      title: "Admin Dashboard - Overview",
       admin: req.session.admin,
       currentPath: "/admin/dashboard",
       stats: {
@@ -119,8 +119,8 @@ exports.dashboard = async (req, res, next) => {
         nodeVersion: process.version,
         dbStatus:
           mongoose.connection.readyState === 1
-            ? "सक्रिय (Connected)"
-            : "डिस्कनेक्ट (Disconnected)",
+            ? "Connected"
+            : "Disconnected",
         uptime: formatUptime(process.uptime()),
         serverPort: process.env.PORT || 9191,
       },

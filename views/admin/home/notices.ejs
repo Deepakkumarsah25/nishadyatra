@@ -11,13 +11,13 @@
       <div class="page-heading">
         <h1>
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--admin-primary)" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-          ताजा सूचनाएं व त्वरित साइडबार प्रबंधन (Notices & Sidebar)
+          Latest Notices & Sidebar Management
         </h1>
-        <p>फ्लोटिंग साइडबार में आने वाले लाइव अपडेट्स, हेल्पलाइन नंबर और संपर्क विवरण नियंत्रित करें</p>
+        <p>Manage live updates, helpline numbers, and contact details displayed in the floating sidebar</p>
       </div>
     </div>
     <div class="topbar-right">
-      <a href="/" target="_blank" class="view-site-btn">साइडबार लाइव देखें</a>
+      <a href="/" target="_blank" class="view-site-btn">View Live Sidebar</a>
     </div>
   </header>
 
@@ -38,36 +38,36 @@
           <div class="admin-card-header">
             <h3>
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-              ताजा गतिविधियां एवं सूचनाएं (<%= notices.length %>)
+              Recent Activities & Notices (<%= notices.length %>)
             </h3>
           </div>
 
           <div class="admin-card-body">
             <!-- Add notice box -->
             <div style="background: #faf6f3; padding: 18px; border-radius: 11px; border: 1px solid var(--admin-border); margin-bottom: 24px;">
-              <h4 style="font-size: 13px; font-weight: 800; color: var(--admin-text-dark); margin-bottom: 12px;">+ नई सूचना / घोषणा जोड़ें</h4>
+              <h4 style="font-size: 13px; font-weight: 800; color: var(--admin-text-dark); margin-bottom: 12px;">+ Add New Notice / Announcement</h4>
               <form action="/admin/home/notices/new" method="POST">
                 <div class="form-group">
-                  <label for="noticeTitle">सूचना का विवरण *</label>
-                  <textarea id="noticeTitle" name="title" class="form-control" rows="2" placeholder="उदा. युवा मार्गदर्शन शिविर: प्रतियोगी परीक्षाओं के लिए निःशुल्क सहायता सत्र।" required></textarea>
+                  <label for="noticeTitle">Notice Description *</label>
+                  <textarea id="noticeTitle" name="title" class="form-control" rows="2" placeholder="e.g. Youth Guidance Camp: Free support sessions for competitive exams." required></textarea>
                 </div>
 
                 <div class="form-grid-3">
                   <div class="form-group">
-                    <label for="dateText">दिनांक टेक्स्ट</label>
-                    <input type="text" id="dateText" name="dateText" class="form-control" placeholder="उदा. 28 सितम्बर 2026" />
+                    <label for="dateText">Date Text</label>
+                    <input type="text" id="dateText" name="dateText" class="form-control" placeholder="e.g. September 28, 2026" />
                   </div>
                   <div class="form-group">
-                    <label for="noticeOrder">प्रदर्शन क्रम</label>
+                    <label for="noticeOrder">Display Order</label>
                     <input type="number" id="noticeOrder" name="order" class="form-control" value="0" />
                   </div>
                   <div class="form-group" style="display:flex; align-items:center; gap:8px; margin-top:24px;">
                     <input type="checkbox" id="noticeActive" name="isActive" value="true" checked style="width:16px; height:16px; accent-color: var(--admin-primary);" />
-                    <label for="noticeActive" style="margin-bottom:0; cursor:pointer;">सक्रिय</label>
+                    <label for="noticeActive" style="margin-bottom:0; cursor:pointer;">Active</label>
                   </div>
                 </div>
 
-                <button type="submit" class="btn-admin btn-admin-primary btn-admin-sm">सूचना प्रकाशित करें</button>
+                <button type="submit" class="btn-admin btn-admin-primary btn-admin-sm">Publish Notice</button>
               </form>
             </div>
 
@@ -78,7 +78,7 @@
                   <div style="padding: 14px; border: 1px solid var(--admin-border); border-radius: 9px; background: #fffdfb; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;">
                     <div>
                       <div style="font-size: 11px; font-weight: 800; color: var(--admin-primary); margin-bottom: 3px;">
-                        📅 <%= item.dateText || 'सामान्य' %> <%= !item.isActive ? '(छिपा हुआ)' : '' %>
+                        📅 <%= item.dateText || 'General' %> <%= !item.isActive ? '(Hidden)' : '' %>
                       </div>
                       <div style="font-size: 13px; font-weight: 600; color: var(--admin-text-dark); line-height: 1.4;">
                         <%= item.title %>
@@ -86,10 +86,10 @@
                     </div>
                     <div style="display: flex; gap: 6px; flex-shrink: 0;">
                       <form action="/admin/home/notices/toggle/<%= item._id %>" method="POST" style="display:inline;">
-                        <button type="submit" class="btn-admin btn-admin-outline btn-admin-sm"><%= item.isActive ? 'छिपाएं' : 'दिखाएं' %></button>
+                        <button type="submit" class="btn-admin btn-admin-outline btn-admin-sm"><%= item.isActive ? 'Hide' : 'Show' %></button>
                       </form>
-                      <form action="/admin/home/notices/delete/<%= item._id %>" method="POST" onsubmit="return confirm('क्या आप इस सूचना को हटाना चाहते हैं?');" style="display:inline;">
-                        <button type="submit" class="btn-admin btn-admin-danger btn-admin-sm">हटाएं</button>
+                      <form action="/admin/home/notices/delete/<%= item._id %>" method="POST" onsubmit="return confirm('Are you sure you want to delete this notice?');" style="display:inline;">
+                        <button type="submit" class="btn-admin btn-admin-danger btn-admin-sm">Delete</button>
                       </form>
                     </div>
                   </div>
@@ -97,7 +97,7 @@
               </div>
             <% } else { %>
               <div style="text-align: center; color: var(--admin-text-muted); padding: 20px;">
-                कोई सूचना नहीं है।
+                No notices available.
               </div>
             <% } %>
 
@@ -111,55 +111,55 @@
           <div class="admin-card-header">
             <h3>
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-              साइडबार संपर्क व हेल्पलाइन सेटिंग्स
+              Sidebar Contact & Helpline Settings
             </h3>
           </div>
 
           <div class="admin-card-body">
             <form action="/admin/home/notices/quick-info" method="POST">
               <div class="form-group">
-                <label for="sidebarTitle">साइडबार मुख्य शीर्षक</label>
+                <label for="sidebarTitle">Sidebar Main Title</label>
                 <input type="text" id="sidebarTitle" name="sidebarTitle" class="form-control" value="<%= quickInfo.sidebarTitle %>" required />
               </div>
 
               <div class="form-group">
-                <label for="sidebarSubtitle">साइडबार उप-शीर्षक</label>
+                <label for="sidebarSubtitle">Sidebar Subtitle</label>
                 <input type="text" id="sidebarSubtitle" name="sidebarSubtitle" class="form-control" value="<%= quickInfo.sidebarSubtitle %>" required />
               </div>
 
               <div class="form-group">
-                <label for="pledgeBoxTitle">संकल्प फॉर्म बॉक्स का नाम</label>
+                <label for="pledgeBoxTitle">Pledge Form Box Title</label>
                 <input type="text" id="pledgeBoxTitle" name="pledgeBoxTitle" class="form-control" value="<%= quickInfo.pledgeBoxTitle %>" required />
               </div>
 
               <div class="form-group">
-                <label for="pledgeBoxDesc">संकल्प फॉर्म बॉक्स का संक्षिप्त परिचय</label>
+                <label for="pledgeBoxDesc">Pledge Form Box Brief Description</label>
                 <textarea id="pledgeBoxDesc" name="pledgeBoxDesc" class="form-control" rows="2" required><%= quickInfo.pledgeBoxDesc %></textarea>
               </div>
 
               <div class="form-group">
-                <label for="helplineText">हेल्पलाइन प्रदर्शित टेक्स्ट (Display Text) *</label>
+                <label for="helplineText">Helpline Display Text *</label>
                 <input type="text" id="helplineText" name="helplineText" class="form-control" value="<%= quickInfo.helplineText %>" required />
               </div>
 
               <div class="form-group">
-                <label for="helplineTel">कॉल करने हेतु नंबर (Dial Number) *</label>
+                <label for="helplineTel">Dial Number (Tel) *</label>
                 <input type="text" id="helplineTel" name="helplineTel" class="form-control" value="<%= quickInfo.helplineTel %>" required />
               </div>
 
               <div class="form-group">
-                <label for="email">आधिकारिक ईमेल (Email) *</label>
+                <label for="email">Official Email *</label>
                 <input type="email" id="email" name="email" class="form-control" value="<%= quickInfo.email %>" required />
               </div>
 
               <div class="form-group">
-                <label for="sidebarFooterText">साइडबार फुटर स्लोगन</label>
+                <label for="sidebarFooterText">Sidebar Footer Slogan</label>
                 <input type="text" id="sidebarFooterText" name="sidebarFooterText" class="form-control" value="<%= quickInfo.sidebarFooterText %>" required />
               </div>
 
               <button type="submit" class="btn-admin btn-admin-primary" style="margin-top: 10px;">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                <span>संपर्क सेटिंग्स सहेजें</span>
+                <span>Save Contact Settings</span>
               </button>
             </form>
           </div>

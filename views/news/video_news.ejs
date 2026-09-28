@@ -1,6 +1,6 @@
 <%
 function ytId(url){ try{ const u=new URL(url); if(u.hostname==='youtu.be') return u.pathname.slice(1); return u.searchParams.get('v') || u.pathname.split('/').filter(Boolean).pop() || ''; }catch(e){ return ''; } }
-function fmtDate(d){ try{ return new Date(d).toLocaleDateString('hi-IN',{day:'numeric',month:'short',year:'numeric'}); }catch(e){ return ''; } }
+function fmtDate(d){ try{ return new Date(d).toLocaleDateString('en-US',{day:'numeric',month:'short',year:'numeric'}); }catch(e){ return ''; } }
 function hay(n){
   return [(n.title||''),(n.description||''),(n.category||'')].join(' ').toLowerCase();
 }
@@ -34,21 +34,21 @@ const featured = items[0] || null;
 const gridItems = items.slice(1);
 const tickerItems = items.slice(0, 6);
 const stats = [
-  { n: items.length, label: 'प्रकाशित वीडियो' },
-  { n: youtubeCount, label: 'YouTube वीडियो' },
-  { n: uploadCount, label: 'अपलोड वीडियो' },
-  { n: cats.length, label: 'श्रेणियाँ' }
+  { n: items.length, label: 'Published Videos' },
+  { n: youtubeCount, label: 'YouTube Videos' },
+  { n: uploadCount, label: 'Uploaded Videos' },
+  { n: cats.length, label: 'Categories' }
 ];
 %><!doctype html>
-<html lang="hi">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title><%= title || "समाचार" %> | निषाद संकल्प अभियान</title>
-  <meta name="description" content="निषाद संकल्प अभियान की ताज़ा खबरें, कहानियाँ, वीडियो और ज़मीनी अपडेट।">
+  <title><%= title || "News" %> | Nishad Sankalp Campaign</title>
+  <meta name="description" content="Latest news, stories, videos, and ground updates from Nishad Sankalp Campaign.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Noto+Serif+Devanagari:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&family=Noto+Serif:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/news/video_news.css">
   <script src="https://unpkg.com/lenis@1/dist/lenis.min.js" defer></script>
 </head>
@@ -57,9 +57,9 @@ const stats = [
 <main class="news-page">
 
   <% if (items.length) { %>
-  <!-- ══ ताज़ा सुर्खियाँ · NEWS TICKER ══ -->
-  <div class="news-ticker" data-testid="news-ticker" aria-label="ताज़ा सुर्खियाँ">
-    <div class="ticker-label"><span class="live-dot" aria-hidden="true"></span>ताज़ा खबर</div>
+  <!-- ══ LATEST HEADLINES · NEWS TICKER ══ -->
+  <div class="news-ticker" data-testid="news-ticker" aria-label="Latest News">
+    <div class="ticker-label"><span class="live-dot" aria-hidden="true"></span>Latest Updates</div>
     <div class="ticker-viewport">
       <div class="ticker-track">
         <% for (let pass = 0; pass < 2; pass++) { %>
@@ -88,14 +88,14 @@ const stats = [
     <div class="hero-content news-container">
       
       <h1 class="hero-title">
-        <span class="hero-line" style="--delay:.16s"><span>संकल्प समाचार</span></span>
+        <span class="hero-line" style="--delay:.16s"><span>Sankalp Newsroom</span></span>
       </h1>
-      <p class="hero-subtitle fade-in" style="--delay:.48s">अभियान की ताज़ा खबरें, कहानियाँ और ज़मीनी अपडेट — सीधे मैदान से।</p>
+      <p class="hero-subtitle fade-in" style="--delay:.48s">Latest news, stories, and ground reports — directly from the field.</p>
       <div class="hero-meta fade-in" style="--delay:.62s">
         <% if (items.length) { %>
-        <span class="live-chip" data-testid="hero-published-count"><span class="live-dot" aria-hidden="true"></span><%= items.length %> प्रकाशित अपडेट</span>
+        <span class="live-chip" data-testid="hero-published-count"><span class="live-dot" aria-hidden="true"></span><%= items.length %> Published Updates</span>
         <% } %>
-        <span class="hero-date">आज · <%= fmtDate(Date.now()) %></span>
+        <span class="hero-date">Today · <%= fmtDate(Date.now()) %></span>
       </div>
     </div>
   </section>
@@ -105,8 +105,8 @@ const stats = [
   <section class="section">
     <div class="empty-state reveal" data-testid="empty-state">
       <svg class="empty-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8L12 2z" fill="currentColor"/></svg>
-      <h2>जल्द आ रहे हैं नए अपडेट</h2>
-      <p>अभियान की ताज़ा खबरों के लिए फिर से यहाँ आएँ।</p>
+      <h2>New Updates Coming Soon</h2>
+      <p>Check back shortly for the latest updates from the movement.</p>
     </div>
   </section>
   <% } else { %>
@@ -114,7 +114,7 @@ const stats = [
 
 
   <% if (featured) { %>
-  <!-- ══ मुख्य खबर · FEATURED ══ -->
+  <!-- ══ TOP STORY · FEATURED ══ -->
   <section class="section featured-section">
     <article class="featured-story reveal" data-testid="featured-story">
       <% const fyid = getYoutubeId(featured); %>
@@ -129,25 +129,25 @@ const stats = [
         <% } else if (isYoutube(featured) && fyid) { %>
           <img src="https://i.ytimg.com/vi/<%= fyid %>/maxresdefault.jpg" alt="<%= featured.title %>" loading="eager" onerror="this.src='https://i.ytimg.com/vi/<%= fyid %>/hqdefault.jpg'">
         <% } else { %>
-          <div class="media-fallback">नि</div>
+          <div class="media-fallback">N</div>
         <% } %>
-        <span class="featured-flag" aria-hidden="true">मुख्य खबर</span>
+        <span class="featured-flag" aria-hidden="true">Top Story</span>
         <% if (true) { %>
-        <button class="play-button large-play-button" type="button" aria-label="वीडियो चलाएँ" data-testid="featured-play">
+        <button class="play-button large-play-button" type="button" aria-label="Play video" data-testid="featured-play">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
         </button>
         <% } %>
       </div>
       <div class="featured-body">
-        <span class="eyebrow">FEATURED · मुख्य कहानी</span>
+        <span class="eyebrow">FEATURED · TOP STORY</span>
         <div class="meta-row">
-          <span class="filter-chip chip-solid"><%= featured.category || 'वीडियो' %></span>
+          <span class="filter-chip chip-solid"><%= featured.category || 'Video' %></span>
           <time class="meta-time"><%= fmtDate(featured.publishedAt || featured.createdAt) %></time>
         </div>
         <h2 class="featured-title"><%= featured.title %></h2>
         <% if (featured.description) { %><p class="featured-summary"><%= featured.description %></p><% } %>
         <details class="story-details" data-testid="featured-story-toggle">
-          <summary>पूरी खबर पढ़ें </summary>
+          <summary>Read Full Story</summary>
           <div class="story-text"><%= featured.description %></div>
         </details>
       </div>
@@ -156,18 +156,18 @@ const stats = [
   <% } %>
 
   <% if (videos.length) { %>
-  <!-- ══ वीडियो कॉर्नर ══ -->
+  <!-- ══ VIDEO CORNER ══ -->
   <section class="section section-tight">
     <div class="section-header">
       <div class="reveal">
         <span class="eyebrow">VIDEO GALLERY</span>
-        <h2 class="section-title">वीडियो कॉर्नर</h2>
+        <h2 class="section-title">Video Corner</h2>
       </div>
       <div class="row-navigation reveal" style="--delay:.1s">
-        <button class="nav-button" id="videoPrev" type="button" aria-label="पिछले वीडियो" data-testid="video-row-prev">
+        <button class="nav-button" id="videoPrev" type="button" aria-label="Previous videos" data-testid="video-row-prev">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.4 7.4L14 6l-6 6 6 6 1.4-1.4L10.8 12z" fill="currentColor"/></svg>
         </button>
-        <button class="nav-button" id="videoNext" type="button" aria-label="अगले वीडियो" data-testid="video-row-next">
+        <button class="nav-button" id="videoNext" type="button" aria-label="Next videos" data-testid="video-row-next">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.6 16.6L10 18l6-6-6-6-1.4 1.4 4.6 4.6z" fill="currentColor"/></svg>
         </button>
       </div>
@@ -187,18 +187,18 @@ const stats = [
           <% } else if (vyid) { %>
             <img src="https://i.ytimg.com/vi/<%= vyid %>/hqdefault.jpg" alt="<%= v.title %>" loading="lazy">
           <% } else { %>
-            <div class="media-fallback">नि</div>
+            <div class="media-fallback">N</div>
           <% } %>
           <span class="video-badge">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
-            <%= isYoutube(v) ? 'YouTube वीडियो' : 'अपलोड वीडियो' %>
+            <%= isYoutube(v) ? 'YouTube Video' : 'Uploaded Video' %>
           </span>
-          <button class="play-button" type="button" aria-label="वीडियो चलाएँ" data-testid="video-play-<%= i %>">
+          <button class="play-button" type="button" aria-label="Play video" data-testid="video-play-<%= i %>">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
           </button>
         </div>
         <div class="video-body">
-          <div class="video-meta"><span class="video-category"><%= v.category || 'वीडियो' %></span><time><%= fmtDate(v.publishedAt || v.createdAt) %></time></div>
+          <div class="video-meta"><span class="video-category"><%= v.category || 'Video' %></span><time><%= fmtDate(v.publishedAt || v.createdAt) %></time></div>
           <h3 class="video-title"><%= v.title %></h3>
         </div>
       </article>
@@ -208,21 +208,21 @@ const stats = [
   <% } %>
 
   <% if (gridItems.length) { %>
-  <!-- ══ ताज़ा समाचार · GRID ══ -->
+  <!-- ══ LATEST NEWS · GRID ══ -->
   <section class="section grid-section" id="news-grid">
     <div class="section-header">
       <div class="reveal">
         <span class="eyebrow">LATEST UPDATES</span>
-        <h2 class="section-title">ताज़ा समाचार</h2>
-        <span class="result-count" id="resultCount" data-testid="result-count"><%= gridItems.length %> खबरें</span>
+        <h2 class="section-title">Latest News</h2>
+        <span class="result-count" id="resultCount" data-testid="result-count"><%= gridItems.length %> Articles</span>
       </div>
       <label class="search-box reveal" style="--delay:.1s">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 10-.7.7l.27.28v.79l5 4.99L20.49 19zm-6 0A4.5 4.5 0 1114 9.5 4.5 4.5 0 019.5 14z" fill="currentColor"/></svg>
-        <input id="newsSearch" type="search" placeholder="समाचार खोजें…" aria-label="समाचार खोजें" data-testid="news-search-input">
+        <input id="newsSearch" type="search" placeholder="Search news…" aria-label="Search news" data-testid="news-search-input">
       </label>
     </div>
-    <div class="filter-chips reveal" id="newsFilters" style="--delay:.15s" data-testid="category-filter" role="group" aria-label="श्रेणी चुनें">
-      <button class="filter-chip is-active" type="button" data-cat="all" data-testid="filter-chip-all">सभी</button>
+    <div class="filter-chips reveal" id="newsFilters" style="--delay:.15s" data-testid="category-filter" role="group" aria-label="Choose Category">
+      <button class="filter-chip is-active" type="button" data-cat="all" data-testid="filter-chip-all">All</button>
       <% cats.forEach(c => { %>
       <button class="filter-chip" type="button" data-cat="<%= c %>" data-testid="filter-chip-<%= c %>"><%= c %></button>
       <% }) %>
@@ -247,31 +247,31 @@ const stats = [
           <% } else if (gid) { %>
             <img src="https://i.ytimg.com/vi/<%= gid %>/hqdefault.jpg" alt="<%= item.title %>" loading="lazy">
           <% } else { %>
-            <div class="media-fallback">नि</div>
+            <div class="media-fallback">N</div>
           <% } %>
           <span class="video-badge">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
-            <%= isYoutube(item) ? 'YouTube वीडियो' : 'अपलोड वीडियो' %>
+            <%= isYoutube(item) ? 'YouTube Video' : 'Uploaded Video' %>
           </span>
-          <button class="play-button" type="button" aria-label="वीडियो चलाएँ" data-testid="card-video-play-<%= i %>">
+          <button class="play-button" type="button" aria-label="Play video" data-testid="card-video-play-<%= i %>">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
           </button>
         </div>
         <% } else if (thumbnailPath(item)) { %>
         <div class="media">
           <img src="<%= thumbnailPath(item) %>" alt="<%= item.title %>" loading="lazy">
-          <span class="video-badge">समाचार</span>
+          <span class="video-badge">News</span>
         </div>
         <% } %>
         <div class="news-card-body">
           <div class="news-card-meta">
-            <span class="news-category"><%= item.category || 'समाचार' %></span>
+            <span class="news-category"><%= item.category || 'News' %></span>
             <time><%= fmtDate(item.publishedAt || item.createdAt) %></time>
           </div>
           <h3 class="news-card-title"><%= item.title %></h3>
           <% if (item.description) { %><p class="news-summary"><%= item.description %></p><% } %>
           <details class="story-details" data-testid="story-toggle-<%= i %>">
-            <summary>पूरी खबर पढ़ें </summary>
+            <summary>Read Full Story</summary>
             <div class="story-text"><%= item.description || '' %></div>
           </details>
         </div>
@@ -280,8 +280,8 @@ const stats = [
     </div>
     <div class="empty-state" id="noResults" hidden data-testid="no-results">
       <svg class="empty-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8L12 2z" fill="currentColor"/></svg>
-      <h2>कोई खबर नहीं मिली</h2>
-      <p>दूसरे शब्द से खोजकर देखें।</p>
+      <h2>No Articles Found</h2>
+      <p>Try searching with a different term.</p>
     </div>
   </section>
   <% } %>
@@ -292,9 +292,9 @@ const stats = [
 
 
 
-<!-- ══ फुल-स्क्रीन वीडियो मोडल ══ -->
-<div class="video-modal" id="videoModal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="वीडियो प्लेयर" data-testid="video-modal">
-  <button class="modal-close" id="videoModalClose" type="button" aria-label="बंद करें" data-testid="video-modal-close">
+<!-- ══ FULL-SCREEN VIDEO MODAL ══ -->
+<div class="video-modal" id="videoModal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Video Player" data-testid="video-modal">
+  <button class="modal-close" id="videoModalClose" type="button" aria-label="Close" data-testid="video-modal-close">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="currentColor"/></svg>
   </button>
   <div class="modal-box">
@@ -390,7 +390,7 @@ const stats = [
       if (show) shown++;
     });
     if (noRes) noRes.hidden = shown !== 0;
-    if (countEl) countEl.textContent = shown + ' खबरें';
+    if (countEl) countEl.textContent = shown + ' Articles';
   }
   if (searchInput) searchInput.addEventListener('input', applyFilters);
   if (chipsWrap) chipsWrap.addEventListener('click', e => {
@@ -412,7 +412,7 @@ const stats = [
     if (yt) {
       const f = document.createElement('iframe');
       f.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(yt) + '?autoplay=1&rel=0&playsinline=1';
-      f.title = title || 'वीडियो';
+      f.title = title || 'Video';
       f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
       f.allowFullscreen = true;
       player.appendChild(f);
@@ -566,7 +566,7 @@ if (fineHover) {
           '?autoplay=1&mute=1&controls=0&loop=1&playlist=' +
           encodeURIComponent(yt) +
           '&modestbranding=1&rel=0&playsinline=1';
-        preview.title = media.dataset.title || 'वीडियो';
+        preview.title = media.dataset.title || 'Video';
         preview.allow = 'autoplay; encrypted-media; picture-in-picture';
         preview.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture');
         preview.setAttribute('frameborder', '0');

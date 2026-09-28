@@ -39,7 +39,7 @@ exports.getGalleryPage = async (req, res) => {
     const totalPhotos = await SankalpPhoto.countDocuments({ isPublished: true });
 
     res.render("gallery", {
-      title: "संकल्प फोटो — Image Gallery",
+      title: "Sankalp Photo — Image Gallery",
       photos: photos && photos.length > 0 ? photos : defaultGalleryPhotos,
       selectedDistrict: district || "all",
       districtsWithCount: districtsWithCount || [],
@@ -49,7 +49,7 @@ exports.getGalleryPage = async (req, res) => {
   } catch (error) {
     console.error("Gallery render error:", error);
     res.render("gallery", {
-      title: "संकल्प फोटो — Image Gallery",
+      title: "Sankalp Photo — Image Gallery",
       photos: defaultGalleryPhotos,
       selectedDistrict: "all",
       districtsWithCount: [],

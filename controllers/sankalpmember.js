@@ -2,7 +2,7 @@ const SankalpMember = require("../models/SankalpMember");
 
 exports.form = (req, res) => {
   res.render("sankalp_form", {
-    title: "संकल्प यात्रा से जुड़ें",
+    title: "Join Sankalp Yatra",
     error: null,
     success: req.query.success === "1",
   });
@@ -15,8 +15,8 @@ exports.register = async (req, res, next) => {
         !String(village || "").trim() || !String(state || "").trim() || !String(district || "").trim() ||
         !String(block || "").trim() || consent !== "yes") {
       return res.status(400).render("sankalp_form", {
-        title: "संकल्प यात्रा से जुड़ें",
-        error: "कृपया सभी आवश्यक जानकारी भरें और सहमति दें।",
+        title: "Join Sankalp Yatra",
+        error: "Please fill in all required fields and provide consent.",
         success: false,
       });
     }
@@ -39,8 +39,8 @@ exports.register = async (req, res, next) => {
   } catch (error) {
     if (error.name === "ValidationError") {
       return res.status(400).render("sankalp_form", {
-        title: "संकल्प यात्रा से जुड़ें",
-        error: "कृपया सही जानकारी दर्ज करें। मोबाइल नंबर 10 अंकों का होना चाहिए।",
+        title: "Join Sankalp Yatra",
+        error: "Please enter valid information. Mobile number must be 10 digits.",
         success: false,
       });
     }

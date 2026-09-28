@@ -17,7 +17,7 @@ const createDefaultAdmin = async () => {
 
     if (!name || !email || !password) {
       console.log(
-        "⚠️ Admin credentials .env में नहीं मिले।"
+        "⚠️ Admin credentials not found in .env."
       );
 
       return;

@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (visibleCountBadge) {
-      visibleCountBadge.textContent = `${matchCount} तस्वीरें प्रदर्शित`;
+      visibleCountBadge.textContent = `${matchCount} photos displayed`;
     }
   }
 
@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!card) return;
 
     const imgUrl = card.getAttribute("data-image");
-    const name = card.getAttribute("data-name") || "सनातनी निषाद";
+    const name = card.getAttribute("data-name") || "Campaign Member";
     const district = card.getAttribute("data-district") || "";
     const date = card.getAttribute("data-date") || "";
     const caption = card.getAttribute("data-caption") || "";
@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
     lightboxName.textContent = name;
     lightboxDistrict.textContent = district ? `📍 ${district}` : "";
     lightboxDate.textContent = date ? `📅 ${date}` : "";
-    lightboxCaption.textContent = caption || "अखंड निषाद संकल्प अभियान के प्रति समर्पित भाव से लिया गया पावन संकल्प।";
+    lightboxCaption.textContent = caption || "A solemn pledge taken in dedication to the Nishad Sankalp Campaign.";
 
     if (lightboxDownloadBtn) {
       lightboxDownloadBtn.href = imgUrl;

@@ -11,21 +11,21 @@
       <div class="page-heading">
         <h1>
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--admin-primary)" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          संकल्प फोटो गैलरी (Sankalp Photo Gallery)
+          Sankalp Photo Gallery
         </h1>
-        <p>संकल्प लेते हुए लोगों की तस्वीरों का प्रबंधन, संपादन, थोक अपलोड एवं प्रकाशन स्थिति</p>
+        <p>Manage, edit, bulk upload, and control publication status of pledge photos</p>
       </div>
     </div>
     <div class="topbar-right" style="gap: 10px;">
       <a href="/admin/gallery/bulk" class="btn-admin btn-admin-outline" style="border-color: #c28834; color: #a26b1a; background: #fffdf9;">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        <span>थोक अपलोड (Bulk Upload)</span>
+        <span>Bulk Upload</span>
       </a>
       <a href="/admin/gallery/new" class="btn-admin btn-admin-primary">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        <span>नई फोटो जोड़ें</span>
+        <span>Add New Photo</span>
       </a>
-      <a href="/gallery" target="_blank" class="view-site-btn">लाइव गैलरी देखें ↗</a>
+      <a href="/gallery" target="_blank" class="view-site-btn">View Live Gallery ↗</a>
     </div>
   </header>
 
@@ -41,19 +41,19 @@
     <!-- Quick Stats Cards -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
       <div class="admin-card" style="margin-bottom: 0; padding: 18px; border-left: 4px solid var(--admin-primary);">
-        <div style="font-size: 11px; font-weight: 700; color: var(--admin-text-muted); text-transform: uppercase;">कुल संकल्प तस्वीरें</div>
+        <div style="font-size: 11px; font-weight: 700; color: var(--admin-text-muted); text-transform: uppercase;">Total Sankalp Photos</div>
         <div style="font-size: 26px; font-weight: 800; color: var(--admin-text-dark); margin-top: 6px;"><%= stats.total %></div>
       </div>
       <div class="admin-card" style="margin-bottom: 0; padding: 18px; border-left: 4px solid var(--admin-success);">
-        <div style="font-size: 11px; font-weight: 700; color: var(--admin-text-muted); text-transform: uppercase;">प्रकाशित तस्वीरें (Live)</div>
+        <div style="font-size: 11px; font-weight: 700; color: var(--admin-text-muted); text-transform: uppercase;">Published Photos (Live)</div>
         <div style="font-size: 26px; font-weight: 800; color: var(--admin-success); margin-top: 6px;"><%= stats.published %></div>
       </div>
       <div class="admin-card" style="margin-bottom: 0; padding: 18px; border-left: 4px solid #f59e0b;">
-        <div style="font-size: 11px; font-weight: 700; color: var(--admin-text-muted); text-transform: uppercase;">अप्रकाशित (Draft/Hidden)</div>
+        <div style="font-size: 11px; font-weight: 700; color: var(--admin-text-muted); text-transform: uppercase;">Unpublished (Draft/Hidden)</div>
         <div style="font-size: 26px; font-weight: 800; color: #b45309; margin-top: 6px;"><%= stats.unpublished %></div>
       </div>
       <div class="admin-card" style="margin-bottom: 0; padding: 18px; border-left: 4px solid #8b5cf6;">
-        <div style="font-size: 11px; font-weight: 700; color: var(--admin-text-muted); text-transform: uppercase;">शामिल जिले (Districts)</div>
+        <div style="font-size: 11px; font-weight: 700; color: var(--admin-text-muted); text-transform: uppercase;">Covered Districts</div>
         <div style="font-size: 26px; font-weight: 800; color: #6d28d9; margin-top: 6px;"><%= stats.districtsCount %></div>
       </div>
     </div>
@@ -68,7 +68,7 @@
               type="text"
               name="search"
               value="<%= filters.search %>"
-              placeholder="नाम, जिला या विवरण खोजें..."
+              placeholder="Search by name, district, or caption..."
               class="form-control"
               style="height: 38px; padding-left: 36px;"
             />
@@ -77,7 +77,7 @@
 
           <!-- District Filter -->
           <select name="district" class="form-control" style="height: 38px; width: 170px;">
-            <option value="all" <%= filters.district === 'all' ? 'selected' : '' %>>सभी जिले (All)</option>
+            <option value="all" <%= filters.district === 'all' ? 'selected' : '' %>>All Districts</option>
             <% if (districtsList && districtsList.length > 0) { %>
               <% districtsList.forEach(function(d) { %>
                 <option value="<%= d %>" <%= filters.district === d ? 'selected' : '' %>><%= d %></option>
@@ -87,18 +87,18 @@
 
           <!-- Status Filter -->
           <select name="status" class="form-control" style="height: 38px; width: 170px;">
-            <option value="all" <%= filters.status === 'all' ? 'selected' : '' %>>सभी स्थिति</option>
-            <option value="published" <%= filters.status === 'published' ? 'selected' : '' %>>केवल प्रकाशित (Published)</option>
-            <option value="unpublished" <%= filters.status === 'unpublished' ? 'selected' : '' %>>अप्रकाशित (Unpublished)</option>
+            <option value="all" <%= filters.status === 'all' ? 'selected' : '' %>>All Statuses</option>
+            <option value="published" <%= filters.status === 'published' ? 'selected' : '' %>>Published Only</option>
+            <option value="unpublished" <%= filters.status === 'unpublished' ? 'selected' : '' %>>Unpublished Only</option>
           </select>
 
           <button type="submit" class="btn-admin btn-admin-primary btn-admin-sm" style="height: 38px; padding: 0 16px;">
-            फ़िल्टर लागू करें
+            Apply Filter
           </button>
 
           <% if (filters.search || filters.district !== 'all' || filters.status !== 'all') { %>
             <a href="/admin/gallery" class="btn-admin btn-admin-outline btn-admin-sm" style="height: 38px; display: inline-flex; align-items: center;">
-              रीसेट करें (Reset)
+              Reset
             </a>
           <% } %>
         </div>
@@ -110,22 +110,22 @@
       <div class="admin-card-header">
         <h3>
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          उपलब्ध तस्वीरें (<%= photos.length %>)
+          Available Photos (<%= photos.length %>)
         </h3>
-        <span style="font-size: 12px; color: var(--admin-text-muted);">क्लिक करके प्रकाशित/अप्रकाशित करें</span>
+        <span style="font-size: 12px; color: var(--admin-text-muted);">Click status to toggle publish/unpublish</span>
       </div>
 
       <div class="admin-table-wrapper">
         <table class="admin-table">
           <thead>
             <tr>
-              <th style="width: 80px;">तस्वीर</th>
-              <th>नाम (Name)</th>
-              <th>जिला (District)</th>
-              <th>दिनांक (Date)</th>
-              <th>विवरण / संकल्प संदेश</th>
-              <th style="width: 120px;">प्रकाशन स्थिति</th>
-              <th style="width: 150px; text-align: right;">क्रियाएं</th>
+              <th style="width: 80px;">Photo</th>
+              <th>Name</th>
+              <th>District</th>
+              <th>Date</th>
+              <th>Caption / Pledge Message</th>
+              <th style="width: 120px;">Publication Status</th>
+              <th style="width: 150px; text-align: right;">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -133,7 +133,7 @@
               <% photos.forEach(function(photo) { %>
                 <tr>
                   <td>
-                    <a href="<%= photo.imageUrl %>" target="_blank" title="बड़ी तस्वीर देखने के लिए क्लिक करें">
+                    <a href="<%= photo.imageUrl %>" target="_blank" title="Click to view full image">
                       <img
                         src="<%= photo.imageUrl %>"
                         alt="<%= photo.name %>"
@@ -154,7 +154,7 @@
                   </td>
                   <td>
                     <span style="font-size: 12px; color: var(--admin-text-muted);">
-                      <%= photo.formattedDate || (photo.date ? new Date(photo.date).toLocaleDateString('hi-IN') : '-') %>
+                      <%= photo.formattedDate || (photo.date ? new Date(photo.date).toLocaleDateString('en-US') : '-') %>
                     </span>
                   </td>
                   <td>
@@ -168,24 +168,24 @@
                         type="submit"
                         class="badge-status <%= photo.isPublished ? 'badge-active' : 'badge-inactive' %>"
                         style="border: none; cursor: pointer; padding: 5px 10px;"
-                        title="प्रकाशन स्थिति बदलने के लिए क्लिक करें"
+                        title="Click to toggle publication status"
                       >
                         <% if (photo.isPublished) { %>
-                          <span style="color: var(--admin-success); font-weight: 800;">✓ प्रकाशित</span>
+                          <span style="color: var(--admin-success); font-weight: 800;">✓ Published</span>
                         <% } else { %>
-                          <span style="color: #8c7870;">✕ अप्रकाशित</span>
+                          <span style="color: #8c7870;">✕ Unpublished</span>
                         <% } %>
                       </button>
                     </form>
                   </td>
                   <td style="text-align: right;">
                     <div style="display: inline-flex; gap: 6px;">
-                      <a href="/admin/gallery/edit/<%= photo._id %>" class="btn-admin btn-admin-outline btn-admin-sm" title="संपादित करें">
-                        संपादित
+                      <a href="/admin/gallery/edit/<%= photo._id %>" class="btn-admin btn-admin-outline btn-admin-sm" title="Edit">
+                        Edit
                       </a>
-                      <form action="/admin/gallery/delete/<%= photo._id %>" method="POST" onsubmit="return confirm('क्या आप वास्तव में इस तस्वीर को हटाना चाहते हैं?');" style="display:inline;">
-                        <button type="submit" class="btn-admin btn-admin-danger btn-admin-sm" title="हटाएं">
-                          हटाएं
+                      <form action="/admin/gallery/delete/<%= photo._id %>" method="POST" onsubmit="return confirm('Are you sure you want to delete this photo?');" style="display:inline;">
+                        <button type="submit" class="btn-admin btn-admin-danger btn-admin-sm" title="Delete">
+                          Delete
                         </button>
                       </form>
                     </div>
@@ -196,11 +196,11 @@
               <tr>
                 <td colspan="7" style="text-align: center; padding: 48px; color: var(--admin-text-muted);">
                   <div style="font-size: 32px; margin-bottom: 8px;">📷</div>
-                  <div style="font-size: 14px; font-weight: 700; color: var(--admin-text-dark);">कोई संकल्प तस्वीर नहीं मिली</div>
-                  <p style="font-size: 12px; margin-top: 4px;">नई तस्वीर जोड़ने के लिए 'नई फोटो जोड़ें' या 'थोक अपलोड' पर क्लिक करें।</p>
+                  <div style="font-size: 14px; font-weight: 700; color: var(--admin-text-dark);">No Sankalp photos found</div>
+                  <p style="font-size: 12px; margin-top: 4px;">Click 'Add New Photo' or 'Bulk Upload' to add photos.</p>
                   <div style="margin-top: 14px; display: flex; gap: 10px; justify-content: center;">
-                    <a href="/admin/gallery/new" class="btn-admin btn-admin-primary btn-admin-sm">नई फोटो जोड़ें</a>
-                    <a href="/admin/gallery/bulk" class="btn-admin btn-admin-outline btn-admin-sm">थोक अपलोड</a>
+                    <a href="/admin/gallery/new" class="btn-admin btn-admin-primary btn-admin-sm">Add New Photo</a>
+                    <a href="/admin/gallery/bulk" class="btn-admin btn-admin-outline btn-admin-sm">Bulk Upload</a>
                   </div>
                 </td>
               </tr>
