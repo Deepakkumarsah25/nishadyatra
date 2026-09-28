@@ -1,8 +1,10 @@
+
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const path = require("path");
-
+const sankalpRoutes = require("./routes/sankalpRoutes");
+const videoNewsRoutes = require("./routes/news/videoNewsRoutes");
 dotenv.config();
 
 const app = express();
@@ -43,6 +45,8 @@ const { seedHomeData } = require("./scripts/seedHomeData");
 const adminAuthRoutes = require("./routes/admin/authRoutes");
 const adminDashboardRoutes = require("./routes/admin/dashboardRoutes");
 const adminHomeRoutes = require("./routes/admin/homeRoutes");
+const adminKalashYatraRoutes = require("./routes/admin/kalashYatraRoutes");
+const KalashYatra = require("./models/KalashYatra");
 const homeRoutes = require("./routes/homeRoutes");
 
 // ========================================
@@ -80,17 +84,15 @@ app.use(
 // ========================================
 
 app.use(express.static(path.join(__dirname, "public")));
-
+app.use("/sankalp-yatra", sankalpRoutes);
 app.use(
   "/uploads",
   express.static(path.join(__dirname, "uploads"))
 );
 
-// ========================================
-// Session
-// ========================================
-
+// ================================
 app.use(sessionConfig);
+app.use(videoNewsRoutes);
 
 // ========================================
 // Admin Routes
@@ -99,6 +101,7 @@ app.use(sessionConfig);
 app.use("/admin", adminAuthRoutes);
 app.use("/admin", adminDashboardRoutes);
 app.use("/admin/home", adminHomeRoutes);
+app.use("/admin/kalash-yatra", adminKalashYatraRoutes);
 
 // ========================================
 // Test API
@@ -112,6 +115,27 @@ app.get("/api/test", (req, res) => {
 });
 
 // ========================================
+// Public Video Page
+// IMPORTANT: This must be BEFORE 404 Handler
+// ========================================
+
+app.get("/video", async (req, res) => {
+  try {
+    const kalash = await KalashYatra.getOrSeed();
+    res.render("videos/kalash-yatra", {
+      kalash,
+      currentUrl: "/video",
+    });
+  } catch (error) {
+    console.error("Fetch kalash yatra error:", error);
+    res.render("videos/kalash-yatra", {
+      kalash: KalashYatra.defaultData,
+      currentUrl: "/video",
+    });
+  }
+});
+
+// ========================================
 // Public Home & Form API Routes
 // ========================================
 
@@ -119,6 +143,7 @@ app.use("/", homeRoutes);
 
 // ========================================
 // 404 Handler
+// IMPORTANT: Keep this at the END
 // ========================================
 
 app.use((req, res) => {
@@ -148,6 +173,7 @@ app.use((err, req, res, next) => {
 
 const startServer = async () => {
   try {
+    // Connect MongoDB
     await mongoose.connect(MONGODB_URI);
 
     console.log("================================");
@@ -160,14 +186,28 @@ const startServer = async () => {
     // Automatically seed default home page data if empty
     await seedHomeData();
 
+    // ========================================
+    // Start Server
+    // ========================================
+
     app.listen(PORT, "0.0.0.0", () => {
       console.log("================================");
-      console.log(`🚀 Server running!`);
+      console.log("🚀 Server running!");
       console.log(`   ➜ Local:   http://localhost:${PORT}`);
-      console.log(`   ➜ Network: http://192.168.1.23:${PORT} (📱 Phone me chalane ke liye)`);
-      console.log(`   🔐 Admin Login: http://localhost:${PORT}/admin/login`);
-      console.log(`   📊 Admin Dashboard: http://localhost:${PORT}/admin/dashboard`);
-      console.log(`   🏡 Admin Home Manager: http://localhost:${PORT}/admin/home`);
+      console.log(`   ➜ Network: http://172.16.10.47:${PORT}`);
+      console.log(
+        `   🔐 Admin Login: http://localhost:${PORT}/admin/login`
+      );
+      console.log(
+        `   📊 Admin Dashboard: http://localhost:${PORT}/admin/dashboard`
+      );
+      console.log(
+        `   🏡 Admin Home Manager: http://localhost:${PORT}/admin/home`
+      );
+      console.log(
+        `   🪔 Admin Kalash Yatra: http://localhost:${PORT}/admin/kalash-yatra`
+      );
+      console.log(`   🎥 Video Page: http://localhost:${PORT}/video`);
       console.log("================================");
     });
   } catch (error) {
@@ -176,4 +216,9 @@ const startServer = async () => {
   }
 };
 
+// ========================================
+// Start Application
+// ========================================
+
 startServer();
+
