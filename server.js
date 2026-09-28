@@ -194,7 +194,7 @@ const startServer = async () => {
       console.log("================================");
       console.log("🚀 Server running!");
       console.log(`   ➜ Local:   http://localhost:${PORT}`);
-      console.log(`   ➜ Network: http://10.37.199.72:${PORT}`);
+      console.log(`   ➜ Network: http://172.16.10.47:${PORT}`);
       console.log(
         `   🔐 Admin Login: http://localhost:${PORT}/admin/login`
       );
