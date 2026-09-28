@@ -1,7 +1,6 @@
 const express = require("express");
 
 const router = express.Router();
-
 const newsUpload = require("../../middleware/news/videoNewsUpload");
 const authMiddleware = require("../../middleware/admin/authMiddleware");
 
@@ -12,54 +11,42 @@ const {
   delete: deleteNews,
   togglePublish,
   frontend,
+  detail,
 } = require("../../controllers/news/videoNewsController");
 
+function uploadThumbnail(req, res, next) {
+  newsUpload.single("thumbnail")(req, res, (error) => {
+    if (!error) return next();
 
-/* =========================================
-   FRONTEND
-========================================= */
+    res.status(400).render("admin/news/editor", {
+      title: req.params.id ? "Edit News" : "Create News",
+      item: { ...req.body, _id: req.params.id },
+      error: error.message,
+    });
+  });
+}
 
+// Public News & Press pages.
 router.get("/news", frontend);
+router.get("/news/:id", detail);
 
-
-/* =========================================
-   ADMIN
-========================================= */
-
+// Protected news management pages.
 router.get("/admin/video_news", authMiddleware, adminList);
-
-router.get(
-  "/admin/video_news/add",
-  authMiddleware, addPage
-);
-
+router.get("/admin/video_news/add", authMiddleware, addPage);
 router.post(
   "/admin/video_news/add",
-  authMiddleware, newsUpload.fields([
-    {
-      name: "video",
-      maxCount: 1,
-    },
-    {
-      name: "thumbnail",
-      maxCount: 1,
-    },
-  ]),
-  create
+  authMiddleware,
+  uploadThumbnail,
+  create,
 );
-
 router.get("/admin/video_news/edit/:id", authMiddleware, addPage);
-router.post("/admin/video_news/edit/:id", authMiddleware, newsUpload.fields([{ name: "video", maxCount: 1 }, { name: "thumbnail", maxCount: 1 }]), create);
-
 router.post(
-  "/admin/video_news/delete/:id",
-  authMiddleware, deleteNews
+  "/admin/video_news/edit/:id",
+  authMiddleware,
+  uploadThumbnail,
+  create,
 );
-
-router.post(
-  "/admin/video_news/toggle/:id",
-  authMiddleware, togglePublish
-);
-
+router.post("/admin/video_news/delete/:id", authMiddleware, deleteNews);
+router.post("/admin/video_news/toggle/:id", authMiddleware, togglePublish);
 
 module.exports = router;

@@ -1,7 +1,160 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title><%= title %> | Nishad Sankalp</title><link rel="stylesheet" href="/css/admin/news.css"></head><body>
-<header class="top"><a class="brand" href="/admin/dashboard"><span class="mark">N</span><span>Nishad Sankalp<small>CONTENT STUDIO</small></span></a><nav><a href="/admin/dashboard">Dashboard</a><a class="active" href="/admin/video_news">News</a><a href="/news" target="_blank">View site ↗</a></nav><form action="/admin/logout" method="post"><button class="logout">Sign out</button></form></header>
-<main class="wrap"><div class="heading"><div><div class="eyebrow">PUBLISHING</div><h1>News studio</h1><p>Manage stories, video coverage and what appears on your public news page.</p></div><a class="primary" href="/admin/video_news/add">＋ Create story</a></div>
-<section class="stats"><article><span>Total stories</span><strong><%= news.length %></strong></article><article><span>Published</span><strong><%= news.filter(n => n.published).length %></strong></article><article><span>Drafts</span><strong><%= news.filter(n => !n.published).length %></strong></article><article><span>Video stories</span><strong><%= news.filter(n => n.mediaType !== 'article').length %></strong></article></section>
-<section class="panel"><div class="panel-head"><div><h2>All stories</h2><p>Your latest coverage and updates</p></div><label class="search">⌕ <input id="search" placeholder="Search stories" aria-label="Search stories"></label></div>
-<% if (!news.length) { %><div class="empty"><span>✦</span><h2>Your newsroom starts here</h2><p>Create your first story and share it with the community.</p><a class="primary" href="/admin/video_news/add">Create your first story</a></div><% } else { %><div class="table-wrap"><table><thead><tr><th>STORY</th><th>FORMAT</th><th>STATUS</th><th>UPDATED</th><th></th></tr></thead><tbody id="rows"><% news.forEach(item => { %><tr data-title="<%= item.title.toLowerCase() %>"><td><div class="story"><% if(item.thumbnailPath){ %><img src="<%= item.thumbnailPath %>" alt=""><% } else { %><span class="thumb">✦</span><% } %><div><strong><%= item.title %></strong><small><%= item.category %><%= item.state ? ' · ' + item.state : '' %></small></div></div></td><td><span class="format"><%= item.mediaType === 'youtube' ? '▶ YouTube' : item.mediaType === 'upload' ? '▣ Uploaded video' : '▤ Article' %></span></td><td><span class="status <%= item.published ? 'live' : 'draft' %>"><i></i><%= item.published ? 'Published' : 'Draft' %></span></td><td><%= new Date(item.updatedAt).toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'}) %></td><td><div class="actions"><a class="quiet" href="/admin/video_news/edit/<%= item._id %>">Edit</a><form action="/admin/video_news/toggle/<%= item._id %>" method="post"><button class="quiet"><%= item.published ? 'Unpublish' : 'Publish' %></button></form><form action="/admin/video_news/delete/<%= item._id %>" method="post" onsubmit="return confirm('Delete this story and its uploaded media?')"><button class="delete">Delete</button></form></div></td></tr><% }) %></tbody></table></div><% } %>
-</section><footer>Stories are published to <a href="/news">your public news page</a>.</footer></main><script>document.getElementById('search')?.addEventListener('input',e=>{const q=e.target.value.toLowerCase();document.querySelectorAll('#rows tr').forEach(r=>r.hidden=!r.dataset.title.includes(q))})</script></body></html>
+<!doctype html>
+<html lang="hi">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title><%= title %> | Nishad Sankalp</title>
+    <link rel="stylesheet" href="/css/admin/news.css">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    >
+  </head>
+  <body>
+    
+    <header class="top">
+      <a class="brand" href="/admin/dashboard">
+        <span class="mark">N</span>
+        <span>निषाद संकल्प<small>NEWS &amp; PRESS</small></span>
+      </a>
+      <nav>
+        <a href="/admin/dashboard">Dashboard</a>
+        <a class="active" href="/admin/video_news">News &amp; Press</a>
+        <a href="/news" target="_blank">View site ↗</a>
+      </nav>
+      <form action="/admin/logout" method="post">
+        <button class="logout">Sign out</button>
+      </form>
+    </header>
+
+    <main class="wrap">
+      <div class="heading">
+        <div>
+          <div class="eyebrow">PUBLISHING</div>
+          <h1>न्यूज़ &amp; प्रेस</h1>
+          <p>अभियान की डिजिटल और प्रिंट मीडिया कवरेज प्रबंधित करें।</p>
+        </div>
+        <a class="primary" href="/admin/video_news/add">＋ खबर जोड़ें</a>
+      </div>
+
+      <section class="stats">
+        <article><span>कुल खबरें</span><strong><%= news.length %></strong></article>
+        <article>
+          <span>प्रकाशित</span>
+          <strong><%= news.filter((item) => item.published).length %></strong>
+        </article>
+        <article>
+          <span>ड्राफ्ट</span>
+          <strong><%= news.filter((item) => !item.published).length %></strong>
+        </article>
+        <article>
+          <span>मुख्य खबर</span>
+          <strong><%= news.filter((item) => item.featured).length %></strong>
+        </article>
+      </section>
+
+      <section class="panel">
+        <form class="panel-head admin-filters" method="get" action="/admin/video_news">
+          <div>
+            <h2>सभी खबरें</h2>
+            <p>खबरों को खोजें और मीडिया प्रकार के अनुसार छाँटें।</p>
+          </div>
+          <label class="search">
+            ⌕
+            <input
+              name="q"
+              value="<%= filters.q || '' %>"
+              placeholder="हेडलाइन खोजें"
+              aria-label="हेडलाइन खोजें"
+            >
+          </label>
+          <select name="category" aria-label="मीडिया प्रकार">
+            <option value="">सभी प्रकार</option>
+            <option value="Digital Media" <%= filters.category === 'Digital Media' ? 'selected' : '' %>>Digital Media</option>
+            <option value="Print Media" <%= filters.category === 'Print Media' ? 'selected' : '' %>>Print Media</option>
+          </select>
+          <select name="status" aria-label="प्रकाशन स्थिति">
+            <option value="">सभी स्थितियाँ</option>
+            <option value="published" <%= filters.status === 'published' ? 'selected' : '' %>>प्रकाशित</option>
+            <option value="draft" <%= filters.status === 'draft' ? 'selected' : '' %>>ड्राफ्ट</option>
+          </select>
+          <button class="secondary" type="submit">फ़िल्टर</button>
+        </form>
+
+        <% if (!news.length) { %>
+          <div class="empty">
+            <span>✦</span>
+            <h2>अभी कोई खबर नहीं</h2>
+            <p>पहली खबर जोड़कर मीडिया कवरेज साझा करें।</p>
+            <a class="primary" href="/admin/video_news/add">खबर जोड़ें</a>
+          </div>
+        <% } else { %>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>खबर</th>
+                  <th>मीडिया</th>
+                  <th>स्थिति</th>
+                  <th>तिथि</th>
+                  <th>कार्य</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% news.forEach((item) => { %>
+                  <tr>
+                    <td>
+                      <div class="story">
+                        <% if (item.thumbnailPath) { %>
+                          <img src="<%= item.thumbnailPath %>" alt="">
+                        <% } else { %>
+                          <span class="thumb">✦</span>
+                        <% } %>
+                        <div>
+                          <strong><%= item.title %></strong>
+                          <small>
+                            <%= item.source || 'स्रोत नहीं दिया' %><%= item.featured ? ' · मुख्य खबर' : '' %>
+                          </small>
+                        </div>
+                      </div>
+                    </td>
+                    <td><span class="format"><%= item.category || 'Digital Media' %></span></td>
+                    <td>
+                      <span class="status <%= item.published ? 'live' : 'draft' %>">
+                        <i></i><%= item.published ? 'प्रकाशित' : 'ड्राफ्ट' %>
+                      </span>
+                    </td>
+                    <td>
+                      <%= new Date(item.publicationDate || item.updatedAt).toLocaleDateString('hi-IN', {
+                        day: 'numeric', month: 'short', year: 'numeric'
+                      }) %>
+                    </td>
+                    <td>
+                      <div class="actions">
+                        <a class="quiet" href="/admin/video_news/edit/<%= item._id %>">संपादित करें</a>
+                        <form action="/admin/video_news/toggle/<%= item._id %>" method="post">
+                          <button class="quiet"><%= item.published ? 'Unpublish' : 'Publish' %></button>
+                        </form>
+                        <form
+                          action="/admin/video_news/delete/<%= item._id %>"
+                          method="post"
+                          onsubmit="return confirm('क्या इस खबर को हटाना चाहते हैं?')"
+                        >
+                          <button class="delete">हटाएँ</button>
+                        </form>
+                      </div>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } %>
+      </section>
+
+      <footer>
+        खबरें आपकी <a href="/news">सार्वजनिक न्यूज़ पेज</a> पर दिखाई देती हैं।
+      </footer>
+    </main>
+  </body>
+</html>

@@ -1,3 +1,177 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title><%= title %> | Nishad Sankalp</title><link rel="stylesheet" href="/css/admin/news.css"></head><body><header class="top"><a class="brand" href="/admin/dashboard"><span class="mark">N</span><span>Nishad Sankalp<small>CONTENT STUDIO</small></span></a><nav><a href="/admin/dashboard">Dashboard</a><a class="active" href="/admin/video_news">News</a><a href="/news" target="_blank">View site ↗</a></nav><form action="/admin/logout" method="post"><button class="logout">Sign out</button></form></header><main class="wrap editor-wrap"><a class="back" href="/admin/video_news">← All stories</a><div class="heading"><div><div class="eyebrow">NEWSROOM / <%= item?._id ? 'EDIT STORY' : 'NEW STORY' %></div><h1><%= item?._id ? 'Edit story' : 'Create a story' %></h1><p>Write an update and add video coverage if you have it.</p></div></div>
-<% if(error){ %><div class="error"><%= error %></div><% } %><form class="editor" action="<%= item?._id ? '/admin/video_news/edit/' + item._id : '/admin/video_news/add' %>" method="post" enctype="multipart/form-data"><section class="panel form-panel"><label class="field">Headline <span>Required</span><input name="title" required maxlength="180" value="<%= item?.title || '' %>" placeholder="A clear, engaging headline"></label><label class="field">Short summary <span>Optional · up to 320 characters</span><textarea name="summary" maxlength="320" rows="2" placeholder="A short introduction for the story card"><%= item?.summary || '' %></textarea></label><label class="field">Story <span>Required</span><textarea name="content" required rows="12" placeholder="Write the full news story"><%= item?.content || '' %></textarea></label><div class="two"><label class="field">Category<input name="category" maxlength="50" value="<%= item?.category || 'समाचार' %>"></label><label class="field">State<input name="state" maxlength="80" value="<%= item?.state || '' %>" placeholder="e.g. Uttar Pradesh"></label><label class="field">District<input name="district" maxlength="80" value="<%= item?.district || '' %>" placeholder="Optional"></label></div></section>
-<aside><section class="panel form-panel"><h2>Media</h2><p class="help">Choose a story format. Uploaded videos support MP4, WebM or MOV (up to 500 MB).</p><label class="field">Format<select id="mediaType" name="mediaType"><option value="article" <%= item?.mediaType==='article'?'selected':'' %>>Article only</option><option value="youtube" <%= item?.mediaType==='youtube'?'selected':'' %>>YouTube video</option><option value="upload" <%= item?.mediaType==='upload'?'selected':'' %>>Upload video</option></select></label><label id="youtubeField" class="field media-field">YouTube link<input name="youtubeUrl" type="url" value="<%= item?.youtubeUrl || '' %>" placeholder="https://youtu.be/..."></label><label id="uploadField" class="field media-field">Video file<input name="video" type="file" accept="video/mp4,video/webm,video/quicktime"><% if(item?.videoPath){ %><small>Current upload: <a href="<%= item.videoPath %>" target="_blank">Preview</a></small><% } %></label><label class="field">Cover image<input name="thumbnail" type="file" accept="image/jpeg,image/png,image/webp,image/avif"><small>JPG, PNG, WebP or AVIF</small><% if(item?.thumbnailPath){ %><img class="preview" src="<%= item.thumbnailPath %>" alt="Current cover image"><% } %></label></section><section class="panel form-panel publish-panel"><h2>Publishing</h2><p class="help"><%= item?.published ? 'This story is live on the public news page.' : 'Save as a draft or publish to the public news page.' %></p><div class="form-actions"><a class="secondary" href="/admin/video_news">Cancel</a><button class="secondary" name="action" value="draft">Save draft</button><button class="primary" name="action" value="publish">Publish story</button></div></section></aside></form></main><script>const type=document.getElementById('mediaType');function updateMedia(){document.getElementById('youtubeField').classList.toggle('visible',type.value==='youtube');document.getElementById('uploadField').classList.toggle('visible',type.value==='upload')}type.addEventListener('change',updateMedia);updateMedia()</script></body></html>
+<!doctype html>
+<html lang="hi">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title><%= title %> | निषाद संकल्प</title>
+    <link rel="stylesheet" href="/css/admin/news.css">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    >
+  </head>
+  <body>
+    <header class="top">
+      <a class="brand" href="/admin/dashboard">
+        <span class="mark">N</span>
+        <span>निषाद संकल्प<small>NEWS &amp; PRESS</small></span>
+      </a>
+      <nav>
+        <a href="/admin/dashboard">Dashboard</a>
+        <a class="active" href="/admin/video_news">News &amp; Press</a>
+        <a href="/news" target="_blank">View site ↗</a>
+      </nav>
+      <form action="/admin/logout" method="post">
+        <button class="logout">Sign out</button>
+      </form>
+    </header>
+
+    <main class="wrap editor-wrap">
+      <a class="back" href="/admin/video_news">← सभी खबरें</a>
+      <div class="heading">
+        <div>
+          <div class="eyebrow">
+            NEWSROOM / <%= item?._id ? 'EDIT ARTICLE' : 'NEW ARTICLE' %>
+          </div>
+          <h1><%= item?._id ? 'खबर संपादित करें' : 'नई खबर जोड़ें' %></h1>
+          <p>मीडिया कवरेज की जानकारी और प्रकाशित लेख यहाँ प्रबंधित करें।</p>
+        </div>
+      </div>
+
+      <% if (error) { %>
+        <div class="error" role="alert"><%= error %></div>
+      <% } %>
+
+      <form
+        class="editor"
+        action="<%= item?._id ? '/admin/video_news/edit/' + item._id : '/admin/video_news/add' %>"
+        method="post"
+        enctype="multipart/form-data"
+      >
+        <section class="panel form-panel">
+          <label class="field">
+            हेडलाइन <span>ज़रूरी</span>
+            <input
+              name="title"
+              required
+              maxlength="180"
+              value="<%= item?.title || '' %>"
+              placeholder="खबर की मुख्य हेडलाइन"
+            >
+          </label>
+
+          <label class="field">
+            संक्षिप्त विवरण <span>कार्ड पर दिखेगा</span>
+            <textarea
+              name="summary"
+              maxlength="500"
+              rows="3"
+              placeholder="खबर का छोटा परिचय"
+            ><%= item?.summary || '' %></textarea>
+            <small>अधिकतम 500 अक्षर</small>
+          </label>
+
+          <label class="field">
+            पूरी खबर <span>ज़रूरी</span>
+            <textarea
+              name="content"
+              required
+              maxlength="30000"
+              rows="14"
+              placeholder="लेख की पूरी सामग्री"
+            ><%= item?.content || '' %></textarea>
+          </label>
+
+          <div class="two">
+            <label class="field">
+              स्रोत / प्रकाशन का नाम <span>ज़रूरी</span>
+              <input
+                name="source"
+                required
+                maxlength="120"
+                value="<%= item?.source || '' %>"
+                placeholder="जैसे: अख़बार या न्यूज़ पोर्टल"
+              >
+            </label>
+
+            <label class="field">
+              मीडिया प्रकार
+              <select name="category" required>
+                <option
+                  value="Digital Media"
+                  <%= (item?.category || 'Digital Media') === 'Digital Media' ? 'selected' : '' %>
+                >Digital Media</option>
+                <option
+                  value="Print Media"
+                  <%= item?.category === 'Print Media' ? 'selected' : '' %>
+                >Print Media</option>
+              </select>
+            </label>
+
+            <label class="field">
+              प्रकाशन तिथि
+              <input
+                type="date"
+                name="publicationDate"
+                value="<%= item?.publicationDate ? new Date(item.publicationDate).toISOString().slice(0, 10) : '' %>"
+              >
+            </label>
+
+            <label class="field">
+              बाहरी खबर का लिंक
+              <input
+                type="url"
+                name="externalUrl"
+                maxlength="1000"
+                value="<%= item?.externalUrl || '' %>"
+                placeholder="https://..."
+              >
+              <small>दिया गया लिंक ‘पूरी खबर पढ़ें’ पर खुलेगा।</small>
+            </label>
+          </div>
+        </section>
+
+        <aside>
+          <section class="panel form-panel">
+            <h2>Featured image</h2>
+            <p class="help">JPG, PNG, WebP या AVIF · अधिकतम 8 MB</p>
+            <label class="field">
+              खबर की तस्वीर
+              <input
+                name="thumbnail"
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/avif"
+              >
+              <% if (item?.thumbnailPath) { %>
+                <img
+                  class="preview"
+                  src="<%= item.thumbnailPath %>"
+                  alt="मौजूदा खबर की तस्वीर"
+                >
+                <small>नई तस्वीर चुनें या मौजूदा तस्वीर रखें।</small>
+              <% } %>
+            </label>
+            <label class="feature-check">
+              <input type="checkbox" name="featured" <%= item?.featured ? 'checked' : '' %>>
+              मुख्य खबर के रूप में दिखाएँ
+            </label>
+          </section>
+
+          <section class="panel form-panel publish-panel">
+            <h2>प्रकाशन</h2>
+            <p class="help">
+              <%= item?.published
+                ? 'यह खबर वेबसाइट पर प्रकाशित है।'
+                : 'ड्राफ्ट सेव करें या वेबसाइट पर प्रकाशित करें.' %>
+            </p>
+            <div class="form-actions">
+              <a class="secondary" href="/admin/video_news">रद्द करें</a>
+              <button class="secondary" name="action" value="draft">ड्राफ्ट सेव करें</button>
+              <button class="primary" name="action" value="publish">खबर प्रकाशित करें</button>
+            </div>
+          </section>
+        </aside>
+      </form>
+    </main>
+  </body>
+</html>
