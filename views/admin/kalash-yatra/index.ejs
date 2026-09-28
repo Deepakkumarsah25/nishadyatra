@@ -455,16 +455,34 @@
           <form action="/admin/kalash-yatra/videos/add" method="POST">
             <div class="form-grid-2">
               <div class="form-group">
-                <label for="vid_title">वीडियो शीर्षक *</label>
+                <label for="vid_title">वीडियो शीर्षक (Title) *</label>
                 <input type="text" id="vid_title" name="title" class="form-control" placeholder="उदा. गोपालगंज में भव्य कलश यात्रा" required />
               </div>
               <div class="form-group">
-                <label for="vid_url">यूट्यूब एम्बेड URL *</label>
-                <input type="url" id="vid_url" name="videoUrl" class="form-control" placeholder="https://www.youtube.com/embed/..." required />
+                <label for="vid_url">यूट्यूब वीडियो / एम्बेड URL *</label>
+                <input type="url" id="vid_url" name="videoUrl" class="form-control" placeholder="https://www.youtube.com/watch?v=... या embed/..." required />
               </div>
             </div>
 
             <div class="form-grid-3">
+              <div class="form-group">
+                <label for="vid_person">व्यक्ति / स्थान का नाम (Person / Place Name)</label>
+                <input type="text" id="vid_person" name="personOrPlace" class="form-control" placeholder="उदा. डॉ. संजय निषाद / मुख्य चौक" />
+                <div class="help-hint">वक्ता या प्रमुख आयोजन स्थल का नाम</div>
+              </div>
+              <div class="form-group">
+                <label for="vid_dist">ज़िला (District) *</label>
+                <input type="text" id="vid_dist" name="district" class="form-control" placeholder="उदा. गोपालगंज, वाराणसी, पटना, भोपाल" required />
+                <div class="help-hint">हिंदी या अंग्रेजी में ज़िले का नाम</div>
+              </div>
+              <div class="form-group">
+                <label for="vid_thumb">कस्टम थंबनेल URL (वैकल्पिक)</label>
+                <input type="text" id="vid_thumb" name="thumbnail" class="form-control" placeholder="/images/kalash-yatra-hero.jpg या URL" />
+                <div class="help-hint">खाली छोड़ने पर यूट्यूब थंबनेल स्वतः लिया जाएगा</div>
+              </div>
+            </div>
+
+            <div class="form-grid-4">
               <div class="form-group">
                 <label for="vid_cat">श्रेणी (Category)</label>
                 <select id="vid_cat" name="category" class="form-control">
@@ -484,22 +502,11 @@
                 </select>
               </div>
               <div class="form-group">
-                <label for="vid_dist">ज़िला (District Key)</label>
-                <input type="text" id="vid_dist" name="district" class="form-control" placeholder="उदा. gopalganj, patna, varanasi" required />
-              </div>
-            </div>
-
-            <div class="form-grid-3">
-              <div class="form-group">
                 <label for="vid_dur">अवधि (Duration)</label>
                 <input type="text" id="vid_dur" name="duration" class="form-control" value="12:30 Min" />
               </div>
               <div class="form-group">
-                <label for="vid_views">व्यूज (Views Count)</label>
-                <input type="text" id="vid_views" name="viewsCount" class="form-control" value="15.2K" />
-              </div>
-              <div class="form-group">
-                <label for="vid_date">दिनांक (Date)</label>
+                <label for="vid_date">प्रकाशन दिनांक (Date)</label>
                 <input type="text" id="vid_date" name="date" class="form-control" value="<%= new Date().toLocaleDateString('hi-IN') %>" />
               </div>
             </div>
@@ -531,40 +538,52 @@
             <thead>
               <tr>
                 <th style="width: 50px;">#</th>
-                <th>शीर्षक</th>
-                <th>श्रेणी</th>
-                <th>राज्य / ज़िला</th>
-                <th>अवधि / दृश्य</th>
-                <th style="width: 140px; text-align: right;">कार्रवाई</th>
+                <th style="width: 100px;">थंबनेल</th>
+                <th>शीर्षक व विवरण</th>
+                <th>व्यक्ति / स्थान</th>
+                <th>ज़िला व राज्य</th>
+                <th>दिनांक</th>
+                <th style="width: 100px; text-align: right;">कार्रवाई</th>
               </tr>
             </thead>
             <tbody>
               <% if (!kalash.videos || kalash.videos.length === 0) { %>
                 <tr>
-                  <td colspan="6" style="text-align: center; color: var(--admin-text-muted); padding: 30px;">
+                  <td colspan="7" style="text-align: center; color: var(--admin-text-muted); padding: 30px;">
                     वर्तमान में कोई वीडियो उपलब्ध नहीं है। ऊपर दिए गए फॉर्म से वीडियो जोड़ें।
                   </td>
                 </tr>
               <% } else { %>
                 <% kalash.videos.forEach((vid, index) => { %>
+                  <%
+                    let ytId = '';
+                    if (vid.videoUrl && vid.videoUrl.includes('embed/')) {
+                      ytId = vid.videoUrl.split('embed/')[1].split('?')[0];
+                    } else if (vid.videoUrl && vid.videoUrl.includes('watch?v=')) {
+                      ytId = vid.videoUrl.split('watch?v=')[1].split('&')[0];
+                    } else if (vid.videoUrl && vid.videoUrl.includes('youtu.be/')) {
+                      ytId = vid.videoUrl.split('youtu.be/')[1].split('?')[0];
+                    }
+                    const thumb = vid.thumbnail || (ytId ? ('https://img.youtube.com/vi/' + ytId + '/hqdefault.jpg') : '/images/kalash-yatra-hero.jpg');
+                  %>
                   <tr>
                     <td><strong><%= index + 1 %></strong></td>
                     <td>
+                      <img src="<%= thumb %>" alt="" style="width: 80px; height: 50px; object-fit: cover; border-radius: 6px; border: 1px solid #ebdccf;" />
+                    </td>
+                    <td>
                       <div style="font-weight: 700; color: var(--admin-text-dark); margin-bottom: 2px;"><%= vid.title %></div>
-                      <small style="color: var(--admin-text-muted); font-size: 11px;"><%= vid.videoUrl %></small>
+                      <small style="color: var(--admin-text-muted); font-size: 11px;"><%= vid.duration %> • <%= vid.category %></small>
                     </td>
                     <td>
-                      <span class="category-badge badge-<%= vid.category %>">
-                        <%= vid.category === 'speech' ? 'संबोधन' : vid.category === 'program' ? 'कार्यक्रम' : 'कलश यात्रा' %>
-                      </span>
+                      <span style="font-weight: 600; color: #7f1d1d;"><%= vid.personOrPlace || '—' %></span>
                     </td>
                     <td>
-                      <strong style="text-transform: capitalize;"><%= vid.state %></strong>
-                      <div style="color: var(--admin-text-muted); font-size: 11px;"><%= vid.district %></div>
+                      <strong style="color: #b45309;"><%= vid.district %></strong>
+                      <div style="color: var(--admin-text-muted); font-size: 11px; text-transform: capitalize;"><%= vid.state %></div>
                     </td>
                     <td>
-                      <div><%= vid.duration %></div>
-                      <small style="color: var(--admin-text-muted);"><%= vid.viewsCount %> दृश्य</small>
+                      <small style="color: var(--admin-text-muted);"><%= vid.date || '—' %></small>
                     </td>
                     <td>
                       <div class="table-actions" style="justify-content: flex-end;">

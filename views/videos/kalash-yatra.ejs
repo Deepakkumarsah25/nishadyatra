@@ -1679,7 +1679,7 @@
     }
 
     /* =====================================================
-       VIDEO GALLERY SECTION
+       VIDEO GALLERY SECTION & VIEW FORMATS
     ===================================================== */
     .gallery-section {
       padding: 40px 0 80px;
@@ -1690,7 +1690,8 @@
       align-items: flex-end;
       justify-content: space-between;
       gap: 20px;
-      margin-bottom: 30px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
     }
 
     .gallery-section-title {
@@ -1707,30 +1708,228 @@
       margin-top: 6px;
     }
 
-    /* 3-Column Video Card Grid */
+    /* Grid / List Format Switcher */
+    .gallery-view-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .view-mode-toggle {
+      display: inline-flex;
+      align-items: center;
+      background: #ffffff;
+      border: 1.5px solid var(--border-warm);
+      border-radius: var(--radius-full);
+      padding: 4px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-view-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 18px;
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-body);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .btn-view-toggle svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    .btn-view-toggle:hover {
+      color: var(--primary-crimson);
+    }
+
+    .btn-view-toggle.active {
+      background: linear-gradient(135deg, var(--primary-crimson) 0%, var(--crimson-dark) 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(185, 28, 28, 0.35);
+    }
+
+    /* Quick District Filter Bar */
+    .quick-district-filter-section {
+      background: rgba(255, 255, 255, 0.92);
+      border: 1.5px solid var(--border-warm);
+      border-radius: var(--radius-lg);
+      padding: 18px 22px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 18px rgba(69, 10, 10, 0.04);
+      backdrop-filter: blur(10px);
+    }
+
+    .quick-district-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .quick-district-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--crimson-ultra);
+    }
+
+    .quick-district-title svg {
+      fill: var(--primary-crimson);
+    }
+
+    .quick-district-hint {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .quick-district-pills {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .district-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 15px;
+      border-radius: var(--radius-full);
+      background: var(--canvas-alt);
+      border: 1.5px solid var(--border-warm);
+      color: var(--text-main);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      white-space: nowrap;
+    }
+
+    .district-pill:hover {
+      border-color: var(--gold-primary);
+      color: var(--crimson-deep);
+      background: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    .district-pill.active {
+      background: linear-gradient(135deg, var(--primary-crimson) 0%, var(--crimson-dark) 100%);
+      border-color: var(--primary-crimson);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(185, 28, 28, 0.3);
+    }
+
+    .district-pill .pill-count {
+      padding: 1px 7px;
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.08);
+      font-size: 11px;
+    }
+
+    .district-pill.active .pill-count {
+      background: rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+    }
+
+    /* =====================================================
+       VIDEO CARDS CONTAINER (GRID & LIST FORMATS)
+    ===================================================== */
+    /* 1. GRID FORMAT (Default) */
     .video-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      transition: opacity 0.25s ease;
+    }
+
+    .video-cards-grid.view-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 28px;
     }
 
+    .video-cards-grid.view-grid .video-card-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .video-cards-grid.view-grid .card-media-box {
+      width: 100%;
+      height: 220px;
+    }
+
+    /* 2. LIST FORMAT */
+    .video-cards-grid.view-list {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .video-cards-grid.view-list .video-card-item {
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      min-height: 230px;
+      border-radius: var(--radius-xl);
+    }
+
+    .video-cards-grid.view-list .card-media-box {
+      width: 350px;
+      min-width: 320px;
+      max-width: 380px;
+      height: auto;
+      flex-shrink: 0;
+    }
+
+    .video-cards-grid.view-list .card-info-box {
+      flex: 1;
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .video-cards-grid.view-list .card-title-text {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .video-cards-grid.view-list .card-description-text {
+      -webkit-line-clamp: 3;
+      margin-bottom: 14px;
+    }
+
+    /* Common Video Card Base */
     .video-card-item {
       background: var(--surface-card);
-      border: 1px solid var(--border-warm);
+      border: 1.5px solid var(--border-warm);
       border-radius: var(--radius-lg);
       overflow: hidden;
       box-shadow: var(--shadow-sm);
-      display: flex;
-      flex-direction: column;
       cursor: pointer;
       transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
       position: relative;
     }
 
     .video-card-item:hover {
-      transform: translateY(-7px);
+      transform: translateY(-6px);
       box-shadow: var(--shadow-lg);
-      border-color: rgba(185, 28, 28, 0.28);
+      border-color: rgba(185, 28, 28, 0.35);
     }
 
     .video-card-item.hidden {
@@ -1740,7 +1939,6 @@
     /* Card Thumbnail Box */
     .card-media-box {
       position: relative;
-      height: 220px;
       overflow: hidden;
       background: #231212;
     }
@@ -1760,7 +1958,7 @@
     .card-gradient-vignette {
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0%, transparent 40%, rgba(0, 0, 0, 0.7) 100%);
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, transparent 40%, rgba(0, 0, 0, 0.75) 100%);
       pointer-events: none;
     }
 
@@ -1784,8 +1982,8 @@
     }
 
     .card-play-symbol svg {
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       fill: currentColor;
       margin-left: 3px;
     }
@@ -1805,11 +2003,11 @@
       z-index: 3;
       padding: 4px 10px;
       border-radius: var(--radius-sm);
-      background: rgba(255, 255, 255, 0.94);
+      background: rgba(255, 255, 255, 0.95);
       color: var(--crimson-ultra);
       font-size: 11px;
       font-weight: 800;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
       backdrop-filter: blur(6px);
       display: inline-flex;
       align-items: center;
@@ -1829,7 +2027,7 @@
       z-index: 3;
       padding: 4px 8px;
       border-radius: var(--radius-sm);
-      background: rgba(15, 6, 6, 0.85);
+      background: rgba(15, 6, 6, 0.88);
       color: #ffffff;
       font-size: 11px;
       font-weight: 700;
@@ -1867,12 +2065,29 @@
       font-weight: 800;
       letter-spacing: 0.5px;
       text-transform: uppercase;
+      background: var(--crimson-soft);
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(185, 28, 28, 0.15);
     }
 
-    .card-state-tag {
-      color: var(--text-muted);
-      font-size: 12px;
-      font-weight: 600;
+    .card-district-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      background: var(--gold-soft);
+      border: 1px solid var(--gold-border);
+      color: var(--crimson-ultra);
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+
+    .card-district-pill svg {
+      width: 12px;
+      height: 12px;
+      fill: var(--primary-crimson);
     }
 
     .card-title-text {
@@ -1889,11 +2104,60 @@
       color: var(--primary-crimson);
     }
 
+    /* Person / Place Row (व्यक्ति / स्थान का नाम) */
+    .card-meta-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+      margin-bottom: 10px;
+      color: var(--text-body);
+    }
+
+    .card-person-line {
+      background: var(--canvas-alt);
+      border: 1px solid var(--border-light);
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 12px;
+    }
+
+    .card-person-line .meta-icon {
+      display: inline-flex;
+      align-items: center;
+      color: var(--primary-crimson);
+      flex-shrink: 0;
+    }
+
+    .card-person-line .meta-icon svg {
+      width: 15px;
+      height: 15px;
+      fill: currentColor;
+    }
+
+    .card-person-line .meta-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+
+    .card-person-line .meta-val {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--crimson-deep);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
     .card-description-text {
       font-size: 13px;
       line-height: 1.65;
       color: var(--text-body);
-      margin-bottom: 18px;
+      margin-bottom: 16px;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
@@ -1916,6 +2180,7 @@
       align-items: center;
       gap: 5px;
       font-weight: 600;
+      color: var(--text-muted);
     }
 
     .card-footer-date svg {
@@ -1924,17 +2189,26 @@
       fill: currentColor;
     }
 
-    .card-cta-link {
-      color: var(--primary-crimson);
-      font-weight: 800;
+    .btn-card-play {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
-      transition: transform 0.2s ease;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      background: var(--crimson-soft);
+      border: 1px solid rgba(185, 28, 28, 0.2);
+      color: var(--primary-crimson);
+      font-size: 12.5px;
+      font-weight: 800;
+      transition: all 0.2s ease;
+      cursor: pointer;
     }
 
-    .video-card-item:hover .card-cta-link {
-      transform: translateX(3px);
+    .btn-card-play:hover, .video-card-item:hover .btn-card-play {
+      background: var(--primary-crimson);
+      color: #ffffff;
+      border-color: var(--primary-crimson);
+      box-shadow: 0 4px 12px rgba(185, 28, 28, 0.3);
     }
 
     /* =====================================================
@@ -2445,12 +2719,55 @@
       background: #000000;
     }
 
-    .modal-video-frame-wrap iframe {
+    .modal-video-frame-wrap iframe,
+    .modal-video-frame-wrap video {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       border: none;
+    }
+
+    /* Modal Info Strip below player */
+    .modal-meta-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 24px;
+      background: #180909;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      color: #e5d8d8;
+      font-size: 13px;
+      flex-wrap: wrap;
+    }
+
+    .modal-meta-col {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .modal-meta-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .modal-meta-item .m-icon {
+      font-size: 15px;
+    }
+
+    .modal-meta-item .m-label {
+      color: #ab9898;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .modal-meta-item .m-val {
+      color: #ffffff;
+      font-weight: 700;
     }
 
     /* Toast Notification for Link Copied */
@@ -2540,13 +2857,34 @@
         gap: 24px;
       }
 
-      .video-cards-grid {
+      .video-cards-grid,
+      .video-cards-grid.view-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 22px;
+      }
+
+      .video-cards-grid.view-list .card-media-box {
+        width: 300px;
+        min-width: 270px;
       }
     }
 
     @media (max-width: 860px) {
+      .video-cards-grid.view-list .video-card-item {
+        flex-direction: column;
+      }
+
+      .video-cards-grid.view-list .card-media-box {
+        width: 100%;
+        max-width: 100%;
+        height: 220px;
+      }
+
+      .quick-district-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
       /* Mobile Floating Filter Tab on Right Screen Edge */
       .mobile-filter-floating-tab {
         display: flex;
@@ -2687,7 +3025,8 @@
         flex-shrink: 0;
       }
 
-      .video-cards-grid {
+      .video-cards-grid,
+      .video-cards-grid.view-grid {
         grid-template-columns: 1fr;
       }
 
@@ -3409,28 +3748,65 @@
             <h2 class="gallery-section-title">कलश यात्रा की अमर झलकियां</h2>
             <p class="gallery-section-subtitle">समस्त राज्यों व जिलों से प्राप्त प्रमाणिक वीडियो संकलन</p>
           </div>
+
+          <!-- View Mode Toggle (Grid / List format) -->
+          <div class="gallery-view-controls">
+            <div class="view-mode-toggle" id="viewModeToggle" role="group" aria-label="प्रदर्शन प्रारूप (View Format)">
+              <button type="button" class="btn-view-toggle active" id="btnViewGrid" data-view="grid" title="ग्रिड प्रारूप में देखें">
+                <svg viewBox="0 0 24 24"><path d="M3 3v8h8V3H3zm2 2h4v4H5V5zm8-2v8h8V3h-8zm2 2h4v4h-4V5zM3 13v8h8v-8H3zm2 2h4v4H5v-4zm8-2v8h8v-8h-8zm2 2h4v4h-4v-4z"/></svg>
+                <span>ग्रिड (Grid)</span>
+              </button>
+              <button type="button" class="btn-view-toggle" id="btnViewList" data-view="list" title="सूची प्रारूप में देखें">
+                <svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
+                <span>सूची (List)</span>
+              </button>
+            </div>
+          </div>
         </div>
 
-        <div class="video-cards-grid" id="videoGrid">
+        <!-- Dedicated District-wise Quick Filter Bar -->
+        <div class="quick-district-filter-section" id="quickDistrictSection">
+          <div class="quick-district-header">
+            <span class="quick-district-title">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
+              <span>ज़िला अनुसार फ़िल्टर (District Filter):</span>
+            </span>
+            <span class="quick-district-hint">त्वरित चयन हेतु किसी भी ज़िले पर क्लिक करें</span>
+          </div>
+          <div class="quick-district-pills" id="quickDistrictPills">
+            <!-- Dynamically populated from script -->
+          </div>
+        </div>
+
+        <div class="video-cards-grid view-grid" id="videoGrid">
           <% const videoList = (typeof kalash !== 'undefined' && kalash.videos && kalash.videos.length > 0) ? kalash.videos : []; %>
           <% videoList.forEach((vid) => { %>
             <% 
               let ytId = '';
-              if (vid.videoUrl && vid.videoUrl.includes('embed/')) {
-                ytId = vid.videoUrl.split('embed/')[1].split('?')[0];
-              } else if (vid.videoUrl && vid.videoUrl.includes('watch?v=')) {
-                ytId = vid.videoUrl.split('watch?v=')[1].split('&')[0];
+              if (vid.videoUrl) {
+                if (vid.videoUrl.includes('embed/')) {
+                  ytId = vid.videoUrl.split('embed/')[1].split(/[?&]/)[0];
+                } else if (vid.videoUrl.includes('watch?v=')) {
+                  ytId = vid.videoUrl.split('watch?v=')[1].split('&')[0];
+                } else if (vid.videoUrl.includes('youtu.be/')) {
+                  ytId = vid.videoUrl.split('youtu.be/')[1].split(/[?&]/)[0];
+                } else if (vid.videoUrl.includes('shorts/')) {
+                  ytId = vid.videoUrl.split('shorts/')[1].split(/[?&]/)[0];
+                }
               }
-              const thumbImg = ytId ? 'https://img.youtube.com/vi/' + ytId + '/hqdefault.jpg' : '/images/kalash-yatra-hero.jpg';
+              const thumbImg = vid.thumbnail || (ytId ? ('https://img.youtube.com/vi/' + ytId + '/hqdefault.jpg') : '/images/kalash-yatra-hero.jpg');
             %>
             <article
               class="video-card-item"
               data-category="<%= vid.category || 'yatra' %>"
               data-state="<%= vid.state || 'bihar' %>"
-              data-district="<%= (vid.district || '').toLowerCase() %>"
+              data-district="<%= (vid.district || '').trim() %>"
+              data-person="<%= (vid.personOrPlace || '').trim() %>"
               data-date="<%= vid.date || '' %>"
               data-video="<%= vid.videoUrl %>"
               data-title="<%= vid.title %>"
+              data-duration="<%= vid.duration || '' %>"
+              data-desc="<%= vid.description || '' %>"
               data-location="<%= vid.district ? (vid.district + ', ') : '' %><%= vid.state %>"
             >
               <div class="card-media-box">
@@ -3447,7 +3823,7 @@
 
                 <span class="badge-location-corner">
                   <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
-                  <%= vid.district || vid.state %>
+                  <%= vid.district || 'पावन धाम' %>
                 </span>
 
                 <span class="badge-duration-corner">
@@ -3459,10 +3835,22 @@
               <div class="card-info-box">
                 <div class="card-tags-row">
                   <span class="card-category-tag"><%= vid.tag || (vid.category === 'speech' ? 'संबोधन' : vid.category === 'program' ? 'कार्यक्रम' : 'कलश यात्रा') %></span>
-                  <span class="card-state-tag"><%= vid.state %></span>
+                  <span class="card-district-pill">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
+                    ज़िला: <strong><%= vid.district || '—' %></strong>
+                  </span>
                 </div>
 
                 <h3 class="card-title-text"><%= vid.title %></h3>
+
+                <!-- व्यक्ति / स्थान का नाम (Person / Place Name) -->
+                <div class="card-meta-line card-person-line">
+                  <span class="meta-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                  </span>
+                  <span class="meta-label">व्यक्ति / स्थान:</span>
+                  <span class="meta-val"><%= vid.personOrPlace || (vid.district ? (vid.district + ' (आयोजन स्थल)') : 'पावन धाम') %></span>
+                </div>
 
                 <p class="card-description-text">
                   <%= vid.description || '' %>
@@ -3471,12 +3859,12 @@
                 <div class="card-footer-strip">
                   <span class="card-footer-date">
                     <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10z"/></svg>
-                    <%= vid.date || 'विशेष प्रस्तुति' %>
+                    <span>अपलोड: <%= vid.date || 'विशेष प्रस्तुति' %></span>
                   </span>
-                  <span class="card-cta-link">
+                  <button type="button" class="btn-card-play" aria-label="वीडियो देखें">
                     <span>चलाएं</span>
-                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                  </span>
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                  </button>
                 </div>
               </div>
             </article>
@@ -3641,7 +4029,7 @@
         </div>
       </div>
 
-      <div class="modal-video-frame-wrap">
+      <div class="modal-video-frame-wrap" id="modalVideoFrameWrap">
         <iframe
           id="modalVideoIframe"
           src=""
@@ -3649,6 +4037,29 @@
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowfullscreen
         ></iframe>
+      </div>
+
+      <!-- Modal Info Strip below player -->
+      <div class="modal-meta-strip">
+        <div class="modal-meta-col">
+          <div class="modal-meta-item">
+            <span class="m-icon">👤</span>
+            <span class="m-label">व्यक्ति / स्थान:</span>
+            <strong class="m-val" id="modalVideoPerson">—</strong>
+          </div>
+          <div class="modal-meta-item">
+            <span class="m-icon">📍</span>
+            <span class="m-label">ज़िला:</span>
+            <strong class="m-val" id="modalVideoDistrict">—</strong>
+          </div>
+        </div>
+        <div class="modal-meta-col">
+          <div class="modal-meta-item">
+            <span class="m-icon">📅</span>
+            <span class="m-label">अपलोड तिथि:</span>
+            <span class="m-val" id="modalVideoDate">—</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -3974,12 +4385,25 @@
       const modalVideoTitle = document.getElementById("modalVideoTitle");
       const modalCategoryBadge = document.getElementById("modalCategoryBadge");
       const modalShareBtn = document.getElementById("modalShareBtn");
+      const modalVideoPerson = document.getElementById("modalVideoPerson");
+      const modalVideoDistrict = document.getElementById("modalVideoDistrict");
+      const modalVideoDate = document.getElementById("modalVideoDate");
+      const modalVideoFrameWrap = document.getElementById("modalVideoFrameWrap");
+
+      // View Mode Toggle (Grid / List)
+      const btnViewGrid = document.getElementById("btnViewGrid");
+      const btnViewList = document.getElementById("btnViewList");
+
+      // Quick District Filter Container
+      const quickDistrictPills = document.getElementById("quickDistrictPills");
 
       // Toast Notification
       const toastNotification = document.getElementById("toastNotification");
       const toastMessage = document.getElementById("toastMessage");
 
       let selectedCategory = "all";
+      let selectedDistrict = "all";
+      let currentViewMode = "grid";
       let activeVideoShareUrl = window.location.href;
 
       /* ===================================================
@@ -4110,23 +4534,190 @@
       }
 
       /* ===================================================
+         VIEW MODE (GRID VS LIST FORMAT)
+      ==================================================== */
+      function setViewMode(mode) {
+        currentViewMode = mode === "list" ? "list" : "grid";
+        if (videoGrid) {
+          if (currentViewMode === "list") {
+            videoGrid.classList.remove("view-grid");
+            videoGrid.classList.add("view-list");
+          } else {
+            videoGrid.classList.remove("view-list");
+            videoGrid.classList.add("view-grid");
+          }
+        }
+
+        if (btnViewGrid && btnViewList) {
+          btnViewGrid.classList.toggle("active", currentViewMode === "grid");
+          btnViewList.classList.toggle("active", currentViewMode === "list");
+        }
+
+        try {
+          localStorage.setItem("ky_view_mode", currentViewMode);
+        } catch (e) {}
+      }
+
+      if (btnViewGrid) {
+        btnViewGrid.addEventListener("click", function () {
+          setViewMode("grid");
+        });
+      }
+
+      if (btnViewList) {
+        btnViewList.addEventListener("click", function () {
+          setViewMode("list");
+        });
+      }
+
+      /* ===================================================
+         DISTRICT ALIAS & MATCHING LOGIC
+      ==================================================== */
+      const districtAliasMap = {
+        gopalganj: "गोपालगंज",
+        patna: "पटना",
+        varanasi: "वाराणसी",
+        bhopal: "भोपाल",
+        ranchi: "रांची",
+        lucknow: "लखनऊ",
+        ayodhya: "अयोध्या",
+        prayagraj: "प्रयागराज",
+        gaya: "गया",
+        muzaffarpur: "मुजफ्फरपुर",
+        indore: "इंदौर",
+        gwalior: "ग्वालियर"
+      };
+
+      function normalizeDistrict(str) {
+        if (!str) return "";
+        return str.trim().toLowerCase();
+      }
+
+      function isDistrictMatch(cardDist, targetDist) {
+        if (!targetDist || targetDist === "all") return true;
+        if (!cardDist) return false;
+
+        const cNorm = normalizeDistrict(cardDist);
+        const tNorm = normalizeDistrict(targetDist);
+
+        if (cNorm === tNorm) return true;
+        if (cNorm.includes(tNorm) || tNorm.includes(cNorm)) return true;
+
+        // Check alias mapping
+        for (const [enKey, hiVal] of Object.entries(districtAliasMap)) {
+          const hiNorm = normalizeDistrict(hiVal);
+          const enNorm = normalizeDistrict(enKey);
+
+          const matchesTarget = tNorm === enNorm || tNorm === hiNorm;
+          const matchesCard = cNorm === enNorm || cNorm === hiNorm;
+
+          if (matchesTarget && matchesCard) return true;
+        }
+
+        return false;
+      }
+
+      /* ===================================================
+         DISTRICTS & QUICK PILLS INITIALIZATION
+      ==================================================== */
+      function getUniqueCardDistricts() {
+        const distMap = {};
+        videoCards.forEach(function (card) {
+          const d = (card.dataset.district || "").trim();
+          if (d) {
+            distMap[d] = (distMap[d] || 0) + 1;
+          }
+        });
+        return distMap;
+      }
+
+      function renderQuickDistrictPills() {
+        if (!quickDistrictPills) return;
+        quickDistrictPills.innerHTML = "";
+
+        const distCounts = getUniqueCardDistricts();
+
+        // 1. "All Districts" Pill
+        const allPill = document.createElement("button");
+        allPill.type = "button";
+        allPill.className = "district-pill" + (selectedDistrict === "all" ? " active" : "");
+        allPill.dataset.district = "all";
+        allPill.innerHTML = `<span>🚩 सभी जिले</span><span class="pill-count">${videoCards.length}</span>`;
+        allPill.addEventListener("click", function () {
+          selectDistrict("all");
+        });
+        quickDistrictPills.appendChild(allPill);
+
+        // 2. Individual District Pills
+        Object.keys(distCounts).sort().forEach(function (distName) {
+          const pill = document.createElement("button");
+          pill.type = "button";
+          pill.className = "district-pill" + (selectedDistrict === distName ? " active" : "");
+          pill.dataset.district = distName;
+          pill.innerHTML = `<span>📍 ${distName}</span><span class="pill-count">${distCounts[distName]}</span>`;
+          pill.addEventListener("click", function () {
+            selectDistrict(distName);
+          });
+          quickDistrictPills.appendChild(pill);
+        });
+      }
+
+      function selectDistrict(distName) {
+        selectedDistrict = distName;
+
+        // Sync Quick Pills
+        if (quickDistrictPills) {
+          const pills = quickDistrictPills.querySelectorAll(".district-pill");
+          pills.forEach(function (p) {
+            p.classList.toggle("active", p.dataset.district === selectedDistrict);
+          });
+        }
+
+        // Sync Dropdown
+        if (districtFilter) {
+          let found = false;
+          Array.from(districtFilter.options).forEach(function (opt) {
+            if (opt.value === selectedDistrict || isDistrictMatch(opt.value, selectedDistrict)) {
+              districtFilter.value = opt.value;
+              found = true;
+            }
+          });
+          if (!found && selectedDistrict === "all") {
+            districtFilter.value = "all";
+          }
+        }
+
+        applyFilters();
+      }
+
+      /* ===================================================
          UPDATE DISTRICTS DROPDOWN
       ==================================================== */
       function updateDistricts() {
-        const state = stateFilter.value;
+        const state = stateFilter ? stateFilter.value : "all";
+        if (!districtFilter) return;
         districtFilter.innerHTML = "";
+        districtFilter.disabled = false;
+
+        const distCounts = getUniqueCardDistricts();
 
         if (state === "all") {
-          const option = document.createElement("option");
-          option.value = "all";
-          option.textContent = "पहले राज्य चुनें (All)";
-          districtFilter.appendChild(option);
-          districtFilter.disabled = true;
-          districtLabel.textContent = "जिला चुनें";
+          districtLabel.textContent = "जिला चुनें (District)";
+          const allOpt = document.createElement("option");
+          allOpt.value = "all";
+          allOpt.textContent = "सभी जिले (सम्पूर्ण भारत)";
+          districtFilter.appendChild(allOpt);
+
+          // Add unique video districts
+          Object.keys(distCounts).sort().forEach(function (d) {
+            const opt = document.createElement("option");
+            opt.value = d;
+            opt.textContent = `${d} (${distCounts[d]} वीडियो)`;
+            districtFilter.appendChild(opt);
+          });
           return;
         }
 
-        districtFilter.disabled = false;
         const districts = districtData[state] || [];
         districtLabel.textContent = `जिला चुनें (${districts.length} उपलब्ध)`;
 
@@ -4147,7 +4738,6 @@
          CATEGORY BUTTONS HANDLING
       ==================================================== */
       function updateCategoryCounts() {
-        // Calculate counts
         let allCount = 0;
         let yatraCount = 0;
         let programCount = 0;
@@ -4197,9 +4787,10 @@
          FILTERING & SEARCH LOGIC
       ==================================================== */
       function applyFilters() {
-        const state = stateFilter.value;
-        const district = districtFilter.value;
-        const search = searchFilter.value.trim().toLowerCase();
+        const state = stateFilter ? stateFilter.value : "all";
+        const districtDropdown = districtFilter ? districtFilter.value : "all";
+        const effectiveDistrict = selectedDistrict !== "all" ? selectedDistrict : districtDropdown;
+        const search = (searchFilter ? searchFilter.value : "").trim().toLowerCase();
         const visibleCards = [];
 
         // Toggle clear search button
@@ -4208,11 +4799,27 @@
         }
 
         videoCards.forEach(function (card) {
-          const matchesState = state === "all" || card.dataset.state === state;
-          const matchesDistrict = district === "all" || card.dataset.district === district;
-          const matchesCategory = selectedCategory === "all" || card.dataset.category === selectedCategory;
-          const cardText = (card.textContent + " " + (card.dataset.title || "")).toLowerCase();
-          const matchesSearch = !search || cardText.includes(search);
+          const cardState = card.dataset.state || "";
+          const cardDistrict = card.dataset.district || "";
+          const cardCat = card.dataset.category || "yatra";
+
+          const matchesState = state === "all" || cardState === state;
+          const matchesDistrict = effectiveDistrict === "all" || isDistrictMatch(cardDistrict, effectiveDistrict);
+          const matchesCategory = selectedCategory === "all" || cardCat === selectedCategory;
+
+          let matchesSearch = true;
+          if (search) {
+            const searchHaystack = [
+              card.dataset.title || "",
+              card.dataset.person || "",
+              cardDistrict,
+              cardState,
+              card.dataset.date || "",
+              card.dataset.desc || "",
+              card.textContent || ""
+            ].join(" ").toLowerCase();
+            matchesSearch = searchHaystack.includes(search);
+          }
 
           const isVisible = matchesState && matchesDistrict && matchesCategory && matchesSearch;
 
@@ -4226,10 +4833,10 @@
 
         sortCards(visibleCards);
 
-        resultCount.textContent = visibleCards.length;
+        if (resultCount) resultCount.textContent = visibleCards.length;
         if (mobileFilterBadge) mobileFilterBadge.textContent = visibleCards.length;
         if (drawerResultCount) drawerResultCount.textContent = visibleCards.length;
-        emptyState.classList.toggle("show", visibleCards.length === 0);
+        if (emptyState) emptyState.classList.toggle("show", visibleCards.length === 0);
 
         updateActiveChips();
       }
@@ -4238,7 +4845,7 @@
          SORT CARDS
       ==================================================== */
       function sortCards(cards) {
-        const sortMode = sortFilter.value;
+        const sortMode = sortFilter ? sortFilter.value : "latest";
 
         cards.sort(function (a, b) {
           if (sortMode === "latest") {
@@ -4256,7 +4863,7 @@
         });
 
         cards.forEach(function (card) {
-          videoGrid.appendChild(card);
+          if (videoGrid) videoGrid.appendChild(card);
         });
       }
 
@@ -4264,12 +4871,13 @@
          ACTIVE FILTER CHIPS
       ==================================================== */
       function updateActiveChips() {
+        if (!activeFilters) return;
         activeFilters.innerHTML = "";
         let hasFilter = false;
 
-        const state = stateFilter.value;
-        const district = districtFilter.value;
-        const search = searchFilter.value.trim();
+        const state = stateFilter ? stateFilter.value : "all";
+        const district = selectedDistrict !== "all" ? selectedDistrict : (districtFilter ? districtFilter.value : "all");
+        const search = searchFilter ? searchFilter.value.trim() : "";
 
         if (state !== "all") {
           const stateName = stateFilter.options[stateFilter.selectedIndex]?.textContent || state;
@@ -4281,11 +4889,9 @@
           hasFilter = true;
         }
 
-        if (state !== "all" && district !== "all") {
-          const districtName = districtFilter.options[districtFilter.selectedIndex]?.textContent || district;
-          addChip("जिला: " + districtName, function () {
-            districtFilter.value = "all";
-            applyFilters();
+        if (district !== "all") {
+          addChip("जिला: " + district, function () {
+            selectDistrict("all");
           });
           hasFilter = true;
         }
@@ -4335,88 +4941,153 @@
          RESET FILTERS
       ==================================================== */
       function resetFilters() {
-        stateFilter.value = "all";
+        if (stateFilter) stateFilter.value = "all";
+        selectedDistrict = "all";
         updateDistricts();
-        searchFilter.value = "";
-        sortFilter.value = "latest";
+        if (searchFilter) searchFilter.value = "";
+        if (sortFilter) sortFilter.value = "latest";
         selectedCategory = "all";
         setCategoryButtons();
+        if (quickDistrictPills) {
+          const pills = quickDistrictPills.querySelectorAll(".district-pill");
+          pills.forEach(p => p.classList.toggle("active", p.dataset.district === "all"));
+        }
         applyFilters();
       }
 
-      clearFilters.addEventListener("click", resetFilters);
-      emptyClear.addEventListener("click", resetFilters);
+      if (clearFilters) clearFilters.addEventListener("click", resetFilters);
+      if (emptyClear) emptyClear.addEventListener("click", resetFilters);
 
       if (searchClearBtn) {
         searchClearBtn.addEventListener("click", function () {
-          searchFilter.value = "";
+          if (searchFilter) searchFilter.value = "";
           applyFilters();
         });
       }
 
-      stateFilter.addEventListener("change", function () {
-        updateDistricts();
-        applyFilters();
-      });
+      if (stateFilter) {
+        stateFilter.addEventListener("change", function () {
+          selectedDistrict = "all";
+          updateDistricts();
+          applyFilters();
+        });
+      }
 
-      districtFilter.addEventListener("change", applyFilters);
-      searchFilter.addEventListener("input", applyFilters);
-      sortFilter.addEventListener("change", applyFilters);
+      if (districtFilter) {
+        districtFilter.addEventListener("change", function () {
+          selectedDistrict = districtFilter.value;
+          if (quickDistrictPills) {
+            const pills = quickDistrictPills.querySelectorAll(".district-pill");
+            pills.forEach(p => p.classList.toggle("active", p.dataset.district === selectedDistrict));
+          }
+          applyFilters();
+        });
+      }
+
+      if (searchFilter) searchFilter.addEventListener("input", applyFilters);
+      if (sortFilter) sortFilter.addEventListener("change", applyFilters);
 
       /* ===================================================
-         MODAL VIDEO PLAYBACK
+         MODAL VIDEO PLAYBACK (PROPER VIDEO PLAYER)
       ==================================================== */
-      function openModalVideo(url, title, category) {
+      function parseYouTubeUrl(url) {
+        if (!url) return "";
+        let videoId = "";
+
+        if (url.includes("embed/")) {
+          videoId = url.split("embed/")[1].split(/[?&]/)[0];
+        } else if (url.includes("watch?v=")) {
+          videoId = url.split("watch?v=")[1].split("&")[0];
+        } else if (url.includes("youtu.be/")) {
+          videoId = url.split("youtu.be/")[1].split(/[?&]/)[0];
+        } else if (url.includes("shorts/")) {
+          videoId = url.split("shorts/")[1].split(/[?&]/)[0];
+        }
+
+        if (videoId) {
+          return "https://www.youtube-nocookie.com/embed/" + videoId + "?autoplay=1&rel=0&modestbranding=1";
+        }
+        return url;
+      }
+
+      function openModalVideo(url, title, category, personOrPlace, district, date) {
         if (!url) return;
 
-        const separator = url.includes("?") ? "&" : "?";
-        modalVideoIframe.src = url + separator + "autoplay=1";
-        modalVideoTitle.textContent = title || "कलश यात्रा विशेष वीडियो";
-        modalCategoryBadge.textContent = category || "विशेष";
+        const embedUrl = parseYouTubeUrl(url);
+
+        // Update Frame Content
+        if (modalVideoFrameWrap) {
+          if (embedUrl.endsWith(".mp4") || embedUrl.endsWith(".webm")) {
+            modalVideoFrameWrap.innerHTML = `
+              <video src="${embedUrl}" controls autoplay style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;">
+                आपका ब्राउज़र यह वीडियो चलाने में असमर्थ है।
+              </video>
+            `;
+          } else {
+            const sep = embedUrl.includes("?") ? "&" : "?";
+            const finalSrc = embedUrl.includes("autoplay=1") ? embedUrl : (embedUrl + sep + "autoplay=1");
+            modalVideoFrameWrap.innerHTML = `
+              <iframe
+                id="modalVideoIframe"
+                src="${finalSrc}"
+                title="${title || 'कलश यात्रा वीडियो'}"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+                style="position:absolute;inset:0;width:100%;height:100%;border:none;"
+              ></iframe>
+            `;
+          }
+        }
+
+        // Update Metadata
+        if (modalVideoTitle) modalVideoTitle.textContent = title || "कलश यात्रा विशेष वीडियो";
+        if (modalCategoryBadge) modalCategoryBadge.textContent = category || "कलश यात्रा";
+        if (modalVideoPerson) modalVideoPerson.textContent = personOrPlace || "आयोजन स्थल";
+        if (modalVideoDistrict) modalVideoDistrict.textContent = district || "पावन धाम";
+        if (modalVideoDate) modalVideoDate.textContent = date || "विशेष प्रस्तुति";
+
         activeVideoShareUrl = url;
 
-        videoModal.classList.add("active");
+        if (videoModal) videoModal.classList.add("active");
         document.body.classList.add("modal-open");
       }
 
       function closeModalVideo() {
-        videoModal.classList.remove("active");
-        modalVideoIframe.src = "";
+        if (videoModal) videoModal.classList.remove("active");
+        if (modalVideoFrameWrap) {
+          modalVideoFrameWrap.innerHTML = "";
+        }
         document.body.classList.remove("modal-open");
       }
 
       // Card Click Listeners
       videoCards.forEach(function (card) {
-        card.addEventListener("click", function () {
+        card.addEventListener("click", function (e) {
           const videoUrl = card.dataset.video;
           const videoTitle = card.dataset.title || card.querySelector("h3")?.textContent?.trim();
-          const categoryTag = card.querySelector(".card-category-tag")?.textContent?.trim();
-          openModalVideo(videoUrl, videoTitle, categoryTag);
+          const categoryTag = card.querySelector(".card-category-tag")?.textContent?.trim() || "कलश यात्रा";
+          const person = card.dataset.person || "";
+          const district = card.dataset.district || "";
+          const date = card.dataset.date || "";
+
+          openModalVideo(videoUrl, videoTitle, categoryTag, person, district, date);
         });
       });
 
-      // Featured Video Button Trigger
-      if (featuredPlayBtn) {
-        featuredPlayBtn.addEventListener("click", function () {
+      // Featured Video Trigger
+      const heroFeaturedPlayBtn = document.getElementById("heroFeaturedPlayBtn");
+      if (heroFeaturedPlayBtn) {
+        heroFeaturedPlayBtn.addEventListener("click", function () {
           openModalVideo(
-            featuredPlayBtn.dataset.video,
-            featuredPlayBtn.dataset.title,
-            "विशेष प्रस्तुति"
+            heroFeaturedPlayBtn.dataset.video,
+            heroFeaturedPlayBtn.dataset.title,
+            "विशेष प्रस्तुति",
+            "राष्ट्रीय महा-आयोजन",
+            "सम्पूर्ण भारत",
+            "2026"
           );
         });
       }
-
-      if (btnFeaturedWatchTrigger) {
-        btnFeaturedWatchTrigger.addEventListener("click", function () {
-          openModalVideo(
-            btnFeaturedWatchTrigger.dataset.video,
-            btnFeaturedWatchTrigger.dataset.title,
-            "विशेष प्रस्तुति"
-          );
-        });
-      }
-
-
 
       // Visual Story Cards Click Listeners
       const storyCards = document.querySelectorAll(".story-card-primary, .story-card-sub");
@@ -4424,18 +5095,20 @@
         card.addEventListener("click", function () {
           const videoUrl = card.dataset.video || "https://www.youtube.com/embed/dQw4w9WgXcQ";
           const videoTitle = card.dataset.title || "कलश यात्रा विशेष दर्शन";
-          openModalVideo(videoUrl, videoTitle, "पावन दर्शन");
+          openModalVideo(videoUrl, videoTitle, "पावन दर्शन", "पवित्र संगम", "काशी - प्रयागराज", "2026");
         });
       });
 
       // Close Modal Triggers
-      modalClose.addEventListener("click", closeModalVideo);
+      if (modalClose) modalClose.addEventListener("click", closeModalVideo);
 
-      videoModal.addEventListener("click", function (event) {
-        if (event.target === videoModal) {
-          closeModalVideo();
-        }
-      });
+      if (videoModal) {
+        videoModal.addEventListener("click", function (event) {
+          if (event.target === videoModal) {
+            closeModalVideo();
+          }
+        });
+      }
 
       document.addEventListener("keydown", function (event) {
         if (event.key === "Escape") {
@@ -4452,6 +5125,7 @@
          SHARE & TOAST NOTIFICATION
       ==================================================== */
       function showToast(msg) {
+        if (!toastNotification || !toastMessage) return;
         toastMessage.textContent = msg || "लिंक कॉपी हो गया!";
         toastNotification.classList.add("show");
         setTimeout(function () {
@@ -4484,10 +5158,17 @@
         });
       }
 
-
       /* ===================================================
          INIT ON LOAD
       ==================================================== */
+      try {
+        const savedView = localStorage.getItem("ky_view_mode") || "grid";
+        setViewMode(savedView);
+      } catch (e) {
+        setViewMode("grid");
+      }
+
+      renderQuickDistrictPills();
       updateDistricts();
       updateCategoryCounts();
       setCategoryButtons();

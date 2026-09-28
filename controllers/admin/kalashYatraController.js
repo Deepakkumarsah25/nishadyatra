@@ -124,6 +124,8 @@ exports.postAddVideo = async (req, res) => {
     const {
       title,
       videoUrl,
+      thumbnail,
+      personOrPlace,
       category,
       state,
       district,
@@ -141,9 +143,11 @@ exports.postAddVideo = async (req, res) => {
     doc.videos.unshift({
       title: title.trim(),
       videoUrl: videoUrl.trim(),
+      thumbnail: thumbnail ? thumbnail.trim() : "",
+      personOrPlace: personOrPlace ? personOrPlace.trim() : "",
       category: category || "yatra",
       state: state || "bihar",
-      district: district ? district.trim().toLowerCase() : "gopalganj",
+      district: district ? district.trim() : "गोपालगंज",
       duration: duration || "12:00 Min",
       viewsCount: viewsCount || "10K",
       date: date || new Date().toLocaleDateString("hi-IN"),
@@ -174,6 +178,8 @@ exports.postUpdateVideo = async (req, res) => {
     const {
       title,
       videoUrl,
+      thumbnail,
+      personOrPlace,
       category,
       state,
       district,
@@ -184,11 +190,13 @@ exports.postUpdateVideo = async (req, res) => {
       tag,
     } = req.body;
 
-    video.title = title || video.title;
-    video.videoUrl = videoUrl || video.videoUrl;
+    video.title = title ? title.trim() : video.title;
+    video.videoUrl = videoUrl ? videoUrl.trim() : video.videoUrl;
+    if (typeof thumbnail !== "undefined") video.thumbnail = thumbnail.trim();
+    if (typeof personOrPlace !== "undefined") video.personOrPlace = personOrPlace.trim();
     video.category = category || video.category;
     video.state = state || video.state;
-    video.district = district ? district.trim().toLowerCase() : video.district;
+    video.district = district ? district.trim() : video.district;
     video.duration = duration || video.duration;
     video.viewsCount = viewsCount || video.viewsCount;
     video.date = date || video.date;
