@@ -11,18 +11,18 @@
       <div class="page-heading">
         <h1>
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--admin-primary)" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          थोक तस्वीरें अपलोड करें (Bulk Image Upload)
+          Bulk Image Upload
         </h1>
-        <p>एक साथ कई संकल्प तस्वीरें चुनें और जिला व दिनांक तय करके एक क्लिक में अपलोड करें</p>
+        <p>Select multiple pledge photos at once, set district and date, and upload in a single click</p>
       </div>
     </div>
     <div class="topbar-right">
       <a href="/admin/gallery" class="btn-admin btn-admin-outline">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-        <span>गैलरी सूची पर वापस जाएं</span>
+        <span>Back to Gallery</span>
       </a>
       <a href="/admin/gallery/new" class="btn-admin btn-admin-primary">
-        <span>एकल फोटो जोड़ें (Single Upload)</span>
+        <span>Add Single Photo</span>
       </a>
     </div>
   </header>
@@ -37,9 +37,9 @@
       <div class="admin-card-header">
         <h3>
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-          थोक फोटो अपलोड कंसोल (Multi-Image Batch Upload)
+          Multi-Image Batch Upload Console
         </h3>
-        <span style="font-size: 11px; color: var(--admin-text-muted);">अधिकतम 50 तस्वीरें एक साथ समर्थित हैं</span>
+        <span style="font-size: 11px; color: var(--admin-text-muted);">Up to 50 photos supported simultaneously</span>
       </div>
 
       <div class="admin-card-body">
@@ -59,10 +59,10 @@
               <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
             </div>
             <div style="font-size: 16px; font-weight: 800; color: var(--admin-text-dark);">
-              तस्वीरें यहाँ खींच कर लाएं या चयन करने के लिए क्लिक करें
+              Drag & drop photos here or click to browse
             </div>
             <p style="font-size: 12px; color: var(--admin-text-muted); margin-top: 6px;">
-              एक बार में 1 से 50 तस्वीरें चुनें (JPG, PNG, WEBP)
+              Select 1 to 50 photos at once (JPG, PNG, WEBP)
             </p>
             <input
               type="file"
@@ -80,14 +80,14 @@
           <div id="fileSelectionInfo" style="display: none; margin-bottom: 24px;">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
               <strong id="fileCountBadge" style="font-size: 13px; color: var(--admin-primary); font-weight: 800;">
-                0 तस्वीरें चुनी गईं
+                0 photos selected
               </strong>
               <button
                 type="button"
                 onclick="clearBulkSelection()"
                 style="border: none; background: none; color: #b91c1c; font-size: 12px; font-weight: 700; cursor: pointer;"
               >
-                ✕ सभी हटाएं
+                ✕ Clear All
               </button>
             </div>
             <div
@@ -99,19 +99,19 @@
           <!-- Batch Common Settings -->
           <div style="background: #faf7f5; padding: 22px; border-radius: 12px; border: 1px solid #ebdcd5; margin-bottom: 24px;">
             <h4 style="font-size: 13px; font-weight: 800; color: var(--admin-text-dark); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.5px;">
-              सभी तस्वीरों के लिए साझा विवरण (Common Details for this Batch)
+              Common Details for this Batch
             </h4>
 
             <div class="form-grid-2">
               <div class="form-group">
-                <label for="defaultDistrict">जिला (District) *</label>
+                <label for="defaultDistrict">District *</label>
                 <input
                   type="text"
                   id="defaultDistrict"
                   name="defaultDistrict"
                   list="districtSuggestions"
                   class="form-control"
-                  placeholder="उदा. गोरखपुर, वाराणसी, प्रयागराज..."
+                  placeholder="e.g. Gorakhpur, Varanasi, Prayagraj..."
                   required
                 />
                 <datalist id="districtSuggestions">
@@ -120,20 +120,20 @@
                       <option value="<%= d %>"></option>
                     <% }); %>
                   <% } %>
-                  <option value="गोरखपुर"></option>
-                  <option value="वाराणसी"></option>
-                  <option value="प्रयागराज"></option>
-                  <option value="अयोध्या"></option>
-                  <option value="लखनऊ"></option>
-                  <option value="गाज़ीपुर"></option>
-                  <option value="बलिया"></option>
-                  <option value="मीरजापुर"></option>
+                  <option value="Gorakhpur"></option>
+                  <option value="Varanasi"></option>
+                  <option value="Prayagraj"></option>
+                  <option value="Ayodhya"></option>
+                  <option value="Lucknow"></option>
+                  <option value="Ghazipur"></option>
+                  <option value="Ballia"></option>
+                  <option value="Mirzapur"></option>
                 </datalist>
-                <span class="form-hint">इस बैच की सभी तस्वीरों पर यह जिला लागू होगा</span>
+                <span class="form-hint">This district will be applied to all photos in this batch</span>
               </div>
 
               <div class="form-group">
-                <label for="defaultDate">संकल्प दिनांक (Date) *</label>
+                <label for="defaultDate">Pledge Date *</label>
                 <input
                   type="date"
                   id="defaultDate"
@@ -142,35 +142,35 @@
                   value="<%= todayStr %>"
                   required
                 />
-                <span class="form-hint">संकल्प की तारीख</span>
+                <span class="form-hint">Date of the pledge</span>
               </div>
             </div>
 
             <div class="form-grid-2">
               <div class="form-group" style="margin-bottom: 0;">
-                <label for="defaultName">डिफ़ॉल्ट नाम या समूह नाम (Default Name / Prefix)</label>
+                <label for="defaultName">Default Name / Group Name Prefix</label>
                 <input
                   type="text"
                   id="defaultName"
                   name="defaultName"
                   class="form-control"
-                  placeholder="उदा. सामूहिक संकल्प / युवा संकल्प दल"
-                  value="सामूहिक संकल्प"
+                  placeholder="e.g. Community Pledge / Youth Pledge Wing"
+                  value="Community Pledge"
                 />
-                <span class="form-hint">यदि खाली रहेगा तो 'सनातनी निषाद' रखा जाएगा</span>
+                <span class="form-hint">If left empty, 'Sanatani Nishad' will be used</span>
               </div>
 
               <div class="form-group" style="margin-bottom: 0;">
-                <label for="defaultCaption">संदेश / विवरण (Common Caption)</label>
+                <label for="defaultCaption">Caption / Pledge Message</label>
                 <input
                   type="text"
                   id="defaultCaption"
                   name="defaultCaption"
                   class="form-control"
-                  placeholder="उदा. अखंड निषाद संकल्प अभियान के अंतर्गत लिया गया पावन संकल्प"
-                  value="अखंड निषाद संकल्प अभियान के अंतर्गत लिया गया पावन संकल्प"
+                  placeholder="e.g. Sacred pledge taken under the Nishad Sankalp Campaign"
+                  value="Sacred pledge taken under the Nishad Sankalp Campaign"
                 />
-                <span class="form-hint">सभी तस्वीरों पर यही संक्षिप्त संदेश रहेगा</span>
+                <span class="form-hint">This common message will be attached to all photos</span>
               </div>
             </div>
           </div>
@@ -185,18 +185,18 @@
               style="width: 20px; height: 20px; accent-color: var(--admin-primary); cursor: pointer;"
             />
             <label for="isPublished" style="margin-bottom: 0; cursor: pointer; font-size: 13px; font-weight: 700;">
-              अपलोड होते ही वेबसाइट पर तुरंत प्रकाशित करें (Publish Live Immediately)
+              Publish live immediately upon upload
             </label>
           </div>
 
           <!-- Submit Buttons -->
           <div style="display: flex; align-items: center; justify-content: flex-end; gap: 12px; border-top: 1px solid var(--admin-border-subtle); padding-top: 20px;">
             <a href="/admin/gallery" class="btn-admin btn-admin-outline">
-              रद्द करें
+              Cancel
             </a>
             <button type="submit" id="submitBtn" class="btn-admin btn-admin-primary" style="padding: 12px 24px;">
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-              <span id="submitBtnText">तस्वीरें अपलोड करें</span>
+              <span id="submitBtnText">Upload Photos</span>
             </button>
           </div>
         </form>
@@ -217,13 +217,13 @@
 
     if (!files || files.length === 0) {
       fileSelectionInfo.style.display = "none";
-      submitBtnText.textContent = "तस्वीरें अपलोड करें";
+      submitBtnText.textContent = "Upload Photos";
       return;
     }
 
     fileSelectionInfo.style.display = "block";
-    fileCountBadge.textContent = files.length + " तस्वीरें अपलोड के लिए तैयार";
-    submitBtnText.textContent = files.length + " तस्वीरें एक साथ अपलोड करें";
+    fileCountBadge.textContent = files.length + " photos ready for upload";
+    submitBtnText.textContent = "Upload " + files.length + " Photos";
 
     Array.from(files).forEach((file, index) => {
       const reader = new FileReader();
@@ -286,7 +286,7 @@
     const btn = document.getElementById("submitBtn");
     btn.disabled = true;
     btn.style.opacity = "0.7";
-    btn.innerHTML = "<span>अपलोड हो रहा है, कृपया प्रतीक्षा करें...</span>";
+    btn.innerHTML = "<span>Uploading, please wait...</span>";
   });
 </script>
 

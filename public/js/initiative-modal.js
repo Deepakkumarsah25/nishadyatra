@@ -5,93 +5,93 @@ document.addEventListener("DOMContentLoaded", () => {
   // Modal Data Dictionary for all 6 initiatives
   const initiativeData = {
     "social-rights": {
-      tag: "चेतना व जागरण प्रकोष्ठ",
-      title: "सामाजिक एकता व विधिक अधिकार सहयोग",
-      description: "निषाद संकल्प अभियान के अंतर्गत ग्राम स्तर पर विधिक सहायता शिविर, राशन व पेंशन लाभ, और संवैधानिक अधिकारों की सुरक्षा हेतु सक्रिय प्रकोष्ठ।",
+      tag: "Awareness & Rights Wing",
+      title: "Social Unity & Legal Rights Support",
+      description: "An active wing under the Nishad Sankalp Campaign for legal aid camps, ration & pension benefits, and constitutional rights protection at the grassroots level.",
       highlights: [
-        "सरकारी योजनाओं और अनुलाभों में प्रशासनिक अड़चनों का निःशुल्क समाधान।",
-        "पारंपरिक बस्तियों व घाटों पर विधिक परामर्श चौपाल का नियमित आयोजन।",
-        "समाजिक कुरीतियों के विरुद्ध सामूहिक संकल्प व चेतना अभियान।"
+        "Free assistance in resolving administrative hurdles in government schemes and benefits.",
+        "Regular legal counseling sessions organized at traditional settlements and ghats.",
+        "Collective awareness drives and campaigns for social empowerment."
       ],
-      helplineText: "अधिकार सहायता: +91 99999 99999",
+      helplineText: "Rights Helpline: +91 99999 99999",
       helplineTel: "+919999999999",
-      formTitle: "सहयोग अथवा समस्या निवारण हेतु पंजीकरण",
-      formSubmitText: "सहयोग अनुरोध भेजें"
+      formTitle: "Registration for Support or Grievance Redressal",
+      formSubmitText: "Submit Support Request"
     },
 
     "youth-wing": {
-      tag: "शिक्षा व युवा प्रकोष्ठ",
-      title: "युवा विंग मार्गदर्शन एवं छात्र सहायता",
-      description: "प्रतियोगी परीक्षाओं (UPSC, UPPSC, SSC, Police, Army, Agniveer) की तैयारी कर रहे छात्र-छात्राओं के लिए विशेष मेंटरशिप और पुस्तक सहायता।",
+      tag: "Education & Youth Wing",
+      title: "Youth Wing Guidance & Student Support",
+      description: "Special mentorship and educational resources for students preparing for competitive examinations (UPSC, UPPSC, SSC, Police, Defense).",
       highlights: [
-        "सफल अधिकारियों व अनुभवी शिक्षकों द्वारा निःशुल्क करियर काउंसलिंग।",
-        "डिजिटल स्टडी मटेरियल, करंट अफेयर्स और टेस्ट सीरीज़ की सुविधा।",
-        "आर्थिक रूप से कमजोर मेधावी विद्यार्थियों के लिए छात्रवृत्ति समन्वय।"
+        "Free career counseling by accomplished officers and experienced educators.",
+        "Digital study materials, current affairs, and mock test access.",
+        "Scholarship coordination for hardworking students from low-income families."
       ],
-      helplineText: "युवा विंग हेल्पलाइन: +91 99999 99998",
+      helplineText: "Youth Helpline: +91 99999 99998",
       helplineTel: "+919999999998",
-      formTitle: "विद्यार्थी मार्गदर्शन आवेदन फॉर्म",
-      formSubmitText: "युवा विंग से मार्गदर्शन प्राप्त करें"
+      formTitle: "Student Guidance Application Form",
+      formSubmitText: "Get Guidance from Youth Wing"
     },
 
     "schemes-info": {
-      tag: "स्वरोजगार व योजना केंद्र",
-      title: "मत्स्य संपदा व स्वरोजगार योजनाएं",
-      description: "केंद्र व राज्य सरकार द्वारा नाविकों, मत्स्य पालकों और लघु उद्यमियों के लिए संचालित सभी कल्याणकारी योजनाओं की सटीक जानकारी व आवेदन सहयोग।",
+      tag: "Self-Employment & Schemes",
+      title: "Fisheries & Self-Employment Schemes",
+      description: "Comprehensive information and application guidance for all central and state welfare schemes for boatmen, fish farmers, and micro-entrepreneurs.",
       highlights: [
-        "प्रधानमंत्री मत्स्य संपदा योजना (PMMSY) - 40% से 60% तक सरकारी अनुदान।",
-        "नाविक किसान क्रेडिट कार्ड (KCC) - रियायती ब्याज दर पर ऋण सुविधा।",
-        "स्वयं सहायता समूहों (SHG) का गठन, रजिस्ट्रेशन एवं वित्तीय मार्गदर्शन।"
+        "Pradhan Mantri Matsya Sampada Yojana (PMMSY) - 40% to 60% government subsidy support.",
+        "Kisan Credit Card (KCC) for boatmen - Concessional interest rate credit facilities.",
+        "Self-Help Groups (SHGs) formation, registration, and financial literacy."
       ],
-      helplineText: "योजना परामर्श: +91 99999 99997",
+      helplineText: "Schemes Advisory: +91 99999 99997",
       helplineTel: "+919999999997",
-      formTitle: "योजना आवेदन सहायता अनुरोध",
-      formSubmitText: "योजना जानकारी व सहयोग मांगें"
+      formTitle: "Scheme Application Support Request",
+      formSubmitText: "Request Information & Support"
     },
 
     "river-rights": {
-      tag: "जल व तटवर्ती अधिकार",
-      title: "नदी संरक्षण, घाट सुरक्षा व आजीविका अधिकार",
-      description: "पवित्र नदियों की अविरलता, घाटों के सौंदर्यीकरण और पारंपरिक नदी तटीय परिवारों के नौकायन व आजीविका अधिकारों के संरक्षण का सामूहिक अभियान।",
+      tag: "River & Riparian Rights",
+      title: "River Conservation, Ghat Safety & Livelihood Rights",
+      description: "A community-driven campaign for the conservation of sacred rivers, ghat development, and safeguarding traditional boating and fishing rights.",
       highlights: [
-        "गंगा, यमुना और सहायक नदियों के घाटों पर नियमित स्वच्छता व सुरक्षा अभियान।",
-        "नाविक बंधुओं के लिए आधुनिक लाइफ-जैकेट, सुरक्षा किट व आपातकालीन प्रशिक्षण।",
-        "पारंपरिक नौकायन व मछली पकड़ने के ऐतिहासिक अधिकारों की कानूनी सुरक्षा।"
+        "Regular cleanliness and safety drives along riverbanks and ghats.",
+        "Modern life jackets, safety equipment, and emergency training for boatmen.",
+        "Legal protection of historic rights for traditional boating and fishing communities."
       ],
-      helplineText: "नदी प्रहरी हेल्पलाइन: +91 99999 99996",
+      helplineText: "River Watch Helpline: +91 99999 99996",
       helplineTel: "+919999999996",
-      formTitle: "नदी प्रहरी / पर्यावरण मित्र स्वयंसेवक फॉर्म",
-      formSubmitText: "अभियान में सहभागिता दर्ज करें"
+      formTitle: "River Watch / Volunteer Form",
+      formSubmitText: "Join the Initiative"
     },
 
     "disaster-relief": {
-      tag: "आपदा सेवा व राहत दल",
-      title: "आपातकालीन बाढ़ राहत व स्वास्थ्य सेवा दल",
-      description: "नदी तटवर्ती एवं निचले क्षेत्रों में बाढ़ अथवा आकस्मिक संकट के समय भोजन, दवा, स्वच्छ जल और नावों द्वारा सुरक्षित बचाव कार्य का विशेष स्वयंसेवक नेटवर्क।",
+      tag: "Disaster Relief & Response",
+      title: "Emergency Flood Relief & Medical Response Team",
+      description: "A dedicated volunteer network for rapid boat rescues, delivering rations, drinking water, and essential medicines during riverbank flooding.",
       highlights: [
-        "24x7 सक्रिय स्थानीय नाविक व तैराक स्वयंसेवकों का त्वरित बचाव दस्ता।",
-        "बाढ़ प्रभावित परिवारों को सूखा राशन, शुद्ध जल व तिरपाल वितरण।",
-        "बाढ़ के पश्चात संक्रामक रोगों से बचाव हेतु निःशुल्क मेडिकल चेकअप कैंप।"
+        "24x7 quick rescue team of experienced local boatmen and expert swimmers.",
+        "Distribution of dry food rations, clean drinking water, and emergency shelter kits.",
+        "Free post-flood medical camps to prevent infectious diseases."
       ],
-      helplineText: "आपातकालीन राहत: 1800-123-4567 / +91 99999 99995",
+      helplineText: "Emergency Relief: 1800-123-4567 / +91 99999 99995",
       helplineTel: "+919999999995",
-      formTitle: "राहत स्वयंसेवक / सहायता अनुरोध फॉर्म",
-      formSubmitText: "राहत दल में शामिल हों"
+      formTitle: "Relief Volunteer / Assistance Form",
+      formSubmitText: "Join Relief Team"
     },
 
     "cultural-events": {
-      tag: "सांस्कृतिक गौरव प्रकोष्ठ",
-      title: "सांस्कृतिक धरोहर एवं निषादराज जयंती महोत्सव",
-      description: "महाराज निषादराज गुह्य जी की गौरवशाली गाथा, ऐतिहासिक मित्रता और समाज के महापुरुषों के त्याग व शौर्य को जन-जन तक पहुंचाने का पावन उत्सव।",
+      tag: "Cultural Heritage Wing",
+      title: "Cultural Heritage & Nishadraj Jayanti Festival",
+      description: "A cultural initiative celebrating the legendary heritage, friendship, and valor of Maharaj Nishadraj Guhya and historical icons.",
       highlights: [
-        "वार्षिक राज्यस्तरीय निषादराज जयंती, भव्य शोभायात्रा व सांस्कृतिक संध्या।",
-        "श्रृंगवेरपुर धाम, प्रयागराज व काशी में विचार गोष्ठियां व सम्मेलन।",
-        "शिक्षा, खेल, कला और समाजसेवा में उत्कृष्ट युवाओं व वरिष्ठों का सम्मान समारोह।"
+        "Annual state-level Nishadraj Jayanti celebrations, grand processions, and cultural summits.",
+        "Conferences and community dialogues at Shringverpur Dham, Prayagraj, and Varanasi.",
+        "Felicitation ceremonies recognizing youth and elders in education, sports, and social service."
       ],
-      helplineText: "उत्सव समिति संपर्क: +91 99999 99994",
+      helplineText: "Festival Committee: +91 99999 99994",
       helplineTel: "+919999999994",
-      formTitle: "उत्सव में भागीदारी / आमंत्रण अनुरोध",
-      formSubmitText: "उत्सव विवरण व आमंत्रण पाएं"
+      formTitle: "Festival Participation / Invitation Request",
+      formSubmitText: "Get Festival Details & Invitation"
     }
   };
 
@@ -196,13 +196,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const name = document.getElementById("modalUserName")?.value;
       const phone = document.getElementById("modalUserPhone")?.value;
       const district = document.getElementById("modalUserDistrict")?.value;
-      const category = initiativeCategoryInput?.value || "पहल सहायता";
+      const category = initiativeCategoryInput?.value || "Initiative Support";
       const message = document.getElementById("modalUserMessage")?.value;
 
       if (submitBtn) {
         submitBtn.disabled = true;
         const origText = submitBtn.innerHTML;
-        submitBtn.innerHTML = `<span>जमा हो रहा है...</span>`;
+        submitBtn.innerHTML = `<span>Submitting...</span>`;
 
         try {
           const res = await fetch("/api/submit-inquiry", {
@@ -214,11 +214,11 @@ document.addEventListener("DOMContentLoaded", () => {
           if (data.success) {
             initiativeForm.style.display = "none";
             if (successBanner) {
-              successBanner.textContent = "✓ " + (data.message || "आपका अनुरोध और विवरण सफलतापूर्वक दर्ज कर लिया गया है।");
+              successBanner.textContent = "✓ " + (data.message || "Your request and details have been recorded successfully.");
               successBanner.style.display = "block";
             }
           } else {
-            alert(data.message || "त्रुटि हुई। कृपया पुनः प्रयास करें।");
+            alert(data.message || "An error occurred. Please try again.");
           }
         } catch (err) {
           console.error(err);

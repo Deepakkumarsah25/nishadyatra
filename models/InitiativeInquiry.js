@@ -9,7 +9,7 @@ const initiativeInquirySchema = new mongoose.Schema(
     },
     category: {
       type: String,
-      default: "सामान्य",
+      default: "General",
       trim: true,
     },
     name: {

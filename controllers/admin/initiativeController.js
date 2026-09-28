@@ -5,7 +5,7 @@ exports.getInitiatives = async (req, res) => {
   try {
     const initiatives = await Initiative.find().sort({ order: 1, createdAt: 1 });
     res.render("admin/home/initiative-list", {
-      title: "कार्यक्षेत्र एवं पहल प्रबंधन (What We Do)",
+      title: "Key Initiatives & What We Do Management",
       admin: req.session.admin,
       initiatives,
       currentPath: "/admin/home/initiatives",
@@ -21,7 +21,7 @@ exports.getInitiatives = async (req, res) => {
 // Render create form
 exports.getCreateInitiative = (req, res) => {
   res.render("admin/home/initiative-form", {
-    title: "नई पहल / कार्य जोड़ें",
+    title: "Add New Initiative",
     admin: req.session.admin,
     initiative: null,
     currentPath: "/admin/home/initiatives",
@@ -70,19 +70,19 @@ exports.postCreateInitiative = async (req, res) => {
 
     await Initiative.create({
       key: key.toLowerCase().trim().replace(/\s+/g, "-"),
-      cardTag: cardTag || "पहल",
+      cardTag: cardTag || "Initiative",
       title: title || "",
       description: description || "",
       points: pointsArray,
-      btnText: btnText || "सहयोग दें या जुड़ें",
+      btnText: btnText || "Support or Join",
       modalTag: modalTag || cardTag || "",
       modalTitle: modalTitle || title || "",
       modalDescription: modalDescription || description || "",
       modalHighlights: highlightsArray,
       helplineText: helplineText || "",
       helplineTel: helplineTel || "",
-      formTitle: formTitle || "पंजीकरण एवं सहायता फॉर्म",
-      formSubmitText: formSubmitText || "सहयोग अनुरोध भेजें",
+      formTitle: formTitle || "Registration & Support Form",
+      formSubmitText: formSubmitText || "Send Support Request",
       iconKey: iconKey || "scale",
       order: Number(order) || 0,
       isActive: isActive === "on" || isActive === "true" || isActive === true,
@@ -92,12 +92,12 @@ exports.postCreateInitiative = async (req, res) => {
   } catch (error) {
     console.error("Create initiative error:", error);
     res.render("admin/home/initiative-form", {
-      title: "नई पहल / कार्य जोड़ें",
+      title: "Add New Initiative",
       admin: req.session.admin,
       initiative: req.body,
       currentPath: "/admin/home/initiatives",
       isEdit: false,
-      error: "पहल सहेजने में त्रुटि हुई: " + error.message,
+      error: "Error saving initiative: " + error.message,
     });
   }
 };
@@ -111,7 +111,7 @@ exports.getEditInitiative = async (req, res) => {
     }
 
     res.render("admin/home/initiative-form", {
-      title: "पहल संपादित करें",
+      title: "Edit Initiative",
       admin: req.session.admin,
       initiative,
       currentPath: "/admin/home/initiatives",
@@ -183,12 +183,12 @@ exports.postEditInitiative = async (req, res) => {
   } catch (error) {
     console.error("Update initiative error:", error);
     res.render("admin/home/initiative-form", {
-      title: "पहल संपादित करें",
+      title: "Edit Initiative",
       admin: req.session.admin,
       initiative: { ...req.body, _id: req.params.id },
       currentPath: "/admin/home/initiatives",
       isEdit: true,
-      error: "पहल अपडेट करने में त्रुटि हुई: " + error.message,
+      error: "Error updating initiative: " + error.message,
     });
   }
 };

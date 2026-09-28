@@ -30,7 +30,7 @@ const initiativeSchema = new mongoose.Schema(
     },
     btnText: {
       type: String,
-      default: "सहयोग दें या जुड़ें",
+      default: "Support or Join",
       trim: true,
     },
     modalTag: {
@@ -54,7 +54,7 @@ const initiativeSchema = new mongoose.Schema(
     },
     helplineText: {
       type: String,
-      default: "सहायता: +91 99999 99999",
+      default: "Helpline: +91 99999 99999",
       trim: true,
     },
     helplineTel: {
@@ -64,12 +64,12 @@ const initiativeSchema = new mongoose.Schema(
     },
     formTitle: {
       type: String,
-      default: "सहयोग अथवा समस्या निवारण हेतु पंजीकरण",
+      default: "Registration for Support & Assistance",
       trim: true,
     },
     formSubmitText: {
       type: String,
-      default: "सहयोग अनुरोध भेजें",
+      default: "Send Support Request",
       trim: true,
     },
     iconKey: {

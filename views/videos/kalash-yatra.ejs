@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>कलश यात्रा वीडियो | निषाद संकल्प अभियान</title>
-  <meta name="description" content="निषाद संकल्प अभियान की पावन कलश यात्रा के वीडियो, कार्यक्रम, ऐतिहासिक क्षण और राज्यवार विशेष झलकियां।" />
+  <title>Kalash Yatra Videos | Nishad Sankalp Campaign</title>
+  <meta name="description" content="Videos, events, historic moments, and state-wise highlights of the sacred Kalash Yatra under Nishad Sankalp Campaign." />
 
   <!-- Google Fonts: Rozha One, Noto Serif Devanagari, Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -2919,20 +2919,20 @@
         <div class="hero-content">
           <div class="live-badge">
             <span class="live-dot-pulse"></span>
-            <span><%= (typeof kalash !== 'undefined' && kalash.hero && kalash.hero.liveBadgeText) ? kalash.hero.liveBadgeText : 'निषाद संकल्प अभियान • कलश यात्रा विशेष दर्शन' %></span>
+            <span><%= (typeof kalash !== 'undefined' && kalash.hero && kalash.hero.liveBadgeText) ? kalash.hero.liveBadgeText : 'Nishad Sankalp Campaign • Kalash Yatra Special Video Highlights' %></span>
           </div>
 
           <h1 class="hero-heading">
-            <%= (typeof kalash !== 'undefined' && kalash.hero && kalash.hero.headingMain) ? kalash.hero.headingMain : 'आस्था, एकता और संकल्प का पावन महासंगम —' %> <span class="highlight"><%= (typeof kalash !== 'undefined' && kalash.hero && kalash.hero.headingHighlight) ? kalash.hero.headingHighlight : 'कलश यात्रा' %></span>
+            <%= (typeof kalash !== 'undefined' && kalash.hero && kalash.hero.headingMain) ? kalash.hero.headingMain : 'Sacred Confluence of Faith, Unity & Resolve —' %> <span class="highlight"><%= (typeof kalash !== 'undefined' && kalash.hero && kalash.hero.headingHighlight) ? kalash.hero.headingHighlight : 'Kalash Yatra' %></span>
           </h1>
 
           <p class="hero-subheading">
-            <%= (typeof kalash !== 'undefined' && kalash.hero && kalash.hero.subheading) ? kalash.hero.subheading : 'समाज को जोड़ने और सामूहिक शक्ति के जागरण हेतु आयोजित ऐतिहासिक कलश यात्राएं। मातृशक्ति का पावन संकल्प, स्वाभिमान की पुकार और सांस्कृतिक धरोहर के संरक्षण का ऐतिहासिक जनप्रवाह। अपने राज्य व जिले के अनुसार संग्रह देखें।' %>
+            <%= (typeof kalash !== 'undefined' && kalash.hero && kalash.hero.subheading) ? kalash.hero.subheading : 'Historic Kalash Yatras organized to unite communities and awaken collective resolve. Explore videos and sacred memories by state and district.' %>
           </p>
 
           <!-- Sacred Highlights Pills -->
           <div class="hero-highlights-list">
-            <% const heroHighlights = (typeof kalash !== 'undefined' && kalash.hero && kalash.hero.highlights && kalash.hero.highlights.length > 0) ? kalash.hero.highlights : ['पावन जल संकल्प', 'मातृशक्ति जनसैलाब', 'सामाजिक स्वाभिमान']; %>
+            <% const heroHighlights = (typeof kalash !== 'undefined' && kalash.hero && kalash.hero.highlights && kalash.hero.highlights.length > 0) ? kalash.hero.highlights : ['Sacred Water Pledge', 'Women Empowerment Wave', 'Community Dignity']; %>
             <% heroHighlights.forEach((hl, hIdx) => { %>
               <div class="hero-highlight-pill">
                 <span class="highlight-icon"><%= hIdx === 0 ? '🪔' : (hIdx === 1 ? '🚩' : '🤝') %></span>
@@ -2946,24 +2946,24 @@
               <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
                 <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8 12.5v-9l6 4.5-6 4.5z"/>
               </svg>
-              <span>वीडियो संकलन देखें</span>
+              <span>Watch Video Collection</span>
             </a>
 
             <a href="#filterConsole" class="btn-secondary-glass" id="heroFilterTrigger">
               <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
                 <path d="M12 2.5a7.2 7.2 0 0 0-7.2 7.2c0 5.2 7.2 11.8 7.2 11.8s7.2-6.6 7.2-11.8A7.2 7.2 0 0 0 12 2.5zm0 9.9a2.7 2.7 0 1 1 0-5.4 2.7 2.7 0 0 1 0 5.4z"/>
               </svg>
-              <span>राज्य व जिला चुनें</span>
+              <span>Select State & District</span>
             </a>
           </div>
 
           <!-- Quick Stats Strip -->
           <div class="hero-stats-strip">
             <% const heroStats = (typeof kalash !== 'undefined' && kalash.hero && kalash.hero.stats && kalash.hero.stats.length > 0) ? kalash.hero.stats : [
-                 { number: '150+', label: 'जिले सम्मिलित' },
-                 { number: '50,000+', label: 'मंगल कलश पूजन' },
-                 { number: '10,000+', label: 'मातृशक्ति सहभागिता' },
-                 { number: '28+', label: 'राज्यों में चेतना' }
+                 { number: '150+', label: 'Districts Joined' },
+                 { number: '50,000+', label: 'Mangal Kalash Rituals' },
+                 { number: '10,000+', label: 'Women Participants' },
+                 { number: '28+', label: 'States Reached' }
                ]; %>
             <% heroStats.forEach((st) => { %>
               <div class="hero-stat-item">
@@ -2982,7 +2982,7 @@
             <div class="hero-main-stage" id="heroMainStage">
               <img
                 src="/images/kalash-yatra-hero.jpg"
-                alt="कलश यात्रा भव्य शोभायात्रा"
+                alt="Kalash Yatra Grand Procession"
                 id="heroMainStageImg"
                 loading="eager"
               />
@@ -2992,12 +2992,12 @@
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                 </svg>
-                <span id="heroStageBadgeText">विशेष महाझलक • 2026</span>
+                <span id="heroStageBadgeText">Grand Highlights • 2026</span>
               </div>
 
               <div class="hero-stage-caption">
-                <h3 id="heroStageTitle">मातृशक्ति का पावन कलश संकल्प</h3>
-                <p id="heroStageDesc">गोपालगंज से लेकर काशी तक — सामाजिक एकता व स्वाभिमान का विराट प्रवाह</p>
+                <h3 id="heroStageTitle">Women's Sacred Kalash Pledge</h3>
+                <p id="heroStageDesc">From Gopalganj to Kashi — A grand movement of social unity and dignity</p>
               </div>
             </div>
 
@@ -3005,26 +3005,26 @@
             <div
               class="hero-float-card card-top-right"
               data-img="/images/sacred-kalash-ritual.jpg"
-              data-badge="पावन अनुष्ठान • 2026"
-              data-title="पावन कलश एवं दीप पूजन"
-              data-desc="वैदिक मंत्रोच्चार और समाज के कल्याण हेतु पावन कलश स्थापना"
-              title="क्लिक करके मुख्य फोटो बनाएं"
+              data-badge="Sacred Ritual • 2026"
+              data-title="Sacred Kalash & Lamp Worship"
+              data-desc="Sacred Kalash consecration with Vedic chants for community welfare"
+              title="Click to view main image"
             >
-              <img src="/images/sacred-kalash-ritual.jpg" alt="पावन कलश एवं दीप पूजन" loading="lazy" />
-              <span class="hero-float-tag">🪔 कलश पूजन</span>
+              <img src="/images/sacred-kalash-ritual.jpg" alt="Sacred Kalash and Lamp Worship" loading="lazy" />
+              <span class="hero-float-tag">🪔 Kalash Worship</span>
             </div>
 
             <!-- Overlapping Floating Card 2: Ghat Procession -->
             <div
               class="hero-float-card card-bottom-left"
               data-img="/images/ghat-kalash-procession.jpg"
-              data-badge="पवित्र संगम • 2026"
-              data-title="पवित्र घाट पर जल संकल्प"
-              data-desc="सूर्योदय की पावन वेला में श्रद्धालुओं का ऐतिहासिक जल संकल्प"
-              title="क्लिक करके मुख्य फोटो बनाएं"
+              data-badge="Sacred Confluence • 2026"
+              data-title="Water Pledge at Sacred Ghats"
+              data-desc="Historic water pledge by devotees at sunrise"
+              title="Click to view main image"
             >
-              <img src="/images/ghat-kalash-procession.jpg" alt="पवित्र घाट पर जल संकल्प" loading="lazy" />
-              <span class="hero-float-tag">🌊 घाट संकल्प</span>
+              <img src="/images/ghat-kalash-procession.jpg" alt="Water Pledge at Sacred Ghats" loading="lazy" />
+              <span class="hero-float-tag">🌊 Ghat Pledge</span>
             </div>
 
             <!-- Interactive Scene Switcher Strip -->
@@ -3033,48 +3033,48 @@
                 type="button"
                 class="hero-thumb-btn active"
                 data-img="/images/kalash-yatra-hero.jpg"
-                data-badge="विशेष महाझलक • 2026"
-                data-title="मातृशक्ति का पावन कलश संकल्प"
-                data-desc="गोपालगंज से लेकर काशी तक — सामाजिक एकता व स्वाभिमान का विराट प्रवाह"
+                data-badge="Grand Highlights • 2026"
+                data-title="Women's Sacred Kalash Pledge"
+                data-desc="From Gopalganj to Kashi — A grand movement of social unity and dignity"
               >
-                <img src="/images/kalash-yatra-hero.jpg" alt="शोभायात्रा" />
-                <span>🚩 शोभायात्रा</span>
+                <img src="/images/kalash-yatra-hero.jpg" alt="Procession" />
+                <span>🚩 Procession</span>
               </button>
 
               <button
                 type="button"
                 class="hero-thumb-btn"
                 data-img="/images/sacred-kalash-ritual.jpg"
-                data-badge="पावन अनुष्ठान • 2026"
-                data-title="पावन कलश एवं दीप पूजन"
-                data-desc="वैदिक मंत्रोच्चार और समाज के कल्याण हेतु पावन कलश स्थापना"
+                data-badge="Sacred Ritual • 2026"
+                data-title="Sacred Kalash & Lamp Worship"
+                data-desc="Sacred Kalash consecration with Vedic chants for community welfare"
               >
-                <img src="/images/sacred-kalash-ritual.jpg" alt="कलश पूजन" />
-                <span>🪔 कलश पूजन</span>
+                <img src="/images/sacred-kalash-ritual.jpg" alt="Kalash Worship" />
+                <span>🪔 Kalash Worship</span>
               </button>
 
               <button
                 type="button"
                 class="hero-thumb-btn"
                 data-img="/images/ghat-kalash-procession.jpg"
-                data-badge="पवित्र संगम • 2026"
-                data-title="पवित्र घाट पर जल संकल्प"
-                data-desc="सूर्योदय की पावन वेला में श्रद्धालुओं का ऐतिहासिक जल संकल्प"
+                data-badge="Sacred Confluence • 2026"
+                data-title="Water Pledge at Sacred Ghats"
+                data-desc="Historic water pledge by devotees at sunrise"
               >
-                <img src="/images/ghat-kalash-procession.jpg" alt="घाट संकल्प" />
-                <span>🌊 घाट संकल्प</span>
+                <img src="/images/ghat-kalash-procession.jpg" alt="Ghat Pledge" />
+                <span>🌊 Ghat Pledge</span>
               </button>
 
               <button
                 type="button"
                 class="hero-thumb-btn"
                 data-img="/images/kalash-yatra-featured.jpg"
-                data-badge="महाजनसैलाब • 2026"
-                data-title="ऐतिहासिक कलश यात्रा जनसैलाब"
-                data-desc="हजारों माताओं, बहनों और सामाजिक साथियों का विराट जनसैलाब"
+                data-badge="Grand Gathering • 2026"
+                data-title="Historic Kalash Yatra Gathering"
+                data-desc="Gathering of thousands of women and community members"
               >
-                <img src="/images/kalash-yatra-featured.jpg" alt="महाजनसैलाब" />
-                <span>👥 जनसैलाब</span>
+                <img src="/images/kalash-yatra-featured.jpg" alt="Grand Gathering" />
+                <span>👥 Grand Gathering</span>
               </button>
             </div>
 
@@ -3093,17 +3093,17 @@
       <div class="yatra-storycase-header">
         <div class="storycase-kicker">
           <span>★</span>
-          <span>पावन संस्मरण • निषाद संकल्प अभियान</span>
+          <span>Sacred Memories • Nishad Sankalp Campaign</span>
           <span class="storycase-kicker-sep">•</span>
-          <span class="storycase-kicker-sub">ऐतिहासिक महासंगम</span>
+          <span class="storycase-kicker-sub">Historic Confluence</span>
         </div>
 
         <h2 class="storycase-title">
-          कलश यात्रा महागाथा — <span class="highlight">आस्था, स्वाभिमान व सामाजिक संकल्प</span> के पावन आयाम
+          Kalash Yatra Epic — Dimensions of <span class="highlight">Faith, Dignity & Social Unity</span>
         </h2>
 
         <p class="storycase-sub">
-          पवित्र गंगाजल, वैदिक मंत्रोच्चार और मातृशक्ति के अटूट संकल्प के साथ देश के विभिन्न अंचलों से गुजरी ऐतिहासिक कलश यात्रा की पावन झलकियां एवं समाज के सशक्तिकरण का जीवंत दर्शन।
+          Living glimpses of social empowerment and sacred memories from the historic Kalash Yatra across regions, powered by devotion and community solidarity.
         </p>
       </div>
 
@@ -3122,7 +3122,7 @@
             />
             <div class="storycase-featured-overlay"></div>
             <div class="storycase-featured-badge">
-              <span><%= featMilestone.tag || '★ मुख्य केंद्र • ऐतिहासिक शंखनाद' %></span>
+              <span><%= featMilestone.tag || '★ Main Center • Historic Milestone' %></span>
             </div>
             <div class="storycase-featured-caption">
               <h4><%= featMilestone.title %></h4>
@@ -3130,7 +3130,7 @@
                 <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
                   <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/>
                 </svg>
-                <span><%= featMilestone.district %>, <%= featMilestone.stateName %> • विराट जनप्रवाह</span>
+                <span><%= featMilestone.district %>, <%= featMilestone.stateName %> • Grand Movement</span>
               </p>
             </div>
           </div>
@@ -3139,7 +3139,7 @@
             <div>
               <div class="storycase-meta-tag-row">
                 <span class="storycase-tag-pill crimson"><%= featMilestone.stateName %> • <%= featMilestone.district %></span>
-                <span class="storycase-tag-pill gold"><%= featMilestone.tag || 'विशेष संस्मरण' %></span>
+                <span class="storycase-tag-pill gold"><%= featMilestone.tag || 'Special Memoir' %></span>
               </div>
 
               <h3><%= featMilestone.title %></h3>
@@ -3149,10 +3149,10 @@
 
             <div class="storycase-actions-row">
               <button type="button" class="btn-storycase-primary btn-jump-filter-state" data-state="<%= featMilestone.stateKey %>">
-                <span><%= featMilestone.stateName %> के वीडियो देखें ↓</span>
+                <span><%= featMilestone.stateName %>  Videos ↓</span>
               </button>
               <button type="button" class="btn-storycase-outline btn-watch-featured" data-video="<%= featMilestone.videoUrl %>" data-title="<%= featMilestone.title %>">
-                <span>झलकियां देखें ▶</span>
+                <span>Watch Highlights ▶</span>
               </button>
             </div>
           </div>
@@ -3175,7 +3175,7 @@
                 </div>
                 <div class="storycase-card-footer">
                   <span class="storycase-location-text"><%= item.district %>, <%= item.stateName %></span>
-                  <span class="btn-card-filter-link btn-jump-filter-state" data-state="<%= item.stateKey %>">वीडियो देखें →</span>
+                  <span class="btn-card-filter-link btn-jump-filter-state" data-state="<%= item.stateKey %>">Watch Videos →</span>
                 </div>
               </div>
             </article>
@@ -3187,12 +3187,12 @@
           <div class="transition-text-group">
             <div class="transition-icon-circle">🎥</div>
             <div>
-              <h5>कलश यात्रा के सभी वीडियो व संबोधन नीचे उपलब्ध हैं</h5>
-              <p>राज्य, जिला या श्रेणी का चयन करके अपनी पसंद का वीडियो तुरंत देखें</p>
+              <h5>All Kalash Yatra videos and addresses are available below</h5>
+              <p>Select state, district, or category to watch your preferred video instantly</p>
             </div>
           </div>
           <button type="button" class="btn-jump-filter" id="btnJumpToFilter">
-            <span>वीडियो फ़िल्टर एवं खोज केंद्र ↓</span>
+            <span>Video Filter & Search Center ↓</span>
           </button>
         </div>
 
@@ -3203,13 +3203,13 @@
     <!-- ===================================================
          MOBILE FLOATING FILTER TAB & DRAWER OVERLAY
     ==================================================== -->
-    <button type="button" class="mobile-filter-floating-tab" id="mobileFilterTab" aria-label="वीडियो फ़िल्टर खोलें">
+    <button type="button" class="mobile-filter-floating-tab" id="mobileFilterTab" aria-label="Open video filters">
       <div class="tab-lines-icon">
         <span></span>
         <span></span>
         <span></span>
       </div>
-      <span class="tab-label-text">फ़िल्टर</span>
+      <span class="tab-label-text">Filter</span>
       <span class="mobile-filter-badge" id="mobileFilterBadge">6</span>
     </button>
 
@@ -3231,27 +3231,27 @@
                 </svg>
               </div>
               <div class="filter-heading-text">
-                <h3>वीडियो खोज एवं चयन केंद्र</h3>
-                <p>राज्य, जिला, श्रेणी अथवा शीर्षक लिखकर मनचाहा वीडियो तुरंत प्राप्त करें</p>
+                <h3>Video Search & Filter Center</h3>
+                <p>Find desired videos quickly by selecting state, district, category, or title keyword</p>
               </div>
             </div>
 
             <div class="filter-top-actions">
               <div class="count-indicator">
-                <span>दिख रहे हैं:</span>
+                <span>Showing:</span>
                 <strong id="resultCount">6</strong>
-                <span>वीडियो</span>
+                <span>Videos</span>
               </div>
 
               <button type="button" class="btn-reset-filters" id="clearFilters">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
                   <path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
                 </svg>
-                <span>रीसेट करें</span>
+                <span>Reset</span>
               </button>
 
               <!-- Drawer Close Button for Mobile Screens -->
-              <button type="button" class="drawer-mobile-close" id="mobileFilterClose" aria-label="फ़िल्टर बंद करें">
+              <button type="button" class="drawer-mobile-close" id="mobileFilterClose" aria-label="Close filters">
                 ✕
               </button>
             </div>
@@ -3266,16 +3266,16 @@
                 <svg viewBox="0 0 24 24">
                   <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/>
                 </svg>
-                <span>राज्य चुनें</span>
+                <span>Select State</span>
               </label>
               <div class="custom-select-wrapper">
                 <select id="stateFilter" class="styled-select">
-                  <option value="all">सभी राज्य (सम्पूर्ण भारत)</option>
-                  <option value="bihar">बिहार (Bihar)</option>
-                  <option value="madhya-pradesh">मध्य प्रदेश (Madhya Pradesh)</option>
-                  <option value="uttar-pradesh">उत्तर प्रदेश (Uttar Pradesh)</option>
-                  <option value="jharkhand">झारखंड (Jharkhand)</option>
-                  <option value="rajasthan">राजस्थान (Rajasthan)</option>
+                  <option value="all">All States (Pan India)</option>
+                  <option value="bihar">Bihar</option>
+                  <option value="madhya-pradesh">Madhya Pradesh</option>
+                  <option value="uttar-pradesh">Uttar Pradesh</option>
+                  <option value="jharkhand">Jharkhand</option>
+                  <option value="rajasthan">Rajasthan</option>
                 </select>
                 <span class="select-arrow">
                   <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
@@ -3289,11 +3289,11 @@
                 <svg viewBox="0 0 24 24">
                   <path d="M15 11V5l-3-3-3 3v2H3v14h18V11h-6zm-8 7H5v-2h2v2zm0-4H5v-2h2v2zm0-4H5V8h2v2zm6 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V8h2v2zm0-4h-2V4h2v2zm6 12h-2v-2h2v2zm0-4h-2v-2h2v2z"/>
                 </svg>
-                <span id="districtLabel">जिला चुनें</span>
+                <span id="districtLabel">Select District</span>
               </label>
               <div class="custom-select-wrapper">
                 <select id="districtFilter" class="styled-select" disabled>
-                  <option value="all">पहले राज्य का चयन करें</option>
+                  <option value="all">Select state first</option>
                 </select>
                 <span class="select-arrow">
                   <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
@@ -3307,7 +3307,7 @@
                 <svg viewBox="0 0 24 24">
                   <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
                 </svg>
-                <span>कीवर्ड / नाम से खोजें</span>
+                <span>Search by Keyword / Name</span>
               </label>
               <div class="custom-input-wrapper">
                 <span class="search-icon-inside">
@@ -3317,10 +3317,10 @@
                   type="search"
                   id="searchFilter"
                   class="styled-input with-icon"
-                  placeholder="उदा. गोपालगंज, संबोधन, शोभायात्रा..."
+                  placeholder="e.g. Gopalganj, address, procession..."
                   autocomplete="off"
                 />
-                <button type="button" class="search-clear-btn" id="searchClearBtn" aria-label="खोज साफ करें">×</button>
+                <button type="button" class="search-clear-btn" id="searchClearBtn" aria-label="Clear search">×</button>
               </div>
             </div>
 
@@ -3330,13 +3330,13 @@
                 <svg viewBox="0 0 24 24">
                   <path d="M3 18h6v-2H3v2zM3 6v2h18V6H3zm0 7h12v-2H3v2z"/>
                 </svg>
-                <span>वीडियो क्रम (Sort)</span>
+                <span>Sort Videos</span>
               </label>
               <div class="custom-select-wrapper">
                 <select id="sortFilter" class="styled-select">
-                  <option value="latest">नवीनतम पहले (Latest)</option>
-                  <option value="oldest">पुराने पहले (Oldest)</option>
-                  <option value="az">शीर्षक (A से Z)</option>
+                  <option value="latest">Newest First (Latest)</option>
+                  <option value="oldest">Oldest First</option>
+                  <option value="az">Title (A to Z)</option>
                 </select>
                 <span class="select-arrow">
                   <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
@@ -3348,35 +3348,35 @@
 
           <!-- Category Pills -->
           <div class="category-nav-bar">
-            <span class="category-nav-label">श्रेणी:</span>
+            <span class="category-nav-label">Category:</span>
 
             <button type="button" class="pill-category-btn active" data-category="all">
               <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
-              <span>सभी वीडियो</span>
+              <span>All Videos</span>
               <span class="category-badge-count" id="countCatAll">6</span>
             </button>
 
             <button type="button" class="pill-category-btn" data-category="yatra">
               <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              <span>कलश यात्रा</span>
+              <span>Kalash Yatra</span>
               <span class="category-badge-count" id="countCatYatra">2</span>
             </button>
 
             <button type="button" class="pill-category-btn" data-category="program">
               <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10z"/></svg>
-              <span>कार्यक्रम</span>
+              <span>Programs</span>
               <span class="category-badge-count" id="countCatProgram">2</span>
             </button>
 
             <button type="button" class="pill-category-btn" data-category="speech">
               <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5zm6 6c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
-              <span>संबोधन</span>
+              <span>Speeches</span>
               <span class="category-badge-count" id="countCatSpeech">1</span>
             </button>
 
             <button type="button" class="pill-category-btn" data-category="highlights">
               <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-              <span>विशेष झलकियां</span>
+              <span>Highlights</span>
               <span class="category-badge-count" id="countCatHighlights">1</span>
             </button>
           </div>
@@ -3390,7 +3390,7 @@
               <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
                 <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>
               </svg>
-              <span>वीडियो देखें (<span id="drawerResultCount">6</span> परिणाम)</span>
+              <span>View Videos (<span id="drawerResultCount">6</span> results)</span>
             </button>
           </div>
 
@@ -3406,8 +3406,8 @@
 
         <div class="gallery-header-row">
           <div>
-            <h2 class="gallery-section-title">कलश यात्रा की अमर झलकियां</h2>
-            <p class="gallery-section-subtitle">समस्त राज्यों व जिलों से प्राप्त प्रमाणिक वीडियो संकलन</p>
+            <h2 class="gallery-section-title">Historic Highlights of Kalash Yatra</h2>
+            <p class="gallery-section-subtitle">Authentic video collection from participating states and districts</p>
           </div>
         </div>
 
@@ -3458,7 +3458,7 @@
 
               <div class="card-info-box">
                 <div class="card-tags-row">
-                  <span class="card-category-tag"><%= vid.tag || (vid.category === 'speech' ? 'संबोधन' : vid.category === 'program' ? 'कार्यक्रम' : 'कलश यात्रा') %></span>
+                  <span class="card-category-tag"><%= vid.tag || (vid.category === 'speech' ? 'Speech' : vid.category === 'program' ? 'Program' : 'Kalash Yatra') %></span>
                   <span class="card-state-tag"><%= vid.state %></span>
                 </div>
 
@@ -3471,10 +3471,10 @@
                 <div class="card-footer-strip">
                   <span class="card-footer-date">
                     <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10z"/></svg>
-                    <%= vid.date || 'विशेष प्रस्तुति' %>
+                    <%= vid.date || 'Special Presentation' %>
                   </span>
                   <span class="card-cta-link">
-                    <span>चलाएं</span>
+                    <span>Play</span>
                     <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                   </span>
                 </div>
@@ -3487,11 +3487,11 @@
             <div class="empty-symbol-icon">
               <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
             </div>
-            <h3>कोई वीडियो नहीं मिला</h3>
-            <p>आपके द्वारा चुने गए राज्य, जिले या खोज शब्द के लिए वर्तमान में कोई वीडियो उपलब्ध नहीं है। कृपया फ़िल्टर बदलें या रीसेट करें।</p>
+            <h3>No Videos Found</h3>
+            <p>No videos match your selected state, district, or search criteria. Please adjust or reset filters.</p>
             <button type="button" class="btn-empty-clear" id="emptyClear">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
-              <span>सभी फ़िल्टर रीसेट करें</span>
+              <span>Reset All Filters</span>
             </button>
           </div>
 
@@ -3506,13 +3506,13 @@
           <div class="pillars-header-block">
             <div class="pillars-kicker-tag">
               <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              <span>पावन धरोहर एवं सामाजिक जागरण • महा-संकल्प दर्शन</span>
+              <span>Sacred Heritage & Social Awakening • Grand Pledge Vision</span>
             </div>
             <h2 class="pillars-main-title">
-              कलश यात्रा के चार महा-संकल्प — <span class="accent">आस्था, संस्कार और स्वाभिमान</span>
+              Four Great Pillars of Kalash Yatra — <span class="accent">Faith, Values & Dignity</span>
             </h2>
             <p class="pillars-subtitle">
-              पवित्र नदियों के जल से समाज में समरसता, मातृशक्ति का सम्मान और भावी पीढ़ी के उज्ज्वल भविष्य का पावन जन-अभियान। जानें इस आंदोलन के मूल आदर्श।
+              A sacred movement celebrating unity through the waters of sacred rivers, honoring women, and building a brighter future. Learn the core pillars of this movement.
             </p>
           </div>
 
@@ -3523,53 +3523,53 @@
             <div class="visual-story-column">
 
               <!-- Primary Big Card -->
-              <div class="story-card-primary" id="storyPrimaryCard" data-video="https://www.youtube.com/embed/dQw4w9WgXcQ" data-title="पवित्र नदी तटों पर वैदिक कलश स्थापन व जल पूजन">
+              <div class="story-card-primary" id="storyPrimaryCard" data-video="https://www.youtube.com/embed/dQw4w9WgXcQ" data-title="Vedic Kalash Consecration & Water Worship on Sacred Ghats">
                 <img
                   src="/images/ghat-kalash-procession.jpg"
-                  alt="पवित्र नदी तटों पर कलश यात्रा"
+                  alt="Kalash Yatra on Sacred Riverbanks"
                   loading="lazy"
                 />
                 <div class="story-overlay-grad"></div>
 
                 <div class="story-floating-badge">
                   <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
-                  <span>गंगा व पावन नदियों का संगम</span>
+                  <span>Confluence of Sacred Rivers</span>
                 </div>
 
                 <div class="story-caption-block">
-                  <h4><%= (typeof kalash !== 'undefined' && kalash.pillarsSection && kalash.pillarsSection.storyCollage && kalash.pillarsSection.storyCollage.primaryCard.title) ? kalash.pillarsSection.storyCollage.primaryCard.title : 'जल शुद्धि एवं सनातन संस्कृति का पुनर्जागरण' %></h4>
-                  <p><%= (typeof kalash !== 'undefined' && kalash.pillarsSection && kalash.pillarsSection.storyCollage && kalash.pillarsSection.storyCollage.primaryCard.desc) ? kalash.pillarsSection.storyCollage.primaryCard.desc : 'पवित्र घाटों पर सूर्योदय के समय माताओं-बहनों द्वारा वैदिक मंत्रोच्चार के साथ कलश पूजन का अलौकिक दृश्य।' %></p>
+                  <h4><%= (typeof kalash !== 'undefined' && kalash.pillarsSection && kalash.pillarsSection.storyCollage && kalash.pillarsSection.storyCollage.primaryCard.title) ? kalash.pillarsSection.storyCollage.primaryCard.title : 'Water Purity & Cultural Renaissance' %></h4>
+                  <p><%= (typeof kalash !== 'undefined' && kalash.pillarsSection && kalash.pillarsSection.storyCollage && kalash.pillarsSection.storyCollage.primaryCard.desc) ? kalash.pillarsSection.storyCollage.primaryCard.desc : 'A magnificent sight of mothers and sisters performing Kalash worship with Vedic chants at sunrise.' %></p>
                 </div>
               </div>
 
               <!-- Dual Sub-Cards -->
               <div class="story-cards-dual">
 
-                <div class="story-card-sub" data-video="https://www.youtube.com/embed/dQw4w9WgXcQ" data-title="वैदिक कलश पूजन — आम्रपल्लव व श्रीफल अर्चन">
+                <div class="story-card-sub" data-video="https://www.youtube.com/embed/dQw4w9WgXcQ" data-title="Vedic Kalash Worship — Sacred Offerings">
                   <img
                     src="/images/sacred-kalash-ritual.jpg"
-                    alt="वैदिक कलश पूजन"
+                    alt="Vedic Kalash Worship"
                     loading="lazy"
                   />
                   <div class="story-overlay-grad"></div>
-                  <span class="story-sub-tag">🪔 वैदिक अनुष्ठान</span>
+                  <span class="story-sub-tag">🪔 Vedic Ritual</span>
                   <div class="story-sub-caption">
-                    <h5>मंगल कलश स्थापन</h5>
-                    <p>आम्रपल्लव, श्रीफल व पावन जल</p>
+                    <h5>Sacred Kalash Installation</h5>
+                    <p>Mango foliage, sacred coconut & holy water</p>
                   </div>
                 </div>
 
-                <div class="story-card-sub" data-video="https://www.youtube.com/embed/dQw4w9WgXcQ" data-title="हजारों श्रद्धालुओं का संगठित जनसैलाब">
+                <div class="story-card-sub" data-video="https://www.youtube.com/embed/dQw4w9WgXcQ" data-title="Organized Gathering of Thousands of Devotees">
                   <img
                     src="/images/kalash-yatra-featured.jpg"
-                    alt="विशाल जनसैलाब रैली"
+                    alt="Grand Rally"
                     loading="lazy"
                   />
                   <div class="story-overlay-grad"></div>
-                  <span class="story-sub-tag">🚩 ऐतिहासिक रैली</span>
+                  <span class="story-sub-tag">🚩 Historic Rally</span>
                   <div class="story-sub-caption">
-                    <h5>स्वाभिमान का शंखनाद</h5>
-                    <p>150+ जिलों में एकता का संगम</p>
+                    <h5>Clarion Call of Dignity</h5>
+                    <p>Confluence of unity across 150+ districts</p>
                   </div>
                 </div>
 
@@ -3580,10 +3580,10 @@
             <!-- Right: The 4 Sacred Pillars (Interactive Cards) -->
             <div class="pillars-list-column">
               <% const pillarList = (typeof kalash !== 'undefined' && kalash.pillarsSection && kalash.pillarsSection.pillars && kalash.pillarsSection.pillars.length > 0) ? kalash.pillarsSection.pillars : [
-                { number: '01', title: 'पवित्र जल एवं पर्यावरण संरक्षण संकल्प', description: 'गंगा, सरयू, नर्मदा व गंडक जैसी पावन नदियों के जल को साक्षी मानकर जलस्रोतों के संरक्षण, स्वच्छता और पर्यावरण संतुलन का सामूहिक प्रण लेना।' },
-                { number: '02', title: 'मातृशक्ति का गौरव एवं सशक्तिकरण', description: 'कलश यात्रा में घर-परिवार की माताओं, बहनों और बेटियों की प्रथम पंक्ति में भागीदारी, जो समाज में नारी नेतृत्व और सम्मान का प्रत्यक्ष उदाहरण है।' },
-                { number: '03', title: 'सामाजिक समरसता व अखंड एकजुटता', description: 'गांव, कस्बों और राज्यों के बंधनों से परे समाज के हर वर्ग को एक धागे में पिरोकर आपसी सहयोग, बंधुत्व और संगठित शक्ति की नींव रखना।' },
-                { number: '04', title: 'शिक्षा, संस्कार और स्वावलंबन की राह', description: 'नई पीढ़ी को अपनी गौरवशाली ऐतिहासिक पहचान से जोड़ना, उच्च शिक्षा के प्रति जागरूक करना और आत्मनिर्भर समाज निर्माण के लिए प्रेरित करना।' }
+                { number: '01', title: 'Sacred Water & Environmental Protection', description: 'Taking a collective vow for water conservation, cleanliness, and ecological balance across sacred rivers like Ganga, Saryu, Narmada, and Gandak.' },
+                { number: '02', title: 'Women Empowerment & Dignity', description: 'Active frontline participation of mothers, sisters, and daughters in Kalash Yatra, embodying leadership and reverence.' },
+                { number: '03', title: 'Social Harmony & Unwavering Unity', description: 'Uniting all sections of the community beyond boundaries to lay the foundation of brotherhood, mutual aid, and strength.' },
+                { number: '04', title: 'Education, Values & Self-Reliance', description: 'Connecting younger generations with their proud heritage, promoting higher education, and inspiring an empowered, self-reliant community.' }
               ]; %>
 
               <% pillarList.forEach((pil, pIdx) => { %>
@@ -3627,17 +3627,17 @@
     <div class="modal-content-shell">
       <div class="modal-top-bar">
         <div class="modal-title-wrap">
-          <span class="meta-tag-pill" id="modalCategoryBadge">कलश यात्रा</span>
-          <h4 id="modalVideoTitle">वीडियो प्लेयर</h4>
+          <span class="meta-tag-pill" id="modalCategoryBadge">Kalash Yatra</span>
+          <h4 id="modalVideoTitle">Video Player</h4>
         </div>
         <div class="modal-actions-right">
-          <button type="button" class="modal-share-btn" id="modalShareBtn" title="वीडियो लिंक कॉपी करें">
+          <button type="button" class="modal-share-btn" id="modalShareBtn" title="Copy video link">
             <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
               <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
             </svg>
-            <span>कॉपी लिंक</span>
+            <span>Copy Link</span>
           </button>
-          <button type="button" class="modal-close-cross" id="modalClose" aria-label="बंद करें">×</button>
+          <button type="button" class="modal-close-cross" id="modalClose" aria-label="Close">×</button>
         </div>
       </div>
 
@@ -3645,7 +3645,7 @@
         <iframe
           id="modalVideoIframe"
           src=""
-          title="कलश यात्रा वीडियो प्लेयर"
+          title="Kalash Yatra Video Player"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowfullscreen
         ></iframe>
@@ -3656,7 +3656,7 @@
   <!-- Toast Notification -->
   <div class="toast-notification" id="toastNotification">
     <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-    <span id="toastMessage">लिंक सफलतापूर्वक कॉपी किया गया!</span>
+    <span id="toastMessage">Link copied successfully!</span>
   </div>
 
   <!-- =====================================================
@@ -3675,246 +3675,246 @@
       ==================================================== */
       const districtData = {
         bihar: [
-          ["araria", "अररिया"],
-          ["arwal", "अरवल"],
-          ["aurangabad", "औरंगाबाद"],
-          ["banka", "बांका"],
-          ["begusarai", "बेगूसराय"],
-          ["bhagalpur", "भागलपुर"],
-          ["bhojpur", "भोजपुर"],
-          ["buxar", "बक्सर"],
-          ["darbhanga", "दरभंगा"],
-          ["east-champaran", "पूर्वी चंपारण"],
-          ["gaya", "गया"],
-          ["gopalganj", "गोपालगंज"],
-          ["jamui", "जमुई"],
-          ["jehanabad", "जहानाबाद"],
-          ["kaimur", "कैमूर"],
-          ["katihar", "कटिहार"],
-          ["khagaria", "खगड़िया"],
-          ["kishanganj", "किशनगंज"],
-          ["lakhisarai", "लखीसराय"],
-          ["madhepura", "मधेपुरा"],
-          ["madhubani", "मधुबनी"],
-          ["munger", "मुंगेर"],
-          ["muzaffarpur", "मुजफ्फरपुर"],
-          ["nalanda", "नालंदा"],
-          ["nawada", "नवादा"],
-          ["patna", "पटना"],
-          ["purnia", "पूर्णिया"],
-          ["rohtas", "रोहतास"],
-          ["saharsa", "सहरसा"],
-          ["samastipur", "समस्तीपुर"],
-          ["saran", "सारण"],
-          ["sheikhpura", "शेखपुरा"],
-          ["sheohar", "शिवहर"],
-          ["sitamarhi", "सीतामढ़ी"],
-          ["siwan", "सीवान"],
-          ["supaul", "सुपौल"],
-          ["vaishali", "वैशाली"],
-          ["west-champaran", "पश्चिमी चंपारण"]
+          ["araria", "Araria"],
+          ["arwal", "Arwal"],
+          ["aurangabad", "Aurangabad"],
+          ["banka", "Banka"],
+          ["begusarai", "Begusarai"],
+          ["bhagalpur", "Bhagalpur"],
+          ["bhojpur", "Bhojpur"],
+          ["buxar", "Buxar"],
+          ["darbhanga", "Darbhanga"],
+          ["east-champaran", "East Champaran"],
+          ["gaya", "Gaya"],
+          ["gopalganj", "Gopalganj"],
+          ["jamui", "Jamui"],
+          ["jehanabad", "Jehanabad"],
+          ["kaimur", "Kaimur"],
+          ["katihar", "Katihar"],
+          ["khagaria", "Khagaria"],
+          ["kishanganj", "Kishanganj"],
+          ["lakhisarai", "Lakhisarai"],
+          ["madhepura", "Madhepura"],
+          ["madhubani", "Madhubani"],
+          ["munger", "Munger"],
+          ["muzaffarpur", "Muzaffarpur"],
+          ["nalanda", "Nalanda"],
+          ["nawada", "Nawada"],
+          ["patna", "Patna"],
+          ["purnia", "Purnia"],
+          ["rohtas", "Rohtas"],
+          ["saharsa", "Saharsa"],
+          ["samastipur", "Samastipur"],
+          ["saran", "Saran"],
+          ["sheikhpura", "Sheikhpura"],
+          ["sheohar", "Sheohar"],
+          ["sitamarhi", "Sitamarhi"],
+          ["siwan", "Siwan"],
+          ["supaul", "Supaul"],
+          ["vaishali", "Vaishali"],
+          ["west-champaran", "West Champaran"]
         ],
         "madhya-pradesh": [
-          ["agar-malwa", "आगर मालवा"],
-          ["alirajpur", "अलीराजपुर"],
-          ["anuppur", "अनूपपुर"],
-          ["ashoknagar", "अशोकनगर"],
-          ["balaghat", "बालाघाट"],
-          ["barwani", "बड़वानी"],
-          ["betul", "बैतूल"],
-          ["bhind", "भिण्ड"],
-          ["bhopal", "भोपाल"],
-          ["burhanpur", "बुरहानपुर"],
-          ["chhatarpur", "छतरपुर"],
-          ["chhindwara", "छिंदवाड़ा"],
-          ["damoh", "दमोह"],
-          ["datia", "दतिया"],
-          ["dewas", "देवास"],
-          ["dhar", "धार"],
-          ["dindori", "डिंडोरी"],
-          ["guna", "गुना"],
-          ["gwalior", "ग्वालियर"],
-          ["harda", "हरदा"],
-          ["narmadapuram", "नर्मदापुरम"],
-          ["indore", "इंदौर"],
-          ["jabalpur", "जबलपुर"],
-          ["jhabua", "झाबुआ"],
-          ["katni", "कटनी"],
-          ["khandwa", "खंडवा"],
-          ["khargone", "खरगोन"],
-          ["maihaar", "मैहर"],
-          ["mandla", "मंडला"],
-          ["mandsaur", "मंदसौर"],
-          ["morena", "मुरैना"],
-          ["narsinghpur", "नरसिंहपुर"],
-          ["neemuch", "नीमच"],
-          ["niwari", "निवाड़ी"],
-          ["pandhurna", "पांढुर्णा"],
-          ["panna", "पन्ना"],
-          ["raisen", "रायसेन"],
-          ["rajgarh", "राजगढ़"],
-          ["ratlam", "रतलाम"],
-          ["rewa", "रीवा"],
-          ["sagar", "सागर"],
-          ["satna", "सतना"],
-          ["sehore", "सीहोर"],
-          ["seoni", "सिवनी"],
-          ["shahdol", "शहडोल"],
-          ["shajapur", "शाजापुर"],
-          ["sheopur", "श्योपुर"],
-          ["shivpuri", "शिवपुरी"],
-          ["sidhi", "सीधी"],
-          ["singrauli", "सिंगरौली"],
-          ["tikamgarh", "टीकमगढ़"],
-          ["ujjain", "उज्जैन"],
-          ["umaria", "उमरिया"],
-          ["vidisha", "विदिशा"]
+          ["agar-malwa", "Agar Malwa"],
+          ["alirajpur", "Alirajpur"],
+          ["anuppur", "Anuppur"],
+          ["ashoknagar", "Ashoknagar"],
+          ["balaghat", "Balaghat"],
+          ["barwani", "Barwani"],
+          ["betul", "Betul"],
+          ["bhind", "Bhind"],
+          ["bhopal", "Bhopal"],
+          ["burhanpur", "Burhanpur"],
+          ["chhatarpur", "Chhatarpur"],
+          ["chhindwara", "Chhindwara"],
+          ["damoh", "Damoh"],
+          ["datia", "Datia"],
+          ["dewas", "Dewas"],
+          ["dhar", "Dhar"],
+          ["dindori", "Dindori"],
+          ["guna", "Guna"],
+          ["gwalior", "Gwalior"],
+          ["harda", "Harda"],
+          ["narmadapuram", "Narmadapuram"],
+          ["indore", "Indore"],
+          ["jabalpur", "Jabalpur"],
+          ["jhabua", "Jhabua"],
+          ["katni", "Katni"],
+          ["khandwa", "Khandwa"],
+          ["khargone", "Khargone"],
+          ["maihaar", "Maihar"],
+          ["mandla", "Mandla"],
+          ["mandsaur", "Mandsaur"],
+          ["morena", "Morena"],
+          ["narsinghpur", "Narsinghpur"],
+          ["neemuch", "Neemuch"],
+          ["niwari", "Niwari"],
+          ["pandhurna", "Pandhurna"],
+          ["panna", "Panna"],
+          ["raisen", "Raisen"],
+          ["rajgarh", "Rajgarh"],
+          ["ratlam", "Ratlam"],
+          ["rewa", "Rewa"],
+          ["sagar", "Sagar"],
+          ["satna", "Satna"],
+          ["sehore", "Sehore"],
+          ["seoni", "Seoni"],
+          ["shahdol", "Shahdol"],
+          ["shajapur", "Shajapur"],
+          ["sheopur", "Sheopur"],
+          ["shivpuri", "Shivpuri"],
+          ["sidhi", "Sidhi"],
+          ["singrauli", "Singrauli"],
+          ["tikamgarh", "Tikamgarh"],
+          ["ujjain", "Ujjain"],
+          ["umaria", "Umaria"],
+          ["vidisha", "Vidisha"]
         ],
         "uttar-pradesh": [
-          ["agra", "आगरा"],
-          ["aligarh", "अलीगढ़"],
-          ["ambedkar-nagar", "अंबेडकर नगर"],
-          ["amethi", "अमेठी"],
-          ["amroha", "अमरोहा"],
-          ["auraiya", "औरैया"],
-          ["ayodhya", "अयोध्या"],
-          ["azamgarh", "आजमगढ़"],
-          ["baghpat", "बागपत"],
-          ["bahraich", "बहराइच"],
-          ["ballia", "बलिया"],
-          ["balrampur", "बलरामपुर"],
-          ["banda", "बांदा"],
-          ["barabanki", "बाराबंकी"],
-          ["bareilly", "बरेली"],
-          ["basti", "बस्ती"],
-          ["bhadohi", "भदोही"],
-          ["bijnor", "बिजनौर"],
-          ["budaun", "बदायूं"],
-          ["bulandshahr", "बुलंदशहर"],
-          ["chandauli", "चंदौली"],
-          ["chitrakoot", "चित्रकूट"],
-          ["deoria", "देवरिया"],
-          ["etah", "एटा"],
-          ["etawah", "इटावा"],
-          ["farrukhabad", "फर्रुखाबाद"],
-          ["fatehpur", "फतेहपुर"],
-          ["firozabad", "फिरोजाबाद"],
-          ["gautam-buddha-nagar", "गौतम बुद्ध नगर"],
-          ["ghaziabad", "गाजियाबाद"],
-          ["ghazipur", "गाजीपुर"],
-          ["gonda", "गोंडा"],
-          ["gorakhpur", "गोरखपुर"],
-          ["hamirpur", "हमीरपुर"],
-          ["hapur", "हापुड़"],
-          ["hardoi", "हरदोई"],
-          ["hathras", "हाथरस"],
-          ["jalaun", "जालौन"],
-          ["jaunpur", "जौनपुर"],
-          ["jhansi", "झांसी"],
-          ["kannauj", "कन्नौज"],
-          ["kanpur-dehat", "कानपुर देहात"],
-          ["kanpur-nagar", "कानपुर नगर"],
-          ["kasganj", "कासगंज"],
-          ["kaushambi", "कौशांबी"],
-          ["kheri", "लखीमपुर खीरी"],
-          ["kushinagar", "कुशीनगर"],
-          ["lalitpur", "ललितपुर"],
-          ["lucknow", "लखनऊ"],
-          ["maharajganj", "महराजगंज"],
-          ["mahoba", "महोबा"],
-          ["mainpuri", "मैनपुरी"],
-          ["mathura", "मथुरा"],
-          ["mau", "मऊ"],
-          ["meerut", "मेरठ"],
-          ["mirzapur", "मिर्जापुर"],
-          ["moradabad", "मुरादाबाद"],
-          ["muzaffarnagar", "मुजफ्फरनगर"],
-          ["pilibhit", "पीलीभीत"],
-          ["pratapgarh", "प्रतापगढ़"],
-          ["prayagraj", "प्रयागराज"],
-          ["raebareli", "रायबरेली"],
-          ["rampur", "रामपुर"],
-          ["saharanpur", "सहारनपुर"],
-          ["sambhal", "संभल"],
-          ["sant-kabir-nagar", "संत कबीर नगर"],
-          ["shahjahanpur", "शाहजहांपुर"],
-          ["shamli", "शामली"],
-          ["shravasti", "श्रावस्ती"],
-          ["siddharthnagar", "सिद्धार्थनगर"],
-          ["sitapur", "सीतापुर"],
-          ["sonbhadra", "सोनभद्र"],
-          ["sultanpur", "सुल्तानपुर"],
-          ["unnao", "उन्नाव"],
-          ["varanasi", "वाराणसी"]
+          ["agra", "Agra"],
+          ["aligarh", "Aligarh"],
+          ["ambedkar-nagar", "Ambedkar Nagar"],
+          ["amethi", "Amethi"],
+          ["amroha", "Amroha"],
+          ["auraiya", "Auraiya"],
+          ["ayodhya", "Ayodhya"],
+          ["azamgarh", "Azamgarh"],
+          ["baghpat", "Baghpat"],
+          ["bahraich", "Bahraich"],
+          ["ballia", "Ballia"],
+          ["balrampur", "Balrampur"],
+          ["banda", "Banda"],
+          ["barabanki", "Barabanki"],
+          ["bareilly", "Bareilly"],
+          ["basti", "Basti"],
+          ["bhadohi", "Bhadohi"],
+          ["bijnor", "Bijnor"],
+          ["budaun", "Budaun"],
+          ["bulandshahr", "Bulandshahr"],
+          ["chandauli", "Chandauli"],
+          ["chitrakoot", "Chitrakoot"],
+          ["deoria", "Deoria"],
+          ["etah", "Etah"],
+          ["etawah", "Etawah"],
+          ["farrukhabad", "Farrukhabad"],
+          ["fatehpur", "Fatehpur"],
+          ["firozabad", "Firozabad"],
+          ["gautam-buddha-nagar", "Gautam Buddha Nagar"],
+          ["ghaziabad", "Ghaziabad"],
+          ["ghazipur", "Ghazipur"],
+          ["gonda", "Gonda"],
+          ["gorakhpur", "Gorakhpur"],
+          ["hamirpur", "Hamirpur"],
+          ["hapur", "Hapur"],
+          ["hardoi", "Hardoi"],
+          ["hathras", "Hathras"],
+          ["jalaun", "Jalaun"],
+          ["jaunpur", "Jaunpur"],
+          ["jhansi", "Jhansi"],
+          ["kannauj", "Kannauj"],
+          ["kanpur-dehat", "Kanpur Dehat"],
+          ["kanpur-nagar", "Kanpur Nagar"],
+          ["kasganj", "Kasganj"],
+          ["kaushambi", "Kaushambi"],
+          ["kheri", "Lakhimpur Kheri"],
+          ["kushinagar", "Kushinagar"],
+          ["lalitpur", "Lalitpur"],
+          ["lucknow", "Lucknow"],
+          ["maharajganj", "Maharajganj"],
+          ["mahoba", "Mahoba"],
+          ["mainpuri", "Mainpuri"],
+          ["mathura", "Mathura"],
+          ["mau", "Mau"],
+          ["meerut", "Meerut"],
+          ["mirzapur", "Mirzapur"],
+          ["moradabad", "Moradabad"],
+          ["muzaffarnagar", "Muzaffarnagar"],
+          ["pilibhit", "Pilibhit"],
+          ["pratapgarh", "Pratapgarh"],
+          ["prayagraj", "Prayagraj"],
+          ["raebareli", "Raebareli"],
+          ["rampur", "Rampur"],
+          ["saharanpur", "Saharanpur"],
+          ["sambhal", "Sambhal"],
+          ["sant-kabir-nagar", "Sant Kabir Nagar"],
+          ["shahjahanpur", "Shahjahanpur"],
+          ["shamli", "Shamli"],
+          ["shravasti", "Shravasti"],
+          ["siddharthnagar", "Siddharthnagar"],
+          ["sitapur", "Sitapur"],
+          ["sonbhadra", "Sonbhadra"],
+          ["sultanpur", "Sultanpur"],
+          ["unnao", "Unnao"],
+          ["varanasi", "Varanasi"]
         ],
         jharkhand: [
-          ["bokaro", "बोकारो"],
-          ["chatra", "चतरा"],
-          ["deoghar", "देवघर"],
-          ["dhanbad", "धनबाद"],
-          ["dumka", "दुमका"],
-          ["east-singhbhum", "पूर्वी सिंहभूम"],
-          ["garhwa", "गढ़वा"],
-          ["giridih", "गिरिडीह"],
-          ["godda", "गोड्डा"],
-          ["gumla", "गुमला"],
-          ["hazaribagh", "हजारीबाग"],
-          ["jamtara", "जामताड़ा"],
-          ["khunti", "खूंटी"],
-          ["koderma", "कोडरमा"],
-          ["latehar", "लातेहार"],
-          ["lohardaga", "लोहरदगा"],
-          ["pakur", "पाकुड़"],
-          ["palamu", "पलामू"],
-          ["ramgarh", "रामगढ़"],
-          ["ranchi", "रांची"],
-          ["sahibganj", "साहिबगंज"],
-          ["saraikela-kharsawan", "सरायकेला-खरसावां"],
-          ["simdega", "सिमडेगा"],
-          ["west-singhbhum", "पश्चिमी सिंहभूम"]
+          ["bokaro", "Bokaro"],
+          ["chatra", "Chatra"],
+          ["deoghar", "Deoghar"],
+          ["dhanbad", "Dhanbad"],
+          ["dumka", "Dumka"],
+          ["east-singhbhum", "East Singhbhum"],
+          ["garhwa", "Garhwa"],
+          ["giridih", "Giridih"],
+          ["godda", "Godda"],
+          ["gumla", "Gumla"],
+          ["hazaribagh", "Hazaribagh"],
+          ["jamtara", "Jamtara"],
+          ["khunti", "Khunti"],
+          ["koderma", "Koderma"],
+          ["latehar", "Latehar"],
+          ["lohardaga", "Lohardaga"],
+          ["pakur", "Pakur"],
+          ["palamu", "Palamu"],
+          ["ramgarh", "Ramgarh"],
+          ["ranchi", "Ranchi"],
+          ["sahibganj", "Sahibganj"],
+          ["saraikela-kharsawan", "Seraikela Kharsawan"],
+          ["simdega", "Simdega"],
+          ["west-singhbhum", "West Singhbhum"]
         ],
         rajasthan: [
-          ["ajmer", "अजमेर"],
-          ["alwar", "अलवर"],
-          ["balotra", "बालोतरा"],
-          ["banswara", "बांसवाड़ा"],
-          ["baran", "बारां"],
-          ["barmer", "बाड़मेर"],
-          ["beawar", "ब्यावर"],
-          ["bharatpur", "भरतपुर"],
-          ["bhilwara", "भीलवाड़ा"],
-          ["bikaner", "बीकानेर"],
-          ["bundi", "बूंदी"],
-          ["chittorgarh", "चित्तौड़गढ़"],
-          ["churu", "चूरू"],
-          ["dausa", "दौसा"],
-          ["deeg", "डीग"],
-          ["dholpur", "धौलपुर"],
-          ["didwana-kuchamana", "डीडवाना-कुचामन"],
-          ["dungarpur", "डूंगरपुर"],
-          ["hanumangarh", "हनुमानगढ़"],
-          ["jaipur", "जयपुर"],
-          ["jaisalmer", "जैसलमेर"],
-          ["jalore", "जालौर"],
-          ["jhalawar", "झालावाड़"],
-          ["jhunjhunu", "झुंझुनूं"],
-          ["jodhpur", "जोधपुर"],
-          ["karauli", "करौली"],
-          ["khairthal-tijara", "खैरथल-तिजारा"],
-          ["kota", "कोटा"],
-          ["kotputli-behror", "कोटपूतली-बहरोड़"],
-          ["nagaur", "नागौर"],
-          ["pali", "पाली"],
-          ["phalaudi", "फलौदी"],
-          ["pratapgarh", "प्रतापगढ़"],
-          ["rajsamand", "राजसमंद"],
-          ["salumbar", "सलूम्बर"],
-          ["sawai-madhopur", "सवाई माधोपुर"],
-          ["sikar", "सीकर"],
-          ["sirohi", "सिरोही"],
-          ["sri-ganganagar", "श्रीगंगानगर"],
-          ["tonk", "टोंक"],
-          ["udaipur", "उदयपुर"]
+          ["ajmer", "Ajmer"],
+          ["alwar", "Alwar"],
+          ["balotra", "Balotra"],
+          ["banswara", "Banswara"],
+          ["baran", "Baran"],
+          ["barmer", "Barmer"],
+          ["beawar", "Beawar"],
+          ["bharatpur", "Bharatpur"],
+          ["bhilwara", "Bhilwara"],
+          ["bikaner", "Bikaner"],
+          ["bundi", "Bundi"],
+          ["chittorgarh", "Chittorgarh"],
+          ["churu", "Churu"],
+          ["dausa", "Dausa"],
+          ["deeg", "Deeg"],
+          ["dholpur", "Dholpur"],
+          ["didwana-kuchamana", "Didwana Kuchaman"],
+          ["dungarpur", "Dungarpur"],
+          ["hanumangarh", "Hanumangarh"],
+          ["jaipur", "Jaipur"],
+          ["jaisalmer", "Jaisalmer"],
+          ["jalore", "Jalore"],
+          ["jhalawar", "Jhalawar"],
+          ["jhunjhunu", "Jhunjhunu"],
+          ["jodhpur", "Jodhpur"],
+          ["karauli", "Karauli"],
+          ["khairthal-tijara", "Khairthal Tijara"],
+          ["kota", "Kota"],
+          ["kotputli-behror", "Kotputli Behror"],
+          ["nagaur", "Nagaur"],
+          ["pali", "Pali"],
+          ["phalaudi", "Phalodi"],
+          ["pratapgarh", "Pratapgarh"],
+          ["rajsamand", "Rajsamand"],
+          ["salumbar", "Salumbar"],
+          ["sawai-madhopur", "Sawai Madhopur"],
+          ["sikar", "Sikar"],
+          ["sirohi", "Sirohi"],
+          ["sri-ganganagar", "Sri Ganganagar"],
+          ["tonk", "Tonk"],
+          ["udaipur", "Udaipur"]
         ]
       };
 
@@ -4065,8 +4065,8 @@
       watchFeaturedTriggers.forEach(function (btn) {
         btn.addEventListener("click", function () {
           const videoUrl = btn.dataset.video || "https://www.youtube.com/embed/dQw4w9WgXcQ";
-          const videoTitle = btn.dataset.title || "गोपालगंज कलश यात्रा";
-          openModalVideo(videoUrl, videoTitle, "विशेष संकलन");
+          const videoTitle = btn.dataset.title || "Gopalganj Kalash Yatra";
+          openModalVideo(videoUrl, videoTitle, "Special Collection");
         });
       });
 
@@ -4119,20 +4119,20 @@
         if (state === "all") {
           const option = document.createElement("option");
           option.value = "all";
-          option.textContent = "पहले राज्य चुनें (All)";
+          option.textContent = "Select state first (All)";
           districtFilter.appendChild(option);
           districtFilter.disabled = true;
-          districtLabel.textContent = "जिला चुनें";
+          districtLabel.textContent = "Select District";
           return;
         }
 
         districtFilter.disabled = false;
         const districts = districtData[state] || [];
-        districtLabel.textContent = `जिला चुनें (${districts.length} उपलब्ध)`;
+        districtLabel.textContent = `Select District (${districts.length} available)`;
 
         const allOption = document.createElement("option");
         allOption.value = "all";
-        allOption.textContent = `सभी जिले (${districts.length})`;
+        allOption.textContent = `All Districts (${districts.length})`;
         districtFilter.appendChild(allOption);
 
         districts.forEach(function (item) {
@@ -4273,7 +4273,7 @@
 
         if (state !== "all") {
           const stateName = stateFilter.options[stateFilter.selectedIndex]?.textContent || state;
-          addChip("राज्य: " + stateName, function () {
+          addChip("State: " + stateName, function () {
             stateFilter.value = "all";
             updateDistricts();
             applyFilters();
@@ -4283,7 +4283,7 @@
 
         if (state !== "all" && district !== "all") {
           const districtName = districtFilter.options[districtFilter.selectedIndex]?.textContent || district;
-          addChip("जिला: " + districtName, function () {
+          addChip("District: " + districtName, function () {
             districtFilter.value = "all";
             applyFilters();
           });
@@ -4293,7 +4293,7 @@
         if (selectedCategory !== "all") {
           const catBtn = document.querySelector(`.pill-category-btn[data-category="${selectedCategory}"]`);
           const catName = catBtn?.querySelector("span")?.textContent || selectedCategory;
-          addChip("श्रेणी: " + catName, function () {
+          addChip("Category: " + catName, function () {
             selectedCategory = "all";
             setCategoryButtons();
             applyFilters();
@@ -4302,7 +4302,7 @@
         }
 
         if (search) {
-          addChip("खोज: " + search, function () {
+          addChip("Search: " + search, function () {
             searchFilter.value = "";
             applyFilters();
           });
@@ -4323,7 +4323,7 @@
         btn.type = "button";
         btn.className = "active-chip-remove";
         btn.innerHTML = "×";
-        btn.title = "हटाएं";
+        btn.title = "Remove";
         btn.addEventListener("click", onRemove);
 
         chip.appendChild(span);
@@ -4371,8 +4371,8 @@
 
         const separator = url.includes("?") ? "&" : "?";
         modalVideoIframe.src = url + separator + "autoplay=1";
-        modalVideoTitle.textContent = title || "कलश यात्रा विशेष वीडियो";
-        modalCategoryBadge.textContent = category || "विशेष";
+        modalVideoTitle.textContent = title || "Kalash Yatra Special Video";
+        modalCategoryBadge.textContent = category || "Special";
         activeVideoShareUrl = url;
 
         videoModal.classList.add("active");
@@ -4401,7 +4401,7 @@
           openModalVideo(
             featuredPlayBtn.dataset.video,
             featuredPlayBtn.dataset.title,
-            "विशेष प्रस्तुति"
+            "Special Presentation"
           );
         });
       }
@@ -4411,7 +4411,7 @@
           openModalVideo(
             btnFeaturedWatchTrigger.dataset.video,
             btnFeaturedWatchTrigger.dataset.title,
-            "विशेष प्रस्तुति"
+            "Special Presentation"
           );
         });
       }
@@ -4423,8 +4423,8 @@
       storyCards.forEach(function (card) {
         card.addEventListener("click", function () {
           const videoUrl = card.dataset.video || "https://www.youtube.com/embed/dQw4w9WgXcQ";
-          const videoTitle = card.dataset.title || "कलश यात्रा विशेष दर्शन";
-          openModalVideo(videoUrl, videoTitle, "पावन दर्शन");
+          const videoTitle = card.dataset.title || "Kalash Yatra Special Video";
+          openModalVideo(videoUrl, videoTitle, "Special Presentation");
         });
       });
 
@@ -4452,7 +4452,7 @@
          SHARE & TOAST NOTIFICATION
       ==================================================== */
       function showToast(msg) {
-        toastMessage.textContent = msg || "लिंक कॉपी हो गया!";
+        toastMessage.textContent = msg || "Link copied!";
         toastNotification.classList.add("show");
         setTimeout(function () {
           toastNotification.classList.remove("show");
@@ -4462,12 +4462,12 @@
       function copyTextToClipboard(text) {
         if (navigator.clipboard && window.isSecureContext) {
           navigator.clipboard.writeText(text).then(function () {
-            showToast("लिंक क्लिपबोर्ड पर कॉपी हो गया!");
+            showToast("Link copied to clipboard!");
           }).catch(function () {
-            showToast("लिंक: " + text);
+            showToast("Link: " + text);
           });
         } else {
-          showToast("लिंक: " + text);
+          showToast("Link: " + text);
         }
       }
 

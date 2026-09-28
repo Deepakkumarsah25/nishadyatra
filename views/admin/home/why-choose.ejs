@@ -11,13 +11,13 @@
       <div class="page-heading">
         <h1>
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--admin-primary)" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          प्रतिबद्धता एवं आधार स्तंभ प्रबंधन (Why Choose Us)
+          Commitment & Pillars of Trust Management
         </h1>
-        <p>विश्वास के 4 प्रमुख आधार स्तंभ, प्रेरक उद्धरण (Quote) और संकल्प कार्ड के बिंदु संपादित करें</p>
+        <p>Edit the core pillars of trust, inspirational quote, and pledge showcase card points</p>
       </div>
     </div>
     <div class="topbar-right">
-      <a href="/#why-choose" target="_blank" class="view-site-btn">सेक्शन लाइव देखें</a>
+      <a href="/#why-choose" target="_blank" class="view-site-btn">View Live Section</a>
     </div>
   </header>
 
@@ -38,7 +38,7 @@
           <div class="admin-card-header">
             <h3>
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-              सेक्शन मुख्य शीर्षक एवं संकल्प बॉक्स विवरण
+              Section Title & Pledge Showcase Card Details
             </h3>
           </div>
 
@@ -46,65 +46,65 @@
             <form action="/admin/home/why-choose/update" method="POST">
               <div class="form-grid-2">
                 <div class="form-group">
-                  <label for="sectionTag">सेक्शन टैग</label>
+                  <label for="sectionTag">Section Tag</label>
                   <input type="text" id="sectionTag" name="sectionTag" class="form-control" value="<%= whyChoose.sectionTag %>" required />
                 </div>
 
                 <div class="form-group">
-                  <label for="highlightText">हाइलाइट शब्द (लाल रंग में)</label>
+                  <label for="highlightText">Highlight Text (Accent Color)</label>
                   <input type="text" id="highlightText" name="highlightText" class="form-control" value="<%= whyChoose.highlightText %>" required />
                 </div>
               </div>
 
               <div class="form-group">
-                <label for="sectionTitle">सेक्शन मुख्य शीर्षक</label>
+                <label for="sectionTitle">Section Main Title</label>
                 <input type="text" id="sectionTitle" name="sectionTitle" class="form-control" value="<%= whyChoose.sectionTitle %>" required />
               </div>
 
               <div class="form-group">
-                <label for="sectionSubtitle">सेक्शन उप-शीर्षक (Subtitle)</label>
+                <label for="sectionSubtitle">Section Subtitle</label>
                 <textarea id="sectionSubtitle" name="sectionSubtitle" class="form-control" rows="2" required><%= whyChoose.sectionSubtitle %></textarea>
               </div>
 
               <div class="form-group">
-                <label for="introHeading">बाएं भाग का शीर्षक (Intro Heading)</label>
+                <label for="introHeading">Intro Heading (Left Section)</label>
                 <input type="text" id="introHeading" name="introHeading" class="form-control" value="<%= whyChoose.introHeading %>" required />
               </div>
 
               <div class="form-group">
-                <label for="introDesc">बाएं भाग का विवरण (Intro Description)</label>
+                <label for="introDesc">Intro Description (Left Section)</label>
                 <textarea id="introDesc" name="introDesc" class="form-control" rows="2" required><%= whyChoose.introDesc %></textarea>
               </div>
 
               <div style="font-size: 13px; font-weight: 800; color: var(--admin-primary-dark); margin: 20px 0 10px; padding-bottom: 4px; border-bottom: 1px solid var(--admin-border-subtle);">
-                दाएं भाग का संकल्प बॉक्स (Pledge Showcase Card)
+                Pledge Showcase Card (Right Section)
               </div>
 
               <div class="form-group">
-                <label for="quoteText">प्रेरक उद्धरण (Quote Text)</label>
+                <label for="quoteText">Inspirational Quote (Quote Text)</label>
                 <textarea id="quoteText" name="quoteText" class="form-control" rows="2" required><%= whyChoose.quoteText %></textarea>
               </div>
 
               <div class="form-group">
-                <label for="pledgePoints">संकल्प कार्ड के बुलेट पॉइंट्स (प्रति पंक्ति एक)</label>
+                <label for="pledgePoints">Pledge Card Bullet Points (One per line)</label>
                 <textarea id="pledgePoints" name="pledgePoints" class="form-control" rows="4" required><%= whyChoose.pledgePoints ? whyChoose.pledgePoints.join('\n') : '' %></textarea>
-                <div class="form-hint">प्रत्येक नई पंक्ति एक चेक-मार्क पॉइंट बनेगी।</div>
+                <div class="form-hint">Each new line will create a checkmark bullet point.</div>
               </div>
 
               <div class="form-grid-2">
                 <div class="form-group">
-                  <label for="pledgeBtnText">कार्ड बटन का नाम</label>
+                  <label for="pledgeBtnText">Card Button Label</label>
                   <input type="text" id="pledgeBtnText" name="pledgeBtnText" class="form-control" value="<%= whyChoose.pledgeBtnText %>" required />
                 </div>
                 <div class="form-group">
-                  <label for="pledgeBtnLink">कार्ड बटन लिंक</label>
+                  <label for="pledgeBtnLink">Card Button Link</label>
                   <input type="text" id="pledgeBtnLink" name="pledgeBtnLink" class="form-control" value="<%= whyChoose.pledgeBtnLink %>" required />
                 </div>
               </div>
 
               <button type="submit" class="btn-admin btn-admin-primary" style="margin-top: 10px;">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                <span>सेक्शन डेटा अपडेट करें</span>
+                <span>Update Section Data</span>
               </button>
             </form>
           </div>
@@ -117,7 +117,7 @@
           <div class="admin-card-header">
             <h3>
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              विश्वास के 4 आधार स्तंभ (<%= whyChoose.pillars ? whyChoose.pillars.length : 0 %>)
+              Pillars of Trust (<%= whyChoose.pillars ? whyChoose.pillars.length : 0 %>)
             </h3>
           </div>
 
@@ -135,8 +135,8 @@
                         <%= p.description %>
                       </div>
                     </div>
-                    <form action="/admin/home/why-choose/pillar/delete/<%= p._id %>" method="POST" onsubmit="return confirm('क्या आप इस आधार स्तंभ को हटाना चाहते हैं?');" style="flex-shrink: 0;">
-                      <button type="submit" class="btn-admin btn-admin-danger btn-admin-sm">हटाएं</button>
+                    <form action="/admin/home/why-choose/pillar/delete/<%= p._id %>" method="POST" onsubmit="return confirm('Are you sure you want to delete this pillar?');" style="flex-shrink: 0;">
+                      <button type="submit" class="btn-admin btn-admin-danger btn-admin-sm">Delete</button>
                     </form>
                   </div>
                 <% }); %>
@@ -145,35 +145,35 @@
 
             <!-- Add new pillar form -->
             <div style="background: #faf6f3; padding: 18px; border-radius: 11px; border: 1px solid var(--admin-border);">
-              <h4 style="font-size: 13px; font-weight: 800; color: var(--admin-text-dark); margin-bottom: 12px;">+ नया आधार स्तंभ जोड़ें</h4>
+              <h4 style="font-size: 13px; font-weight: 800; color: var(--admin-text-dark); margin-bottom: 12px;">+ Add New Pillar of Trust</h4>
               <form action="/admin/home/why-choose/pillar/add" method="POST">
                 <div class="form-group">
-                  <label for="pillarTitle">आधार शीर्षक *</label>
-                  <input type="text" id="pillarTitle" name="title" class="form-control" placeholder="उदा. 100% धरातल पर सक्रिय उपस्थिति" required />
+                  <label for="pillarTitle">Pillar Title *</label>
+                  <input type="text" id="pillarTitle" name="title" class="form-control" placeholder="e.g. 100% Active Ground Presence" required />
                 </div>
 
                 <div class="form-group">
-                  <label for="pillarDesc">आधार संक्षिप्त विवरण *</label>
-                  <textarea id="pillarDesc" name="description" class="form-control" rows="2" placeholder="कागजी दावों के स्थान पर..." required></textarea>
+                  <label for="pillarDesc">Pillar Brief Description *</label>
+                  <textarea id="pillarDesc" name="description" class="form-control" rows="2" placeholder="Transparent ground-level work rather than mere paper claims..." required></textarea>
                 </div>
 
                 <div class="form-grid-2">
                   <div class="form-group">
-                    <label for="pillarIcon">आइकॉन</label>
+                    <label for="pillarIcon">Icon</label>
                     <select id="pillarIcon" name="iconKey" class="form-control">
-                      <option value="shield">🛡️ सुरक्षा (Shield)</option>
-                      <option value="users">👥 पारदर्शी नेतृत्व (Users)</option>
-                      <option value="check">✓ सटीक परिणाम (Check)</option>
-                      <option value="award">⭐ गौरव व संस्कार (Award)</option>
+                      <option value="shield">🛡️ Security (Shield)</option>
+                      <option value="users">👥 Transparent Leadership (Users)</option>
+                      <option value="check">✓ Proven Impact (Check)</option>
+                      <option value="award">⭐ Heritage & Pride (Award)</option>
                     </select>
                   </div>
                   <div class="form-group">
-                    <label for="pillarOrder">क्रम संख्या</label>
+                    <label for="pillarOrder">Display Order</label>
                     <input type="number" id="pillarOrder" name="order" class="form-control" value="<%= (whyChoose.pillars ? whyChoose.pillars.length : 0) + 1 %>" />
                   </div>
                 </div>
 
-                <button type="submit" class="btn-admin btn-admin-primary btn-admin-sm" style="margin-top: 6px;">आधार स्तंभ जोड़ें</button>
+                <button type="submit" class="btn-admin btn-admin-primary btn-admin-sm" style="margin-top: 6px;">Add Pillar</button>
               </form>
             </div>
 

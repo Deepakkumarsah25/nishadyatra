@@ -4,27 +4,27 @@ const homeQuickInfoSchema = new mongoose.Schema(
   {
     sidebarTitle: {
       type: String,
-      default: "निषाद संकल्प अभियान",
+      default: "Nishad Sankalp Campaign",
       trim: true,
     },
     sidebarSubtitle: {
       type: String,
-      default: "त्वरित सेवा एवं सहायता केंद्र",
+      default: "Quick Service & Support Center",
       trim: true,
     },
     pledgeBoxTitle: {
       type: String,
-      default: "अभियान से संकल्पबद्ध जुड़ें",
+      default: "Join the Campaign by Taking a Pledge",
       trim: true,
     },
     pledgeBoxDesc: {
       type: String,
-      default: "समाज के उत्थान और सशक्तिकरण के लिए अपना ऑनलाइन संकल्प दर्ज करें।",
+      default: "Register your online pledge for the upliftment and empowerment of our community.",
       trim: true,
     },
     helplineText: {
       type: String,
-      default: "हेल्पलाइन: +91 99999 99999",
+      default: "Helpline: +91 99999 99999",
       trim: true,
     },
     helplineTel: {
@@ -39,7 +39,7 @@ const homeQuickInfoSchema = new mongoose.Schema(
     },
     sidebarFooterText: {
       type: String,
-      default: "॥ जन-सेवा ही सच्चा संकल्प है ॥",
+      default: "Public service is our true pledge",
       trim: true,
     },
   },

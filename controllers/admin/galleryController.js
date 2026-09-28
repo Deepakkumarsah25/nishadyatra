@@ -46,7 +46,7 @@ exports.getGalleryList = async (req, res) => {
       ]);
 
     res.render("admin/gallery/index", {
-      title: "संकल्प फोटो गैलरी प्रबंधन",
+      title: "Sankalp Photo Gallery Management",
       admin: req.session.admin,
       photos,
       stats: {
@@ -76,7 +76,7 @@ exports.getCreatePhoto = async (req, res) => {
   try {
     const districtsList = await SankalpPhoto.distinct("district");
     res.render("admin/gallery/form", {
-      title: "नई संकल्प फोटो जोड़ें",
+      title: "Add New Sankalp Photo",
       admin: req.session.admin,
       photo: {
         name: "",
@@ -116,35 +116,35 @@ exports.postCreatePhoto = async (req, res) => {
     } else {
       const districtsList = await SankalpPhoto.distinct("district");
       return res.render("admin/gallery/form", {
-        title: "नई संकल्प फोटो जोड़ें",
+        title: "Add New Sankalp Photo",
         admin: req.session.admin,
         photo: req.body,
         formatDateForInput,
         districtsList,
         currentPath: "/admin/gallery",
         isEdit: false,
-        error: "कृपया फोटो फाइल चुनें अथवा फोटो का URL दर्ज करें।",
+        error: "Please choose a photo file or enter an image URL.",
       });
     }
 
     if (!district || !district.trim()) {
       const districtsList = await SankalpPhoto.distinct("district");
       return res.render("admin/gallery/form", {
-        title: "नई संकल्प फोटो जोड़ें",
+        title: "Add New Sankalp Photo",
         admin: req.session.admin,
         photo: req.body,
         formatDateForInput,
         districtsList,
         currentPath: "/admin/gallery",
         isEdit: false,
-        error: "कृपया जिला (District) अवश्य चुनें या दर्ज करें।",
+        error: "Please select or enter a district.",
       });
     }
 
     const photoDate = date ? new Date(date) : new Date();
 
     await SankalpPhoto.create({
-      name: name && name.trim() ? name.trim() : "सनातनी निषाद",
+      name: name && name.trim() ? name.trim() : "Sanatani Nishad",
       district: district.trim(),
       date: isNaN(photoDate.getTime()) ? new Date() : photoDate,
       caption: caption ? caption.trim() : "",
@@ -155,21 +155,21 @@ exports.postCreatePhoto = async (req, res) => {
       order: Number(order) || 0,
     });
 
-    res.redirect("/admin/gallery?msg=संकल्प फोटो सफलतापूर्वक जोड़ दी गई है।");
+    res.redirect("/admin/gallery?msg=Sankalp photo successfully added.");
   } catch (error) {
     console.error("Create photo error:", error);
     const districtsList = await SankalpPhoto.distinct("district").catch(
       () => []
     );
     res.render("admin/gallery/form", {
-      title: "नई संकल्प फोटो जोड़ें",
+      title: "Add New Sankalp Photo",
       admin: req.session.admin,
       photo: req.body,
       formatDateForInput,
       districtsList,
       currentPath: "/admin/gallery",
       isEdit: false,
-      error: "फोटो सहेजने में त्रुटि: " + error.message,
+      error: "Error saving photo: " + error.message,
     });
   }
 };
@@ -179,7 +179,7 @@ exports.getBulkUpload = async (req, res) => {
   try {
     const districtsList = await SankalpPhoto.distinct("district");
     res.render("admin/gallery/bulk", {
-      title: "थोक तस्वीरें अपलोड करें (Bulk Image Upload)",
+      title: "Bulk Image Upload",
       admin: req.session.admin,
       districtsList,
       formatDateForInput,
@@ -200,12 +200,12 @@ exports.postBulkUpload = async (req, res) => {
     if (!files || files.length === 0) {
       const districtsList = await SankalpPhoto.distinct("district");
       return res.render("admin/gallery/bulk", {
-        title: "थोक तस्वीरें अपलोड करें (Bulk Image Upload)",
+        title: "Bulk Image Upload",
         admin: req.session.admin,
         districtsList,
         formatDateForInput,
         currentPath: "/admin/gallery",
-        error: "कृपया कम से कम एक या अधिक तस्वीरें चुनें!",
+        error: "Please select at least one or more images!",
         todayStr: formatDateForInput(new Date()),
       });
     }
@@ -216,12 +216,12 @@ exports.postBulkUpload = async (req, res) => {
     if (!defaultDistrict || !defaultDistrict.trim()) {
       const districtsList = await SankalpPhoto.distinct("district");
       return res.render("admin/gallery/bulk", {
-        title: "थोक तस्वीरें अपलोड करें (Bulk Image Upload)",
+        title: "Bulk Image Upload",
         admin: req.session.admin,
         districtsList,
         formatDateForInput,
         currentPath: "/admin/gallery",
-        error: "कृपया सभी तस्वीरों के लिए जिला (District) दर्ज करें।",
+        error: "Please specify a district for all photos.",
         todayStr: formatDateForInput(new Date()),
       });
     }
@@ -232,7 +232,7 @@ exports.postBulkUpload = async (req, res) => {
 
     const docsToInsert = files.map((file, idx) => {
       // Derive name if custom or fallback
-      let photoName = defaultName && defaultName.trim() ? defaultName.trim() : "सनातनी निषाद";
+      let photoName = defaultName && defaultName.trim() ? defaultName.trim() : "Sanatani Nishad";
       if (files.length > 1 && defaultName && defaultName.trim()) {
         photoName = `${defaultName.trim()} #${idx + 1}`;
       }
@@ -241,7 +241,7 @@ exports.postBulkUpload = async (req, res) => {
         name: photoName,
         district: defaultDistrict.trim(),
         date: isNaN(photoDate.getTime()) ? new Date() : photoDate,
-        caption: defaultCaption ? defaultCaption.trim() : "सामूहिक संकल्प अभियान",
+        caption: defaultCaption ? defaultCaption.trim() : "Mass Pledge Campaign",
         imageUrl: `/uploads/gallery/${file.filename}`,
         imageFilename: file.filename,
         isPublished: publishedBool,
@@ -252,7 +252,7 @@ exports.postBulkUpload = async (req, res) => {
     await SankalpPhoto.insertMany(docsToInsert);
 
     res.redirect(
-      `/admin/gallery?msg=${files.length} तस्वीरें सफलतापूर्वक एक साथ अपलोड कर दी गईं!`
+      `/admin/gallery?msg=${files.length} photos successfully uploaded together!`
     );
   } catch (error) {
     console.error("Bulk upload error:", error);
@@ -260,12 +260,12 @@ exports.postBulkUpload = async (req, res) => {
       () => []
     );
     res.render("admin/gallery/bulk", {
-      title: "थोक तस्वीरें अपलोड करें (Bulk Image Upload)",
+      title: "Bulk Image Upload",
       admin: req.session.admin,
       districtsList,
       formatDateForInput,
       currentPath: "/admin/gallery",
-      error: "थोक अपलोड में त्रुटि हुई: " + error.message,
+      error: "Error during bulk upload: " + error.message,
       todayStr: formatDateForInput(new Date()),
     });
   }
@@ -276,13 +276,13 @@ exports.getEditPhoto = async (req, res) => {
   try {
     const photo = await SankalpPhoto.findById(req.params.id);
     if (!photo) {
-      return res.redirect("/admin/gallery?err=फोटो नहीं मिली");
+      return res.redirect("/admin/gallery?err=Photo not found");
     }
 
     const districtsList = await SankalpPhoto.distinct("district");
 
     res.render("admin/gallery/form", {
-      title: "संकल्प फोटो संपादित करें",
+      title: "Edit Sankalp Photo",
       admin: req.session.admin,
       photo,
       formatDateForInput,
@@ -305,7 +305,7 @@ exports.postEditPhoto = async (req, res) => {
 
     const existing = await SankalpPhoto.findById(req.params.id);
     if (!existing) {
-      return res.redirect("/admin/gallery?err=फोटो नहीं मिली");
+      return res.redirect("/admin/gallery?err=Photo not found");
     }
 
     let finalImageUrl = existing.imageUrl;
@@ -348,21 +348,21 @@ exports.postEditPhoto = async (req, res) => {
 
     await existing.save();
 
-    res.redirect("/admin/gallery?msg=फोटो का विवरण सफलतापूर्वक अपडेट हो गया है।");
+    res.redirect("/admin/gallery?msg=Photo details successfully updated.");
   } catch (error) {
     console.error("Edit photo error:", error);
     const districtsList = await SankalpPhoto.distinct("district").catch(
       () => []
     );
     res.render("admin/gallery/form", {
-      title: "संकल्प फोटो संपादित करें",
+      title: "Edit Sankalp Photo",
       admin: req.session.admin,
       photo: { ...req.body, _id: req.params.id },
       formatDateForInput,
       districtsList,
       currentPath: "/admin/gallery",
       isEdit: true,
-      error: "अपडेट करने में त्रुटि: " + error.message,
+      error: "Error updating photo: " + error.message,
     });
   }
 };
@@ -374,10 +374,10 @@ exports.togglePhotoPublish = async (req, res) => {
     if (photo) {
       photo.isPublished = !photo.isPublished;
       await photo.save();
-      const statusText = photo.isPublished ? "प्रकाशित (Published)" : "अप्रकाशित (Unpublished)";
-      return res.redirect(`/admin/gallery?msg=फोटो स्थिति बदलकर '${statusText}' कर दी गई।`);
+      const statusText = photo.isPublished ? "Published" : "Unpublished";
+      return res.redirect(`/admin/gallery?msg=${encodeURIComponent(`Photo status changed to '${statusText}'.`)}`);
     }
-    res.redirect("/admin/gallery?err=फोटो नहीं मिली");
+    res.redirect("/admin/gallery?err=Photo not found");
   } catch (error) {
     console.error("Toggle photo error:", error);
     res.redirect("/admin/gallery?err=Failed to change status");
@@ -403,7 +403,7 @@ exports.deletePhoto = async (req, res) => {
         } catch (e) {}
       }
     }
-    res.redirect("/admin/gallery?msg=फोटो सफलतापूर्वक हटा दी गई है।");
+    res.redirect("/admin/gallery?msg=Photo successfully deleted.");
   } catch (error) {
     console.error("Delete photo error:", error);
     res.redirect("/admin/gallery?err=Failed to delete photo");

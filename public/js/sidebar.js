@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const originalHtml = submitBtn ? submitBtn.innerHTML : "";
         if (submitBtn) {
           submitBtn.disabled = true;
-          submitBtn.innerHTML = "<span>दर्ज हो रहा है...</span>";
+          submitBtn.innerHTML = "<span>Submitting...</span>";
         }
 
         try {
@@ -82,11 +82,11 @@ document.addEventListener("DOMContentLoaded", () => {
           if (data.success) {
             membershipForm.style.display = "none";
             if (formSuccess) {
-              formSuccess.textContent = "✓ " + (data.message || "आपका संकल्प दर्ज कर लिया गया है।");
+              formSuccess.textContent = "✓ " + (data.message || "Your pledge has been recorded successfully.");
               formSuccess.style.display = "block";
             }
           } else {
-            alert(data.message || "त्रुटि हुई। कृपया पुनः प्रयास करें।");
+            alert(data.message || "An error occurred. Please try again.");
             if (submitBtn) {
               submitBtn.disabled = false;
               submitBtn.innerHTML = originalHtml;
