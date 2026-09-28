@@ -4,6 +4,7 @@ const WhyChoose = require("../models/WhyChoose");
 const SiteNotice = require("../models/SiteNotice");
 const HomeQuickInfo = require("../models/HomeQuickInfo");
 const InitiativeInquiry = require("../models/InitiativeInquiry");
+const SankalpPhoto = require("../models/SankalpPhoto");
 const {
   defaultHeroSlides,
   defaultInitiatives,
@@ -11,17 +12,19 @@ const {
   defaultNotices,
   defaultQuickInfo,
 } = require("../scripts/seedHomeData");
+const { defaultGalleryPhotos } = require("../scripts/seedGalleryData");
 
 // Public Home Page
 exports.getHomePage = async (req, res) => {
   try {
-    const [heroSlides, initiatives, whyChooseDoc, notices, quickInfoDoc] =
+    const [heroSlides, initiatives, whyChooseDoc, notices, quickInfoDoc, galleryPhotos] =
       await Promise.all([
         HeroSlide.find({ isActive: true }).sort({ order: 1, createdAt: 1 }),
         Initiative.find({ isActive: true }).sort({ order: 1, createdAt: 1 }),
         WhyChoose.findOne(),
         SiteNotice.find({ isActive: true }).sort({ order: 1, createdAt: 1 }),
         HomeQuickInfo.findOne(),
+        SankalpPhoto.find({ isPublished: true }).sort({ order: 1, date: -1 }).limit(6),
       ]);
 
     // Fallbacks if database is completely empty or just initialized
@@ -33,6 +36,8 @@ exports.getHomePage = async (req, res) => {
     const finalNotices =
       notices && notices.length > 0 ? notices : defaultNotices;
     const finalQuickInfo = quickInfoDoc || defaultQuickInfo;
+    const finalGalleryPhotos =
+      galleryPhotos && galleryPhotos.length > 0 ? galleryPhotos : defaultGalleryPhotos.slice(0, 4);
 
     // Convert initiatives to client-side modal dictionary
     const initiativesModalMap = {};
@@ -60,6 +65,7 @@ exports.getHomePage = async (req, res) => {
       whyChoose: finalWhyChoose,
       notices: finalNotices,
       quickInfo: finalQuickInfo,
+      galleryPhotos: finalGalleryPhotos,
     });
   } catch (error) {
     console.error("Home page render error:", error);
@@ -72,6 +78,7 @@ exports.getHomePage = async (req, res) => {
       whyChoose: defaultWhyChoose,
       notices: defaultNotices,
       quickInfo: defaultQuickInfo,
+      galleryPhotos: defaultGalleryPhotos.slice(0, 4),
     });
   }
 };

@@ -281,15 +281,15 @@
       </div>
 
       <!-- 5. User Inquiries & Pledges -->
-      <div class="module-card" style="grid-column: 1 / -1;">
+      <div class="module-card">
         <div>
           <div class="module-header">
             <div class="module-icon" style="background: linear-gradient(135deg, #10b981, #059669);">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             </div>
             <div class="module-title">
-              <h3>5. प्राप्त ऑनलाइन संकल्प एवं सहायता अनुरोध (Pledges & Inquiries)</h3>
-              <p>साइट विजिटर्स द्वारा साइडबार व विभिन्न पहल से भेजे गए संकल्प पत्र, संपर्क विवरण व समस्याओं की सूची देखें। (<%= stats.newInquiriesCount %> नए अनुरोध प्रतीक्षारत)</p>
+              <h3>5. प्राप्त ऑनलाइन संकल्प एवं सहायता अनुरोध (Inquiries)</h3>
+              <p>साइट विजिटर्स द्वारा साइडबार व विभिन्न पहल से भेजे गए संकल्प पत्र, संपर्क विवरण व समस्याओं की सूची देखें। (<%= stats.newInquiriesCount %> नए अनुरोध)</p>
             </div>
           </div>
         </div>
@@ -298,6 +298,28 @@
             <span>सभी संकल्प व अनुरोध देखें (<%= stats.inquiriesCount %>)</span>
             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
+        </div>
+      </div>
+
+      <!-- 6. Sankalp Photo Gallery Manager -->
+      <div class="module-card">
+        <div>
+          <div class="module-header">
+            <div class="module-icon" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            </div>
+            <div class="module-title">
+              <h3>6. संकल्प फोटो गैलरी प्रबंधन (Sankalp Gallery)</h3>
+              <p>विभिन्न जनपदों से संकल्प लेते हुए लोगों द्वारा भेजी गई तस्वीरों का प्रबंधन, संपादन, प्रकाशन स्थिति और थोक (Bulk) तस्वीरें अपलोड करें।</p>
+            </div>
+          </div>
+        </div>
+        <div class="module-actions">
+          <a href="/admin/gallery" class="btn-admin btn-admin-primary" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9);">
+            <span>गैलरी प्रबंधित करें (<%= typeof stats.photosCount !== 'undefined' ? stats.photosCount : 0 %>)</span>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="/admin/gallery/bulk" class="btn-admin btn-admin-outline">थोक अपलोड</a>
         </div>
       </div>
     </div>
