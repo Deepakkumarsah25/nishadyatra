@@ -190,6 +190,7 @@ const startServer = async () => {
 
     app.listen(PORT, "0.0.0.0", () => {
       console.log(`Server running at http://localhost:${PORT}`);
+      console.log(`Admin Login: http://localhost:${PORT}/admin/login`);
     });
   } catch (error) {
     console.error("Server Startup Error:", error.message);
