@@ -46,6 +46,8 @@ const adminAuthRoutes = require("./routes/admin/authRoutes");
 const adminDashboardRoutes = require("./routes/admin/dashboardRoutes");
 const adminHomeRoutes = require("./routes/admin/homeRoutes");
 const adminKalashYatraRoutes = require("./routes/admin/kalashYatraRoutes");
+const adminAboutRoutes = require("./routes/admin/aboutRoutes");
+const aboutController = require("./controllers/aboutController");
 const KalashYatra = require("./models/KalashYatra");
 const homeRoutes = require("./routes/homeRoutes");
 
@@ -102,6 +104,7 @@ app.use("/admin", adminAuthRoutes);
 app.use("/admin", adminDashboardRoutes);
 app.use("/admin/home", adminHomeRoutes);
 app.use("/admin/kalash-yatra", adminKalashYatraRoutes);
+app.use("/admin/about", adminAboutRoutes);
 
 // ========================================
 // Test API
@@ -113,6 +116,12 @@ app.get("/api/test", (req, res) => {
     message: "API is working",
   });
 });
+
+// ========================================
+// Public About Page
+// ========================================
+
+app.get("/about", aboutController.getAboutPage);
 
 // ========================================
 // Public Video Page

@@ -339,6 +339,15 @@
     }
 
 
+    .dashboard {
+      min-height: 100vh;
+      display: flex;
+      width: 100%;
+      max-width: 100vw;
+      overflow-x: clip;
+      position: relative;
+    }
+
     /* =========================================
        MAIN CONTENT
     ========================================= */
@@ -351,6 +360,14 @@
       margin-left: 260px;
 
       background: #f7f4f1;
+
+      min-width: 0;
+
+      max-width: calc(100% - 260px);
+
+      overflow-x: hidden;
+
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
 
@@ -972,10 +989,10 @@
 
 
     /* =========================================
-       MOBILE
+       RESPONSIVE (TABLET & MOBILE)
     ========================================= */
 
-    @media (max-width: 800px) {
+    @media (max-width: 1024px) {
 
       .sidebar {
         transform: translateX(-100%);
@@ -984,6 +1001,7 @@
 
       .sidebar.open {
         transform: translateX(0);
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.32);
       }
 
 
@@ -993,9 +1011,9 @@
 
 
       .main-content {
-        width: 100%;
-
-        margin-left: 0;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
       }
 
 
@@ -1191,6 +1209,8 @@
 
         </div>
 
+        <button type="button" id="sidebarCloseBtn" aria-label="Close" style="display:none;margin-left:auto;background:#fff2f0;border:1px solid #ffdcd6;width:34px;height:34px;border-radius:8px;color:#d72a2a;font-size:16px;cursor:pointer;align-items:center;justify-content:center;">✕</button>
+
       </div>
 
 
@@ -1287,6 +1307,35 @@
           </span>
 
           होम पेज प्रबंधन
+
+        </a>
+
+
+        <!-- About Page Manager (7 Points) -->
+
+        <a
+          href="/admin/about"
+        >
+
+          <span class="nav-icon">
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+
+            </svg>
+
+          </span>
+
+          परिचय पेज (7 मुख्य बिंदु)
 
         </a>
 
@@ -2254,6 +2303,19 @@
     }
 
 
+    const sidebarCloseBtn =
+      document.getElementById("sidebarCloseBtn");
+
+    if (sidebarCloseBtn) {
+
+      sidebarCloseBtn.addEventListener(
+        "click",
+        closeSidebar
+      );
+
+    }
+
+
     if (sidebarOverlay) {
 
       sidebarOverlay.addEventListener(
@@ -2275,7 +2337,7 @@
           () => {
 
             if (
-              window.innerWidth <= 800
+              window.innerWidth <= 1024
             ) {
 
               closeSidebar();
@@ -2313,7 +2375,7 @@
       () => {
 
         if (
-          window.innerWidth > 800
+          window.innerWidth > 1024
         ) {
 
           closeSidebar();
