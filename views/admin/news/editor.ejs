@@ -1,40 +1,23 @@
-<!doctype html>
-<html lang="hi">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title><%= title %> | निषाद संकल्प</title>
-    <link rel="stylesheet" href="/css/admin/news.css">
-    <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    >
-  </head>
-  <body>
-    <header class="top">
-      <a class="brand" href="/admin/dashboard">
-        <span class="mark">N</span>
-        <span>निषाद संकल्प<small>NEWS &amp; PRESS</small></span>
-      </a>
-      <nav>
-        <a href="/admin/dashboard">Dashboard</a>
-        <a class="active" href="/admin/video_news">News &amp; Press</a>
-        <a href="/news" target="_blank">View site ↗</a>
-      </nav>
-      <form action="/admin/logout" method="post">
-        <button class="logout">Sign out</button>
-      </form>
-    </header>
-
-    <main class="wrap editor-wrap">
-      <a class="back" href="/admin/video_news">← सभी खबरें</a>
+<%- include("../common/header") %>
+<%- include("../common/sidebar", { currentPath }) %>
+<div class="admin-main">
+  <header class="admin-topbar">
+    <div class="topbar-left">
+      <button type="button" class="mobile-menu-trigger" id="adminMobileMenuBtn" aria-label="Open menu">☰</button>
+      <div class="page-heading"><h1>News &amp; Press</h1><p>Manage digital and print media coverage.</p></div>
+    </div>
+    <div class="topbar-right"><a href="/news" target="_blank" class="view-site-btn">View Live News ↗</a></div>
+  </header>
+  <div class="admin-body">
+    <main class="wrap editor-wrap news-admin-editor">
+      <a class="back" href="/admin/video_news">← All Articles</a>
       <div class="heading">
         <div>
           <div class="eyebrow">
             NEWSROOM / <%= item?._id ? 'EDIT ARTICLE' : 'NEW ARTICLE' %>
           </div>
-          <h1><%= item?._id ? 'खबर संपादित करें' : 'नई खबर जोड़ें' %></h1>
-          <p>मीडिया कवरेज की जानकारी और प्रकाशित लेख यहाँ प्रबंधित करें।</p>
+          <h1><%= item?._id ? 'Edit Article' : 'Add New Article' %></h1>
+          <p>Manage media coverage details and published articles.</p>
         </div>
       </div>
 
@@ -50,52 +33,62 @@
       >
         <section class="panel form-panel">
           <label class="field">
-            हेडलाइन <span>ज़रूरी</span>
+            Headline <span>Required</span>
             <input
               name="title"
               required
               maxlength="180"
               value="<%= item?.title || '' %>"
-              placeholder="खबर की मुख्य हेडलाइन"
+              placeholder="Enter the article headline"
             >
           </label>
 
           <label class="field">
-            संक्षिप्त विवरण <span>कार्ड पर दिखेगा</span>
+            Summary <span>Shown on the article card</span>
             <textarea
               name="summary"
               maxlength="500"
               rows="3"
-              placeholder="खबर का छोटा परिचय"
+              placeholder="Write a short article summary"
             ><%= item?.summary || '' %></textarea>
-            <small>अधिकतम 500 अक्षर</small>
+            <small>Maximum 500 characters</small>
           </label>
 
           <label class="field">
-            पूरी खबर <span>ज़रूरी</span>
+            Article Content <span>Required</span>
             <textarea
               name="content"
               required
               maxlength="30000"
               rows="14"
-              placeholder="लेख की पूरी सामग्री"
+              placeholder="Enter the full article content"
             ><%= item?.content || '' %></textarea>
           </label>
 
           <div class="two">
-            <label class="field">
-              स्रोत / प्रकाशन का नाम <span>ज़रूरी</span>
-              <input
-                name="source"
-                required
-                maxlength="120"
-                value="<%= item?.source || '' %>"
-                placeholder="जैसे: अख़बार या न्यूज़ पोर्टल"
-              >
-            </label>
+            <div class="source-location-row">
+              <label class="field">
+                Source / Publisher <span>Required</span>
+                <input
+                  name="source"
+                  required
+                  maxlength="120"
+                  value="<%= item?.source || '' %>"
+                  placeholder="Example: newspaper or news portal"
+                >
+              </label>
+              <label class="field">
+                State
+                <input name="state" maxlength="80" value="<%= item?.state || '' %>" placeholder="Example: Uttar Pradesh">
+              </label>
+              <label class="field">
+                District
+                <input name="district" maxlength="80" value="<%= item?.district || '' %>" placeholder="Example: Varanasi">
+              </label>
+            </div>
 
             <label class="field">
-              मीडिया प्रकार
+              Media Type
               <select name="category" required>
                 <option
                   value="Digital Media"
@@ -109,7 +102,7 @@
             </label>
 
             <label class="field">
-              प्रकाशन तिथि
+              Publication Date
               <input
                 type="date"
                 name="publicationDate"
@@ -118,7 +111,7 @@
             </label>
 
             <label class="field">
-              बाहरी खबर का लिंक
+              External Article URL
               <input
                 type="url"
                 name="externalUrl"
@@ -126,7 +119,7 @@
                 value="<%= item?.externalUrl || '' %>"
                 placeholder="https://..."
               >
-              <small>दिया गया लिंक ‘पूरी खबर पढ़ें’ पर खुलेगा।</small>
+              <small>This link opens when readers select “Read Full Story.”</small>
             </label>
           </div>
         </section>
@@ -134,9 +127,9 @@
         <aside>
           <section class="panel form-panel">
             <h2>Featured image</h2>
-            <p class="help">JPG, PNG, WebP या AVIF · अधिकतम 8 MB</p>
+            <p class="help">JPG, PNG, WebP, or AVIF · Maximum 8 MB</p>
             <label class="field">
-              खबर की तस्वीर
+              Article Image
               <input
                 name="thumbnail"
                 type="file"
@@ -146,32 +139,32 @@
                 <img
                   class="preview"
                   src="<%= item.thumbnailPath %>"
-                  alt="मौजूदा खबर की तस्वीर"
+                  alt="Current article image"
                 >
-                <small>नई तस्वीर चुनें या मौजूदा तस्वीर रखें।</small>
+                <small>Choose a new image or keep the current one.</small>
               <% } %>
             </label>
             <label class="feature-check">
               <input type="checkbox" name="featured" <%= item?.featured ? 'checked' : '' %>>
-              मुख्य खबर के रूप में दिखाएँ
+              Feature this article
             </label>
           </section>
 
           <section class="panel form-panel publish-panel">
-            <h2>प्रकाशन</h2>
+            <h2>Publication</h2>
             <p class="help">
               <%= item?.published
-                ? 'यह खबर वेबसाइट पर प्रकाशित है।'
-                : 'ड्राफ्ट सेव करें या वेबसाइट पर प्रकाशित करें.' %>
+                ? 'This article is published on the website.'
+                : 'Save as a draft or publish it on the website.' %>
             </p>
             <div class="form-actions">
-              <a class="secondary" href="/admin/video_news">रद्द करें</a>
-              <button class="secondary" name="action" value="draft">ड्राफ्ट सेव करें</button>
-              <button class="primary" name="action" value="publish">खबर प्रकाशित करें</button>
+              <a class="secondary" href="/admin/video_news">Cancel</a>
+              <button class="secondary" name="action" value="draft">Save Draft</button>
+              <button class="primary" name="action" value="publish">Publish Article</button>
             </div>
           </section>
         </aside>
       </form>
     </main>
-  </body>
-</html>
+  </div>
+<%- include("../common/footer") %>

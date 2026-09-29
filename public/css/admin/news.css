@@ -34,3 +34,60 @@
     width:100%
   }
 }
+/* Fit the shared admin shell while preserving the newsroom components. */
+body { font-family: Inter, 'Segoe UI', Arial, sans-serif; }
+.admin-body .wrap { width:100%; max-width:none; margin:0; padding:0; }
+.admin-body .editor-wrap { max-width:none; }
+.admin-body .heading h1 { font-size:31px; }
+.admin-body .heading { margin-bottom:22px; }
+.admin-topbar .page-heading h1 { font-size:18px; letter-spacing:0; margin:0; }
+.admin-topbar .page-heading p { margin-top:3px; }
+.admin-body .panel-head { gap:12px; }
+.news-admin-list > .heading,
+.news-admin-editor > .heading { padding:18px 20px; border:1px solid #f0d7d2; border-left:4px solid #bd282c; border-radius:12px; background:linear-gradient(105deg,#fff 65%,#fff6f3); }
+.news-admin-list .stats article { border-color:#edd9d4; box-shadow:0 5px 16px #8a2b2410; }
+.news-admin-list .stats article:first-child { border-top:3px solid #bd282c; }
+.news-admin-list .panel { border-color:#e8d5ce; box-shadow:0 8px 24px #42251b0b; }
+.news-admin-list .panel-head { background:#fffaf8; }
+.news-admin-list table tbody tr:hover { background:#fffaf8; }
+.news-admin-list .status.live { box-shadow:inset 0 0 0 1px #ccebd9; }
+.news-admin-editor .editor > .panel,
+.news-admin-editor .editor aside .panel { border-color:#ead8d2; box-shadow:0 7px 22px #42251b0a; }
+.news-admin-editor .editor aside .panel:first-child { border-top:3px solid #d38b56; }
+.source-location-row { grid-column:1 / -1; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0 15px; }
+.source-location-row .field { min-width:0; }
+@media(max-width:760px) {
+  .admin-body .heading { flex-wrap:wrap; }
+  .admin-body .heading h1 { font-size:26px; }
+  .admin-body .admin-filters { align-items:stretch; }
+  .admin-body .admin-filters .search,
+  .admin-body .admin-filters select,
+  .admin-body .admin-filters .secondary { width:100%; }
+  .source-location-row { grid-template-columns:1fr; gap:0; }
+}
+.hero-poster-manager { border-color:#eed9d3; }
+.hero-poster-manager { display:grid; grid-template-columns:minmax(0,1fr) minmax(320px,520px); gap:28px; align-items:center; margin:0 0 24px; padding:23px; border:1px solid #eed9d3; border-radius:14px; background:linear-gradient(120deg,#fff 48%,#fff5f1); box-shadow:0 7px 22px #42251b0a; }
+.hero-poster-copy h2 { margin:7px 0 6px; font-size:19px; color:#322525; }
+.hero-poster-copy>p:not(.poster-message) { max-width:580px; margin:0 0 14px; color:#81736d; font-size:12px; line-height:1.7; }
+.poster-upload-form { display:flex; align-items:flex-end; gap:14px; flex-wrap:wrap; }
+.poster-upload-form .field { flex:1 1 300px; margin:0; }
+.poster-upload-form .field input[type=file] { padding:9px; background:#fff; }
+.hero-poster-preview-wrap { display:grid; width:100%; justify-items:stretch; gap:9px; }
+.hero-poster-mockup { position:relative; width:100%; aspect-ratio:16/7; overflow:hidden; border:1px solid #eadbd5; border-radius:10px; background:#3d1a1a; }
+.hero-poster-preview { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border:0; border-radius:0; }
+.hero-poster-mockup::after { position:absolute; inset:0; background:linear-gradient(90deg,#100b0bd9 0%,#100b0b9c 48%,#100b0b00 100%); content:""; pointer-events:none; }
+.hero-poster-overlay { position:absolute; z-index:1; top:50%; left:5%; display:grid; width:55%; gap:7px; transform:translateY(-50%); color:#fff; text-shadow:0 2px 8px #0009; }
+.hero-poster-overlay>span { color:#f0c89f; font-size:9px; font-weight:800; letter-spacing:.12em; }
+.hero-poster-overlay strong { font:700 clamp(13px,1.5vw,20px)/1.3 Georgia,serif; }
+.hero-poster-overlay small { color:#ffffffd9; font-size:9px; line-height:1.45; }
+.hero-poster-crop-label { position:absolute; z-index:2; top:10px; right:10px; padding:5px 8px; border:1px solid #ffffff65; border-radius:5px; background:#0008; color:#fff; font-size:9px; font-weight:800; letter-spacing:.08em; }
+.hero-poster-empty { display:grid; height:auto; aspect-ratio:16/7; place-items:center; padding:16px; border:1px dashed #dbbfb5; border-radius:10px; color:#8b7770; background:#fffaf8; font-size:12px; text-align:center; }
+.hero-poster-empty::after { background:linear-gradient(90deg,#ffffff05,#ffffff00); }
+.hero-poster-empty>span:last-child { position:relative; z-index:1; }
+.poster-delete { color:#b34545; font-size:12px; }
+.poster-message { margin:9px 0 12px; color:#287246; font-size:12px; font-weight:700; }
+.poster-message.is-error { color:#a5282b; }
+@media(max-width:760px) {
+  .hero-poster-manager { grid-template-columns:1fr; gap:18px; padding:17px; }
+  .hero-poster-overlay { width:64%; }
+}

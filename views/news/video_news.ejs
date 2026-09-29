@@ -1,67 +1,172 @@
 <%
 const articles = Array.isArray(remaining) ? remaining : [];
-const featuredArticle = featured || null;
+const featuredItems = Array.isArray(featured) ? featured : (featured ? [featured] : []);
 const fmtDate = (value) => value ? new Date(value).toLocaleDateString('hi-IN', { day:'numeric', month:'long', year:'numeric' }) : '';
-const allItems = articles;
+const catClass = (cat) => (cat || 'Digital Media') === 'Print Media' ? 'press-category--print' : 'press-category--digital';
+const pageUrl = (number) => {
+  const params = new URLSearchParams();
+  if (query?.state) params.set('state', query.state);
+  if (query?.district) params.set('district', query.district);
+  if (query?.category) params.set('category', query.category);
+  if (query?.q) params.set('q', query.q);
+  params.set('page', String(number));
+  return '/news?' + params.toString();
+};
 %><!doctype html>
 <html lang="hi">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title><%= title %> | निषाद आरक्षण संकल्प अभियान</title>
-  <meta name="description" content="निषाद आरक्षण संकल्प अभियान से जुड़ी डिजिटल मीडिया और प्रिंट मीडिया की खबरें।">
+  <meta name="description" content="निषाद आरक्षण संकल्प अभियान से जुड़ी ताज़ा खबरें और मीडिया रिपोर्ट।">
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Noto+Serif+Devanagari:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/news/video_news.css">
 </head>
 <body><%- include('../common/navbar') %>
 <main class="press-page">
-  <section class="press-hero"><div class="press-container"><span class="press-eyebrow">मीडिया कवरेज</span><h1>न्यूज़ <span>&amp;</span> प्रेस</h1><p>निषाद आरक्षण संकल्प अभियान से जुड़ी ताज़ा खबरें और मीडिया रिपोर्ट।</p><span class="press-count"><%= news.length %> प्रकाशित खबरें</span></div></section>
+  <section class="press-hero"><% if (heroPoster) { %><div class="press-hero-poster" aria-hidden="true"><img src="<%= heroPoster %>" alt=""></div><% } %><div class="press-container"><div class="press-hero-copy"><h1>न्यूज़ <span>&amp;</span> प्रेस</h1><p>निषाद आरक्षण संकल्प अभियान से जुड़ी ताज़ा खबरें और मीडिया रिपोर्ट।</p>
+    <div class="press-stats" aria-label="समाचार आंकड़े">
+      <div class="press-stat"><strong><%= stats.news %></strong><span>कुल खबरें</span></div>
+      <div class="press-stat"><strong><%= stats.videos %></strong><span>कुल वीडियो</span></div>
+      <div class="press-stat"><strong><%= stats.districts %></strong><span>ज़िले</span></div>
+      <div class="press-stat"><strong><%= stats.states %></strong><span>राज्य</span></div>
+    </div>
+  </div></div></section>
   <section class="press-container press-content">
-    <% if (news.length) { %>
-      <% if (featuredArticle) { %>
-      <article class="press-featured">
-        <a class="press-feature-image" href="<%= featuredArticle.externalUrl || '/news/' + featuredArticle._id %>" <%= featuredArticle.externalUrl ? 'target="_blank" rel="noopener noreferrer"' : '' %>>
-          <% if (featuredArticle.thumbnailPath) { %><img src="<%= featuredArticle.thumbnailPath %>" alt="<%= featuredArticle.title %>" fetchpriority="high"><% } else { %><span class="press-image-fallback">प्रेस कवरेज</span><% } %>
-          <span class="press-feature-label">मुख्य खबर</span>
-        </a>
-        <div class="press-feature-body"><div class="press-meta"><span class="press-category"><%= featuredArticle.category %></span><time><%= fmtDate(featuredArticle.publicationDate || featuredArticle.publishedAt) %></time></div>
-          <h2><%= featuredArticle.title %></h2><p class="press-source">स्रोत: <strong><%= featuredArticle.source || 'मीडिया' %></strong></p>
-          <% if (featuredArticle.summary) { %><p class="press-summary"><%= featuredArticle.summary %></p><% } %>
-          <a class="press-read" href="<%= featuredArticle.externalUrl || '/news/' + featuredArticle._id %>" <%= featuredArticle.externalUrl ? 'target="_blank" rel="noopener noreferrer"' : '' %>>पूरी खबर पढ़ें <span aria-hidden="true">↗</span></a>
+    <% if (featuredItems.length) { %>
+      <section class="press-featured-section" aria-label="मुख्य खबरें">
+        <div class="press-featured-track" id="featuredTrack">
+          <% featuredItems.forEach((item) => { %>
+            <article class="press-featured-slide">
+              <a class="press-feature-image" href="<%= item.externalUrl || '/news/' + item._id %>" <%= item.externalUrl ? 'target="_blank" rel="noopener noreferrer"' : '' %>>
+                <% if (item.thumbnailPath) { %><img src="<%= item.thumbnailPath %>" alt="<%= item.title %>" fetchpriority="high"><% } else { %><span class="press-image-fallback">प्रेस कवरेज</span><% } %>
+                <span class="press-feature-label">मुख्य खबर</span>
+              </a>
+              <div class="press-feature-body"><div class="press-meta"><span class="press-category <%= catClass(item.category) %>"><%= item.category || 'Digital Media' %></span><time><%= fmtDate(item.publicationDate || item.publishedAt) %></time></div>
+                <h2><%= item.title %></h2><p class="press-source">स्रोत: <strong><%= item.source || 'मीडिया' %></strong></p>
+                <% if (item.state || item.district) { %><p class="press-location"><%= [item.district, item.state].filter(Boolean).join(', ') %></p><% } %>
+                <% if (item.summary) { %><p class="press-summary"><%= item.summary %></p><% } %>
+                <div class="press-card-actions"><a class="press-read" href="<%= item.externalUrl || '/news/' + item._id %>" <%= item.externalUrl ? 'target="_blank" rel="noopener noreferrer"' : '' %>>पूरी खबर पढ़ें <span aria-hidden="true">↗</span></a></div>
+              </div>
+            </article>
+          <% }) %>
         </div>
-      </article>
-      <% } %>
-      <div class="press-list-heading"><div><span class="press-eyebrow">अभियान की खबरें</span><h2>सभी समाचार</h2></div><label class="press-search"><span aria-hidden="true">⌕</span><input id="pressSearch" type="search" placeholder="खबर या स्रोत खोजें" aria-label="खबर या स्रोत खोजें"></label></div>
-      <div class="press-filters" role="group" aria-label="मीडिया प्रकार फ़िल्टर"><button class="is-active" type="button" data-filter="all">सभी</button><button type="button" data-filter="Digital Media">डिजिटल मीडिया</button><button type="button" data-filter="Print Media">प्रिंट मीडिया</button></div>
+        <% if (featuredItems.length > 1) { %><div class="press-carousel-controls"><button type="button" id="featuredPrev" aria-label="Previous featured story">‹</button><span id="featuredPosition">1 / <%= featuredItems.length %></span><button type="button" id="featuredNext" aria-label="Next featured story">›</button></div><% } %>
+      </section>
+    <% } %>
+
+    <div class="press-list-heading"><div><h2>सभी समाचार</h2><span class="press-result-count"></span></div><label class="press-search" for="newsSearch"><span aria-hidden="true">⌕</span><input id="newsSearch" name="q" type="search" form="newsFilters" value="<%= query.q || '' %>" placeholder="Search.." aria-label="खबर या स्रोत खोजें"></label></div>
+    <form class="press-filters" method="get" action="/news" id="newsFilters">
+      <label class="press-select-label">राज्य<select name="state" id="stateFilter" data-auto-submit><option value="">सभी राज्य</option><% [...new Set(locations.map((location) => location._id.state))].forEach((stateName) => { %><option value="<%= stateName %>" <%= query.state === stateName ? 'selected' : '' %>><%= stateName %></option><% }) %></select></label>
+      <label class="press-select-label">ज़िला<select name="district" id="districtFilter" data-auto-submit><option value="">सभी ज़िले</option><% locations.forEach((location) => { %><option value="<%= location._id.district %>" data-state="<%= location._id.state %>" <%= query.district === location._id.district && (!query.state || query.state === location._id.state) ? 'selected' : '' %>><%= location._id.district %><%= !query.state ? ' · ' + location._id.state : '' %></option><% }) %></select></label>
+      <label class="press-select-label">मीडिया प्रकार<select name="category" data-auto-submit><option value="">सभी प्रकार</option><option value="Digital Media" <%= query.category === 'Digital Media' ? 'selected' : '' %>>डिजिटल मीडिया</option><option value="Print Media" <%= query.category === 'Print Media' ? 'selected' : '' %>>प्रिंट मीडिया</option></select></label>
+    </form>
+    <div class="press-results" id="pressResults" aria-live="polite" aria-busy="false">
+    <% if (articles.length) { %>
       <div class="press-grid" id="pressGrid">
-        <% allItems.forEach((item, index) => { %>
-        <article class="press-card" data-category="<%= item.category || 'Digital Media' %>" data-search="<%= [item.title,item.source,item.summary].join(' ').toLowerCase() %>">
-          <a class="press-card-image" href="<%= item.externalUrl || '/news/' + item._id %>" <%= item.externalUrl ? 'target="_blank" rel="noopener noreferrer"' : '' %>>
+        <% articles.forEach((item) => { %>
+        <article class="press-card">
+          <div class="press-card-image">
             <% if(item.thumbnailPath){ %><img src="<%= item.thumbnailPath %>" alt="<%= item.title %>" loading="lazy"><% } else { %><span class="press-image-fallback">मीडिया खबर</span><% } %>
-          </a>
-          <div class="press-card-body"><div class="press-meta"><span class="press-category"><%= item.category || 'Digital Media' %></span><time><%= fmtDate(item.publicationDate || item.publishedAt) %></time></div>
-            <h3><%= item.title %></h3><p class="press-source">स्रोत: <strong><%= item.source || 'मीडिया' %></strong></p>
+          </div>
+          <div class="press-card-body"><div class="press-meta"><span class="press-category <%= catClass(item.category) %>"><%= item.category || 'Digital Media' %></span><time><%= fmtDate(item.publicationDate || item.publishedAt) %></time></div>
+            <h3><a class="press-title-link" href="<%= item.externalUrl || '/news/' + item._id %>" <%= item.externalUrl ? 'target="_blank" rel="noopener noreferrer"' : '' %>><%= item.title %></a></h3>
+            <div class="press-card-info-row">
+              <p class="press-source">स्रोत: <strong><%= item.source || 'मीडिया' %></strong></p>
+              <% if (item.state || item.district) { %><p class="press-location"><%= [item.district, item.state].filter(Boolean).join(', ') %></p><% } %>
+            </div>
             <% if(item.summary){ %><p class="press-summary"><%= item.summary %></p><% } %>
             <a class="press-read" href="<%= item.externalUrl || '/news/' + item._id %>" <%= item.externalUrl ? 'target="_blank" rel="noopener noreferrer"' : '' %>>पूरी खबर पढ़ें <span aria-hidden="true">↗</span></a>
           </div>
         </article><% }) %>
       </div>
-      <div class="press-empty" id="pressNoResults" hidden><h3>कोई खबर नहीं मिली</h3><p>दूसरे शब्द से खोजकर देखें।</p></div>
-    <% } else { %><div class="press-empty press-empty-start"><span>✦</span><h2>जल्द आ रही हैं नई खबरें</h2><p>अभियान से जुड़ी मीडिया कवरेज यहाँ प्रकाशित होगी।</p></div><% } %>
+      <nav class="press-pagination" aria-label="समाचार पेज"><% if (page > 1) { %><a href="<%= pageUrl(page - 1) %>">← पिछला पेज</a><% } else { %><span></span><% } %><span>पेज <%= page %> / <%= totalPages %></span><% if (page < totalPages) { %><a href="<%= pageUrl(page + 1) %>">अगला पेज →</a><% } else { %><span></span><% } %></nav>
+    <% } else { %><div class="press-empty"><h3>कोई खबर नहीं मिली</h3><p>दूसरे फ़िल्टर से खोजकर देखें।</p></div><% } %>
+    </div>
   </section>
 </main><%- include('../common/footer') %>
 <script>
 (() => {
-  const search = document.getElementById('pressSearch');
-  const cards = [...document.querySelectorAll('.press-card')];
-  const empty = document.getElementById('pressNoResults');
-  let category = 'all';
-  function update(){
-    const q = (search?.value || '').trim().toLocaleLowerCase(); let visible = 0;
-    cards.forEach(card => { const show = (category === 'all' || card.dataset.category === category) && card.dataset.search.includes(q); card.hidden = !show; if(show) visible++; });
-    if(empty) empty.hidden = visible !== 0;
+  const track = document.getElementById('featuredTrack');
+  if (track) {
+    const slides = [...track.children]; let index = 0; let timer;
+    const show = (next) => { index = (next + slides.length) % slides.length; track.style.transform = `translateX(-${index * 100}%)`; const pos = document.getElementById('featuredPosition'); if (pos) pos.textContent = `${index + 1} / ${slides.length}`; };
+    const start = () => { if (slides.length > 1) timer = setInterval(() => show(index + 1), 5000); };
+    const restart = () => { clearInterval(timer); start(); };
+    document.getElementById('featuredPrev')?.addEventListener('click', () => { show(index - 1); restart(); });
+    document.getElementById('featuredNext')?.addEventListener('click', () => { show(index + 1); restart(); });
+    track.parentElement.addEventListener('mouseenter', () => clearInterval(timer));
+    track.parentElement.addEventListener('mouseleave', start); start();
   }
-  document.querySelectorAll('.press-filters button').forEach(button => button.addEventListener('click', () => { category = button.dataset.filter; document.querySelectorAll('.press-filters button').forEach(b => b.classList.toggle('is-active', b === button)); update(); }));
-  search?.addEventListener('input', update);
+  const state = document.getElementById('stateFilter'); const district = document.getElementById('districtFilter');
+  const filterDistricts = () => { [...district.options].forEach((option) => { if (!option.value) return; option.hidden = !!state.value && option.dataset.state !== state.value; }); if (district.selectedOptions[0]?.hidden) district.value = ''; };
+  const form = document.getElementById('newsFilters');
+  const results = document.getElementById('pressResults');
+  let debounceTimer;
+  let activeRequest;
+  const buildUrl = (page = 1) => {
+    const url = new URL(form.action, window.location.origin);
+    const params = new URLSearchParams(new FormData(form));
+    params.delete('page');
+    if (page > 1) params.set('page', String(page));
+    url.search = params.toString();
+    return url;
+  };
+  const loadResults = async (url, historyMode = 'replace') => {
+    activeRequest?.abort();
+    activeRequest = new AbortController();
+    results.setAttribute('aria-busy', 'true');
+    try {
+      const response = await fetch(url.pathname + url.search, {
+        signal: activeRequest.signal,
+        headers: { 'X-Requested-With': 'XMLHttpRequest', Accept: 'text/html' },
+      });
+      if (!response.ok) throw new Error(`News request failed (${response.status})`);
+      const html = await response.text();
+      const nextDocument = new DOMParser().parseFromString(html, 'text/html');
+      const nextResults = nextDocument.getElementById('pressResults');
+      if (!nextResults) throw new Error('News results were not found in the response.');
+      results.innerHTML = nextResults.innerHTML;
+      results.setAttribute('aria-busy', 'false');
+      if (historyMode === 'push') history.pushState({}, '', url.pathname + url.search);
+      else if (historyMode === 'replace') history.replaceState({}, '', url.pathname + url.search);
+    } catch (error) {
+      if (error.name !== 'AbortError') {
+        results.setAttribute('aria-busy', 'false');
+        console.error(error);
+      }
+    }
+  };
+  const scheduleResults = (delay = 350) => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => loadResults(buildUrl()), delay);
+  };
+  const clearFilters = () => {
+    form.querySelectorAll('select').forEach((select) => { select.value = ''; });
+    document.getElementById('newsSearch').value = '';
+    filterDistricts();
+  };
+  form.addEventListener('submit', (event) => { event.preventDefault(); scheduleResults(250); });
+  state?.addEventListener('change', () => { filterDistricts(); scheduleResults(300); });
+  district?.addEventListener('change', () => scheduleResults(300));
+  form.querySelector('[name="category"]')?.addEventListener('change', () => scheduleResults(300));
+  document.getElementById('newsSearch')?.addEventListener('input', () => scheduleResults(450));
+  results.addEventListener('click', (event) => {
+    const link = event.target.closest('.press-pagination a');
+    if (!link) return;
+    const target = new URL(link.href, window.location.origin);
+    if (target.origin !== window.location.origin) return;
+    event.preventDefault();
+    loadResults(target, 'push');
+  });
+  window.addEventListener('popstate', () => loadResults(new URL(window.location.href), 'none'));
+  filterDistricts();
+  const navigation = performance.getEntriesByType('navigation')[0];
+  if (navigation?.type === 'reload') {
+    clearFilters();
+    const cleanUrl = new URL(window.location.pathname, window.location.origin);
+    history.replaceState({}, '', cleanUrl.pathname);
+    loadResults(cleanUrl, 'none');
+  }
 })();
 </script></body></html>

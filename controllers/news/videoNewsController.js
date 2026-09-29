@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const VideoNews = require("../../models/news/VideoNews");
+const NewsPageSetting = require("../../models/news/NewsPageSetting");
 
 function removeUpload(file) {
   if (!file || !file.startsWith("/uploads/news/")) return;
@@ -30,6 +31,7 @@ function renderEditor(res, item, error, status = 200) {
     title: item?._id ? "Edit News" : "Create News",
     item,
     error,
+    currentPath: "/admin/video_news",
   });
 }
 
@@ -63,12 +65,54 @@ exports.adminList = async (req, res, next) => {
     const search = searchFilter(req.query.q);
     if (search) Object.assign(filter, search);
 
-    const news = await VideoNews.find(filter).sort({ updatedAt: -1 }).lean();
+    const [news, newsPageSetting] = await Promise.all([
+      VideoNews.find(filter).sort({ updatedAt: -1 }).lean(),
+      NewsPageSetting.findOne({ key: "news-page" }).lean(),
+    ]);
     res.render("admin/news/index", {
       title: "News & Press",
       news,
       filters: req.query,
+      currentPath: "/admin/video_news",
+      newsPageSetting,
+      posterError: req.query.posterError || "",
+      query: req.query,
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.saveHeroPoster = async (req, res, next) => {
+  const file = req.file;
+  if (!file) return res.redirect("/admin/video_news?posterError=Choose%20an%20image%20to%20upload.");
+
+  try {
+    const posterPath = `/uploads/news/${file.filename}`;
+    const previous = await NewsPageSetting.findOne({ key: "news-page" });
+    const previousPath = previous?.heroPosterPath;
+    await NewsPageSetting.findOneAndUpdate(
+      { key: "news-page" },
+      { $set: { heroPosterPath: posterPath }, $setOnInsert: { key: "news-page" } },
+      { new: true, upsert: true, runValidators: true },
+    );
+    if (previousPath) removeUpload(previousPath);
+    res.redirect("/admin/video_news?posterSaved=1");
+  } catch (error) {
+    removeUpload(`/uploads/news/${file.filename}`);
+    next(error);
+  }
+};
+
+exports.deleteHeroPoster = async (_req, res, next) => {
+  try {
+    const setting = await NewsPageSetting.findOneAndUpdate(
+      { key: "news-page" },
+      { $set: { heroPosterPath: "" } },
+      { new: false },
+    );
+    if (setting?.heroPosterPath) removeUpload(setting.heroPosterPath);
+    res.redirect("/admin/video_news?posterRemoved=1");
   } catch (error) {
     next(error);
   }
@@ -90,6 +134,7 @@ exports.addPage = async (req, res, next) => {
       title: item ? "Edit News" : "Create News",
       item,
       error: null,
+      currentPath: "/admin/video_news",
     });
   } catch (error) {
     next(error);
@@ -113,6 +158,8 @@ exports.create = async (req, res, next) => {
     const category = req.body.category;
     const source = String(req.body.source || "").trim();
     const summary = String(req.body.summary || "").trim();
+    const state = String(req.body.state || "").trim();
+    const district = String(req.body.district || "").trim();
 
     if (!title || !content || !source) {
       throw new Error("Headline, source name and full article are required.");
@@ -139,6 +186,8 @@ exports.create = async (req, res, next) => {
       title,
       content,
       summary,
+      state,
+      district,
       source,
       category,
       publicationDate,
@@ -234,25 +283,55 @@ exports.frontend = async (req, res, next) => {
     const search = searchFilter(req.query.q);
     if (search) Object.assign(filter, search);
 
+    const state = String(req.query.state || "").trim();
+    const district = String(req.query.district || "").trim();
+    if (state) filter.state = state;
+    if (district) filter.district = district;
+
+    const pageSize = 9;
+    const requestedPage = Number.parseInt(req.query.page, 10) || 1;
+    const page = Math.max(1, requestedPage);
+    const featuredFilter = { published: true, featured: true };
+    const [total, locations, featured, videoCount, stateCount, newsCount, newsPageSetting] = await Promise.all([
+      VideoNews.countDocuments(filter),
+      VideoNews.aggregate([
+        { $match: { published: true, state: { $nin: [null, ""] }, district: { $nin: [null, ""] } } },
+        { $group: { _id: { state: "$state", district: "$district" } } },
+        { $sort: { "_id.state": 1, "_id.district": 1 } },
+      ]),
+      VideoNews.find(featuredFilter)
+        .sort({ publicationDate: -1, publishedAt: -1, createdAt: -1 })
+        .limit(5)
+        .lean(),
+      VideoNews.countDocuments({ published: true, mediaType: { $in: ["youtube", "upload"] } }),
+      VideoNews.distinct("state", { published: true, state: { $nin: [null, ""] } }).then((values) => values.length),
+      VideoNews.countDocuments({ published: true }),
+      NewsPageSetting.findOne({ key: "news-page" }).lean(),
+    ]);
+
     const news = await VideoNews.find(filter)
       .sort({
-        featured: -1,
         publicationDate: -1,
         publishedAt: -1,
         createdAt: -1,
       })
+      .skip((page - 1) * pageSize)
+      .limit(pageSize)
       .lean();
-    const featured = news.find((item) => item.featured) || null;
-    const remaining = featured
-      ? news.filter((item) => String(item._id) !== String(featured._id))
-      : news;
 
     res.render("news/video_news", {
       title: "न्यूज़ / प्रेस",
       news,
       featured,
-      remaining,
+      remaining: news,
+      page,
+      pageSize,
+      total,
+      stats: { news: newsCount, videos: videoCount, districts: locations.length, states: stateCount },
+      totalPages: Math.max(1, Math.ceil(total / pageSize)),
+      locations,
       query: req.query,
+      heroPoster: newsPageSetting?.heroPosterPath || "",
     });
   } catch (error) {
     next(error);
