@@ -189,7 +189,7 @@ const startServer = async () => {
     await seedGalleryData();
 
     app.listen(PORT, "0.0.0.0", () => {
-      console.log(`Server running on port ${PORT}`);
+      console.log(`Server running at http://localhost:${PORT}`);
     });
   } catch (error) {
     console.error("Server Startup Error:", error.message);
