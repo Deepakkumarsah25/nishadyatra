@@ -4,13 +4,13 @@
 <section class="hero-wrapper" id="home">
   
   <!-- Full Screen Slider Area -->
-  <div class="hero-full-slider" aria-label="मुख्य स्लाइडर">
+  <div class="hero-full-slider" aria-label="Main Slider">
     
     <!-- Previous / Next Controls -->
-    <button type="button" class="hero-nav-arrow prev" id="heroPrevBtn" aria-label="पिछली स्लाइड">
+    <button type="button" class="hero-nav-arrow prev" id="heroPrevBtn" aria-label="Previous Slide">
       <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
     </button>
-    <button type="button" class="hero-nav-arrow next" id="heroNextBtn" aria-label="अगली स्लाइड">
+    <button type="button" class="hero-nav-arrow next" id="heroNextBtn" aria-label="Next Slide">
       <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
     </button>
 
@@ -83,10 +83,10 @@
     <div class="hero-slider-dots">
       <% if (typeof heroSlides !== 'undefined' && heroSlides && heroSlides.length > 0) { %>
         <% heroSlides.forEach(function(slide, idx) { %>
-          <button class="hero-dot <%= idx === 0 ? 'active' : '' %>" data-slide-index="<%= idx %>" aria-label="स्लाइड <%= idx + 1 %>"></button>
+          <button class="hero-dot <%= idx === 0 ? 'active' : '' %>" data-slide-index="<%= idx %>" aria-label="Slide <%= idx + 1 %>"></button>
         <% }); %>
       <% } else { %>
-        <button class="hero-dot active" data-slide-index="0" aria-label="स्लाइड 1"></button>
+        <button class="hero-dot active" data-slide-index="0" aria-label="Slide 1"></button>
       <% } %>
     </div>
 

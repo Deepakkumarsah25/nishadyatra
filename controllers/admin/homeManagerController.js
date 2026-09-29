@@ -4,6 +4,7 @@ const WhyChoose = require("../../models/WhyChoose");
 const SiteNotice = require("../../models/SiteNotice");
 const HomeQuickInfo = require("../../models/HomeQuickInfo");
 const InitiativeInquiry = require("../../models/InitiativeInquiry");
+const SankalpPhoto = require("../../models/SankalpPhoto");
 
 exports.getHomeDashboard = async (req, res) => {
   try {
@@ -14,6 +15,7 @@ exports.getHomeDashboard = async (req, res) => {
       noticesCount,
       inquiriesCount,
       newInquiriesCount,
+      photosCount,
     ] = await Promise.all([
       HeroSlide.countDocuments(),
       Initiative.countDocuments(),
@@ -21,12 +23,13 @@ exports.getHomeDashboard = async (req, res) => {
       SiteNotice.countDocuments(),
       InitiativeInquiry.countDocuments(),
       InitiativeInquiry.countDocuments({ status: "new" }),
+      SankalpPhoto.countDocuments(),
     ]);
 
     const pillarsCount = whyChooseDoc?.pillars?.length || 0;
 
     res.render("admin/home/index", {
-      title: "होम पेज प्रबंधन (Home Manager)",
+      title: "Home Page Management",
       admin: req.session.admin,
       stats: {
         heroSlidesCount,
@@ -35,6 +38,7 @@ exports.getHomeDashboard = async (req, res) => {
         noticesCount,
         inquiriesCount,
         newInquiriesCount,
+        photosCount,
       },
       currentPath: "/admin/home",
     });
@@ -42,7 +46,7 @@ exports.getHomeDashboard = async (req, res) => {
     console.error("Home manager error:", error);
     res.status(500).render("error", {
       title: "Error",
-      message: "होम पेज प्रबंधन लोड करने में समस्या आई।",
+      message: "Failed to load Home Page Manager.",
     });
   }
 };

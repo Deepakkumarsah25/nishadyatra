@@ -12,7 +12,7 @@ exports.getNotices = async (req, res) => {
     }
 
     res.render("admin/home/notices", {
-      title: "ताजा सूचनाएं एवं त्वरित संपर्क प्रबंधन (Notices & Sidebar)",
+      title: "Latest Notices & Sidebar Helpline Management",
       admin: req.session.admin,
       notices,
       quickInfo,
@@ -32,7 +32,7 @@ exports.postCreateNotice = async (req, res) => {
     const { title, dateText, link, order, isActive } = req.body;
     await SiteNotice.create({
       title,
-      dateText: dateText || new Date().toLocaleDateString("hi-IN"),
+      dateText: dateText || new Date().toLocaleDateString("en-US"),
       link: link || "",
       order: Number(order) || 0,
       isActive: isActive === "on" || isActive === "true" || isActive === true,

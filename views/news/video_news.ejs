@@ -1,0 +1,613 @@
+<%
+function ytId(url){ try{ const u=new URL(url); if(u.hostname==='youtu.be') return u.pathname.slice(1); return u.searchParams.get('v') || u.pathname.split('/').filter(Boolean).pop() || ''; }catch(e){ return ''; } }
+function fmtDate(d){ try{ return new Date(d).toLocaleDateString('en-US',{day:'numeric',month:'short',year:'numeric'}); }catch(e){ return ''; } }
+function hay(n){
+  return [(n.title||''),(n.description||''),(n.category||'')].join(' ').toLowerCase();
+}
+function getYoutubeId(n){
+  if (n.youtubeId) return n.youtubeId;
+  if (n.youtubeUrl) {
+    try {
+      const u = new URL(n.youtubeUrl);
+      if (u.hostname === 'youtu.be') return u.pathname.slice(1);
+      return u.searchParams.get('v') || u.pathname.split('/').filter(Boolean).pop() || '';
+    } catch(e) {}
+  }
+  return '';
+}
+function isYoutube(n){
+  return String(n.videoType || '').toLowerCase() === 'youtube' || !!getYoutubeId(n);
+}
+function isUpload(n){
+  return !isYoutube(n) && !!n.videoUrl;
+}
+function mediaPath(n){ return n.videoUrl || ''; }
+function thumbnailPath(n){ return n.thumbnail || ''; }
+function metaLine(n){ return [(n.category||''), fmtDate(n.publishedAt||n.createdAt)].filter(Boolean).join(' · '); }
+
+const items = Array.isArray(news) ? news : [];
+const videos = items;
+const youtubeCount = items.filter(isYoutube).length;
+const uploadCount = items.filter(isUpload).length;
+const cats = [...new Set(items.slice(1).map(n => (n.category||'').trim()).filter(Boolean))];
+const featured = items[0] || null;
+const gridItems = items.slice(1);
+const tickerItems = items.slice(0, 6);
+const stats = [
+  { n: items.length, label: 'Published Videos' },
+  { n: youtubeCount, label: 'YouTube Videos' },
+  { n: uploadCount, label: 'Uploaded Videos' },
+  { n: cats.length, label: 'Categories' }
+];
+%><!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title><%= title || "News" %> | Nishad Sankalp Campaign</title>
+  <meta name="description" content="Latest news, stories, videos, and ground updates from Nishad Sankalp Campaign.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&family=Noto+Serif:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/news/video_news.css">
+  <script src="https://unpkg.com/lenis@1/dist/lenis.min.js" defer></script>
+</head>
+<body>
+<%- include('../common/navbar') %>
+<main class="news-page">
+
+  <% if (items.length) { %>
+  <!-- ══ LATEST HEADLINES · NEWS TICKER ══ -->
+  <div class="news-ticker" data-testid="news-ticker" aria-label="Latest News">
+    <div class="ticker-label"><span class="live-dot" aria-hidden="true"></span>Latest Updates</div>
+    <div class="ticker-viewport">
+      <div class="ticker-track">
+        <% for (let pass = 0; pass < 2; pass++) { %>
+        <div class="ticker-strip" <%- pass === 1 ? 'aria-hidden="true"' : '' %>>
+          <% tickerItems.forEach(n => { %>
+          <span class="ticker-item">
+            <a href="#newsGrid" class="ticker-link" data-scroll-grid data-testid="ticker-link"><%= n.title %></a>
+            <span class="ticker-separator" aria-hidden="true">◆</span>
+          </span>
+          <% }) %>
+        </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+  <% } %>
+
+  <!-- ══ HERO ══ -->
+  <section class="hero">
+    <div class="hero-background" aria-hidden="true">
+      <span class="hero-ring hero-ring-one"></span>
+      <span class="hero-ring hero-ring-two"></span>
+      <span class="hero-ring hero-ring-three"></span>
+      <span class="hero-glow"></span>
+    </div>
+    <div class="hero-content news-container">
+      
+      <h1 class="hero-title">
+        <span class="hero-line" style="--delay:.16s"><span>Sankalp Newsroom</span></span>
+      </h1>
+      <p class="hero-subtitle fade-in" style="--delay:.48s">Latest news, stories, and ground reports — directly from the field.</p>
+      <div class="hero-meta fade-in" style="--delay:.62s">
+        <% if (items.length) { %>
+        <span class="live-chip" data-testid="hero-published-count"><span class="live-dot" aria-hidden="true"></span><%= items.length %> Published Updates</span>
+        <% } %>
+        <span class="hero-date">Today · <%= fmtDate(Date.now()) %></span>
+      </div>
+    </div>
+  </section>
+
+  <% if (!items.length) { %>
+  <!-- ══ EMPTY STATE ══ -->
+  <section class="section">
+    <div class="empty-state reveal" data-testid="empty-state">
+      <svg class="empty-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8L12 2z" fill="currentColor"/></svg>
+      <h2>New Updates Coming Soon</h2>
+      <p>Check back shortly for the latest updates from the movement.</p>
+    </div>
+  </section>
+  <% } else { %>
+
+
+
+  <% if (featured) { %>
+  <!-- ══ TOP STORY · FEATURED ══ -->
+  <section class="section featured-section">
+    <article class="featured-story reveal" data-testid="featured-story">
+      <% const fyid = getYoutubeId(featured); %>
+      <div class="featured-media video-media"
+           data-youtube="<%= fyid %>"
+           data-upload="<%= mediaPath(featured) %>"
+           data-title="<%= featured.title %>"
+           data-meta="<%= metaLine(featured) %>"
+           data-preview="1">
+        <% if (thumbnailPath(featured)) { %>
+          <img src="<%= thumbnailPath(featured) %>" alt="<%= featured.title %>" loading="eager">
+        <% } else if (isYoutube(featured) && fyid) { %>
+          <img src="https://i.ytimg.com/vi/<%= fyid %>/maxresdefault.jpg" alt="<%= featured.title %>" loading="eager" onerror="this.src='https://i.ytimg.com/vi/<%= fyid %>/hqdefault.jpg'">
+        <% } else { %>
+          <div class="media-fallback">N</div>
+        <% } %>
+        <span class="featured-flag" aria-hidden="true">Top Story</span>
+        <% if (true) { %>
+        <button class="play-button large-play-button" type="button" aria-label="Play video" data-testid="featured-play">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        </button>
+        <% } %>
+      </div>
+      <div class="featured-body">
+        <span class="eyebrow">FEATURED · TOP STORY</span>
+        <div class="meta-row">
+          <span class="filter-chip chip-solid"><%= featured.category || 'Video' %></span>
+          <time class="meta-time"><%= fmtDate(featured.publishedAt || featured.createdAt) %></time>
+        </div>
+        <h2 class="featured-title"><%= featured.title %></h2>
+        <% if (featured.description) { %><p class="featured-summary"><%= featured.description %></p><% } %>
+        <details class="story-details" data-testid="featured-story-toggle">
+          <summary>Read Full Story</summary>
+          <div class="story-text"><%= featured.description %></div>
+        </details>
+      </div>
+    </article>
+  </section>
+  <% } %>
+
+  <% if (videos.length) { %>
+  <!-- ══ VIDEO CORNER ══ -->
+  <section class="section section-tight">
+    <div class="section-header">
+      <div class="reveal">
+        <span class="eyebrow">VIDEO GALLERY</span>
+        <h2 class="section-title">Video Corner</h2>
+      </div>
+      <div class="row-navigation reveal" style="--delay:.1s">
+        <button class="nav-button" id="videoPrev" type="button" aria-label="Previous videos" data-testid="video-row-prev">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.4 7.4L14 6l-6 6 6 6 1.4-1.4L10.8 12z" fill="currentColor"/></svg>
+        </button>
+        <button class="nav-button" id="videoNext" type="button" aria-label="Next videos" data-testid="video-row-next">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.6 16.6L10 18l6-6-6-6-1.4 1.4 4.6 4.6z" fill="currentColor"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="video-row" id="videoRow" data-testid="video-row">
+      <% videos.forEach((v, i) => { const vyid = getYoutubeId(v); %>
+      <article class="video-card reveal" style="--delay:<%= (i % 4) * 0.07 %>s" data-testid="video-card-<%= i %>">
+        <div class="media video-media video-row-media"
+             data-youtube="<%= vyid %>"
+             data-upload="<%= mediaPath(v) %>"
+             data-title="<%= v.title %>"
+             data-meta="<%= metaLine(v) %>"
+             data-preview="1"
+             data-testid="video-media-<%= i %>">
+          <% if (thumbnailPath(v)) { %>
+            <img src="<%= thumbnailPath(v) %>" alt="<%= v.title %>" loading="lazy">
+          <% } else if (vyid) { %>
+            <img src="https://i.ytimg.com/vi/<%= vyid %>/hqdefault.jpg" alt="<%= v.title %>" loading="lazy">
+          <% } else { %>
+            <div class="media-fallback">N</div>
+          <% } %>
+          <span class="video-badge">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+            <%= isYoutube(v) ? 'YouTube Video' : 'Uploaded Video' %>
+          </span>
+          <button class="play-button" type="button" aria-label="Play video" data-testid="video-play-<%= i %>">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+          </button>
+        </div>
+        <div class="video-body">
+          <div class="video-meta"><span class="video-category"><%= v.category || 'Video' %></span><time><%= fmtDate(v.publishedAt || v.createdAt) %></time></div>
+          <h3 class="video-title"><%= v.title %></h3>
+        </div>
+      </article>
+      <% }) %>
+    </div>
+  </section>
+  <% } %>
+
+  <% if (gridItems.length) { %>
+  <!-- ══ LATEST NEWS · GRID ══ -->
+  <section class="section grid-section" id="news-grid">
+    <div class="section-header">
+      <div class="reveal">
+        <span class="eyebrow">LATEST UPDATES</span>
+        <h2 class="section-title">Latest News</h2>
+        <span class="result-count" id="resultCount" data-testid="result-count"><%= gridItems.length %> Articles</span>
+      </div>
+      <label class="search-box reveal" style="--delay:.1s">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 10-.7.7l.27.28v.79l5 4.99L20.49 19zm-6 0A4.5 4.5 0 1114 9.5 4.5 4.5 0 019.5 14z" fill="currentColor"/></svg>
+        <input id="newsSearch" type="search" placeholder="Search news…" aria-label="Search news" data-testid="news-search-input">
+      </label>
+    </div>
+    <div class="filter-chips reveal" id="newsFilters" style="--delay:.15s" data-testid="category-filter" role="group" aria-label="Choose Category">
+      <button class="filter-chip is-active" type="button" data-cat="all" data-testid="filter-chip-all">All</button>
+      <% cats.forEach(c => { %>
+      <button class="filter-chip" type="button" data-cat="<%= c %>" data-testid="filter-chip-<%= c %>"><%= c %></button>
+      <% }) %>
+    </div>
+    <div class="news-grid" id="newsGrid" data-testid="news-grid">
+      <% gridItems.forEach((item, i) => { const gid = getYoutubeId(item); %>
+      <article class="news-card reveal"
+               style="--delay:<%= (i % 3) * 0.08 %>s"
+               data-search="<%= hay(item) %>"
+               data-category="<%= (item.category || '').trim() %>"
+               data-testid="news-card-<%= i %>">
+        <% if (true) { %>
+        <div class="media video-media"
+             data-youtube="<%= gid %>"
+             data-upload="<%= mediaPath(item) %>"
+             data-title="<%= item.title %>"
+             data-meta="<%= metaLine(item) %>"
+             data-preview="1"
+             data-testid="card-video-media-<%= i %>">
+          <% if (thumbnailPath(item)) { %>
+            <img src="<%= thumbnailPath(item) %>" alt="<%= item.title %>" loading="lazy">
+          <% } else if (gid) { %>
+            <img src="https://i.ytimg.com/vi/<%= gid %>/hqdefault.jpg" alt="<%= item.title %>" loading="lazy">
+          <% } else { %>
+            <div class="media-fallback">N</div>
+          <% } %>
+          <span class="video-badge">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+            <%= isYoutube(item) ? 'YouTube Video' : 'Uploaded Video' %>
+          </span>
+          <button class="play-button" type="button" aria-label="Play video" data-testid="card-video-play-<%= i %>">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+          </button>
+        </div>
+        <% } else if (thumbnailPath(item)) { %>
+        <div class="media">
+          <img src="<%= thumbnailPath(item) %>" alt="<%= item.title %>" loading="lazy">
+          <span class="video-badge">News</span>
+        </div>
+        <% } %>
+        <div class="news-card-body">
+          <div class="news-card-meta">
+            <span class="news-category"><%= item.category || 'News' %></span>
+            <time><%= fmtDate(item.publishedAt || item.createdAt) %></time>
+          </div>
+          <h3 class="news-card-title"><%= item.title %></h3>
+          <% if (item.description) { %><p class="news-summary"><%= item.description %></p><% } %>
+          <details class="story-details" data-testid="story-toggle-<%= i %>">
+            <summary>Read Full Story</summary>
+            <div class="story-text"><%= item.description || '' %></div>
+          </details>
+        </div>
+      </article>
+      <% }) %>
+    </div>
+    <div class="empty-state" id="noResults" hidden data-testid="no-results">
+      <svg class="empty-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8L12 2z" fill="currentColor"/></svg>
+      <h2>No Articles Found</h2>
+      <p>Try searching with a different term.</p>
+    </div>
+  </section>
+  <% } %>
+  <% } %>
+</main>
+
+<%- include('../common/footer') %>
+
+
+
+<!-- ══ FULL-SCREEN VIDEO MODAL ══ -->
+<div class="video-modal" id="videoModal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Video Player" data-testid="video-modal">
+  <button class="modal-close" id="videoModalClose" type="button" aria-label="Close" data-testid="video-modal-close">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="currentColor"/></svg>
+  </button>
+  <div class="modal-box">
+    <div class="video-player" id="videoPlayer"></div>
+    <div class="modal-caption">
+      <h2 id="videoModalTitle" data-testid="video-modal-title"></h2>
+      <span id="videoModalMeta"></span>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  const $  = (s, c) => (c || document).querySelector(s);
+  const $$ = (s, c) => Array.prototype.slice.call((c || document).querySelectorAll(s));
+  const fineHover = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ── Lenis smooth momentum scroll (CDN, optional) ── */
+  let lenis = null;
+  function initLenis(){
+    try {
+      if (window.Lenis && !reduce) {
+        lenis = new Lenis({ duration: 1.15, smoothWheel: true });
+        const raf = t => { lenis.raf(t); requestAnimationFrame(raf); };
+        requestAnimationFrame(raf);
+      }
+    } catch (e) {}
+  }
+  if (document.readyState === 'complete') initLenis();
+  else addEventListener('load', initLenis);
+
+  /* ── Ticker link → smooth scroll to grid ── */
+  $$('[data-scroll-grid]').forEach(a => a.addEventListener('click', e => {
+    e.preventDefault();
+    const g = $('#newsGrid');
+    if (!g) return;
+    if (lenis) lenis.scrollTo(g, { offset: -80 });
+    else g.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+  }));
+
+  /* ── Scroll reveals ── */
+  const revealIO = new IntersectionObserver(es => es.forEach(en => {
+    if (en.isIntersecting) { en.target.classList.add('in-view'); revealIO.unobserve(en.target); }
+  }), { threshold: 0.12, rootMargin: '0px 0px -36px 0px' });
+  $$('.reveal').forEach(el => revealIO.observe(el));
+
+  /* ── Stat count-up ── */
+  function countUp(el){
+    const t = +el.dataset.count || 0;
+    if (reduce) { el.textContent = t; return; }
+    const s = performance.now(), d = 950;
+    (function step(n){
+      const p = Math.min(1, (n - s) / d);
+      el.textContent = Math.round(t * (1 - Math.pow(1 - p, 3)));
+      if (p < 1) requestAnimationFrame(step);
+    })(s);
+  }
+  const countIO = new IntersectionObserver(es => es.forEach(en => {
+    if (en.isIntersecting) { countUp(en.target); countIO.unobserve(en.target); }
+  }), { threshold: 0.5 });
+  $$('.stat-number').forEach(el => countIO.observe(el));
+
+  /* ── Hero rings parallax ── */
+  const rings = $$('.hero-ring');
+  if (rings.length && !reduce) {
+    let ticking = false;
+    addEventListener('scroll', () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const y = window.scrollY || 0;
+        rings.forEach((r, i) => { r.style.transform = 'translate3d(0,' + (y * (0.05 + i * 0.035)).toFixed(1) + 'px,0)'; });
+        ticking = false;
+      });
+    }, { passive: true });
+  }
+
+  /* ── Search + category filter ── */
+  const searchInput = $('#newsSearch'), chipsWrap = $('#newsFilters'),
+        grid = $('#newsGrid'), noRes = $('#noResults'), countEl = $('#resultCount');
+  let activeCat = 'all';
+  function applyFilters(){
+    if (!grid) return;
+    const q = (searchInput ? searchInput.value : '').trim().toLowerCase();
+    let shown = 0;
+    $$('.news-card', grid).forEach(c => {
+      const okQ = !q || (c.dataset.search || '').includes(q);
+      const okC = activeCat === 'all' || c.dataset.category === activeCat;
+      const show = okQ && okC;
+      c.classList.toggle('is-hidden', !show);
+      if (show) shown++;
+    });
+    if (noRes) noRes.hidden = shown !== 0;
+    if (countEl) countEl.textContent = shown + ' Articles';
+  }
+  if (searchInput) searchInput.addEventListener('input', applyFilters);
+  if (chipsWrap) chipsWrap.addEventListener('click', e => {
+    const b = e.target.closest('.filter-chip');
+    if (!b) return;
+    $$('.filter-chip', chipsWrap).forEach(c => c.classList.remove('is-active'));
+    b.classList.add('is-active');
+    activeCat = b.dataset.cat;
+    applyFilters();
+  });
+
+  /* ── Full-screen video modal ── */
+  const modal = $('#videoModal'), player = $('#videoPlayer'),
+        mTitle = $('#videoModalTitle'), mMeta = $('#videoModalMeta');
+  function openModal(title, yt, up, meta){
+    mTitle.textContent = title || '';
+    mMeta.textContent = meta || '';
+    player.replaceChildren();
+    if (yt) {
+      const f = document.createElement('iframe');
+      f.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(yt) + '?autoplay=1&rel=0&playsinline=1';
+      f.title = title || 'Video';
+      f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+      f.allowFullscreen = true;
+      player.appendChild(f);
+    } else if (up) {
+      const v = document.createElement('video');
+      v.src = up; v.controls = true; v.autoplay = true; v.playsInline = true;
+      player.appendChild(v);
+    }
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    if (lenis) lenis.stop();
+    hidePreview();
+  }
+  function closeModal(){
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    player.replaceChildren();
+    document.body.style.overflow = '';
+    if (lenis) lenis.start();
+  }
+  $('#videoModalClose').addEventListener('click', closeModal);
+  modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeModal(); hidePreview(); }
+  });
+  document.addEventListener('click', e => {
+    const m = e.target.closest('.video-media');
+    if (!m) return;
+    const yt = m.dataset.youtube, up = m.dataset.upload;
+    if (!yt && !up) return;
+    openModal(m.dataset.title, yt, up, m.dataset.meta);
+  });
+
+ /* ── Hover: whole card scales + video preview plays ── */
+function hidePreview(){
+  $$('.video-media.is-hovering').forEach(m => m.dispatchEvent(new Event('previewstop')));
+}
+
+if (fineHover) {
+  $$('.news-card, .video-card, .featured-story').forEach(host => {
+    const m = $('.video-media', host);
+    if (!m) return;
+    let pv = null;
+
+    function start(){
+      if (pv || modal.classList.contains('is-open')) return;
+      const yt = m.dataset.youtube, up = m.dataset.upload;
+      if (up) {
+        pv = document.createElement('video');
+        pv.src = up; pv.muted = true; pv.loop = true;
+        pv.autoplay = true; pv.playsInline = true;
+      } else if (yt) {
+        pv = document.createElement('iframe');
+        pv.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(yt) +
+          '?autoplay=1&mute=1&controls=0&loop=1&playlist=' + encodeURIComponent(yt) +
+          '&modestbranding=1&rel=0&playsinline=1';
+        pv.setAttribute('allow', 'autoplay; encrypted-media');
+        pv.setAttribute('frameborder', '0');
+      } else return;
+      const img = $('img', m);
+      if (img) img.style.display = 'none';
+      m.insertBefore(pv, m.firstChild);
+      if (pv.play) pv.play().catch(() => {});
+      m.classList.add('is-hovering');
+    }
+
+    function stop(){
+      m.classList.remove('is-hovering');
+      if (pv) { pv.remove(); pv = null; }
+      const img = $('img', m);
+      if (img) img.style.display = '';
+    }
+
+    host.addEventListener('mouseenter', start);
+    host.addEventListener('mouseleave', stop);
+    m.addEventListener('previewstop', stop);
+  });
+}
+  /* ── Mobile: autoplay only the most visible video ── */
+  const isMobile = matchMedia('(max-width: 700px)').matches;
+
+  if (isMobile && !reduce) {
+    const mobileVideos = $$('.video-media');
+    const visibility = new Map();
+
+    const mobileObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        visibility.set(entry.target, {
+          isIntersecting: entry.isIntersecting,
+          ratio: entry.intersectionRatio
+        });
+      });
+
+      // Find the single video that occupies the largest visible area.
+      let activeVideo = null;
+      let highestRatio = 0;
+
+      mobileVideos.forEach(media => {
+        const state = visibility.get(media);
+        if (state && state.isIntersecting && state.ratio > highestRatio) {
+          highestRatio = state.ratio;
+          activeVideo = media;
+        }
+      });
+
+      // Only autoplay when a video is at least 55% visible.
+      if (activeVideo && highestRatio >= 0.55 && !modal.classList.contains('is-open')) {
+        mobileVideos.forEach(media => {
+          if (media === activeVideo) {
+            playMobilePreview(media);
+          } else {
+            stopMobilePreview(media);
+          }
+        });
+      } else {
+        mobileVideos.forEach(stopMobilePreview);
+      }
+    }, {
+      threshold: [0, 0.55, 0.75, 1]
+    });
+
+    function playMobilePreview(media) {
+      if (media.dataset.mobilePlaying === 'true' || modal.classList.contains('is-open')) return;
+
+      const yt = media.dataset.youtube;
+      const up = media.dataset.upload;
+      if (!yt && !up) return;
+
+      const oldImg = $('img', media);
+      if (oldImg) oldImg.style.display = 'none';
+
+      let preview;
+
+      if (up) {
+        preview = document.createElement('video');
+        preview.src = up;
+        preview.muted = true;
+        preview.defaultMuted = true;
+        preview.loop = true;
+        preview.autoplay = true;
+        preview.playsInline = true;
+        preview.setAttribute('muted', '');
+        preview.setAttribute('autoplay', '');
+        preview.setAttribute('playsinline', '');
+      } else {
+        preview = document.createElement('iframe');
+        preview.src =
+          'https://www.youtube-nocookie.com/embed/' +
+          encodeURIComponent(yt) +
+          '?autoplay=1&mute=1&controls=0&loop=1&playlist=' +
+          encodeURIComponent(yt) +
+          '&modestbranding=1&rel=0&playsinline=1';
+        preview.title = media.dataset.title || 'Video';
+        preview.allow = 'autoplay; encrypted-media; picture-in-picture';
+        preview.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture');
+        preview.setAttribute('frameborder', '0');
+      }
+
+      preview.classList.add('mobile-autoplay-preview');
+      media.insertBefore(preview, media.firstChild);
+      media.dataset.mobilePlaying = 'true';
+
+      if (preview.play) {
+        const promise = preview.play();
+        if (promise) promise.catch(() => {});
+      }
+    }
+
+    function stopMobilePreview(media) {
+      if (media.dataset.mobilePlaying !== 'true') return;
+
+      const preview = $('.mobile-autoplay-preview', media);
+      if (preview) preview.remove();
+
+      const img = $('img', media);
+      if (img) img.style.display = '';
+
+      media.dataset.mobilePlaying = 'false';
+    }
+
+    mobileVideos.forEach(media => mobileObserver.observe(media));
+
+    window.addEventListener('pagehide', () => {
+      mobileVideos.forEach(stopMobilePreview);
+    });
+  }
+
+  /* ── Video row arrows ── */
+  const row = $('#videoRow');
+  const step = () => (row ? (row.firstElementChild ? row.firstElementChild.offsetWidth + 18 : 348) : 348);
+  const prev = $('#videoPrev'), next = $('#videoNext');
+  if (prev) prev.addEventListener('click', () => row.scrollBy({ left: -step(), behavior: 'smooth' }));
+  if (next) next.addEventListener('click', () => row.scrollBy({ left:  step(), behavior: 'smooth' }));
+})();
+</script>
+</body>
+</html>

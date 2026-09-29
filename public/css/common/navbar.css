@@ -132,56 +132,31 @@ body.drawer-open {
    ========================================================= */
 
 .brand {
-  display: flex;
-
+  display: inline-flex;
   align-items: center;
-
   justify-content: flex-start;
-
   gap: 10px;
-
   color: var(--dark-red);
-
-  font-family:
-    "Noto Serif Devanagari",
-    serif;
-
+  font-family: "Noto Serif Devanagari", serif;
   font-weight: 700;
-
-  font-size:
-    clamp(
-      0.9rem,
-      2vw,
-      1.12rem
-    );
-
-  line-height: 1;
-
+  line-height: 1.35;
   text-decoration: none;
-
   white-space: nowrap;
-
-  min-width: 0;
-
-  /*
-    Brand available space lega
-    lekin hamburger ko push nahi karega
-  */
-  flex: 1 1 auto;
-
-  overflow: hidden;
+  flex: 0 0 auto;
+  min-width: max-content;
+  overflow: visible;
 }
 
-/* Brand text */
-
-.brand > span:last-child {
-  min-width: 0;
-
-  overflow: hidden;
-
-  text-overflow: ellipsis;
-
+/* Brand text - Never cut or truncate */
+.brand > span:last-child,
+.brand-name {
+  display: inline-block;
   white-space: nowrap;
+  overflow: visible;
+  line-height: 1.35;
+  font-size: clamp(0.95rem, 1.35vw, 1.15rem);
+  font-weight: 800;
+  letter-spacing: -0.2px;
 }
 
 /* =========================================================
@@ -254,32 +229,18 @@ body.drawer-open {
 
 .nav-links a {
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
-  min-height: 42px;
-
-  padding:
-    9px 16px;
-
+  min-height: 38px;
+  padding: 7px 11px;
   border-radius: 999px;
-
   color: var(--text-brown);
-
-  font-size: 0.95rem;
-
+  font-size: 0.91rem;
   font-weight: 600;
-
-  line-height: 1.2;
-
+  line-height: 1.25;
   text-align: center;
-
   text-decoration: none;
-
   white-space: nowrap;
-
   transition:
     background 0.2s ease,
     color 0.2s ease;
@@ -458,7 +419,7 @@ body.drawer-open {
    TABLET + MOBILE
    ========================================================= */
 
-@media (max-width: 860px) {
+@media (max-width: 1040px) {
 
   :root {
     --mobile-navbar-height: 60px;
@@ -544,25 +505,22 @@ body.drawer-open {
 
   .brand {
     min-width: 0;
-
-    flex: 1 1 auto;
-
-    display: flex;
-
+    flex: 0 1 auto;
+    max-width: calc(100% - 54px);
+    display: inline-flex;
     align-items: center;
-
     justify-content: flex-start;
-
     gap: 8px;
+    line-height: 1.35;
+    overflow: visible;
+  }
 
-    font-size:
-      clamp(
-        0.82rem,
-        3.5vw,
-        1rem
-      );
-
-    line-height: 1;
+  .brand > span:last-child,
+  .brand-name {
+    font-size: clamp(0.85rem, 3.4vw, 1.05rem);
+    line-height: 1.35;
+    white-space: nowrap;
+    overflow: visible;
   }
 
   .brand-mark {
@@ -835,63 +793,36 @@ body.drawer-open {
    ========================================================= */
 
 @media (max-width: 480px) {
-
   :root {
     --mobile-navbar-height: 58px;
   }
 
   .site-header {
-    height:
-      calc(
-        var(--mobile-navbar-height) +
-        env(
-          safe-area-inset-top,
-          0px
-        )
-      );
-
-    min-height:
-      calc(
-        var(--mobile-navbar-height) +
-        env(
-          safe-area-inset-top,
-          0px
-        )
-      );
+    height: calc(var(--mobile-navbar-height) + env(safe-area-inset-top, 0px));
+    min-height: calc(var(--mobile-navbar-height) + env(safe-area-inset-top, 0px));
   }
 
   .navbar {
-    height:
-      var(--mobile-navbar-height);
-
-    min-height:
-      var(--mobile-navbar-height);
-
-    padding-left:
-      max(
-        10px,
-        env(
-          safe-area-inset-left,
-          0px
-        )
-      );
-
-    padding-right:
-      max(
-        14px,
-        env(
-          safe-area-inset-right,
-          0px
-        )
-      );
-
+    height: var(--mobile-navbar-height);
+    min-height: var(--mobile-navbar-height);
+    padding-left: max(10px, env(safe-area-inset-left, 0px));
+    padding-right: max(10px, env(safe-area-inset-right, 0px));
     gap: 6px;
   }
 
   .brand {
-    font-size: 0.88rem;
-
     gap: 7px;
+    line-height: 1.3;
+    max-width: calc(100% - 50px);
+    overflow: visible;
+  }
+
+  .brand > span:last-child,
+  .brand-name {
+    font-size: clamp(0.82rem, 3.4vw, 0.94rem);
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: visible;
   }
 
   .brand-mark {
@@ -936,63 +867,36 @@ body.drawer-open {
    ========================================================= */
 
 @media (max-width: 360px) {
-
   :root {
     --mobile-navbar-height: 56px;
   }
 
   .site-header {
-    height:
-      calc(
-        var(--mobile-navbar-height) +
-        env(
-          safe-area-inset-top,
-          0px
-        )
-      );
-
-    min-height:
-      calc(
-        var(--mobile-navbar-height) +
-        env(
-          safe-area-inset-top,
-          0px
-        )
-      );
+    height: calc(var(--mobile-navbar-height) + env(safe-area-inset-top, 0px));
+    min-height: calc(var(--mobile-navbar-height) + env(safe-area-inset-top, 0px));
   }
 
   .navbar {
-    height:
-      var(--mobile-navbar-height);
-
-    min-height:
-      var(--mobile-navbar-height);
-
-    padding-left:
-      max(
-        7px,
-        env(
-          safe-area-inset-left,
-          0px
-        )
-      );
-
-    padding-right:
-      max(
-        10px,
-        env(
-          safe-area-inset-right,
-          0px
-        )
-      );
-
+    height: var(--mobile-navbar-height);
+    min-height: var(--mobile-navbar-height);
+    padding-left: max(6px, env(safe-area-inset-left, 0px));
+    padding-right: max(8px, env(safe-area-inset-right, 0px));
     gap: 4px;
   }
 
   .brand {
-    font-size: 0.78rem;
+    gap: 5px;
+    line-height: 1.3;
+    max-width: calc(100% - 46px);
+    overflow: visible;
+  }
 
-    gap: 6px;
+  .brand > span:last-child,
+  .brand-name {
+    font-size: 0.78rem;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: visible;
   }
 
   .brand-mark {
@@ -1041,49 +945,36 @@ body.drawer-open {
    ========================================================= */
 
 @media (max-width: 320px) {
-
   :root {
     --mobile-navbar-height: 54px;
   }
 
   .site-header {
-    height:
-      calc(
-        var(--mobile-navbar-height) +
-        env(
-          safe-area-inset-top,
-          0px
-        )
-      );
-
-    min-height:
-      calc(
-        var(--mobile-navbar-height) +
-        env(
-          safe-area-inset-top,
-          0px
-        )
-      );
+    height: calc(var(--mobile-navbar-height) + env(safe-area-inset-top, 0px));
+    min-height: calc(var(--mobile-navbar-height) + env(safe-area-inset-top, 0px));
   }
 
   .navbar {
-    height:
-      var(--mobile-navbar-height);
-
-    min-height:
-      var(--mobile-navbar-height);
-
-    padding-left: 6px;
-
-    padding-right: 8px;
-
+    height: var(--mobile-navbar-height);
+    min-height: var(--mobile-navbar-height);
+    padding-left: 5px;
+    padding-right: 6px;
     gap: 3px;
   }
 
   .brand {
-    font-size: 0.74rem;
+    gap: 4px;
+    line-height: 1.3;
+    max-width: calc(100% - 42px);
+    overflow: visible;
+  }
 
-    gap: 5px;
+  .brand > span:last-child,
+  .brand-name {
+    font-size: 0.72rem;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: visible;
   }
 
   .brand-mark {

@@ -16,5 +16,6 @@ router.post("/videos/add", kalashYatraController.postAddVideo);
 router.post("/videos/update/:videoId", kalashYatraController.postUpdateVideo);
 router.post("/videos/delete/:videoId", kalashYatraController.postDeleteVideo);
 router.post("/pillars", kalashYatraController.postUpdatePillars);
+router.post("/pledge", kalashYatraController.postUpdatePledge);
 
 module.exports = router;

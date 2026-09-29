@@ -35,7 +35,7 @@ exports.login = async (req, res) => {
     if (!email || !password) {
       return res.status(400).render("admin/auth/login", {
         title: "Admin Login",
-        error: "Email और password दोनों required हैं।",
+        error: "Both email and password are required.",
         success: null,
       });
     }
@@ -51,7 +51,7 @@ exports.login = async (req, res) => {
     if (!admin) {
       return res.status(401).render("admin/auth/login", {
         title: "Admin Login",
-        error: "Invalid email या password।",
+        error: "Invalid email or password.",
         success: null,
       });
     }
@@ -63,7 +63,7 @@ exports.login = async (req, res) => {
     if (!admin.isActive) {
       return res.status(403).render("admin/auth/login", {
         title: "Admin Login",
-        error: "Admin account inactive है।",
+        error: "Admin account is inactive.",
         success: null,
       });
     }
@@ -80,7 +80,7 @@ exports.login = async (req, res) => {
     if (!passwordMatch) {
       return res.status(401).render("admin/auth/login", {
         title: "Admin Login",
-        error: "Invalid email या password।",
+        error: "Invalid email or password.",
         success: null,
       });
     }
@@ -98,7 +98,7 @@ exports.login = async (req, res) => {
 
         return res.status(500).render("admin/auth/login", {
           title: "Admin Login",
-          error: "Login session create नहीं हो सका।",
+          error: "Could not create login session.",
           success: null,
         });
       }
@@ -129,7 +129,7 @@ exports.login = async (req, res) => {
             "admin/auth/login",
             {
               title: "Admin Login",
-              error: "Login session save नहीं हो सका।",
+              error: "Could not save login session.",
               success: null,
             }
           );

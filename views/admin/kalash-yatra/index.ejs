@@ -1,561 +1,663 @@
 <%- include("../common/header") %>
-<%- include("../common/sidebar") %>
+  <%- include("../common/sidebar") %>
 
-<style>
-  .ky-nav-tabs {
-    display: flex;
-    gap: 8px;
-    background: #ffffff;
-    padding: 8px 12px;
-    border-radius: 14px;
-    border: 1px solid var(--admin-border);
-    margin-bottom: 24px;
-    overflow-x: auto;
-    box-shadow: var(--admin-shadow-sm);
-  }
+    <style>
+      .ky-nav-tabs {
+        display: flex;
+        gap: 8px;
+        background: #ffffff;
+        padding: 8px 12px;
+        border-radius: 14px;
+        border: 1px solid var(--admin-border);
+        margin-bottom: 24px;
+        overflow-x: auto;
+        box-shadow: var(--admin-shadow-sm);
+      }
 
-  .ky-tab-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 18px;
-    border-radius: 10px;
-    font-size: 13px;
-    font-weight: 700;
-    color: #63534d;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: all 0.2s ease;
-    text-decoration: none;
-  }
+      .ky-tab-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 18px;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 700;
+        color: #63534d;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: all 0.2s ease;
+        text-decoration: none;
+      }
 
-  .ky-tab-btn:hover {
-    background: var(--admin-primary-light);
-    color: var(--admin-primary);
-  }
+      .ky-tab-btn:hover {
+        background: var(--admin-primary-light);
+        color: var(--admin-primary);
+      }
 
-  .ky-tab-btn.active {
-    background: linear-gradient(135deg, var(--admin-primary), var(--admin-primary-dark));
-    color: #ffffff;
-    box-shadow: 0 4px 12px rgba(215, 42, 42, 0.25);
-  }
+      .ky-tab-btn.active {
+        background: linear-gradient(135deg, var(--admin-primary), var(--admin-primary-dark));
+        color: #ffffff;
+        box-shadow: 0 4px 12px rgba(215, 42, 42, 0.25);
+      }
 
-  .ky-tab-btn svg {
-    width: 16px;
-    height: 16px;
-  }
+      .ky-tab-btn svg {
+        width: 16px;
+        height: 16px;
+      }
 
-  .form-section-title {
-    font-size: 14px;
-    font-weight: 800;
-    color: var(--admin-primary-dark);
-    margin: 22px 0 12px;
-    padding-bottom: 6px;
-    border-bottom: 1.5px dashed var(--admin-border);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+      .form-section-title {
+        font-size: 14px;
+        font-weight: 800;
+        color: var(--admin-primary-dark);
+        margin: 22px 0 12px;
+        padding-bottom: 6px;
+        border-bottom: 1.5px dashed var(--admin-border);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
 
-  .form-section-title:first-child {
-    margin-top: 0;
-  }
+      .form-section-title:first-child {
+        margin-top: 0;
+      }
 
-  .milestone-editor-card {
-    background: #faf7f5;
-    border: 1px solid var(--admin-border);
-    border-radius: 12px;
-    padding: 18px 20px;
-    margin-bottom: 16px;
-    position: relative;
-    transition: border-color 0.2s;
-  }
+      .milestone-editor-card {
+        background: #faf7f5;
+        border: 1px solid var(--admin-border);
+        border-radius: 12px;
+        padding: 18px 20px;
+        margin-bottom: 16px;
+        position: relative;
+        transition: border-color 0.2s;
+      }
 
-  .milestone-editor-card:hover {
-    border-color: var(--admin-primary);
-  }
+      .milestone-editor-card:hover {
+        border-color: var(--admin-primary);
+      }
 
-  .milestone-badge-pill {
-    display: inline-block;
-    padding: 3px 10px;
-    background: #ffe8e2;
-    color: var(--admin-primary-dark);
-    font-size: 11px;
-    font-weight: 800;
-    border-radius: 20px;
-    margin-bottom: 12px;
-  }
+      .milestone-badge-pill {
+        display: inline-block;
+        padding: 3px 10px;
+        background: #ffe8e2;
+        color: var(--admin-primary-dark);
+        font-size: 11px;
+        font-weight: 800;
+        border-radius: 20px;
+        margin-bottom: 12px;
+      }
 
-  .video-table-wrap {
-    background: #ffffff;
-    border-radius: 14px;
-    border: 1px solid var(--admin-border);
-    overflow: hidden;
-    box-shadow: var(--admin-shadow-sm);
-  }
+      .video-table-wrap {
+        background: #ffffff;
+        border-radius: 14px;
+        border: 1px solid var(--admin-border);
+        overflow: hidden;
+        box-shadow: var(--admin-shadow-sm);
+      }
 
-  .video-list-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-  }
+      .video-list-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
 
-  .video-list-table th {
-    background: #faf7f5;
-    padding: 14px 16px;
-    text-align: left;
-    font-weight: 800;
-    color: #63534d;
-    border-bottom: 1px solid var(--admin-border);
-  }
+      .video-list-table th {
+        background: #faf7f5;
+        padding: 14px 16px;
+        text-align: left;
+        font-weight: 800;
+        color: #63534d;
+        border-bottom: 1px solid var(--admin-border);
+      }
 
-  .video-list-table td {
-    padding: 14px 16px;
-    border-bottom: 1px solid var(--admin-border);
-    vertical-align: middle;
-  }
+      .video-list-table td {
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--admin-border);
+        vertical-align: middle;
+      }
 
-  .video-list-table tr:last-child td {
-    border-bottom: none;
-  }
+      .video-list-table tr:last-child td {
+        border-bottom: none;
+      }
 
-  .video-list-table tr:hover td {
-    background: #fffafa;
-  }
+      .video-list-table tr:hover td {
+        background: #fffafa;
+      }
 
-  .table-actions {
-    display: flex;
-    gap: 8px;
-  }
+      .table-actions {
+        display: flex;
+        gap: 8px;
+      }
 
-  .btn-sm-action {
-    padding: 5px 10px;
-    border-radius: 7px;
-    font-size: 12px;
-    font-weight: 700;
-    cursor: pointer;
-    border: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    text-decoration: none;
-  }
+      .btn-sm-action {
+        padding: 5px 10px;
+        border-radius: 7px;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        text-decoration: none;
+      }
 
-  .btn-edit {
-    background: #f0f4ff;
-    color: #2563eb;
-  }
+      .btn-edit {
+        background: #f0f4ff;
+        color: #2563eb;
+      }
 
-  .btn-edit:hover {
-    background: #dbeafe;
-  }
+      .btn-edit:hover {
+        background: #dbeafe;
+      }
 
-  .btn-del {
-    background: #fff1f2;
-    color: #e11d48;
-  }
+      .btn-del {
+        background: #fff1f2;
+        color: #e11d48;
+      }
 
-  .btn-del:hover {
-    background: #ffe4e6;
-  }
+      .btn-del:hover {
+        background: #ffe4e6;
+      }
 
-  .category-badge {
-    display: inline-block;
-    padding: 3px 9px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 800;
-  }
+      .category-badge {
+        display: inline-block;
+        padding: 3px 9px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 800;
+      }
 
-  .badge-yatra { background: #fee2e2; color: #b91c1c; }
-  .badge-program { background: #fef3c7; color: #b45309; }
-  .badge-speech { background: #e0e7ff; color: #4338ca; }
+      .badge-yatra {
+        background: #fee2e2;
+        color: #b91c1c;
+      }
 
-  .help-hint {
-    font-size: 11.5px;
-    color: #8c7870;
-    margin-top: 4px;
-    line-height: 1.4;
-  }
-</style>
+      .badge-program {
+        background: #fef3c7;
+        color: #b45309;
+      }
 
-<div class="admin-main">
-  <!-- Topbar -->
-  <header class="admin-topbar">
-    <div class="topbar-left">
-      <button type="button" class="mobile-menu-trigger" id="adminMobileMenuBtn" aria-label="Menu">
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-      </button>
-      <div class="page-heading">
-        <h1>
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--admin-primary)" stroke-width="2.2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          कलश यात्रा प्रबंधन (Kalash Yatra Manager)
-        </h1>
-        <p>हीरो सेक्शन, 5 यात्रा पड़ाव, वीडियो गैलरी और 4 महा-संकल्प को आसानी से संपादित करें</p>
-      </div>
-    </div>
-    <div class="topbar-right">
-      <a href="/video" target="_blank" class="view-site-btn">
-        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        <span>लाइव पेज देखें</span>
-      </a>
-    </div>
-  </header>
+      .badge-speech {
+        background: #e0e7ff;
+        color: #4338ca;
+      }
 
-  <!-- Body -->
-  <div class="admin-body">
-    <% if (message) { %>
-      <div class="admin-alert admin-alert-success">✓ <%= message %></div>
-    <% } %>
-    <% if (error) { %>
-      <div class="admin-alert admin-alert-error">⚠ <%= error %></div>
-    <% } %>
+      .help-hint {
+        font-size: 11.5px;
+        color: #8c7870;
+        margin-top: 4px;
+        line-height: 1.4;
+      }
+    </style>
 
-    <!-- Navigation Tabs -->
-    <div class="ky-nav-tabs">
-      <a href="/admin/kalash-yatra?tab=hero" class="ky-tab-btn <%= activeTab === 'hero' ? 'active' : '' %>">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
-        <span>1. हीरो व आंकड़े</span>
-      </a>
-      <a href="/admin/kalash-yatra?tab=milestones" class="ky-tab-btn <%= activeTab === 'milestones' ? 'active' : '' %>">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-        <span>2. यात्रा पड़ाव (5 माइलस्टोन्स)</span>
-      </a>
-      <a href="/admin/kalash-yatra?tab=videos" class="ky-tab-btn <%= activeTab === 'videos' ? 'active' : '' %>">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
-        <span>3. वीडियो गैलरी (<%= kalash.videos ? kalash.videos.length : 0 %>)</span>
-      </a>
-      <a href="/admin/kalash-yatra?tab=pillars" class="ky-tab-btn <%= activeTab === 'pillars' ? 'active' : '' %>">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        <span>4. चार महा-संकल्प व फ़ोटो</span>
-      </a>
-    </div>
+    <div class="admin-main">
+      <!-- Topbar -->
+      <header class="admin-topbar">
+        <div class="topbar-left">
+          <button type="button" class="mobile-menu-trigger" id="adminMobileMenuBtn" aria-label="Menu">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
+          </button>
+          <div class="page-heading">
+            <h1>
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--admin-primary)"
+                stroke-width="2.2">
+                <path
+                  d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+              </svg>
+              Kalash Yatra Management
+            </h1>
+            <p>Easily manage the hero section, 5 yatra milestones, and video gallery</p>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <a href="/video" target="_blank" class="view-site-btn">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+              <polyline points="15 3 21 3 21 9" />
+              <line x1="10" y1="14" x2="21" y2="3" />
+            </svg>
+            <span>View Live Page</span>
+          </a>
+        </div>
+      </header>
 
-    <!-- ====================================================
+      <!-- Body -->
+      <div class="admin-body">
+        <% if (message) { %>
+          <div class="admin-alert admin-alert-success">✓ <%= message %>
+          </div>
+          <% } %>
+            <% if (error) { %>
+              <div class="admin-alert admin-alert-error">⚠ <%= error %>
+              </div>
+              <% } %>
+
+                <!-- Navigation Tabs -->
+                <div class="ky-nav-tabs">
+                  <a href="/admin/kalash-yatra?tab=hero" class="ky-tab-btn <%= activeTab === 'hero' ? 'active' : '' %>">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="3" width="18" height="18" rx="2" />
+                      <line x1="3" y1="9" x2="21" y2="9" />
+                      <line x1="9" y1="21" x2="9" y2="9" />
+                    </svg>
+                    <span>1. Hero & Statistics</span>
+                  </a>
+                  <a href="/admin/kalash-yatra?tab=milestones"
+                    class="ky-tab-btn <%= activeTab === 'milestones' ? 'active' : '' %>">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polygon points="12 2 2 7 12 12 22 7 12 2" />
+                      <polyline points="2 17 12 22 22 17" />
+                      <polyline points="2 12 12 17 22 12" />
+                    </svg>
+                    <span>2. Yatra Milestones (5 Stops)</span>
+                  </a>
+                  <a href="/admin/kalash-yatra?tab=videos"
+                    class="ky-tab-btn <%= activeTab === 'videos' ? 'active' : '' %>">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="2" y="2" width="20" height="20" rx="2.18" />
+                      <line x1="7" y1="2" x2="7" y2="22" />
+                      <line x1="17" y1="2" x2="17" y2="22" />
+                      <line x1="2" y1="12" x2="22" y2="12" />
+                    </svg>
+                    <span>3. Video Gallery (<%= kalash.videos ? kalash.videos.length : 0 %>)</span>
+                  </a>
+                </div>
+
+                <!-- ====================================================
          TAB 1: HERO & STATS
     ===================================================== -->
-    <% if (activeTab === 'hero') { %>
-      <div class="admin-card">
-        <div class="admin-card-header">
-          <h3>
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-            हीरो सेक्शन शीर्षक, आंकड़े और मुख्य प्रस्तुति वीडियो
-          </h3>
-        </div>
+                <% if (activeTab==='hero' ) { %>
+                  <div class="admin-card">
+                    <div class="admin-card-header">
+                      <h3>
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                          stroke-width="2">
+                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                        </svg>
+                        Hero Section Titles, Statistics & Featured Video
+                      </h3>
+                    </div>
 
-        <div class="admin-card-body">
-          <form action="/admin/kalash-yatra/hero" method="POST">
-            
-            <div class="form-section-title">🚩 मुख्य शीर्षक व बैज</div>
-            <div class="form-grid-2">
-              <div class="form-group">
-                <label for="liveBadgeText">लाइव बैज टेक्स्ट</label>
-                <input type="text" id="liveBadgeText" name="liveBadgeText" class="form-control" value="<%= kalash.hero.liveBadgeText %>" required />
-                <span class="help-hint">उदा. पावन संकल्प अभियान • राष्ट्रीय महा-आयोजन</span>
-              </div>
-              <div class="form-group">
-                <label for="headingMain">मुख्य शीर्षक (सफेद रंग में)</label>
-                <input type="text" id="headingMain" name="headingMain" class="form-control" value="<%= kalash.hero.headingMain %>" required />
-              </div>
-            </div>
+                    <div class="admin-card-body">
+                      <form action="/admin/kalash-yatra/hero" method="POST">
 
-            <div class="form-group">
-              <label for="headingHighlight">हाइलाइट शीर्षक (सुनहरे/लाल रंग में)</label>
-              <input type="text" id="headingHighlight" name="headingHighlight" class="form-control" value="<%= kalash.hero.headingHighlight %>" required />
-            </div>
+                        <div class="form-section-title">🚩 Main Title & Badge</div>
+                        <div class="form-grid-2">
+                          <div class="form-group">
+                            <label for="liveBadgeText">Live Badge Text</label>
+                            <input type="text" id="liveBadgeText" name="liveBadgeText" class="form-control"
+                              value="<%= kalash.hero.liveBadgeText %>" required />
+                            <span class="help-hint">e.g. Sacred Pledge Campaign • National Mega Event</span>
+                          </div>
+                          <div class="form-group">
+                            <label for="headingMain">Main Heading (Primary)</label>
+                            <input type="text" id="headingMain" name="headingMain" class="form-control"
+                              value="<%= kalash.hero.headingMain %>" required />
+                          </div>
+                        </div>
 
-            <div class="form-group">
-              <label for="subheading">उप-विवरण (Subheading)</label>
-              <textarea id="subheading" name="subheading" rows="3" class="form-control" required><%= kalash.hero.subheading %></textarea>
-            </div>
+                        <div class="form-group">
+                          <label for="headingHighlight">Highlight Heading (Accent)</label>
+                          <input type="text" id="headingHighlight" name="headingHighlight" class="form-control"
+                            value="<%= kalash.hero.headingHighlight %>" required />
+                        </div>
 
-            <div class="form-group">
-              <label for="highlights">मुख्य बिंदु (Highlights - प्रति पंक्ति एक बिंदु लिखें)</label>
-              <textarea id="highlights" name="highlights" rows="3" class="form-control"><%= (kalash.hero.highlights || []).join('\n') %></textarea>
-              <span class="help-hint">प्रत्येक लाइन एक चेक-मार्क पॉइंट बनाएगी।</span>
-            </div>
+                        <div class="form-group">
+                          <label for="subheading">Subheading</label>
+                          <textarea id="subheading" name="subheading" rows="3" class="form-control"
+                            required><%= kalash.hero.subheading %></textarea>
+                        </div>
 
-            <div class="form-section-title">📊 4 मुख्य संख्यात्मक आंकड़े (Stats Strip)</div>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
-              <% (kalash.hero.stats || []).forEach((st, idx) => { %>
-                <div style="background: #faf7f5; padding: 14px; border-radius: 10px; border: 1px solid var(--admin-border);">
-                  <strong style="color: var(--admin-primary-dark); font-size: 12px;">आंकड़ा <%= idx + 1 %></strong>
-                  <div class="form-group" style="margin-top: 8px;">
-                    <label>संख्या</label>
-                    <input type="text" name="stat<%= idx %>_num" class="form-control" value="<%= st.number %>" required />
+                        <div class="form-group">
+                          <label for="highlights">Key Highlights (One point per line)</label>
+                          <textarea id="highlights" name="highlights" rows="3"
+                            class="form-control"><%= (kalash.hero.highlights || []).join('\n') %></textarea>
+                          <span class="help-hint">Each line will create a checkmark bullet point.</span>
+                        </div>
+
+                        <div class="form-section-title">📊 4 Key Numerical Statistics (Stats Strip)</div>
+                        <div
+                          style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+                          <% (kalash.hero.stats || []).forEach((st, idx)=> { %>
+                            <div
+                              style="background: #faf7f5; padding: 14px; border-radius: 10px; border: 1px solid var(--admin-border);">
+                              <strong style="color: var(--admin-primary-dark); font-size: 12px;">Stat <%= idx + 1 %>
+                                  </strong>
+                              <div class="form-group" style="margin-top: 8px;">
+                                <label>Number / Value</label>
+                                <input type="text" name="stat<%= idx %>_num" class="form-control"
+                                  value="<%= st.number %>" required />
+                              </div>
+                              <div class="form-group">
+                                <label>Title / Label</label>
+                                <input type="text" name="stat<%= idx %>_label" class="form-control"
+                                  value="<%= st.label %>" required />
+                              </div>
+                              <div class="form-group">
+                                <label>Sub-label</label>
+                                <input type="text" name="stat<%= idx %>_sub" class="form-control"
+                                  value="<%= st.sub %>" />
+                              </div>
+                            </div>
+                            <% }) %>
+                        </div>
+
+                        <div class="form-section-title">🎥 Featured Video Player</div>
+                        <div class="form-grid-2">
+                          <div class="form-group">
+                            <label for="featVideo_title">Video Title</label>
+                            <input type="text" id="featVideo_title" name="featVideo_title" class="form-control"
+                              value="<%= kalash.hero.featuredVideo.title %>" required />
+                          </div>
+                          <div class="form-group">
+                            <label for="featVideo_duration">Duration</label>
+                            <input type="text" id="featVideo_duration" name="featVideo_duration" class="form-control"
+                              value="<%= kalash.hero.featuredVideo.duration %>" />
+                          </div>
+                        </div>
+
+                        <div class="form-grid-2">
+                          <div class="form-group">
+                            <label for="featVideo_videoUrl">YouTube Embed URL</label>
+                            <input type="url" id="featVideo_videoUrl" name="featVideo_videoUrl" class="form-control"
+                              value="<%= kalash.hero.featuredVideo.videoUrl %>" required />
+                            <span class="help-hint">e.g. https://www.youtube.com/embed/dQw4w9WgXcQ</span>
+                          </div>
+                          <div class="form-group">
+                            <label for="featVideo_posterImage">Poster Image Path</label>
+                            <input type="text" id="featVideo_posterImage" name="featVideo_posterImage"
+                              class="form-control" value="<%= kalash.hero.featuredVideo.posterImage %>" />
+                          </div>
+                        </div>
+
+                        <div style="margin-top: 24px;">
+                          <button type="submit" class="admin-btn admin-btn-primary">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                              stroke-width="2">
+                              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                              <polyline points="17 21 17 13 7 13 7 21" />
+                              <polyline points="7 3 7 8 15 8" />
+                            </svg>
+                            <span>Save Hero Section</span>
+                          </button>
+                        </div>
+                      </form>
+                    </div>
                   </div>
-                  <div class="form-group">
-                    <label>शीर्षक</label>
-                    <input type="text" name="stat<%= idx %>_label" class="form-control" value="<%= st.label %>" required />
-                  </div>
-                  <div class="form-group">
-                    <label>उप-लेबल</label>
-                    <input type="text" name="stat<%= idx %>_sub" class="form-control" value="<%= st.sub %>" />
-                  </div>
-                </div>
-              <% }) %>
-            </div>
+                  <% } %>
 
-            <div class="form-section-title">🎥 हीरो विशेष वीडियो (Featured Video Player)</div>
-            <div class="form-grid-2">
-              <div class="form-group">
-                <label for="featVideo_title">वीडियो शीर्षक</label>
-                <input type="text" id="featVideo_title" name="featVideo_title" class="form-control" value="<%= kalash.hero.featuredVideo.title %>" required />
-              </div>
-              <div class="form-group">
-                <label for="featVideo_duration">अवधि (Duration)</label>
-                <input type="text" id="featVideo_duration" name="featVideo_duration" class="form-control" value="<%= kalash.hero.featuredVideo.duration %>" />
-              </div>
-            </div>
-
-            <div class="form-grid-2">
-              <div class="form-group">
-                <label for="featVideo_videoUrl">यूट्यूब एम्बेड URL</label>
-                <input type="url" id="featVideo_videoUrl" name="featVideo_videoUrl" class="form-control" value="<%= kalash.hero.featuredVideo.videoUrl %>" required />
-                <span class="help-hint">उदा. https://www.youtube.com/embed/dQw4w9WgXcQ</span>
-              </div>
-              <div class="form-group">
-                <label for="featVideo_posterImage">पोस्टर इमेज पाथ</label>
-                <input type="text" id="featVideo_posterImage" name="featVideo_posterImage" class="form-control" value="<%= kalash.hero.featuredVideo.posterImage %>" />
-              </div>
-            </div>
-
-            <div style="margin-top: 24px;">
-              <button type="submit" class="admin-btn admin-btn-primary">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                <span>हीरो सेक्शन सुरक्षित करें (Save Hero)</span>
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    <% } %>
-
-    <!-- ====================================================
+                    <!-- ====================================================
          TAB 2: MILESTONES SHOWCASE (5 ITEMS)
     ===================================================== -->
-    <% if (activeTab === 'milestones') { %>
-      <div class="admin-card">
-        <div class="admin-card-header">
-          <h3>
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-            यात्रा पड़ाव (5 प्रमुख माइलस्टोन कार्ड्स)
-          </h3>
-        </div>
+                    <% if (activeTab==='milestones' ) { %>
+                      <div class="admin-card">
+                        <div class="admin-card-header">
+                          <h3>
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                              stroke-width="2">
+                              <polygon points="12 2 2 7 12 12 22 7 12 2" />
+                              <polyline points="2 17 12 22 22 17" />
+                              <polyline points="2 12 12 17 22 12" />
+                            </svg>
+                            Yatra Milestones (5 Milestone Cards)
+                          </h3>
+                        </div>
 
-        <div class="admin-card-body">
-          <form action="/admin/kalash-yatra/milestones" method="POST">
-            
-            <div class="form-section-title">🚩 सेक्शन हेडिंग</div>
-            <div class="form-grid-2">
-              <div class="form-group">
-                <label for="kicker">किकर टैग</label>
-                <input type="text" id="kicker" name="kicker" class="form-control" value="<%= kalash.milestonesSection.kicker %>" required />
-              </div>
-              <div class="form-group">
-                <label for="title">मुख्य शीर्षक (शुरुआती भाग)</label>
-                <input type="text" id="title" name="title" class="form-control" value="<%= kalash.milestonesSection.title %>" required />
-              </div>
-            </div>
+                        <div class="admin-card-body">
+                          <form action="/admin/kalash-yatra/milestones" method="POST">
 
-            <div class="form-grid-2">
-              <div class="form-group">
-                <label for="titleHighlight">हाइलाइट शीर्षक (रंगीन भाग)</label>
-                <input type="text" id="titleHighlight" name="titleHighlight" class="form-control" value="<%= kalash.milestonesSection.titleHighlight %>" required />
-              </div>
-              <div class="form-group">
-                <label for="subtitle">उप-शीर्षक (Subtitle)</label>
-                <input type="text" id="subtitle" name="subtitle" class="form-control" value="<%= kalash.milestonesSection.subtitle %>" required />
-              </div>
-            </div>
+                            <div class="form-section-title">🚩 Section Header</div>
+                            <div class="form-grid-2">
+                              <div class="form-group">
+                                <label for="kicker">Kicker Tag</label>
+                                <input type="text" id="kicker" name="kicker" class="form-control"
+                                  value="<%= kalash.milestonesSection.kicker %>" required />
+                              </div>
+                              <div class="form-group">
+                                <label for="title">Main Title (Initial Part)</label>
+                                <input type="text" id="title" name="title" class="form-control"
+                                  value="<%= kalash.milestonesSection.title %>" required />
+                              </div>
+                            </div>
 
-            <div class="form-section-title">📍 5 प्रमुख पड़ाव कार्ड्स विवरण</div>
+                            <div class="form-grid-2">
+                              <div class="form-group">
+                                <label for="titleHighlight">Highlight Title (Accent Part)</label>
+                                <input type="text" id="titleHighlight" name="titleHighlight" class="form-control"
+                                  value="<%= kalash.milestonesSection.titleHighlight %>" required />
+                              </div>
+                              <div class="form-group">
+                                <label for="subtitle">Subtitle</label>
+                                <input type="text" id="subtitle" name="subtitle" class="form-control"
+                                  value="<%= kalash.milestonesSection.subtitle %>" required />
+                              </div>
+                            </div>
 
-            <% (kalash.milestonesSection.items || []).forEach((item, idx) => { %>
-              <div class="milestone-editor-card">
-                <span class="milestone-badge-pill">पड़ाव #<%= idx + 1 %>: <%= item.title || item.district %></span>
-                
-                <div class="form-grid-3">
-                  <div class="form-group">
-                    <label>राज्य फ़िल्टर (Key)</label>
-                    <select name="milestones[<%= idx %>][stateKey]" class="form-control">
-                      <option value="bihar" <%= item.stateKey === 'bihar' ? 'selected' : '' %>>बिहार (bihar)</option>
-                      <option value="uttar-pradesh" <%= item.stateKey === 'uttar-pradesh' ? 'selected' : '' %>>उत्तर प्रदेश (uttar-pradesh)</option>
-                      <option value="madhya-pradesh" <%= item.stateKey === 'madhya-pradesh' ? 'selected' : '' %>>मध्य प्रदेश (madhya-pradesh)</option>
-                      <option value="jharkhand" <%= item.stateKey === 'jharkhand' ? 'selected' : '' %>>झारखंड (jharkhand)</option>
-                      <option value="rajasthan" <%= item.stateKey === 'rajasthan' ? 'selected' : '' %>>राजस्थान (rajasthan)</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label>राज्य का नाम</label>
-                    <input type="text" name="milestones[<%= idx %>][stateName]" class="form-control" value="<%= item.stateName %>" required />
-                  </div>
-                  <div class="form-group">
-                    <label>ज़िला / स्थान</label>
-                    <input type="text" name="milestones[<%= idx %>][district]" class="form-control" value="<%= item.district %>" required />
-                  </div>
-                </div>
+                            <div class="form-section-title">📍 5 Milestone Cards Details</div>
 
-                <div class="form-grid-2">
-                  <div class="form-group">
-                    <label>कार्ड शीर्षक</label>
-                    <input type="text" name="milestones[<%= idx %>][title]" class="form-control" value="<%= item.title %>" required />
-                  </div>
-                  <div class="form-group">
-                    <label>टैग (उदा. 🚩 प्रथम पड़ाव)</label>
-                    <input type="text" name="milestones[<%= idx %>][tag]" class="form-control" value="<%= item.tag %>" />
-                  </div>
-                </div>
+                            <% (kalash.milestonesSection.items || []).forEach((item, idx)=> { %>
+                              <div class="milestone-editor-card">
+                                <span class="milestone-badge-pill">Stop #<%= idx + 1 %>: <%= item.title || item.district
+                                      %></span>
 
-                <div class="form-grid-2">
-                  <div class="form-group">
-                    <label>इमेज पाथ</label>
-                    <input type="text" name="milestones[<%= idx %>][image]" class="form-control" value="<%= item.image %>" required />
-                  </div>
-                  <div class="form-group">
-                    <label>यूट्यूब एम्बेड वीडियो URL</label>
-                    <input type="url" name="milestones[<%= idx %>][videoUrl]" class="form-control" value="<%= item.videoUrl %>" />
-                  </div>
-                </div>
+                                <div class="form-grid-3">
+                                  <div class="form-group">
+                                    <label>State Filter (Key)</label>
+                                    <select name="milestones[<%= idx %>][stateKey]" class="form-control">
+                                      <option value="bihar" <%=item.stateKey==='bihar' ? 'selected' : '' %>>Bihar
+                                        (bihar)</option>
+                                      <option value="uttar-pradesh" <%=item.stateKey==='uttar-pradesh' ? 'selected' : ''
+                                        %>>Uttar Pradesh (uttar-pradesh)</option>
+                                      <option value="madhya-pradesh" <%=item.stateKey==='madhya-pradesh' ? 'selected'
+                                        : '' %>>Madhya Pradesh (madhya-pradesh)</option>
+                                      <option value="jharkhand" <%=item.stateKey==='jharkhand' ? 'selected' : '' %>
+                                        >Jharkhand (jharkhand)</option>
+                                      <option value="rajasthan" <%=item.stateKey==='rajasthan' ? 'selected' : '' %>
+                                        >Rajasthan (rajasthan)</option>
+                                    </select>
+                                  </div>
+                                  <div class="form-group">
+                                    <label>State Name</label>
+                                    <input type="text" name="milestones[<%= idx %>][stateName]" class="form-control"
+                                      value="<%= item.stateName %>" required />
+                                  </div>
+                                  <div class="form-group">
+                                    <label>District / Location</label>
+                                    <input type="text" name="milestones[<%= idx %>][district]" class="form-control"
+                                      value="<%= item.district %>" required />
+                                  </div>
+                                </div>
 
-                <div class="form-group" style="margin-bottom: 0;">
-                  <label>संक्षिप्त विवरण</label>
-                  <textarea name="milestones[<%= idx %>][description]" rows="2" class="form-control" required><%= item.description %></textarea>
-                </div>
-              </div>
-            <% }) %>
+                                <div class="form-grid-2">
+                                  <div class="form-group">
+                                    <label>Card Title</label>
+                                    <input type="text" name="milestones[<%= idx %>][title]" class="form-control"
+                                      value="<%= item.title %>" required />
+                                  </div>
+                                  <div class="form-group">
+                                    <label>Tag (e.g. 🚩 Milestone 1)</label>
+                                    <input type="text" name="milestones[<%= idx %>][tag]" class="form-control"
+                                      value="<%= item.tag %>" />
+                                  </div>
+                                </div>
 
-            <div style="margin-top: 24px;">
-              <button type="submit" class="admin-btn admin-btn-primary">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                <span>यात्रा पड़ाव सुरक्षित करें (Save Milestones)</span>
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    <% } %>
+                                <div class="form-grid-2">
+                                  <div class="form-group">
+                                    <label>Image Path</label>
+                                    <input type="text" name="milestones[<%= idx %>][image]" class="form-control"
+                                      value="<%= item.image %>" required />
+                                  </div>
+                                  <div class="form-group">
+                                    <label>YouTube Embed Video URL</label>
+                                    <input type="url" name="milestones[<%= idx %>][videoUrl]" class="form-control"
+                                      value="<%= item.videoUrl %>" />
+                                  </div>
+                                </div>
 
-    <!-- ====================================================
+                                <div class="form-group" style="margin-bottom: 0;">
+                                  <label>Brief Description</label>
+                                  <textarea name="milestones[<%= idx %>][description]" rows="2" class="form-control"
+                                    required><%= item.description %></textarea>
+                                </div>
+                              </div>
+                              <% }) %>
+
+                                <div style="margin-top: 24px;">
+                                  <button type="submit" class="admin-btn admin-btn-primary">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                      stroke-width="2">
+                                      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                                      <polyline points="17 21 17 13 7 13 7 21" />
+                                      <polyline points="7 3 7 8 15 8" />
+                                    </svg>
+                                    <span>Save Milestones</span>
+                                  </button>
+                                </div>
+                          </form>
+                        </div>
+                      </div>
+                      <% } %>
+
+                        <!-- ====================================================
          TAB 3: VIDEO GALLERY
     ===================================================== -->
-    <% if (activeTab === 'videos') { %>
-      <!-- Add New Video Card -->
-      <div class="admin-card" style="margin-bottom: 24px;">
-        <div class="admin-card-header">
-          <h3>
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            नया वीडियो जोड़ें (Add New Video)
-          </h3>
-        </div>
+                        <% if (activeTab==='videos' ) { %>
+                          <!-- Add New Video Card -->
+                          <div class="admin-card" style="margin-bottom: 24px;">
+                            <div class="admin-card-header">
+                              <h3>
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                  stroke-width="2">
+                                  <line x1="12" y1="5" x2="12" y2="19" />
+                                  <line x1="5" y1="12" x2="19" y2="12" />
+                                </svg>
+                                Add New Video
+                              </h3>
+                            </div>
 
-        <div class="admin-card-body">
-          <form action="/admin/kalash-yatra/videos/add" method="POST">
-            <div class="form-grid-2">
-              <div class="form-group">
-                <label for="vid_title">वीडियो शीर्षक (Title) *</label>
-                <input type="text" id="vid_title" name="title" class="form-control" placeholder="उदा. गोपालगंज में भव्य कलश यात्रा" required />
-              </div>
-              <div class="form-group">
-                <label for="vid_url">यूट्यूब वीडियो / एम्बेड URL *</label>
-                <input type="url" id="vid_url" name="videoUrl" class="form-control" placeholder="https://www.youtube.com/watch?v=... या embed/..." required />
-              </div>
-            </div>
+                            <div class="admin-card-body">
+                              <form action="/admin/kalash-yatra/videos/add" method="POST">
+                                <div class="form-grid-2">
+                                  <div class="form-group">
+                                    <label for="vid_title">Video Title *</label>
+                                    <input type="text" id="vid_title" name="title" class="form-control"
+                                      placeholder="e.g. Grand Kalash Yatra in Gopalganj" required />
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="vid_url">YouTube Embed URL *</label>
+                                    <input type="url" id="vid_url" name="videoUrl" class="form-control"
+                                      placeholder="https://www.youtube.com/embed/..." required />
+                                  </div>
+                                </div>
 
-            <div class="form-grid-3">
-              <div class="form-group">
-                <label for="vid_person">व्यक्ति / स्थान का नाम (Person / Place Name)</label>
-                <input type="text" id="vid_person" name="personOrPlace" class="form-control" placeholder="उदा. डॉ. संजय निषाद / मुख्य चौक" />
-                <div class="help-hint">वक्ता या प्रमुख आयोजन स्थल का नाम</div>
-              </div>
-              <div class="form-group">
-                <label for="vid_dist">ज़िला (District) *</label>
-                <input type="text" id="vid_dist" name="district" class="form-control" placeholder="उदा. गोपालगंज, वाराणसी, पटना, भोपाल" required />
-                <div class="help-hint">हिंदी या अंग्रेजी में ज़िले का नाम</div>
-              </div>
-              <div class="form-group">
-                <label for="vid_thumb">कस्टम थंबनेल URL (वैकल्पिक)</label>
-                <input type="text" id="vid_thumb" name="thumbnail" class="form-control" placeholder="/images/kalash-yatra-hero.jpg या URL" />
-                <div class="help-hint">खाली छोड़ने पर यूट्यूब थंबनेल स्वतः लिया जाएगा</div>
-              </div>
-            </div>
+                                <div class="form-grid-3">
+                                  <div class="form-group">
+                                    <label for="vid_cat">Category</label>
+                                    <select id="vid_cat" name="category" class="form-control">
+                                      <option value="yatra">Kalash Yatra (yatra)</option>
+                                      <option value="program">Program (program)</option>
+                                      <option value="speech">Speech / Address (speech)</option>
+                                    </select>
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="vid_state">State</label>
+                                    <select id="vid_state" name="state" class="form-control">
+                                      <option value="bihar">Bihar (bihar)</option>
+                                      <option value="uttar-pradesh">Uttar Pradesh (uttar-pradesh)</option>
+                                      <option value="madhya-pradesh">Madhya Pradesh (madhya-pradesh)</option>
+                                      <option value="jharkhand">Jharkhand (jharkhand)</option>
+                                      <option value="rajasthan">Rajasthan (rajasthan)</option>
+                                    </select>
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="vid_dist">District (District Key)</label>
+                                    <input type="text" id="vid_dist" name="district" class="form-control"
+                                      placeholder="e.g. gopalganj, patna, varanasi" required />
+                                  </div>
+                                </div>
 
-            <div class="form-grid-4">
-              <div class="form-group">
-                <label for="vid_cat">श्रेणी (Category)</label>
-                <select id="vid_cat" name="category" class="form-control">
-                  <option value="yatra">कलश यात्रा (yatra)</option>
-                  <option value="program">कार्यक्रम (program)</option>
-                  <option value="speech">संबोधन (speech)</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="vid_state">राज्य (State)</label>
-                <select id="vid_state" name="state" class="form-control">
-                  <option value="bihar">बिहार (bihar)</option>
-                  <option value="uttar-pradesh">उत्तर प्रदेश (uttar-pradesh)</option>
-                  <option value="madhya-pradesh">मध्य प्रदेश (madhya-pradesh)</option>
-                  <option value="jharkhand">झारखंड (jharkhand)</option>
-                  <option value="rajasthan">राजस्थान (rajasthan)</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="vid_dur">अवधि (Duration)</label>
-                <input type="text" id="vid_dur" name="duration" class="form-control" value="12:30 Min" />
-              </div>
-              <div class="form-group">
-                <label for="vid_date">प्रकाशन दिनांक (Date)</label>
-                <input type="text" id="vid_date" name="date" class="form-control" value="<%= new Date().toLocaleDateString('hi-IN') %>" />
-              </div>
-            </div>
+                                <div class="form-grid-3">
+                                  <div class="form-group">
+                                    <label for="vid_dur">Duration</label>
+                                    <input type="text" id="vid_dur" name="duration" class="form-control"
+                                      value="12:30 Min" />
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="vid_views">Views Count</label>
+                                    <input type="text" id="vid_views" name="viewsCount" class="form-control"
+                                      value="15.2K" />
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="vid_date">Date</label>
+                                    <input type="text" id="vid_date" name="date" class="form-control"
+                                      value="<%= new Date().toLocaleDateString('en-US') %>" />
+                                  </div>
+                                </div>
 
-            <div class="form-group">
-              <label for="vid_desc">विवरण (Description)</label>
-              <textarea id="vid_desc" name="description" rows="2" class="form-control" placeholder="वीडियो का संक्षिप्त विवरण..."></textarea>
-            </div>
+                                <div class="form-group">
+                                  <label for="vid_desc">Description</label>
+                                  <textarea id="vid_desc" name="description" rows="2" class="form-control"
+                                    placeholder="Brief video description..."></textarea>
+                                </div>
 
-            <button type="submit" class="admin-btn admin-btn-primary">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              <span>वीडियो प्रकाशित करें (Publish Video)</span>
-            </button>
-          </form>
-        </div>
-      </div>
+                                <button type="submit" class="admin-btn admin-btn-primary">
+                                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19" />
+                                    <line x1="5" y1="12" x2="19" y2="12" />
+                                  </svg>
+                                  <span>Publish Video</span>
+                                </button>
+                              </form>
+                            </div>
+                          </div>
 
-      <!-- Current Video List Table -->
-      <div class="admin-card">
-        <div class="admin-card-header">
-          <h3>
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
-            मौजूदा वीडियो सूची (<%= (kalash.videos || []).length %> वीडियो)
-          </h3>
-        </div>
+                          <!-- Current Video List Table -->
+                          <div class="admin-card">
+                            <div class="admin-card-header">
+                              <h3>
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                  stroke-width="2">
+                                  <rect x="2" y="2" width="20" height="20" rx="2.18" />
+                                  <line x1="7" y1="2" x2="7" y2="22" />
+                                  <line x1="17" y1="2" x2="17" y2="22" />
+                                  <line x1="2" y1="12" x2="22" y2="12" />
+                                </svg>
+                                Existing Videos List (<%= (kalash.videos || []).length %> videos)
+                              </h3>
+                            </div>
 
-        <div class="video-table-wrap">
-          <table class="video-list-table">
-            <thead>
-              <tr>
-                <th style="width: 50px;">#</th>
-                <th style="width: 100px;">थंबनेल</th>
-                <th>शीर्षक व विवरण</th>
-                <th>व्यक्ति / स्थान</th>
-                <th>ज़िला व राज्य</th>
-                <th>दिनांक</th>
-                <th style="width: 100px; text-align: right;">कार्रवाई</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% if (!kalash.videos || kalash.videos.length === 0) { %>
-                <tr>
-                  <td colspan="7" style="text-align: center; color: var(--admin-text-muted); padding: 30px;">
-                    वर्तमान में कोई वीडियो उपलब्ध नहीं है। ऊपर दिए गए फॉर्म से वीडियो जोड़ें।
-                  </td>
-                </tr>
-              <% } else { %>
-                <% kalash.videos.forEach((vid, index) => { %>
-                  <%
+                            <div class="video-table-wrap">
+                              <table class="video-list-table">
+                                <thead>
+                                  <tr>
+                                    <th style="width: 50px;">#</th>
+                                    <th style="width: 100px;">थंबनेल</th>
+                                      <th>शीर्षक व विवरण</th>
+                                      <th>व्यक्ति / स्थान</th>
+                                      <th>ज़िला व राज्य</th>
+                                      <th>दिनांक</th>
+                                      <th style="width: 100px; text-align: right;">कार्रवाई</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <% if (!kalash.videos || kalash.videos.length===0) { %>
+                                    <tr>
+                                      <td colspan="7" style="text-align: center; color: var(--admin-text-muted); padding: 30px;">
+                                        वर्तमान में कोई वीडियो उपलब्ध नहीं है। ऊपर दिए गए फॉर्म से वीडियो जोड़ें।
+                                      </td>
+                                        </td>
+                                    </tr>
+                                    <% } else { %>
+                                      <% kalash.videos.forEach((vid, index)=> { %>
+                                        <%
                     let ytId = '';
                     if (vid.videoUrl && vid.videoUrl.includes('embed/')) {
                       ytId = vid.videoUrl.split('embed/')[1].split('?')[0];
@@ -588,10 +690,10 @@
                     <td>
                       <div class="table-actions" style="justify-content: flex-end;">
                         <!-- Delete Form -->
-                        <form action="/admin/kalash-yatra/videos/delete/<%= vid._id %>" method="POST" onsubmit="return confirm('क्या आप इस वीडियो को हटाना चाहते हैं?');">
-                          <button type="submit" class="btn-sm-action btn-del" title="हटाएं">
+                        <form action="/admin/kalash-yatra/videos/delete/<%= vid._id %>" method="POST" onsubmit="return confirm('Are you sure you want to delete this video?');">
+                          <button type="submit" class="btn-sm-action btn-del" title="Delete">
                             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                            <span>हटाएं</span>
+                            <span>Delete</span>
                           </button>
                         </form>
                       </div>
@@ -601,165 +703,10 @@
               <% } %>
             </tbody>
           </table>
-        </div>
-      </div>
-    <% } %>
-
-    <!-- ====================================================
-         TAB 4: FOUR PILLARS & STORY COLLAGE
-    ===================================================== -->
-    <% if (activeTab === 'pillars') { %>
-      <div class="admin-card">
-        <div class="admin-card-header">
-          <h3>
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            चार महा-संकल्प एवं दर्शन फ़ोटो कोलाज प्रबंधन
-          </h3>
-        </div>
-
-        <div class="admin-card-body">
-          <form action="/admin/kalash-yatra/pillars" method="POST">
-            
-            <div class="form-section-title">🚩 सेक्शन शीर्षक विवरण</div>
-            <div class="form-grid-2">
-              <div class="form-group">
-                <label for="pil_kicker">किकर टैग</label>
-                <input type="text" id="pil_kicker" name="kicker" class="form-control" value="<%= kalash.pillarsSection.kicker %>" required />
-              </div>
-              <div class="form-group">
-                <label for="pil_title">मुख्य शीर्षक</label>
-                <input type="text" id="pil_title" name="title" class="form-control" value="<%= kalash.pillarsSection.title %>" required />
-              </div>
-            </div>
-
-            <div class="form-grid-2">
-              <div class="form-group">
-                <label for="pil_titleAccent">हाइलाइट शीर्षक (Accent)</label>
-                <input type="text" id="pil_titleAccent" name="titleAccent" class="form-control" value="<%= kalash.pillarsSection.titleAccent %>" required />
-              </div>
-              <div class="form-group">
-                <label for="pil_subtitle">उप-विवरण</label>
-                <input type="text" id="pil_subtitle" name="subtitle" class="form-control" value="<%= kalash.pillarsSection.subtitle %>" required />
-              </div>
-            </div>
-
-            <div class="form-section-title">🖼️ बाएं तरफ़ का फ़ोटो कोलाज (3 तस्वीरें)</div>
-
-            <!-- Primary Big Photo -->
-            <div class="milestone-editor-card">
-              <span class="milestone-badge-pill">1. मुख्य बड़ी तस्वीर (Primary Photo)</span>
-              <div class="form-grid-2">
-                <div class="form-group">
-                  <label>इमेज पाथ</label>
-                  <input type="text" name="primaryImage" class="form-control" value="<%= kalash.pillarsSection.storyCollage.primaryCard.image %>" required />
-                </div>
-                <div class="form-group">
-                  <label>फ़्लोटिंग बैज टैग</label>
-                  <input type="text" name="primaryBadge" class="form-control" value="<%= kalash.pillarsSection.storyCollage.primaryCard.badge %>" />
-                </div>
-              </div>
-              <div class="form-grid-2">
-                <div class="form-group">
-                  <label>तस्वीर शीर्षक</label>
-                  <input type="text" name="primaryTitle" class="form-control" value="<%= kalash.pillarsSection.storyCollage.primaryCard.title %>" required />
-                </div>
-                <div class="form-group">
-                  <label>यूट्यूब वीडियो लिंक (क्लिक पर खुलेगा)</label>
-                  <input type="url" name="primaryVideo" class="form-control" value="<%= kalash.pillarsSection.storyCollage.primaryCard.videoUrl %>" />
-                </div>
-              </div>
-              <div class="form-group" style="margin-bottom: 0;">
-                <label>संक्षिप्त विवरण</label>
-                <textarea name="primaryDesc" rows="2" class="form-control" required><%= kalash.pillarsSection.storyCollage.primaryCard.desc %></textarea>
-              </div>
-            </div>
-
-            <!-- Sub Photo 1 -->
-            <div class="milestone-editor-card">
-              <span class="milestone-badge-pill">2. छोटी तस्वीर (बाएं - वैदिक अनुष्ठान)</span>
-              <div class="form-grid-3">
-                <div class="form-group">
-                  <label>इमेज पाथ</label>
-                  <input type="text" name="sub1Image" class="form-control" value="<%= kalash.pillarsSection.storyCollage.subCard1.image %>" required />
-                </div>
-                <div class="form-group">
-                  <label>टैग</label>
-                  <input type="text" name="sub1Tag" class="form-control" value="<%= kalash.pillarsSection.storyCollage.subCard1.tag %>" />
-                </div>
-                <div class="form-group">
-                  <label>शीर्षक</label>
-                  <input type="text" name="sub1Title" class="form-control" value="<%= kalash.pillarsSection.storyCollage.subCard1.title %>" required />
-                </div>
-              </div>
-              <div class="form-grid-2">
-                <div class="form-group" style="margin-bottom: 0;">
-                  <label>उप-विवरण</label>
-                  <input type="text" name="sub1Desc" class="form-control" value="<%= kalash.pillarsSection.storyCollage.subCard1.desc %>" />
-                </div>
-                <div class="form-group" style="margin-bottom: 0;">
-                  <label>वीडियो URL</label>
-                  <input type="url" name="sub1Video" class="form-control" value="<%= kalash.pillarsSection.storyCollage.subCard1.videoUrl %>" />
-                </div>
-              </div>
-            </div>
-
-            <!-- Sub Photo 2 -->
-            <div class="milestone-editor-card">
-              <span class="milestone-badge-pill">3. छोटी तस्वीर (दाएं - जनसैलाब रैली)</span>
-              <div class="form-grid-3">
-                <div class="form-group">
-                  <label>इमेज पाथ</label>
-                  <input type="text" name="sub2Image" class="form-control" value="<%= kalash.pillarsSection.storyCollage.subCard2.image %>" required />
-                </div>
-                <div class="form-group">
-                  <label>टैग</label>
-                  <input type="text" name="sub2Tag" class="form-control" value="<%= kalash.pillarsSection.storyCollage.subCard2.tag %>" />
-                </div>
-                <div class="form-group">
-                  <label>शीर्षक</label>
-                  <input type="text" name="sub2Title" class="form-control" value="<%= kalash.pillarsSection.storyCollage.subCard2.title %>" required />
-                </div>
-              </div>
-              <div class="form-grid-2">
-                <div class="form-group" style="margin-bottom: 0;">
-                  <label>उप-विवरण</label>
-                  <input type="text" name="sub2Desc" class="form-control" value="<%= kalash.pillarsSection.storyCollage.subCard2.desc %>" />
-                </div>
-                <div class="form-group" style="margin-bottom: 0;">
-                  <label>वीडियो URL</label>
-                  <input type="url" name="sub2Video" class="form-control" value="<%= kalash.pillarsSection.storyCollage.subCard2.videoUrl %>" />
-                </div>
-              </div>
-            </div>
-
-            <div class="form-section-title">🏛️ चार महा-संकल्प कार्ड्स (01, 02, 03, 04)</div>
-
-            <% (kalash.pillarsSection.pillars || []).forEach((pil, pIdx) => { %>
-              <div class="milestone-editor-card">
-                <span class="milestone-badge-pill">स्तंभ #<%= pil.number || (pIdx + 1) %></span>
-                <div class="form-group">
-                  <label>स्तंभ शीर्षक</label>
-                  <input type="text" name="p<%= pIdx %>_title" class="form-control" value="<%= pil.title %>" required />
-                </div>
-                <div class="form-group" style="margin-bottom: 0;">
-                  <label>स्तंभ का विस्तृत संदेश / विवरण</label>
-                  <textarea name="p<%= pIdx %>_desc" rows="2" class="form-control" required><%= pil.description %></textarea>
-                </div>
-              </div>
-            <% }) %>
-
-            <div style="margin-top: 24px;">
-              <button type="submit" class="admin-btn admin-btn-primary">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                <span>चार महा-संकल्प व फ़ोटो सुरक्षित करें (Save Pillars)</span>
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    <% } %>
-
-  </div>
+                            </div>
+                          </div>
+                          <% } %>
 </div>
+    </div>
 
-<%- include("../common/footer") %>
+    <%- include("../common/footer") %>

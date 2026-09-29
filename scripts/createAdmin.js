@@ -21,7 +21,7 @@ const createAdmin = async () => {
     if (!name || !email || !password) {
 
       console.log(
-        "❌ ADMIN_NAME, ADMIN_EMAIL और ADMIN_PASSWORD .env में add करें"
+        "❌ Please add ADMIN_NAME, ADMIN_EMAIL and ADMIN_PASSWORD to .env"
       );
 
       process.exit(1);

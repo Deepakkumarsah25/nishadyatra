@@ -1,9 +1,9 @@
-
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const path = require("path");
-
+const sankalpRoutes = require("./routes/sankalpRoutes");
+const videoNewsRoutes = require("./routes/news/videoNewsRoutes");
 dotenv.config();
 
 const app = express();
@@ -36,6 +36,7 @@ if (!process.env.SESSION_SECRET) {
 const sessionConfig = require("./config/session");
 const createDefaultAdmin = require("./config/createAdmin");
 const { seedHomeData } = require("./scripts/seedHomeData");
+const { seedGalleryData } = require("./scripts/seedGalleryData");
 
 // ========================================
 // Routes
@@ -43,10 +44,12 @@ const { seedHomeData } = require("./scripts/seedHomeData");
 
 const adminAuthRoutes = require("./routes/admin/authRoutes");
 const adminDashboardRoutes = require("./routes/admin/dashboardRoutes");
+const adminGalleryRoutes = require("./routes/admin/galleryRoutes");
 const adminHomeRoutes = require("./routes/admin/homeRoutes");
 const adminKalashYatraRoutes = require("./routes/admin/kalashYatraRoutes");
 const KalashYatra = require("./models/KalashYatra");
 const homeRoutes = require("./routes/homeRoutes");
+const galleryRoutes = require("./routes/galleryRoutes");
 
 // ========================================
 // View Engine
@@ -83,17 +86,15 @@ app.use(
 // ========================================
 
 app.use(express.static(path.join(__dirname, "public")));
-
+app.use("/sankalp-yatra", sankalpRoutes);
 app.use(
   "/uploads",
   express.static(path.join(__dirname, "uploads"))
 );
 
-// ========================================
-// Session
-// ========================================
-
+// ================================
 app.use(sessionConfig);
+app.use(videoNewsRoutes);
 
 // ========================================
 // Admin Routes
@@ -101,6 +102,7 @@ app.use(sessionConfig);
 
 app.use("/admin", adminAuthRoutes);
 app.use("/admin", adminDashboardRoutes);
+app.use("/admin/gallery", adminGalleryRoutes);
 app.use("/admin/home", adminHomeRoutes);
 app.use("/admin/kalash-yatra", adminKalashYatraRoutes);
 
@@ -116,8 +118,7 @@ app.get("/api/test", (req, res) => {
 });
 
 // ========================================
-// Public Video Page
-// IMPORTANT: This must be BEFORE 404 Handler
+// Public Video Page (Kalash Yatra)
 // ========================================
 
 app.get("/video", async (req, res) => {
@@ -137,14 +138,15 @@ app.get("/video", async (req, res) => {
 });
 
 // ========================================
-// Public Home & Form API Routes
+// Public Gallery & Home Routes
 // ========================================
 
+app.use("/gallery", galleryRoutes);
+app.use("/sankalp-photos", (req, res) => res.redirect("/gallery"));
 app.use("/", homeRoutes);
 
 // ========================================
 // 404 Handler
-// IMPORTANT: Keep this at the END
 // ========================================
 
 app.use((req, res) => {
@@ -187,15 +189,14 @@ const startServer = async () => {
     // Automatically seed default home page data if empty
     await seedHomeData();
 
-    // ========================================
-    // Start Server
-    // ========================================
+    // Automatically seed default gallery photos if empty
+    await seedGalleryData();
 
     app.listen(PORT, "0.0.0.0", () => {
       console.log("================================");
       console.log("🚀 Server running!");
       console.log(`   ➜ Local:   http://localhost:${PORT}`);
-      console.log(`   ➜ Network: http://10.37.199.72:${PORT}`);
+      console.log(`   ➜ Network: http://192.168.1.23:${PORT}`);
       console.log(
         `   🔐 Admin Login: http://localhost:${PORT}/admin/login`
       );
@@ -208,7 +209,11 @@ const startServer = async () => {
       console.log(
         `   🪔 Admin Kalash Yatra: http://localhost:${PORT}/admin/kalash-yatra`
       );
+      console.log(
+        `   🖼️ Admin Gallery: http://localhost:${PORT}/admin/gallery`
+      );
       console.log(`   🎥 Video Page: http://localhost:${PORT}/video`);
+      console.log(`   🖼️ Public Gallery: http://localhost:${PORT}/gallery`);
       console.log("================================");
     });
   } catch (error) {
@@ -222,4 +227,3 @@ const startServer = async () => {
 // ========================================
 
 startServer();
-
