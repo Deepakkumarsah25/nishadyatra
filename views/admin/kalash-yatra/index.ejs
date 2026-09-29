@@ -267,6 +267,13 @@
                     </svg>
                     <span>3. Video Gallery (<%= kalash.videos ? kalash.videos.length : 0 %>)</span>
                   </a>
+                  <a href="/admin/kalash-yatra?tab=pledge"
+                    class="ky-tab-btn <%= activeTab === 'pledge' ? 'active' : '' %>">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                    <span>4. लोकतांत्रिक महा-संकल्प (Pledge)</span>
+                  </a>
                 </div>
 
                 <!-- ====================================================
@@ -564,22 +571,30 @@
                                       <option value="yatra">Kalash Yatra (yatra)</option>
                                       <option value="program">Program (program)</option>
                                       <option value="speech">Speech / Address (speech)</option>
+                                      <option value="sankalp">महा-संकल्प (Democratic Pledge)</option>
                                     </select>
                                   </div>
                                   <div class="form-group">
-                                    <label for="vid_state">State</label>
+                                    <label for="vid_state">State (राज्य)</label>
                                     <select id="vid_state" name="state" class="form-control">
-                                      <option value="bihar">Bihar (bihar)</option>
-                                      <option value="uttar-pradesh">Uttar Pradesh (uttar-pradesh)</option>
-                                      <option value="madhya-pradesh">Madhya Pradesh (madhya-pradesh)</option>
-                                      <option value="jharkhand">Jharkhand (jharkhand)</option>
-                                      <option value="rajasthan">Rajasthan (rajasthan)</option>
+                                      <option value="bihar">Bihar (बिहार)</option>
+                                      <option value="uttar-pradesh">Uttar Pradesh (उत्तर प्रदेश)</option>
+                                      <option value="madhya-pradesh">Madhya Pradesh (मध्य प्रदेश)</option>
+                                      <option value="jharkhand">Jharkhand (झारखंड)</option>
+                                      <option value="rajasthan">Rajasthan (राजस्थान)</option>
                                     </select>
                                   </div>
                                   <div class="form-group">
-                                    <label for="vid_dist">District (District Key)</label>
-                                    <input type="text" id="vid_dist" name="district" class="form-control"
-                                      placeholder="e.g. gopalganj, patna, varanasi" required />
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                      <label for="vid_dist" style="margin-bottom: 0;">District (ज़िला चुनें) *</label>
+                                      <button type="button" id="btnToggleCustomDist" style="background: none; border: none; color: var(--admin-primary); font-size: 11px; cursor: pointer; text-decoration: underline; font-weight: 700;">
+                                        ✍️ अन्य ज़िला लिखें
+                                      </button>
+                                    </div>
+                                    <select id="vid_dist" name="district" class="form-control" required>
+                                      <!-- Dynamically populated based on state -->
+                                    </select>
+                                    <input type="text" id="vid_dist_custom" class="form-control" style="display: none; margin-top: 6px;" placeholder="उदा. किसी अन्य ज़िले या कस्बे का नाम दर्ज करें..." />
                                   </div>
                                 </div>
 
@@ -602,7 +617,12 @@
                                 </div>
 
                                 <div class="form-group">
-                                  <label for="vid_desc">Description</label>
+                                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                    <label for="vid_desc" style="margin-bottom: 0;">Description (विवरण)</label>
+                                    <button type="button" id="btnQuickPledgeFill" class="btn-sm-action" style="background: #fff0eb; color: #b91c1c; border: 1px solid #ffd0c2; padding: 3px 10px; font-size: 11.5px; border-radius: 6px; cursor: pointer; font-weight: 700;">
+                                      📜 + लोकतांत्रिक संकल्प वाक्य यहाँ भरें
+                                    </button>
+                                  </div>
                                   <textarea id="vid_desc" name="description" rows="2" class="form-control"
                                     placeholder="Brief video description..."></textarea>
                                 </div>
@@ -706,7 +726,254 @@
                             </div>
                           </div>
                           <% } %>
-</div>
-    </div>
+
+                <!-- ====================================================
+                     TAB 4: DEMOCRATIC PLEDGE (लोकतांत्रिक महा-संकल्प)
+                ===================================================== -->
+                <% if (activeTab === 'pledge') { %>
+                  <div class="admin-card">
+                    <div class="admin-card-header">
+                      <h3>
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                        </svg>
+                        लोकतांत्रिक महा-संकल्प पत्र (Democratic Pledge Showcase)
+                      </h3>
+                      <span style="font-size: 12px; color: var(--admin-text-muted);">
+                        यह संकल्प पत्र सार्वजनिक पृष्ठ (kalash-yatra.ejs) पर सुनहरे बैनर में प्रदर्शित होगा
+                      </span>
+                    </div>
+
+                    <div class="admin-card-body">
+                      <form action="/admin/kalash-yatra/pledge" method="POST">
+                        <div style="background: #fff8f5; border: 1.5px solid #ffcaa5; border-radius: 12px; padding: 16px 20px; margin-bottom: 22px; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+                          <div>
+                            <strong style="color: #9a2c0c; font-size: 14px; display: block; margin-bottom: 3px;">
+                              🚩 सार्वजनिक पृष्ठ पर संकल्प पत्र प्रदर्शित करें
+                            </strong>
+                            <span style="color: #6c584c; font-size: 12.5px;">
+                              सक्षम करने पर kalash-yatra पृष्ठ पर यह महा-संकल्प लाइव दिखेगा।
+                            </span>
+                          </div>
+                          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 700;">
+                            <input type="checkbox" name="enabled" value="true" <%= (kalash.democraticPledge && kalash.democraticPledge.enabled !== false) ? 'checked' : '' %> style="width: 20px; height: 20px; accent-color: var(--admin-primary);" />
+                            <span>सक्रिय (Active)</span>
+                          </label>
+                        </div>
+
+                        <div class="form-grid-2">
+                          <div class="form-group">
+                            <label for="pledgeBadge">बैज / टैग (Badge Text)</label>
+                            <input type="text" id="pledgeBadge" name="badge" class="form-control"
+                              value="<%= (kalash.democraticPledge && kalash.democraticPledge.badge) || '🇮🇳 ऐतिहासिक लोकतांत्रिक महा-संकल्प' %>" required />
+                          </div>
+                          <div class="form-group">
+                            <label for="pledgeTitle">मुख्य शीर्षक (Pledge Title)</label>
+                            <input type="text" id="pledgeTitle" name="title" class="form-control"
+                              value="<%= (kalash.democraticPledge && kalash.democraticPledge.title) || 'लोकतांत्रिक संकल्प पत्र' %>" required />
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="pledgeSubtitle">उप-शीर्षक (Pledge Subtitle)</label>
+                          <input type="text" id="pledgeSubtitle" name="subtitle" class="form-control"
+                            value="<%= (kalash.democraticPledge && kalash.democraticPledge.subtitle) || 'स्वतंत्र विचार, स्वाभिमान एवं जनमत का संवैधानिक अधिकार' %>" />
+                        </div>
+
+                        <div class="form-group" style="background: #faf7f5; padding: 18px; border-radius: 12px; border: 1.5px dashed #e2cfc4;">
+                          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <label for="pledgeText" style="font-weight: 800; color: #881337; font-size: 14px; margin-bottom: 0;">
+                              ⭐ मुख्य संकल्प वाक्य (Pledge Statement) *
+                            </label>
+                            <button type="button" id="btnResetDefaultPledge" class="btn-sm-action" style="background: #ffe4e6; color: #9f1239; border: 1px solid #fecdd3; padding: 4px 10px; font-size: 11.5px; border-radius: 6px; cursor: pointer; font-weight: 700;">
+                              ↺ डिफ़ॉल्ट संकल्प वाक्य लोड करें
+                            </button>
+                          </div>
+                          <textarea id="pledgeText" name="pledgeText" rows="3" class="form-control" style="font-size: 14.5px; font-weight: 600; line-height: 1.6; color: #431407;" required><%= (kalash.democraticPledge && kalash.democraticPledge.pledgeText) || 'आज हम लोकतांत्रिक संकल्प लेते हैं कि आगामी चुनाव में भाजपा के पक्ष में मतदान नहीं करेंगे तथा अपने विवेक और विचार के आधार पर अपने मताधिकार का प्रयोग करेंगे।' %></textarea>
+                          <span class="help-hint">
+                            यह वाक्य सार्वजनिक पृष्ठ पर उद्धरण (Quote) के रूप में विशाल अक्षरों में प्रदर्शित होगा।
+                          </span>
+                        </div>
+
+                        <div class="form-grid-2">
+                          <div class="form-group">
+                            <label for="pledgeSignOff">हस्ताक्षर / समर्पण पंक्ति (Sign-off Text)</label>
+                            <input type="text" id="pledgeSignOff" name="signOff" class="form-control"
+                              value="<%= (kalash.democraticPledge && kalash.democraticPledge.signOff) || '— समस्त समाज, युवा एवं मातृशक्ति का सामूहिक संकल्प' %>" />
+                          </div>
+                          <div class="form-group">
+                            <label for="pledgeVideo">संकल्प का संबंधित वीडियो URL (Optional YouTube Embed)</label>
+                            <input type="url" id="pledgeVideo" name="videoUrl" class="form-control"
+                              placeholder="https://www.youtube.com/embed/..."
+                              value="<%= (kalash.democraticPledge && kalash.democraticPledge.videoUrl) || '' %>" />
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="pledgePoints">संकल्प के मुख्य बिंदु (प्रति पंक्ति 1 बिंदु)</label>
+                          <textarea id="pledgePoints" name="points" rows="3" class="form-control"><%= ((kalash.democraticPledge && kalash.democraticPledge.keyPoints) || [
+                            'मतदान हमारा संवैधानिक अधिकार और स्वाभिमान का प्रतीक है',
+                            'समाज के समग्र हितों, विकास और मान-सम्मान को ध्यान में रखकर ही वोट देंगे',
+                            'किसी भी अनुचित दबाव या बहकावे में न आकर स्वतंत्र विवेक से निर्णय लेंगे'
+                          ]).join('\n') %></textarea>
+                          <span class="help-hint">प्रत्येक नई पंक्ति एक चेकपॉइंट बैज बनाएगी।</span>
+                        </div>
+
+                        <div style="margin-top: 24px;">
+                          <button type="submit" class="admin-btn admin-btn-primary">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                              <polyline points="17 21 17 13 7 13 7 21" />
+                              <polyline points="7 3 7 8 15 8" />
+                            </svg>
+                            <span>Save Democratic Pledge</span>
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                <% } %>
+
+              </div>
+            </div>
+
+            <!-- Client Script for Dynamic State to District and Pledge Presets -->
+            <script>
+              document.addEventListener("DOMContentLoaded", function () {
+                // Complete District Mapping for 5 States
+                const stateDistricts = {
+                  "bihar": [
+                    "गोपालगंज", "पटना", "मुजफ्फरपुर", "गया", "दरभंगा", "भागलपुर", "सारण", "सीवान", "वैशाली", "समस्तीपुर",
+                    "नालंदा", "पूर्णिया", "बेगूसराय", "रोहतास", "भोजपुर", "बक्सर", "कटिहार", "खगड़िया", "किशनगंज", "लखीसराय",
+                    "मधेपुरा", "मधुबनी", "मुंगेर", "नवादा", "अररिया", "अरवल", "औरंगाबाद", "बांका", "जमुई", "जहानाबाद",
+                    "कैमूर", "सहरसा", "शेखपुरा", "शिवहर", "सीतामढ़ी", "सुपौल", "पश्चिम चंपारण", "पूर्वी चंपारण"
+                  ],
+                  "uttar-pradesh": [
+                    "लखनऊ", "वाराणसी", "प्रयागराज", "अयोध्या", "गोरखपुर", "झांसी", "कानपुर नगर", "कानपुर देहात", "आगरा", "बरेली",
+                    "मेरठ", "मिर्जापुर", "गाजीपुर", "बलिया", "बस्ती", "देवरिया", "आजमगढ़", "जौनपुर", "चंदौली", "सोनभद्र",
+                    "भदोही", "प्रतापगढ़", "सुलतानपुर", "रायबरेली", "सीतापुर", "हरदोई", "लखीमपुर खीरी", "बहराइच", "गोंडा", "श्रावस्ती",
+                    "बलरामपुर", "सिद्धार्थनगर", "संतकबीरनगर", "महाराजगंज", "कुशीनगर", "मऊ", "बांदा", "चित्रकूट", "हमीरपुर", "महोबा",
+                    "जालौन", "ललितपुर", "फतेहपुर", "कौशाम्बी", "उन्नाव", "बाराबंकी", "अमेठी", "अंबेडकरनगर", "फर्रुखाबाद", "कन्नौज",
+                    "इटावा", "औरैया", "मैनपुरी", "एटा", "कासगंज", "मथुरा", "अलीगढ़", "हाथरस", "फिरोजाबाद", "बदायूं",
+                    "शाहजहांपुर", "पीलीभीत", "रामपुर", "मुरादाबाद", "संभल", "अमरोहा", "बिजनौर", "सहारनपुर", "शामली", "मुजफ्फरनगर",
+                    "बागपत", "गाजियाबाद", "हापुड़", "गौतमबुद्ध नगर", "बुलंदशहर"
+                  ],
+                  "madhya-pradesh": [
+                    "भोपाल", "इंदौर", "जबलपुर", "ग्वालियर", "उज्जैन", "सागर", "रीवा", "सतना", "छिंदवाड़ा", "विदिशा",
+                    "सीहोर", "रायसेन", "राजगढ़", "नर्मदापुरम", "हरदा", "बैतूल", "गुना", "शिवपुरी", "अशोकनगर", "दतिया",
+                    "श्योपुर", "मुरैना", "भिंड", "दमोह", "पन्ना", "छतरपुर", "टीकमगढ़", "निवाड़ी", "कटनी", "नरसिंहपुर",
+                    "सिवनी", "बालाघाट", "मंडला", "डिंडौरी", "शहडोल", "उमरिया", "अनूपपुर", "सीधी", "सिंगरौली", "खंडवा",
+                    "बुरहानपुर", "खरगोन", "बड़वानी", "धार", "अलीराजपुर", "झाबुआ", "रतलाम", "मंदसौर", "नीमच", "शाजापुर",
+                    "आगर मालवा", "देवास", "पांढुर्णा", "मैहर"
+                  ],
+                  "jharkhand": [
+                    "रांची", "धनबाद", "जमशेदपुर", "बोकारो", "देवघर", "हजारीबाग", "गिरिडीह", "पलामू", "गढ़वा", "लातेहार",
+                    "चतरा", "कोडरमा", "रामगढ़", "दुमका", "जामताड़ा", "गोड्डा", "साहिबगंज", "पाकुड़", "लोहरदगा", "गुमला",
+                    "सिमडेगा", "पश्चिमी सिंहभूम", "सरायकेला खरसावां", "खूंटी"
+                  ],
+                  "rajasthan": [
+                    "जयपुर", "जोधपुर", "उदयपुर", "कोटा", "बीकानेर", "अजमेर", "अलवर", "भरतपुर", "भीलवाड़ा", "बाड़मेर",
+                    "पाली", "सीकर", "नागौर", "चित्तौड़गढ़", "श्रीगंगानगर", "झुंझुनूं", "चूरू", "दौसा", "धौलपुर", "सवाई माधोपुर",
+                    "करौली", "टोंक", "बूंदी", "झालावाड़", "बारां", "बांसवाड़ा", "डूंगरपुर", "प्रतापगढ़", "राजसमंद", "जालोर",
+                    "सिरोही", "जैसलमेर", "हनुमानगढ़", "बालोतरा", "ब्यावर", "अनूपगढ़", "डीडवाना-कुचामन", "डीग", "दूदू", "गंगापुर सिटी",
+                    "जयपुर ग्रामीण", "जोधपुर ग्रामीण", "केकड़ी", "कोटपूतली-बहरोड़", "खैरथल-तिजारा", "नीम का थाना", "फलौदी", "सलूंबर", "सांचौर", "शाहपुरा"
+                  ]
+                };
+
+                // 1. Video Add Form: State to District Dynamic Population
+                const vidState = document.getElementById("vid_state");
+                const vidDist = document.getElementById("vid_dist");
+                const vidDistCustom = document.getElementById("vid_dist_custom");
+                const btnToggleCustomDist = document.getElementById("btnToggleCustomDist");
+
+                function populateAdminDistricts(selectedState, defaultVal) {
+                  if (!vidDist) return;
+                  vidDist.innerHTML = "";
+                  const list = stateDistricts[selectedState] || stateDistricts["bihar"];
+                  list.forEach(function (d) {
+                    const opt = document.createElement("option");
+                    opt.value = d;
+                    opt.textContent = d;
+                    if (defaultVal && (defaultVal === d || defaultVal.toLowerCase() === d.toLowerCase())) {
+                      opt.selected = true;
+                    }
+                    vidDist.appendChild(opt);
+                  });
+
+                  // Add custom option
+                  const customOpt = document.createElement("option");
+                  customOpt.value = "__custom__";
+                  customOpt.textContent = "✍️ अन्य ज़िला लिखें (Custom District)...";
+                  vidDist.appendChild(customOpt);
+                }
+
+                if (vidState && vidDist) {
+                  populateAdminDistricts(vidState.value, "गोपालगंज");
+
+                  vidState.addEventListener("change", function () {
+                    populateAdminDistricts(this.value);
+                    if (vidDistCustom) {
+                      vidDistCustom.style.display = "none";
+                      vidDistCustom.value = "";
+                      vidDist.name = "district";
+                    }
+                  });
+
+                  vidDist.addEventListener("change", function () {
+                    if (this.value === "__custom__") {
+                      if (vidDistCustom) {
+                        vidDistCustom.style.display = "block";
+                        vidDistCustom.focus();
+                        vidDistCustom.name = "district";
+                        vidDist.name = "";
+                      }
+                    } else {
+                      if (vidDistCustom) {
+                        vidDistCustom.style.display = "none";
+                        vidDistCustom.name = "";
+                        vidDist.name = "district";
+                      }
+                    }
+                  });
+                }
+
+                if (btnToggleCustomDist && vidDistCustom && vidDist) {
+                  btnToggleCustomDist.addEventListener("click", function () {
+                    if (vidDistCustom.style.display === "none") {
+                      vidDistCustom.style.display = "block";
+                      vidDistCustom.focus();
+                      vidDistCustom.name = "district";
+                      vidDist.name = "";
+                    } else {
+                      vidDistCustom.style.display = "none";
+                      vidDistCustom.name = "";
+                      vidDist.name = "district";
+                    }
+                  });
+                }
+
+                // 2. Quick Fill Democratic Pledge into Video Description
+                const btnQuickPledgeFill = document.getElementById("btnQuickPledgeFill");
+                const vidDesc = document.getElementById("vid_desc");
+                const DEFAULT_PLEDGE_TEXT = "आज हम लोकतांत्रिक संकल्प लेते हैं कि आगामी चुनाव में भाजपा के पक्ष में मतदान नहीं करेंगे तथा अपने विवेक और विचार के आधार पर अपने मताधिकार का प्रयोग करेंगे।";
+
+                if (btnQuickPledgeFill && vidDesc) {
+                  btnQuickPledgeFill.addEventListener("click", function () {
+                    vidDesc.value = DEFAULT_PLEDGE_TEXT;
+                    vidDesc.focus();
+                  });
+                }
+
+                // 3. Reset Default Pledge button in Tab 4
+                const btnResetDefaultPledge = document.getElementById("btnResetDefaultPledge");
+                const pledgeText = document.getElementById("pledgeText");
+                if (btnResetDefaultPledge && pledgeText) {
+                  btnResetDefaultPledge.addEventListener("click", function () {
+                    pledgeText.value = DEFAULT_PLEDGE_TEXT;
+                    pledgeText.focus();
+                  });
+                }
+              });
+            </script>
 
     <%- include("../common/footer") %>

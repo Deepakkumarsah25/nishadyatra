@@ -91,10 +91,7 @@ exports.login = async (req, res) => {
 
     req.session.regenerate((sessionError) => {
       if (sessionError) {
-        console.error(
-          "❌ Session Regenerate Error:",
-          sessionError
-        );
+        console.error("Session Regenerate Error:", sessionError);
 
         return res.status(500).render("admin/auth/login", {
           title: "Admin Login",
@@ -120,10 +117,7 @@ exports.login = async (req, res) => {
 
       req.session.save((saveError) => {
         if (saveError) {
-          console.error(
-            "❌ Session Save Error:",
-            saveError
-          );
+          console.error("Session Save Error:", saveError);
 
           return res.status(500).render(
             "admin/auth/login",
@@ -135,15 +129,11 @@ exports.login = async (req, res) => {
           );
         }
 
-        console.log(
-          `✅ Admin Login: ${admin.email}`
-        );
-
         return res.redirect("/admin/dashboard");
       });
     });
   } catch (error) {
-    console.error("❌ Admin Login Error:", error);
+    console.error("Admin Login Error:", error);
 
     return res.status(500).render("admin/auth/login", {
       title: "Admin Login",
@@ -160,7 +150,7 @@ exports.login = async (req, res) => {
 exports.logout = (req, res) => {
   req.session.destroy((error) => {
     if (error) {
-      console.error("❌ Logout Error:", error);
+      console.error("Logout Error:", error);
 
       return res.redirect("/admin/dashboard");
     }
@@ -172,8 +162,6 @@ exports.logout = (req, res) => {
       secure: process.env.NODE_ENV === "production",
       path: "/",
     });
-
-    console.log("✅ Admin Logout");
 
     return res.redirect("/admin/login");
   });

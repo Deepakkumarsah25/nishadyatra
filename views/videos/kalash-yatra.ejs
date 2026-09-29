@@ -5,8 +5,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Kalash Yatra Videos | Nishad Sankalp Campaign</title>
-  <meta name="description" content="Videos, events, historic moments, and state-wise highlights of the sacred Kalash Yatra under Nishad Sankalp Campaign." />
+  <title>लोकतांत्रिक महा-संकल्प यात्रा वीडियो संकलन | निषाद संकल्प अभियान</title>
+  <meta name="description" content="आज हम लोकतांत्रिक संकल्प लेते हैं कि आगामी चुनाव में भाजपा के पक्ष में मतदान नहीं करेंगे तथा अपने विवेक और विचार के आधार पर अपने मताधिकार का प्रयोग करेंगे। ऐतिहासिक लोकतांत्रिक महा-संकल्प यात्रा वीडियो संकलन।" />
 
   <!-- Google Fonts: Rozha One, Noto Serif Devanagari, Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -3448,17 +3448,17 @@
       <div class="yatra-storycase-header">
         <div class="storycase-kicker">
           <span>★</span>
-          <span>पावन संस्मरण • निषाद संकल्प अभियान</span>
+          <span><%= (kalash && kalash.milestonesSection && kalash.milestonesSection.kicker) || 'ऐतिहासिक जन-संकल्प • लोकतांत्रिक अधिकार चेतना अभियान' %></span>
           <span class="storycase-kicker-sep">•</span>
           <span class="storycase-kicker-sub">ऐतिहासिक महासंगम</span>
         </div>
 
         <h2 class="storycase-title">
-          कलश यात्रा महागाथा — <span class="highlight">आस्था, स्वाभिमान व सामाजिक समरसता</span>
+          <%= (kalash && kalash.milestonesSection && kalash.milestonesSection.title) || 'लोकतांत्रिक महा-संकल्प यात्रा — ' %><span class="highlight"><%= (kalash && kalash.milestonesSection && kalash.milestonesSection.titleHighlight) || 'जनमत जागरण और स्वतंत्र मताधिकार का उद्घोष' %></span>
         </h2>
 
         <p class="storycase-sub">
-          पवित्र नदियों के जल और जन-जागरण से पोषित, विभिन्न अंचलों में आयोजित ऐतिहासिक कलश यात्रा की सजीव झलकियां एवं पावन संस्मरण।
+          <%= (kalash && kalash.milestonesSection && kalash.milestonesSection.subtitle) || 'आज हम लोकतांत्रिक संकल्प लेते हैं कि आगामी चुनाव में भाजपा के पक्ष में मतदान नहीं करेंगे तथा अपने विवेक और विचार के आधार पर अपने मताधिकार का प्रयोग करेंगे।' %>
         </p>
       </div>
 
@@ -3477,7 +3477,7 @@
             />
             <div class="storycase-featured-overlay"></div>
             <div class="storycase-featured-badge">
-              <span><%= featMilestone.tag || '★ Main Center • Historic Milestone' %></span>
+              <span><%= featMilestone.tag || '★ प्रमुख केंद्र • ऐतिहासिक महा-संकल्प' %></span>
             </div>
             <div class="storycase-featured-caption">
               <h4><%= featMilestone.title %></h4>
@@ -3485,7 +3485,7 @@
                 <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
                   <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/>
                 </svg>
-                <span><%= featMilestone.district %>, <%= featMilestone.stateName %> • Grand Movement</span>
+                <span><%= featMilestone.district %>, <%= featMilestone.stateName %> • जन-जागरण अभियान</span>
               </p>
             </div>
           </div>
@@ -3494,7 +3494,7 @@
             <div>
               <div class="storycase-meta-tag-row">
                 <span class="storycase-tag-pill crimson"><%= featMilestone.stateName %> • <%= featMilestone.district %></span>
-                <span class="storycase-tag-pill gold"><%= featMilestone.tag || 'Special Memoir' %></span>
+                <span class="storycase-tag-pill gold"><%= featMilestone.tag || 'विशेष संकल्प' %></span>
               </div>
 
               <h3><%= featMilestone.title %></h3>
@@ -3504,10 +3504,10 @@
 
             <div class="storycase-actions-row">
               <button type="button" class="btn-storycase-primary btn-jump-filter-state" data-state="<%= featMilestone.stateKey %>">
-                <span><%= featMilestone.stateName %>  Videos ↓</span>
+                <span><%= featMilestone.stateName %> के संकल्प वीडियो ↓</span>
               </button>
               <button type="button" class="btn-storycase-outline btn-watch-featured" data-video="<%= featMilestone.videoUrl %>" data-title="<%= featMilestone.title %>">
-                <span>Watch Highlights ▶</span>
+                <span>संकल्प झलकियां देखें ▶</span>
               </button>
             </div>
           </div>
@@ -3530,7 +3530,7 @@
                 </div>
                 <div class="storycase-card-footer">
                   <span class="storycase-location-text"><%= item.district %>, <%= item.stateName %></span>
-                  <span class="btn-card-filter-link btn-jump-filter-state" data-state="<%= item.stateKey %>">Watch Videos →</span>
+                  <span class="btn-card-filter-link btn-jump-filter-state" data-state="<%= item.stateKey %>">संकल्प वीडियो देखें →</span>
                 </div>
               </div>
             </article>
@@ -3540,14 +3540,14 @@
         <!-- 3. Seamless Transition Ribbon connecting into Filter Console (NO GAP) -->
         <div class="storycase-transition-bar">
           <div class="transition-text-group">
-            <div class="transition-icon-circle">🎥</div>
+            <div class="transition-icon-circle">📜</div>
             <div>
-              <h5>संपूर्ण कलश यात्रा वीडियो एवं संबोधन नीचे उपलब्ध हैं</h5>
-              <p>राज्य, जिला अथवा श्रेणी का चयन कर अपनी पसंद का वीडियो तुरंत देखें</p>
+              <h5>लोकतांत्रिक महा-संकल्प यात्रा वीडियो एवं संबोधन नीचे उपलब्ध हैं</h5>
+              <p>राज्य, ज़िला अथवा श्रेणी का चयन कर जन-जागरण व मताधिकार संकल्प वीडियो तुरंत देखें</p>
             </div>
           </div>
           <button type="button" class="btn-jump-filter" id="btnJumpToFilter">
-            <span>वीडियो फ़िल्टर एवं संकलन देखें ↓</span>
+            <span>संकल्प वीडियो एवं संकलन देखें ↓</span>
           </button>
         </div>
 
@@ -3573,6 +3573,8 @@
     <!-- ===================================================
          FILTER CONSOLE (STATE, DISTRICT, SEARCH)
     ==================================================== -->
+
+
     <section class="filter-console-section" id="filterConsole">
       <div class="container">
         <div class="filter-card">
@@ -3586,8 +3588,8 @@
                 </svg>
               </div>
               <div class="filter-heading-text">
-                <h3>वीडियो फ़िल्टर एवं खोज केंद्र</h3>
-                <p>राज्य, ज़िला अथवा नाम/कीवर्ड के अनुसार अपनी पसंद का वीडियो तुरंत खोजें</p>
+                <h3>लोकतांत्रिक संकल्प वीडियो एवं खोज केंद्र</h3>
+                <p>राज्य, ज़िला अथवा नाम/कीवर्ड के अनुसार लोकतांत्रिक संकल्प व जन-जागरण वीडियो तुरंत खोजें</p>
               </div>
             </div>
 
@@ -3672,7 +3674,7 @@
                   type="search"
                   id="searchFilter"
                   class="styled-input with-icon"
-                  placeholder="उदा. गोपालगंज, पटना, भाषण, महासंगम..."
+                  placeholder="उदा. गोपालगंज, पटना, संकल्प, जन-जागरण, भाषण..."
                   autocomplete="off"
                 />
                 <button type="button" class="search-clear-btn" id="searchClearBtn" aria-label="खोज साफ़ करें">×</button>
@@ -3708,13 +3710,13 @@
           <div>
             <div class="gallery-section-badge">
               <span class="badge-dot"></span>
-              <span>वीडियो संकलन • पावन महासंगम</span>
+              <span><%= (kalash && kalash.hero && kalash.hero.liveBadgeText) || 'लोकतांत्रिक महा-संकल्प • वीडियो संकलन' %></span>
             </div>
             <h2 class="gallery-section-title">
-              आस्था, एकता और संकल्प का पावन महासंगम — <span class="highlight">कलश यात्रा</span>
+              <%= (kalash && kalash.hero && kalash.hero.headingMain) || 'जन-जन का संकल्प — लोकतंत्र को मजबूत बनाने का संकल्प ' %><span class="highlight"><%= (kalash && kalash.hero && kalash.hero.headingHighlight) || 'स्वतंत्र मतदान, स्वाभिमान और सामाजिक चेतना' %></span>
             </h2>
             <p class="gallery-section-subtitle">
-              पवित्र नदियों के जल, जन-जागरण एवं मातृशक्ति के स्वाभिमान का ऐतिहासिक वीडियो संकलन
+              <%= (kalash && kalash.hero && kalash.hero.subheading) || 'आज हम लोकतांत्रिक संकल्प लेते हैं कि आगामी चुनाव में भाजपा के पक्ष में मतदान नहीं करेंगे तथा अपने विवेक और विचार के आधार पर अपने मताधिकार का प्रयोग करेंगे।' %>
             </p>
           </div>
 
@@ -3778,7 +3780,7 @@
 
                 <span class="badge-location-corner">
                   <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
-                  <%= vid.district || 'पावन धाम' %>
+                  <%= vid.district || 'प्रमुख केंद्र' %>
                 </span>
 
                 <span class="badge-duration-corner">
@@ -3789,7 +3791,7 @@
 
               <div class="card-info-box">
                 <div class="card-tags-row">
-<span class="card-category-tag"><%= vid.tag || (vid.category === 'speech' ? 'संबोधन' : vid.category === 'program' ? 'कार्यक्रम' : 'कलश यात्रा') %></span>
+                  <span class="card-category-tag"><%= vid.tag || (vid.category === 'sankalp' ? 'संकल्प यात्रा' : vid.category === 'speech' ? 'संबोधन' : vid.category === 'program' ? 'जन-जागरण' : 'लोकतांत्रिक संकल्प') %></span>
                   <span class="card-district-pill">
                     <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
                     ज़िला: <strong><%= vid.district || '—' %></strong>
@@ -3804,7 +3806,7 @@
                     <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                   </span>
                   <span class="meta-label">व्यक्ति / स्थान:</span>
-                  <span class="meta-val"><%= vid.personOrPlace || (vid.district ? (vid.district + ' (आयोजन स्थल)') : 'पावन धाम') %></span>
+                  <span class="meta-val"><%= vid.personOrPlace || (vid.district ? (vid.district + ' (संकल्प सभा स्थल)') : 'संकल्प स्थल') %></span>
                 </div>
 
                 <p class="card-description-text">
@@ -3814,10 +3816,10 @@
                 <div class="card-footer-strip">
                   <span class="card-footer-date">
                     <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10z"/></svg>
-<span>अपलोड: <%= vid.date || 'विशेष प्रस्तुति' %></span>
+                    <span>संकल्प तिथि: <%= vid.date || 'विशेष जन-सभा' %></span>
                   </span>
                   <button type="button" class="btn-card-play" aria-label="वीडियो देखें">
-                    <span>चलाएं</span>
+                    <span>वीडियो देखें</span>
                     <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
                   </button>
                 </div>
@@ -3830,11 +3832,11 @@
             <div class="empty-symbol-icon">
               <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
             </div>
-            <h3>No Videos Found</h3>
-            <p>No videos match your selected state, district, or search criteria. Please adjust or reset filters.</p>
+            <h3>कोई संकल्प वीडियो नहीं मिला</h3>
+            <p>आपके द्वारा चुने गए राज्य, ज़िले अथवा खोज के अनुसार कोई संकल्प वीडियो उपलब्ध नहीं है। कृपया फ़िल्टर रीसेट करें।</p>
             <button type="button" class="btn-empty-clear" id="emptyClear">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
-              <span>Reset All Filters</span>
+              <span>सभी फ़िल्टर रीसेट करें (Reset All)</span>
             </button>
           </div>
         </div>
@@ -3883,15 +3885,15 @@
     <div class="modal-content-shell">
       <div class="modal-top-bar">
         <div class="modal-title-wrap">
-          <span class="meta-tag-pill" id="modalCategoryBadge">Kalash Yatra</span>
-          <h4 id="modalVideoTitle">Video Player</h4>
+          <span class="meta-tag-pill" id="modalCategoryBadge">लोकतांत्रिक संकल्प</span>
+          <h4 id="modalVideoTitle">लोकतांत्रिक संकल्प वीडियो प्लेयर</h4>
         </div>
         <div class="modal-actions-right">
           <button type="button" class="modal-share-btn" id="modalShareBtn" title="Copy video link">
             <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
               <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
             </svg>
-            <span>Copy Link</span>
+            <span>लिंक शेयर करें</span>
           </button>
           <button type="button" class="modal-close-cross" id="modalClose" aria-label="Close">×</button>
         </div>
@@ -3901,7 +3903,7 @@
         <iframe
           id="modalVideoIframe"
           src=""
-          title="Kalash Yatra Video Player"
+          title="लोकतांत्रिक महा-संकल्प यात्रा वीडियो प्लेयर"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowfullscreen
         ></iframe>
@@ -3924,7 +3926,7 @@
         <div class="modal-meta-col">
           <div class="modal-meta-item">
             <span class="m-icon">📅</span>
-            <span class="m-label">अपलोड तिथि:</span>
+            <span class="m-label">संकल्प तिथि:</span>
             <span class="m-val" id="modalVideoDate">—</span>
           </div>
         </div>
@@ -3935,7 +3937,7 @@
   <!-- Toast Notification -->
   <div class="toast-notification" id="toastNotification">
     <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-    <span id="toastMessage">Link copied successfully!</span>
+    <span id="toastMessage">वीडियो लिंक कॉपी हो गया!</span>
   </div>
 
   <!-- =====================================================
@@ -4010,15 +4012,46 @@
       let currentViewMode = "grid";
       let activeVideoShareUrl = window.location.href;
 
-      /* ===================================================
-         DISTRICT DATA & ALIAS MAPPINGS
+            /* ===================================================
+         DISTRICT DATA & ALIAS MAPPINGS (ALL 5 STATES FULL LIST)
       ==================================================== */
       const stateDistrictList = {
-        "bihar": ["गोपालगंज", "पटना", "मुजफ्फरपुर", "गया", "दरभंगा", "भागलपुर", "सारण", "सीवान", "वैशाली", "समस्तीपुर", "नालंदा", "पूर्णिया", "बेगूसराय", "रोहतास"],
-        "madhya-pradesh": ["भोपाल", "इंदौर", "जबलपुर", "ग्वालियर", "उज्जैन", "सागर", "रीवा", "सतना", "छिंदवाड़ा", "विदिशा"],
-        "uttar-pradesh": ["लखनऊ", "वाराणसी", "प्रयागराज", "अयोध्या", "गोरखपुर", "झांसी", "कानपुर", "आगरा", "बरेली", "मेरठ", "मिर्जापुर", "गाजीपुर", "बलिया"],
-        "jharkhand": ["रांची", "धनबाद", "जमशेदपुर", "बोकारो", "देवघर", "हजारीबाग", "गिरिडीह"],
-        "rajasthan": ["जयपुर", "जोधपुर", "उदयपुर", "कोटा", "बीकानेर", "अजमेर", "अलवर", "भरतपुर"]
+        "bihar": [
+          "गोपालगंज", "पटना", "मुजफ्फरपुर", "गया", "दरभंगा", "भागलपुर", "सारण", "सीवान", "वैशाली", "समस्तीपुर",
+          "नालंदा", "पूर्णिया", "बेगूसराय", "रोहतास", "भोजपुर", "बक्सर", "कटिहार", "खगड़िया", "किशनगंज", "लखीसराय",
+          "मधेपुरा", "मधुबनी", "मुंगेर", "नवादा", "अररिया", "अरवल", "औरंगाबाद", "बांका", "जमुई", "जहानाबाद",
+          "कैमूर", "सहरसा", "शेखपुरा", "शिवहर", "सीतामढ़ी", "सुपौल", "पश्चिम चंपारण", "पूर्वी चंपारण"
+        ],
+        "uttar-pradesh": [
+          "लखनऊ", "वाराणसी", "प्रयागराज", "अयोध्या", "गोरखपुर", "झांसी", "कानपुर नगर", "कानपुर देहात", "आगरा", "बरेली",
+          "मेरठ", "मिर्जापुर", "गाजीपुर", "बलिया", "बस्ती", "देवरिया", "आजमगढ़", "जौनपुर", "चंदौली", "सोनभद्र",
+          "भदोही", "प्रतापगढ़", "सुलतानपुर", "रायबरेली", "सीतापुर", "हरदोई", "लखीमपुर खीरी", "बहराइच", "गोंडा", "श्रावस्ती",
+          "बलरामपुर", "सिद्धार्थनगर", "संतकबीरनगर", "महाराजगंज", "कुशीनगर", "मऊ", "बांदा", "चित्रकूट", "हमीरपुर", "महोबा",
+          "जालौन", "ललितपुर", "फतेहपुर", "कौशाम्बी", "उन्नाव", "बाराबंकी", "अमेठी", "अंबेडकरनगर", "फर्रुखाबाद", "कन्नौज",
+          "इटावा", "औरैया", "मैनपुरी", "एटा", "कासगंज", "मथुरा", "अलीगढ़", "हाथरस", "फिरोजाबाद", "बदायूं",
+          "शाहजहांपुर", "पीलीभीत", "रामपुर", "मुरादाबाद", "संभल", "अमरोहा", "बिजनौर", "सहारनपुर", "शामली", "मुजफ्फरनगर",
+          "बागपत", "गाजियाबाद", "हापुड़", "गौतमबुद्ध नगर", "बुलंदशहर"
+        ],
+        "madhya-pradesh": [
+          "भोपाल", "इंदौर", "जबलपुर", "ग्वालियर", "उज्जैन", "सागर", "रीवा", "सतना", "छिंदवाड़ा", "विदिशा",
+          "सीहोर", "रायसेन", "राजगढ़", "नर्मदापुरम", "हरदा", "बैतूल", "गुना", "शिवपुरी", "अशोकनगर", "दतिया",
+          "श्योपुर", "मुरैना", "भिंड", "दमोह", "पन्ना", "छतरपुर", "टीकमगढ़", "निवाड़ी", "कटनी", "नरसिंहपुर",
+          "सिवनी", "बालाघाट", "मंडला", "डिंडौरी", "शहडोल", "उमरिया", "अनूपपुर", "सीधी", "सिंगरौली", "खंडवा",
+          "बुरहानपुर", "खरगोन", "बड़वानी", "धार", "अलीराजपुर", "झाबुआ", "रतलाम", "मंदसौर", "नीमच", "शाजापुर",
+          "आगर मालवा", "देवास", "पांढुर्णा", "मैहर"
+        ],
+        "jharkhand": [
+          "रांची", "धनबाद", "जमशेदपुर", "बोकारो", "देवघर", "हजारीबाग", "गिरिडीह", "पलामू", "गढ़वा", "लातेहार",
+          "चतरा", "कोडरमा", "रामगढ़", "दुमका", "जामताड़ा", "गोड्डा", "साहिबगंज", "पाकुड़", "लोहरदगा", "गुमला",
+          "सिमडेगा", "पश्चिमी सिंहभूम", "सरायकेला खरसावां", "खूंटी"
+        ],
+        "rajasthan": [
+          "जयपुर", "जोधपुर", "उदयपुर", "कोटा", "बीकानेर", "अजमेर", "अलवर", "भरतपुर", "भीलवाड़ा", "बाड़मेर",
+          "पाली", "सीकर", "नागौर", "चित्तौड़गढ़", "श्रीगंगानगर", "झुंझुनूं", "चूरू", "दौसा", "धौलपुर", "सवाई माधोपुर",
+          "करौली", "टोंक", "बूंदी", "झालावाड़", "बारां", "बांसवाड़ा", "डूंगरपुर", "प्रतापगढ़", "राजसमंद", "जालोर",
+          "सिरोही", "जैसलमेर", "हनुमानगढ़", "बालोतरा", "ब्यावर", "अनूपगढ़", "डीडवाना-कुचामन", "डीग", "दूदू", "गंगापुर सिटी",
+          "जयपुर ग्रामीण", "जोधपुर ग्रामीण", "केकड़ी", "कोटपूतली-बहरोड़", "खैरथल-तिजारा", "नीम का थाना", "फलौदी", "सलूंबर", "सांचौर", "शाहपुरा"
+        ]
       };
 
       const districtAliasMap = {
@@ -4080,25 +4113,34 @@
         const currentSelected = districtFilter.value;
         districtFilter.innerHTML = "";
 
+        const stateNameMap = {
+          "bihar": "बिहार",
+          "uttar-pradesh": "उत्तर प्रदेश",
+          "madhya-pradesh": "मध्य प्रदेश",
+          "jharkhand": "झारखंड",
+          "rajasthan": "राजस्थान"
+        };
+
         const allOpt = document.createElement("option");
         allOpt.value = "all";
-        allOpt.textContent = state === "all" ? "सभी ज़िले (All Districts)" : "सभी ज़िले (समस्त राज्य)";
+        allOpt.textContent = state === "all" ? "सभी ज़िले (All Districts)" : ("सभी ज़िले (" + (stateNameMap[state] || state) + ")");
         districtFilter.appendChild(allOpt);
+
+        if (districtLabel) {
+          districtLabel.textContent = state === "all" ? "ज़िला चुनें (Select District)" : ("ज़िला चुनें (" + (stateNameMap[state] || state) + " के ज़िले)");
+        }
 
         const districtsSet = new Set();
 
-        // 1. Get districts from video cards
-        videoCards.forEach(card => {
-          const cardState = card.dataset.state || "";
-          const cardDist = (card.dataset.district || "").trim();
-          if (cardDist && (state === "all" || cardState === state)) {
-            districtsSet.add(cardDist);
-          }
-        });
-
-        // 2. If specific state selected, add other districts from state list
+        // 1. If specific state selected, add all districts of that state
         if (state !== "all" && stateDistrictList[state]) {
           stateDistrictList[state].forEach(d => districtsSet.add(d));
+        } else if (state === "all") {
+          // If all states, collect districts from video cards
+          videoCards.forEach(card => {
+            const cardDist = (card.dataset.district || "").trim();
+            if (cardDist) districtsSet.add(cardDist);
+          });
         }
 
         Array.from(districtsSet).sort((a, b) => a.localeCompare(b, "hi")).forEach(dist => {
@@ -4446,8 +4488,8 @@
       watchFeaturedTriggers.forEach(function (btn) {
         btn.addEventListener("click", function () {
           const videoUrl = btn.dataset.video || "https://www.youtube.com/embed/dQw4w9WgXcQ";
-          const videoTitle = btn.dataset.title || "Gopalganj Kalash Yatra";
-          openModalVideo(videoUrl, videoTitle, "Special Collection");
+          const videoTitle = btn.dataset.title || "लोकतांत्रिक महा-संकल्प यात्रा";
+          openModalVideo(videoUrl, videoTitle, "लोकतांत्रिक महा-संकल्प");
         });
       });
 
@@ -4531,7 +4573,7 @@
               <iframe
                 id="modalVideoIframe"
                 src="${finalSrc}"
-                title="${title || 'कलश यात्रा वीडियो'}"
+                title="${title || 'लोकतांत्रिक महा-संकल्प यात्रा वीडियो'}"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowfullscreen
                 style="position:absolute;inset:0;width:100%;height:100%;border:none;"
@@ -4541,11 +4583,11 @@
         }
 
         // Update Metadata
-        if (modalVideoTitle) modalVideoTitle.textContent = title || "कलश यात्रा विशेष वीडियो";
-        if (modalCategoryBadge) modalCategoryBadge.textContent = category || "कलश यात्रा";
-        if (modalVideoPerson) modalVideoPerson.textContent = personOrPlace || "आयोजन स्थल";
-        if (modalVideoDistrict) modalVideoDistrict.textContent = district || "पावन धाम";
-        if (modalVideoDate) modalVideoDate.textContent = date || "विशेष प्रस्तुति";
+        if (modalVideoTitle) modalVideoTitle.textContent = title || "लोकतांत्रिक संकल्प विशेष वीडियो";
+        if (modalCategoryBadge) modalCategoryBadge.textContent = category || "लोकतांत्रिक संकल्प";
+        if (modalVideoPerson) modalVideoPerson.textContent = personOrPlace || "संकल्प सभा स्थल";
+        if (modalVideoDistrict) modalVideoDistrict.textContent = district || "प्रमुख केंद्र";
+        if (modalVideoDate) modalVideoDate.textContent = date || "विशेष जन-सभा";
         activeVideoShareUrl = url;
 
         if (videoModal) videoModal.classList.add("active");
@@ -4565,7 +4607,7 @@
         card.addEventListener("click", function () {
           const videoUrl = card.dataset.video;
           const videoTitle = card.dataset.title || card.querySelector("h3")?.textContent?.trim();
-          const categoryTag = card.querySelector(".card-category-tag")?.textContent?.trim() || "कलश यात्रा";
+          const categoryTag = card.querySelector(".card-category-tag")?.textContent?.trim() || "लोकतांत्रिक संकल्प";
           const person = card.dataset.person || "";
           const district = card.dataset.district || "";
           const date = card.dataset.date || "";
@@ -4581,8 +4623,8 @@
           openModalVideo(
             heroFeaturedPlayBtn.dataset.video,
             heroFeaturedPlayBtn.dataset.title,
-            "विशेष प्रस्तुति",
-            "राष्ट्रीय महा-आयोजन",
+            "लोकतांत्रिक महा-संकल्प",
+            "राष्ट्रीय जन-जागरण अभियान",
             "सम्पूर्ण भारत",
             "2026"
           );
@@ -4594,8 +4636,8 @@
       storyCards.forEach(function (card) {
         card.addEventListener("click", function () {
           const videoUrl = card.dataset.video || "https://www.youtube.com/embed/dQw4w9WgXcQ";
-          const videoTitle = card.dataset.title || "कलश यात्रा विशेष दर्शन";
-          openModalVideo(videoUrl, videoTitle, "पावन दर्शन", "पवित्र संगम", "काशी - प्रयागराज", "2026");
+          const videoTitle = card.dataset.title || "लोकतांत्रिक महा-संकल्प जन-सभा";
+          openModalVideo(videoUrl, videoTitle, "जन-जागरण दर्शन", "स्वाभिमान व अधिकार चेतना", "बिहार - उत्तर प्रदेश - मध्य प्रदेश", "2026");
         });
       });
 
