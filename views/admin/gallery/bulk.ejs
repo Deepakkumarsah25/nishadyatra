@@ -1,0 +1,293 @@
+<%- include("../common/header") %>
+<%- include("../common/sidebar") %>
+
+<div class="admin-main">
+  <!-- Topbar -->
+  <header class="admin-topbar">
+    <div class="topbar-left">
+      <button type="button" class="mobile-menu-trigger" id="adminMobileMenuBtn" aria-label="Menu">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="page-heading">
+        <h1>
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--admin-primary)" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Bulk Image Upload
+        </h1>
+        <p>Select multiple pledge photos at once, set district and date, and upload in a single click</p>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <a href="/admin/gallery" class="btn-admin btn-admin-outline">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <span>Back to Gallery</span>
+      </a>
+      <a href="/admin/gallery/new" class="btn-admin btn-admin-primary">
+        <span>Add Single Photo</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Body -->
+  <div class="admin-body">
+    <% if (error) { %>
+      <div class="admin-alert admin-alert-error">⚠ <%= error %></div>
+    <% } %>
+
+    <div class="admin-card" style="max-width: 900px; margin: 0 auto;">
+      <div class="admin-card-header">
+        <h3>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+          Multi-Image Batch Upload Console
+        </h3>
+        <span style="font-size: 11px; color: var(--admin-text-muted);">Up to 50 photos supported simultaneously</span>
+      </div>
+
+      <div class="admin-card-body">
+        <form
+          action="/admin/gallery/bulk-upload"
+          method="POST"
+          enctype="multipart/form-data"
+          id="bulkUploadForm"
+        >
+          <!-- Upload Dropzone -->
+          <div
+            id="dropArea"
+            style="border: 2px dashed #d72a2a; background: #fffaf8; border-radius: 14px; padding: 36px 20px; text-align: center; cursor: pointer; transition: all 0.2s ease; margin-bottom: 24px;"
+            onclick="document.getElementById('bulkPhotos').click();"
+          >
+            <div style="width: 58px; height: 58px; background: #fff0ec; color: var(--admin-primary); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px;">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </div>
+            <div style="font-size: 16px; font-weight: 800; color: var(--admin-text-dark);">
+              Drag & drop photos here or click to browse
+            </div>
+            <p style="font-size: 12px; color: var(--admin-text-muted); margin-top: 6px;">
+              Select 1 to 50 photos at once (JPG, PNG, WEBP)
+            </p>
+            <input
+              type="file"
+              id="bulkPhotos"
+              name="photos"
+              multiple
+              accept="image/*"
+              style="display: none;"
+              onchange="handleBulkFilesSelected(this)"
+              required
+            />
+          </div>
+
+          <!-- Preview Grid for Selected Files -->
+          <div id="fileSelectionInfo" style="display: none; margin-bottom: 24px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+              <strong id="fileCountBadge" style="font-size: 13px; color: var(--admin-primary); font-weight: 800;">
+                0 photos selected
+              </strong>
+              <button
+                type="button"
+                onclick="clearBulkSelection()"
+                style="border: none; background: none; color: #b91c1c; font-size: 12px; font-weight: 700; cursor: pointer;"
+              >
+                ✕ Clear All
+              </button>
+            </div>
+            <div
+              id="thumbnailsGrid"
+              style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; max-height: 250px; overflow-y: auto; padding: 12px; background: #fff; border: 1px solid var(--admin-border); border-radius: 10px;"
+            ></div>
+          </div>
+
+          <!-- Batch Common Settings -->
+          <div style="background: #faf7f5; padding: 22px; border-radius: 12px; border: 1px solid #ebdcd5; margin-bottom: 24px;">
+            <h4 style="font-size: 13px; font-weight: 800; color: var(--admin-text-dark); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.5px;">
+              Common Details for this Batch
+            </h4>
+
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label for="defaultDistrict">District *</label>
+                <input
+                  type="text"
+                  id="defaultDistrict"
+                  name="defaultDistrict"
+                  list="districtSuggestions"
+                  class="form-control"
+                  placeholder="e.g. Gorakhpur, Varanasi, Prayagraj..."
+                  required
+                />
+                <datalist id="districtSuggestions">
+                  <% if (districtsList && districtsList.length > 0) { %>
+                    <% districtsList.forEach(function(d) { %>
+                      <option value="<%= d %>"></option>
+                    <% }); %>
+                  <% } %>
+                  <option value="Gorakhpur"></option>
+                  <option value="Varanasi"></option>
+                  <option value="Prayagraj"></option>
+                  <option value="Ayodhya"></option>
+                  <option value="Lucknow"></option>
+                  <option value="Ghazipur"></option>
+                  <option value="Ballia"></option>
+                  <option value="Mirzapur"></option>
+                </datalist>
+                <span class="form-hint">This district will be applied to all photos in this batch</span>
+              </div>
+
+              <div class="form-group">
+                <label for="defaultDate">Pledge Date *</label>
+                <input
+                  type="date"
+                  id="defaultDate"
+                  name="defaultDate"
+                  class="form-control"
+                  value="<%= todayStr %>"
+                  required
+                />
+                <span class="form-hint">Date of the pledge</span>
+              </div>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label for="defaultName">Default Name / Group Name Prefix</label>
+                <input
+                  type="text"
+                  id="defaultName"
+                  name="defaultName"
+                  class="form-control"
+                  placeholder="e.g. Community Pledge / Youth Pledge Wing"
+                  value="Community Pledge"
+                />
+                <span class="form-hint">If left empty, 'Sanatani Nishad' will be used</span>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                <label for="defaultCaption">Caption / Pledge Message</label>
+                <input
+                  type="text"
+                  id="defaultCaption"
+                  name="defaultCaption"
+                  class="form-control"
+                  placeholder="e.g. Sacred pledge taken under the Nishad Sankalp Campaign"
+                  value="Sacred pledge taken under the Nishad Sankalp Campaign"
+                />
+                <span class="form-hint">This common message will be attached to all photos</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Publish Status Toggle -->
+          <div class="form-group" style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px; padding: 12px 16px; background: #fff; border: 1px solid var(--admin-border); border-radius: 9px;">
+            <input
+              type="checkbox"
+              id="isPublished"
+              name="isPublished"
+              checked
+              style="width: 20px; height: 20px; accent-color: var(--admin-primary); cursor: pointer;"
+            />
+            <label for="isPublished" style="margin-bottom: 0; cursor: pointer; font-size: 13px; font-weight: 700;">
+              Publish live immediately upon upload
+            </label>
+          </div>
+
+          <!-- Submit Buttons -->
+          <div style="display: flex; align-items: center; justify-content: flex-end; gap: 12px; border-top: 1px solid var(--admin-border-subtle); padding-top: 20px;">
+            <a href="/admin/gallery" class="btn-admin btn-admin-outline">
+              Cancel
+            </a>
+            <button type="submit" id="submitBtn" class="btn-admin btn-admin-primary" style="padding: 12px 24px;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span id="submitBtnText">Upload Photos</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function handleBulkFilesSelected(input) {
+    const files = input.files;
+    const fileSelectionInfo = document.getElementById("fileSelectionInfo");
+    const fileCountBadge = document.getElementById("fileCountBadge");
+    const thumbnailsGrid = document.getElementById("thumbnailsGrid");
+    const submitBtnText = document.getElementById("submitBtnText");
+
+    thumbnailsGrid.innerHTML = "";
+
+    if (!files || files.length === 0) {
+      fileSelectionInfo.style.display = "none";
+      submitBtnText.textContent = "Upload Photos";
+      return;
+    }
+
+    fileSelectionInfo.style.display = "block";
+    fileCountBadge.textContent = files.length + " photos ready for upload";
+    submitBtnText.textContent = "Upload " + files.length + " Photos";
+
+    Array.from(files).forEach((file, index) => {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const item = document.createElement("div");
+        item.style.position = "relative";
+        item.style.borderRadius = "8px";
+        item.style.overflow = "hidden";
+        item.style.border = "1px solid #e0d0c8";
+        item.style.height = "85px";
+
+        item.innerHTML = `
+          <img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover;" alt="${file.name}"/>
+          <span style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.65); color: #fff; font-size: 9px; padding: 2px 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+            #${index + 1}
+          </span>
+        `;
+        thumbnailsGrid.appendChild(item);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function clearBulkSelection() {
+    const input = document.getElementById("bulkPhotos");
+    input.value = "";
+    handleBulkFilesSelected(input);
+  }
+
+  // Drag & drop highlight
+  const dropArea = document.getElementById("dropArea");
+  if (dropArea) {
+    ["dragenter", "dragover"].forEach(eventName => {
+      dropArea.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        dropArea.style.background = "#fff0eb";
+        dropArea.style.borderColor = "#b51c1c";
+      }, false);
+    });
+
+    ["dragleave", "drop"].forEach(eventName => {
+      dropArea.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        dropArea.style.background = "#fffaf8";
+        dropArea.style.borderColor = "#d72a2a";
+      }, false);
+    });
+
+    dropArea.addEventListener("drop", (e) => {
+      const dt = e.dataTransfer;
+      const files = dt.files;
+      const fileInput = document.getElementById("bulkPhotos");
+      fileInput.files = files;
+      handleBulkFilesSelected(fileInput);
+    }, false);
+  }
+
+  // Show loading state on submit
+  document.getElementById("bulkUploadForm").addEventListener("submit", function() {
+    const btn = document.getElementById("submitBtn");
+    btn.disabled = true;
+    btn.style.opacity = "0.7";
+    btn.innerHTML = "<span>Uploading, please wait...</span>";
+  });
+</script>
+
+<%- include("../common/footer") %>

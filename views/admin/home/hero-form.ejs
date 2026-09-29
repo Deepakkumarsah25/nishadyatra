@@ -11,13 +11,13 @@
       <div class="page-heading">
         <h1>
           <a href="/admin/home/hero" style="color: var(--admin-text-muted); margin-right: 6px;">←</a>
-          <%= isEdit ? 'हीरो स्लाइड संपादित करें' : 'नई हीरो स्लाइड जोड़ें' %>
+          <%= isEdit ? 'Edit Hero Slide' : 'Add New Hero Slide' %>
         </h1>
-        <p>स्लाइडर का टेक्स्ट, फोटो और बटन कस्टमाइज़ करें</p>
+        <p>Customize slider text, imagery, and button actions</p>
       </div>
     </div>
     <div class="topbar-right">
-      <a href="/admin/home/hero" class="btn-admin btn-admin-outline">वापस सूची पर जाएं</a>
+      <a href="/admin/home/hero" class="btn-admin btn-admin-outline">Back to List</a>
     </div>
   </header>
 
@@ -31,7 +31,7 @@
       <div class="admin-card-header">
         <h3>
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-          स्लाइड विवरण फॉर्म
+          Hero Slide Details Form
         </h3>
       </div>
 
@@ -40,9 +40,9 @@
           
           <!-- 1. Background Image -->
           <div class="form-group">
-            <label for="imageUrl">बैकग्राउंड इमेज URL (Image URL) *</label>
+            <label for="imageUrl">Background Image URL *</label>
             <input type="url" id="imageUrl" name="imageUrl" class="form-control" placeholder="https://images.unsplash.com/..." value="<%= slide ? slide.imageUrl : '' %>" required oninput="document.getElementById('previewImg').src = this.value;"/>
-            <div class="form-hint">उच्च गुणवत्ता (1920x1080) वाली तस्वीर का लिंक दें।</div>
+            <div class="form-hint">Provide a high-resolution (1920x1080) image link.</div>
             <div style="margin-top: 10px;">
               <img id="previewImg" src="<%= slide && slide.imageUrl ? slide.imageUrl : 'https://placehold.co/600x300/eadfd7/666?text=Image+Preview' %>" alt="Preview" style="max-width: 100%; height: 180px; object-fit: cover; border-radius: 8px; border: 1px solid var(--admin-border);" onerror="this.src='https://placehold.co/600x300/eadfd7/666?text=Invalid+Image+URL';"/>
             </div>
@@ -51,83 +51,83 @@
           <!-- 2. Badges and Tags -->
           <div class="form-grid-2">
             <div class="form-group">
-              <label for="tag">पिल टैग (Tag) *</label>
-              <input type="text" id="tag" name="tag" class="form-control" placeholder="उदा. राष्ट्र व समाज हित" value="<%= slide ? slide.tag : 'राष्ट्र व समाज हित' %>" required />
+              <label for="tag">Pill Tag *</label>
+              <input type="text" id="tag" name="tag" class="form-control" placeholder="e.g. National & Community Upliftment" value="<%= slide ? slide.tag : 'Community Welfare' %>" required />
             </div>
 
             <div class="form-group">
-              <label for="badgeText">बैज उप-शीर्षक (Badge Subtitle)</label>
-              <input type="text" id="badgeText" name="badgeText" class="form-control" placeholder="उदा. ॥ जय निषादराज ॥ अखंड चेतना संकल्प" value="<%= slide ? slide.badgeText : '' %>" />
+              <label for="badgeText">Badge Subtitle</label>
+              <input type="text" id="badgeText" name="badgeText" class="form-control" placeholder="e.g. Jai Nishadraj • United Consciousness Pledge" value="<%= slide ? slide.badgeText : '' %>" />
             </div>
           </div>
 
           <!-- 3. Heading Composition -->
           <div class="form-grid-3">
             <div class="form-group">
-              <label for="headingPrefix">शीर्षक (प्रारंभ)</label>
-              <input type="text" id="headingPrefix" name="headingPrefix" class="form-control" placeholder="उदा. एकता, स्वाभिमान और" value="<%= slide ? slide.headingPrefix : '' %>" />
+              <label for="headingPrefix">Heading Prefix</label>
+              <input type="text" id="headingPrefix" name="headingPrefix" class="form-control" placeholder="e.g. Towards Unity, Dignity &" value="<%= slide ? slide.headingPrefix : '' %>" />
             </div>
 
             <div class="form-group">
-              <label for="highlightText">हाइलाइट शब्द (लाल रंग में)</label>
-              <input type="text" id="highlightText" name="highlightText" class="form-control" placeholder="उदा. उज्ज्वल भविष्य" value="<%= slide ? slide.highlightText : '' %>" />
+              <label for="highlightText">Highlighted Text (Accent Color)</label>
+              <input type="text" id="highlightText" name="highlightText" class="form-control" placeholder="e.g. A Brighter Future" value="<%= slide ? slide.highlightText : '' %>" />
             </div>
 
             <div class="form-group">
-              <label for="headingSuffix">शीर्षक (शेष भाग)</label>
-              <input type="text" id="headingSuffix" name="headingSuffix" class="form-control" placeholder="उदा. की ओर एक मजबूत कदम" value="<%= slide ? slide.headingSuffix : '' %>" />
+              <label for="headingSuffix">Heading Suffix</label>
+              <input type="text" id="headingSuffix" name="headingSuffix" class="form-control" placeholder="e.g. A Strong Step Forward" value="<%= slide ? slide.headingSuffix : '' %>" />
             </div>
           </div>
 
           <!-- 4. Description -->
           <div class="form-group">
-            <label for="description">विस्तृत विवरण (Description) *</label>
-            <textarea id="description" name="description" class="form-control" rows="3" placeholder="स्लाइड का मुख्य संदेश लिखें..." required><%= slide ? slide.description : '' %></textarea>
+            <label for="description">Detailed Description *</label>
+            <textarea id="description" name="description" class="form-control" rows="3" placeholder="Write the main message for this slide..." required><%= slide ? slide.description : '' %></textarea>
           </div>
 
           <!-- 5. Primary CTA Button -->
           <div class="form-grid-3" style="background: #faf6f3; padding: 14px; border-radius: 9px; margin-bottom: 18px; border: 1px solid var(--admin-border-subtle);">
             <div class="form-group" style="margin-bottom: 0;">
-              <label for="primaryBtnText">मुख्य बटन का नाम</label>
-              <input type="text" id="primaryBtnText" name="primaryBtnText" class="form-control" placeholder="उदा. अभियान से जुड़ें" value="<%= slide ? slide.primaryBtnText : 'अभियान से जुड़ें' %>" />
+              <label for="primaryBtnText">Primary Button Label</label>
+              <input type="text" id="primaryBtnText" name="primaryBtnText" class="form-control" placeholder="e.g. Join the Movement" value="<%= slide ? slide.primaryBtnText : 'Join the Movement' %>" />
             </div>
             <div class="form-group" style="margin-bottom: 0;">
-              <label for="primaryBtnLink">मुख्य बटन का लिंक (URL)</label>
+              <label for="primaryBtnLink">Primary Button Link (URL)</label>
               <input type="text" id="primaryBtnLink" name="primaryBtnLink" class="form-control" placeholder="#quickActionSidebar" value="<%= slide ? slide.primaryBtnLink : '#quickActionSidebar' %>" />
             </div>
             <div class="form-group" style="margin-bottom: 0;">
-              <label for="primaryBtnInitiative">पहल पॉपअप कुंजी (वैकल्पिक)</label>
-              <input type="text" id="primaryBtnInitiative" name="primaryBtnInitiative" class="form-control" placeholder="उदा. river-rights" value="<%= slide ? slide.primaryBtnInitiative : '' %>" />
+              <label for="primaryBtnInitiative">Modal Key (Optional)</label>
+              <input type="text" id="primaryBtnInitiative" name="primaryBtnInitiative" class="form-control" placeholder="e.g. river-rights" value="<%= slide ? slide.primaryBtnInitiative : '' %>" />
             </div>
           </div>
 
           <!-- 6. Secondary CTA Button -->
           <div class="form-grid-3" style="background: #faf6f3; padding: 14px; border-radius: 9px; margin-bottom: 18px; border: 1px solid var(--admin-border-subtle);">
             <div class="form-group" style="margin-bottom: 0;">
-              <label for="secondaryBtnText">द्वितीयक बटन का नाम</label>
-              <input type="text" id="secondaryBtnText" name="secondaryBtnText" class="form-control" placeholder="उदा. हमारे मुख्य कार्य" value="<%= slide ? slide.secondaryBtnText : 'हमारे मुख्य कार्य' %>" />
+              <label for="secondaryBtnText">Secondary Button Label</label>
+              <input type="text" id="secondaryBtnText" name="secondaryBtnText" class="form-control" placeholder="e.g. Our Key Initiatives" value="<%= slide ? slide.secondaryBtnText : 'Our Key Initiatives' %>" />
             </div>
             <div class="form-group" style="margin-bottom: 0;">
-              <label for="secondaryBtnLink">द्वितीयक बटन का लिंक</label>
+              <label for="secondaryBtnLink">Secondary Button Link (URL)</label>
               <input type="text" id="secondaryBtnLink" name="secondaryBtnLink" class="form-control" placeholder="#what-we-do" value="<%= slide ? slide.secondaryBtnLink : '#what-we-do' %>" />
             </div>
             <div class="form-group" style="margin-bottom: 0;">
-              <label for="secondaryBtnInitiative">पहल पॉपअप कुंजी (वैकल्पिक)</label>
-              <input type="text" id="secondaryBtnInitiative" name="secondaryBtnInitiative" class="form-control" placeholder="उदा. youth-wing" value="<%= slide ? slide.secondaryBtnInitiative : '' %>" />
+              <label for="secondaryBtnInitiative">Modal Key (Optional)</label>
+              <input type="text" id="secondaryBtnInitiative" name="secondaryBtnInitiative" class="form-control" placeholder="e.g. youth-wing" value="<%= slide ? slide.secondaryBtnInitiative : '' %>" />
             </div>
           </div>
 
           <!-- 7. Order & Status -->
           <div class="form-grid-2">
             <div class="form-group">
-              <label for="order">प्रदर्शन क्रम (Order)</label>
+              <label for="order">Display Order</label>
               <input type="number" id="order" name="order" class="form-control" value="<%= slide ? slide.order : 0 %>" min="0" />
-              <div class="form-hint">कम संख्या वाली स्लाइड पहले दिखाई देगी (1, 2, 3...)।</div>
+              <div class="form-hint">Lower numbers display first (1, 2, 3...).</div>
             </div>
 
             <div class="form-group" style="display: flex; align-items: center; gap: 12px; margin-top: 26px;">
               <input type="checkbox" id="isActive" name="isActive" value="true" <%= !slide || slide.isActive ? 'checked' : '' %> style="width: 18px; height: 18px; accent-color: var(--admin-primary); cursor: pointer;" />
-              <label for="isActive" style="margin-bottom: 0; cursor: pointer; font-size: 14px;">इस स्लाइड को वेबसाइट पर सक्रिय (Active) रखें</label>
+              <label for="isActive" style="margin-bottom: 0; cursor: pointer; font-size: 14px;">Keep this slide active and visible on website</label>
             </div>
           </div>
 
@@ -135,9 +135,9 @@
           <div style="display: flex; gap: 12px; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--admin-border-subtle);">
             <button type="submit" class="btn-admin btn-admin-primary">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-              <span><%= isEdit ? 'अपडेट सुरक्षित करें' : 'स्लाइड सहेजें' %></span>
+              <span><%= isEdit ? 'Save Changes' : 'Save Slide' %></span>
             </button>
-            <a href="/admin/home/hero" class="btn-admin btn-admin-outline">रद्द करें</a>
+            <a href="/admin/home/hero" class="btn-admin btn-admin-outline">Cancel</a>
           </div>
 
         </form>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= typeof title !== 'undefined' ? title : 'Image Gallery' %> | Nishad Sankalp Campaign</title>
+
+    <!-- Google Fonts for authentic typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800;900&family=Rozha+One&display=swap" rel="stylesheet" />
+
+    <!-- Global Site CSS -->
+    <link rel="stylesheet" href="/css/index.css" />
+    <link rel="stylesheet" href="/css/sidebar.css" />
+
+    <!-- Gallery Specific CSS -->
+    <link rel="stylesheet" href="/css/gallery.css" />
+  </head>
+  <body class="gallery-page">
+    <!-- Top Navigation Bar -->
+    <%- include("common/navbar") %>
+
+    <!-- Quick Action / Helpline Sidebar Drawer -->
+    <%- include("components/sidebar") %>
+
+    <!-- HERO BANNER -->
+    <section class="gallery-hero">
+      <div class="gallery-hero-badge">
+        <span>Community Solidarity</span>
+        <span>•</span>
+        <span>People's Participation</span>
+      </div>
+
+      <h1>
+        <span>Image Gallery</span>
+      </h1>
+
+      <p>
+        Inspiring moments of unity, education, self-reliance, and river conservation pledges
+        taken by dedicated community members and youth from across districts.
+      </p>
+
+      <div class="gallery-stats-pills">
+        <div class="gallery-stat-pill">
+          <span>Total Pledge Photos:</span>
+          <strong><%= totalPhotos %></strong>
+        </div>
+        <div class="gallery-stat-pill">
+          <span>Districts Covered:</span>
+          <strong><%= districtsWithCount && districtsWithCount.length ? districtsWithCount.length : 12 %>+</strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- MAIN GALLERY CONTENT -->
+    <main class="gallery-container">
+      <!-- DISTRICT FILTER & SEARCH PANEL -->
+      <section class="gallery-filter-panel" aria-label="Photo Filter">
+        <div class="filter-top-row">
+          <div class="filter-title">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+            <span>Filter by District</span>
+          </div>
+
+          <div class="gallery-search-box">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input
+              type="text"
+              id="gallerySearchInput"
+              placeholder="Search by name, district, or keyword..."
+              aria-label="Search"
+            />
+          </div>
+
+          <span id="visibleCountBadge" style="font-size: 13px; font-weight: 700; color: var(--gallery-text-muted);">
+            <%= photos.length %> photos displayed
+          </span>
+        </div>
+
+        <!-- DISTRICT CHIPS (Horizontal Scrollable) -->
+        <div class="district-chips-wrapper">
+          <div class="district-chips-container" role="tablist">
+            <button
+              type="button"
+              class="district-chip active"
+              data-district="all"
+              role="tab"
+              aria-selected="true"
+            >
+              <span>All Districts</span>
+              <span class="chip-count"><%= totalPhotos %></span>
+            </button>
+
+            <% if (districtsWithCount && districtsWithCount.length > 0) { %>
+              <% districtsWithCount.forEach(function(item) { %>
+                <button
+                  type="button"
+                  class="district-chip"
+                  data-district="<%= item._id %>"
+                  role="tab"
+                  aria-selected="false"
+                >
+                  <span>📍 <%= item._id %></span>
+                  <span class="chip-count"><%= item.count %></span>
+                </button>
+              <% }); %>
+            <% } %>
+          </div>
+        </div>
+      </section>
+
+      <!-- PHOTOS GRID -->
+      <section class="gallery-grid" id="galleryGrid" aria-label="Pledge photos grid">
+        <% if (photos && photos.length > 0) { %>
+          <% photos.forEach(function(photo, index) { %>
+            <article
+              class="gallery-card"
+              data-district="<%= photo.district %>"
+              data-name="<%= photo.name %>"
+              data-date="<%= photo.formattedDate || (photo.date ? new Date(photo.date).toLocaleDateString('en-US') : '') %>"
+              data-caption="<%= photo.caption || '' %>"
+              data-image="<%= photo.imageUrl %>"
+              tabindex="0"
+              role="button"
+              aria-label="<%= photo.name %>, <%= photo.district %>"
+            >
+              <div class="gallery-card-image-wrap">
+                <img
+                  src="<%= photo.imageUrl %>"
+                  alt="<%= photo.name %> — <%= photo.district %>"
+                  class="gallery-card-img"
+                  loading="lazy"
+                  onerror="this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80'"
+                />
+                <div class="gallery-card-overlay">
+                  <div class="card-top-badges">
+                    <span class="card-district-badge">
+                      📍 <%= photo.district %>
+                    </span>
+                    <span class="card-date-badge">
+                      📅 <%= photo.formattedDate || (photo.date ? new Date(photo.date).toLocaleDateString('en-US') : '') %>
+                    </span>
+                  </div>
+
+                  <div class="card-zoom-trigger" title="View large photo">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                  </div>
+                </div>
+              </div>
+
+              <div class="gallery-card-body">
+                <div class="gallery-card-name">
+                  <span><%= photo.name %></span>
+                </div>
+
+                <p class="gallery-card-caption">
+                  <%= photo.caption ? photo.caption : 'A solemn pledge taken in dedication to the Nishad Sankalp Campaign.' %>
+                </p>
+
+                <div class="gallery-card-footer">
+                  <span style="font-size: 11px; font-weight: 700; color: var(--gallery-text-muted);">
+                    Campaign Member
+                  </span>
+                  <span class="card-action-link">
+                    View Photo
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  </span>
+                </div>
+              </div>
+            </article>
+          <% }); %>
+        <% } %>
+
+        <!-- EMPTY STATE (Hidden by default, shown by JS if 0 matches) -->
+        <div class="gallery-empty" id="galleryEmptyState" style="display: none;">
+          <div class="gallery-empty-icon">🔍</div>
+          <h3>No Photos Found</h3>
+          <p>No photographs match your selected district or search term.</p>
+        </div>
+      </section>
+
+      <!-- CALL TO ACTION BANNER -->
+      <section class="gallery-cta">
+        <div>
+          <h3>Have You Taken the Pledge Yet?</h3>
+          <p>
+            Be a part of community progress, education, and unity. Register your pledge online
+            and share your photograph with the movement.
+          </p>
+        </div>
+        <div class="gallery-cta-actions">
+          <a href="#quickActionSidebar" id="galleryPledgeCta" class="btn-cta-primary">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <span>Take Online Pledge</span>
+          </a>
+          <a href="tel:<%= quickInfo && quickInfo.helplineTel ? quickInfo.helplineTel : '+919999999999' %>" class="btn-cta-outline">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <span>Helpline Contact</span>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <!-- FULLSCREEN LIGHTBOX / MODAL -->
+    <div class="gallery-lightbox" id="galleryLightbox" role="dialog" aria-modal="true" aria-label="Photo Lightbox">
+      <!-- Close button -->
+      <button type="button" class="lightbox-close-btn" id="lightboxCloseBtn" aria-label="Close">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+
+      <!-- Previous button -->
+      <button type="button" class="lightbox-nav-btn lightbox-nav-prev" id="lightboxPrevBtn" aria-label="Previous Photo">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+
+      <!-- Next button -->
+      <button type="button" class="lightbox-nav-btn lightbox-nav-next" id="lightboxNextBtn" aria-label="Next Photo">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+
+      <!-- Content Box -->
+      <div class="lightbox-content-box" onclick="event.stopPropagation();">
+        <div class="lightbox-image-side">
+          <img id="lightboxImg" src="" alt="Pledge Photo" />
+        </div>
+
+        <div class="lightbox-details-side">
+          <div>
+            <div class="lightbox-badges">
+              <span class="lightbox-district-badge" id="lightboxDistrict">📍 District</span>
+              <span class="lightbox-date-badge" id="lightboxDate">📅 Date</span>
+            </div>
+
+            <h2 class="lightbox-name" id="lightboxName">Member Name</h2>
+
+            <p class="lightbox-caption" id="lightboxCaption">
+              A solemn pledge taken in dedication to the Nishad Sankalp Campaign for community empowerment, youth guidance, and cultural heritage.
+            </p>
+          </div>
+
+          <div class="lightbox-footer">
+            <a id="lightboxDownloadBtn" href="#" target="_blank" download class="btn-cta-primary" style="padding: 8px 16px; font-size: 13px;">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span>Download / Original Photo</span>
+            </a>
+
+            <span style="font-size: 12px; color: rgba(255,255,255,0.6);">
+              Nishad Sankalp Campaign
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <%- include("common/footer") %>
+
+    <!-- Scripts -->
+    <script src="/js/sidebar.js"></script>
+    <script src="/js/gallery.js"></script>
+  </body>
+</html>

@@ -50,7 +50,7 @@ exports.create = async (req, res, next) => {
     const doc = existing || new VideoNews();
     Object.assign(doc, {
       title: req.body.title.trim(), summary: (req.body.summary || "").trim(), content: req.body.content.trim(),
-      category: (req.body.category || "समाचार").trim(), state: (req.body.state || "").trim(), district: (req.body.district || "").trim(),
+      category: (req.body.category || "News").trim(), state: (req.body.state || "").trim(), district: (req.body.district || "").trim(),
       mediaType, youtubeUrl: mediaType === "youtube" ? link : "",
       videoPath: files.video?.[0] ? `/uploads/news/${files.video[0].filename}` : (mediaType === "upload" ? existing?.videoPath || "" : ""),
       thumbnailPath: files.thumbnail?.[0] ? `/uploads/news/${files.thumbnail[0].filename}` : existing?.thumbnailPath || "",
@@ -95,7 +95,7 @@ exports.togglePublish = async (req, res, next) => {
 exports.frontend = async (_req, res, next) => {
   try {
     const news = await VideoNews.find({ published: true }).sort({ publishedAt: -1, createdAt: -1 }).lean();
-    res.render("news/video_news", { title: "समाचार", news });
+    res.render("news/video_news", { title: "News", news });
   } catch (error) { next(error); }
 };
 

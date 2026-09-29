@@ -1,4 +1,3 @@
-
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
@@ -21,12 +20,12 @@ const MONGODB_URI = process.env.MONGODB_URI;
 // ========================================
 
 if (!MONGODB_URI) {
-  console.error("❌ MONGODB_URI is missing in .env");
+  console.error("MONGODB_URI is missing in .env");
   process.exit(1);
 }
 
 if (!process.env.SESSION_SECRET) {
-  console.error("❌ SESSION_SECRET is missing in .env");
+  console.error("SESSION_SECRET is missing in .env");
   process.exit(1);
 }
 
@@ -37,6 +36,7 @@ if (!process.env.SESSION_SECRET) {
 const sessionConfig = require("./config/session");
 const createDefaultAdmin = require("./config/createAdmin");
 const { seedHomeData } = require("./scripts/seedHomeData");
+const { seedGalleryData } = require("./scripts/seedGalleryData");
 
 // ========================================
 // Routes
@@ -44,12 +44,14 @@ const { seedHomeData } = require("./scripts/seedHomeData");
 
 const adminAuthRoutes = require("./routes/admin/authRoutes");
 const adminDashboardRoutes = require("./routes/admin/dashboardRoutes");
+const adminGalleryRoutes = require("./routes/admin/galleryRoutes");
 const adminHomeRoutes = require("./routes/admin/homeRoutes");
 const adminKalashYatraRoutes = require("./routes/admin/kalashYatraRoutes");
 const adminAboutRoutes = require("./routes/admin/aboutRoutes");
 const aboutController = require("./controllers/aboutController");
 const KalashYatra = require("./models/KalashYatra");
 const homeRoutes = require("./routes/homeRoutes");
+const galleryRoutes = require("./routes/galleryRoutes");
 
 // ========================================
 // View Engine
@@ -102,6 +104,7 @@ app.use(videoNewsRoutes);
 
 app.use("/admin", adminAuthRoutes);
 app.use("/admin", adminDashboardRoutes);
+app.use("/admin/gallery", adminGalleryRoutes);
 app.use("/admin/home", adminHomeRoutes);
 app.use("/admin/kalash-yatra", adminKalashYatraRoutes);
 app.use("/admin/about", adminAboutRoutes);
@@ -124,7 +127,7 @@ app.get("/api/test", (req, res) => {
 app.get("/about", aboutController.getAboutPage);
 
 // ========================================
-// Public Video Page
+// Public Video Page (Kalash Yatra)
 // IMPORTANT: This must be BEFORE 404 Handler
 // ========================================
 
@@ -145,14 +148,15 @@ app.get("/video", async (req, res) => {
 });
 
 // ========================================
-// Public Home & Form API Routes
+// Public Gallery & Home Routes
 // ========================================
 
+app.use("/gallery", galleryRoutes);
+app.use("/sankalp-photos", (req, res) => res.redirect("/gallery"));
 app.use("/", homeRoutes);
 
 // ========================================
 // 404 Handler
-// IMPORTANT: Keep this at the END
 // ========================================
 
 app.use((req, res) => {
@@ -185,42 +189,21 @@ const startServer = async () => {
     // Connect MongoDB
     await mongoose.connect(MONGODB_URI);
 
-    console.log("================================");
-    console.log("✅ MongoDB Connected");
-    console.log("================================");
-
     // Automatically create admin if not exists
     await createDefaultAdmin();
 
     // Automatically seed default home page data if empty
     await seedHomeData();
 
-    // ========================================
-    // Start Server
-    // ========================================
+    // Automatically seed default gallery photos if empty
+    await seedGalleryData();
 
     app.listen(PORT, "0.0.0.0", () => {
-      console.log("================================");
-      console.log("🚀 Server running!");
-      console.log(`   ➜ Local:   http://localhost:${PORT}`);
-      console.log(`   ➜ Network: http://172.16.10.47:${PORT}`);
-      console.log(
-        `   🔐 Admin Login: http://localhost:${PORT}/admin/login`
-      );
-      console.log(
-        `   📊 Admin Dashboard: http://localhost:${PORT}/admin/dashboard`
-      );
-      console.log(
-        `   🏡 Admin Home Manager: http://localhost:${PORT}/admin/home`
-      );
-      console.log(
-        `   🪔 Admin Kalash Yatra: http://localhost:${PORT}/admin/kalash-yatra`
-      );
-      console.log(`   🎥 Video Page: http://localhost:${PORT}/video`);
-      console.log("================================");
+      console.log(`Server running at http://localhost:${PORT}`);
+      console.log(`Admin Login: http://localhost:${PORT}/admin/login`);
     });
   } catch (error) {
-    console.error("❌ Server Startup Error:", error.message);
+    console.error("Server Startup Error:", error.message);
     process.exit(1);
   }
 };
@@ -230,4 +213,3 @@ const startServer = async () => {
 // ========================================
 
 startServer();
-

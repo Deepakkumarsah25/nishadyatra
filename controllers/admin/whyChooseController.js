@@ -10,7 +10,7 @@ exports.getWhyChoose = async (req, res) => {
     }
 
     res.render("admin/home/why-choose", {
-      title: "प्रतिबद्धता एवं विश्वास प्रबंधन (Why Choose Us)",
+      title: "Pillars of Trust Management",
       admin: req.session.admin,
       whyChoose,
       currentPath: "/admin/home/why-choose",
@@ -79,7 +79,7 @@ exports.postAddPillar = async (req, res) => {
     }
 
     doc.pillars.push({
-      title: title || "नया आधार",
+      title: title || "New Pillar",
       description: description || "",
       iconKey: iconKey || "shield",
       order: Number(order) || doc.pillars.length + 1,

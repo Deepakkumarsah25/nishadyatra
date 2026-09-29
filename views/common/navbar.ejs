@@ -2,38 +2,25 @@
 
 <header class="site-header">
   <nav class="navbar">
-
-    <a href="/" class="brand">
-      <span class="brand-mark">नि</span>
-      <span>निषाद संकल्प अभियान</span>
+    <a href="/" class="brand" title="Nishad Sankalp Campaign">
+      <span class="brand-mark">N</span>
+      <span class="brand-name">Nishad Sankalp Campaign</span>
     </a>
 
     <ul class="nav-links" id="navLinks">
-
-      <li>
-        <a href="/">होम</a>
-      </li>
-
-      <li>
-        <a href="/about" class="<%= typeof currentUrl !== 'undefined' && currentUrl === '/about' ? 'active' : '' %>">परिचय</a>
-      </li>
-
-      <li>
-        <a href="/news">समाचार</a>
-      </li>
-
-      <li>
-        <a href="/video">संकल्प वीडियो</a>
-      </li>
-
+      <li><a href="/" class="<%= typeof currentUrl !== 'undefined' && currentUrl === '/' ? 'active' : '' %>">Home</a></li>
+      <li><a href="/about" class="<%= typeof currentUrl !== 'undefined' && currentUrl === '/about' ? 'active' : '' %>">About</a></li>
+      <li><a href="/video" class="<%= typeof currentUrl !== 'undefined' && currentUrl === '/video' ? 'active' : '' %>">Video</a></li>
+      <li><a href="/gallery" class="<%= typeof currentUrl !== 'undefined' && currentUrl === '/gallery' ? 'active' : '' %>">Gallery</a></li>
+      <li><a href="/news" class="<%= typeof currentUrl !== 'undefined' && currentUrl === '/news' ? 'active' : '' %>">News</a></li>
+      <li><a href="/#contact">Contact</a></li>
     </ul>
 
-    <button class="burger" id="burgerBtn" aria-label="मेनू खोलें" aria-expanded="false" type="button">
+    <button class="burger" id="burgerBtn" aria-label="Open menu" aria-expanded="false" type="button">
       <span></span>
       <span></span>
       <span></span>
     </button>
-
   </nav>
 </header>
 

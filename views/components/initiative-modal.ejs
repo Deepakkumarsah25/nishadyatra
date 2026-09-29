@@ -11,11 +11,11 @@
           <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
         </div>
         <div>
-          <span class="modal-category-tag" id="modalCategoryTag">पहल एवं सेवा</span>
-          <h3 class="modal-title" id="modalTitle">पहल विवरण</h3>
+          <span class="modal-category-tag" id="modalCategoryTag">Initiative & Service</span>
+          <h3 class="modal-title" id="modalTitle">Initiative Details</h3>
         </div>
       </div>
-      <button type="button" class="modal-close-btn" id="initiativeModalClose" aria-label="बंद करें">
+      <button type="button" class="modal-close-btn" id="initiativeModalClose" aria-label="Close">
         <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
       </button>
     </div>
@@ -25,14 +25,14 @@
       
       <!-- Overview Description -->
       <p class="modal-overview-desc" id="modalDesc">
-        विवरण लोड हो रहा है...
+        Loading details...
       </p>
 
       <!-- Key Highlights Card -->
       <div class="modal-highlights-card">
         <div class="modal-card-label">
           <svg viewBox="0 0 24 24" width="18" height="18" fill="var(--primary-red)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-          <span>मुख्य विशेषताएं एवं लाभ:</span>
+          <span>Key Features & Benefits:</span>
         </div>
         <ul class="modal-highlights-list" id="modalHighlightsList">
           <!-- Dynamically populated -->
@@ -43,58 +43,58 @@
       <div class="modal-helpline-row">
         <a href="tel:+919999999999" class="modal-helpline-btn" id="modalHelplineBtn">
           <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          <span id="modalHelplineText">सीधा हेल्पलाइन संपर्क</span>
+          <span id="modalHelplineText">Direct Helpline Contact</span>
         </a>
       </div>
 
       <!-- Quick Action Form -->
       <div class="modal-form-card">
-        <h4 class="modal-form-title" id="modalFormTitle">त्वरित ऑनलाइन पंजीकरण व सहयोग</h4>
-        <p class="modal-form-sub">कृपया अपना विवरण भरें, हमारी संबंधित विंग के प्रतिनिधि आपसे 24 घंटे में संपर्क करेंगे।</p>
+        <h4 class="modal-form-title" id="modalFormTitle">Quick Online Registration & Support</h4>
+        <p class="modal-form-sub">Please fill in your details; our team representative will contact you within 24 hours.</p>
 
         <form id="initiativeActionForm">
           <input type="hidden" id="initiativeCategoryInput" name="category" value="" />
           
           <div class="modal-form-grid">
             <div class="modal-field">
-              <label for="modalUserName">आपका शुभ नाम *</label>
-              <input type="text" id="modalUserName" placeholder="नाम लिखें" required />
+              <label for="modalUserName">Full Name *</label>
+              <input type="text" id="modalUserName" placeholder="Enter your full name" required />
             </div>
 
             <div class="modal-field">
-              <label for="modalUserPhone">मोबाइल नंबर *</label>
-              <input type="tel" id="modalUserPhone" placeholder="10 अंकों का मोबाइल नंबर" pattern="[0-9]{10}" required />
+              <label for="modalUserPhone">Phone Number *</label>
+              <input type="tel" id="modalUserPhone" placeholder="10-digit mobile number" pattern="[0-9]{10}" required />
             </div>
 
             <div class="modal-field">
-              <label for="modalUserDistrict">जिला / ब्लॉक *</label>
-              <input type="text" id="modalUserDistrict" placeholder="जैसे: प्रयागराज, वाराणसी, आदि" required />
+              <label for="modalUserDistrict">District / Block *</label>
+              <input type="text" id="modalUserDistrict" placeholder="e.g. Prayagraj, Varanasi, etc." required />
             </div>
 
             <div class="modal-field">
-              <label for="modalUserRole">सहयोग का प्रकार</label>
+              <label for="modalUserRole">Type of Support</label>
               <select id="modalUserRole">
-                <option value="inquiry">जानकारी / सहायता चाहिए</option>
-                <option value="volunteer">स्वयंसेवक के रूप में जुड़ना है</option>
-                <option value="student">विद्यार्थी / अभ्यर्थी मार्गदर्शन</option>
-                <option value="contribute">सहयोग व योगदान</option>
+                <option value="inquiry">Need Information / Help</option>
+                <option value="volunteer">Join as a Volunteer</option>
+                <option value="student">Student / Career Guidance</option>
+                <option value="contribute">Support & Contribution</option>
               </select>
             </div>
 
             <div class="modal-field full-width">
-              <label for="modalUserMessage">संदेश या विशेष आवश्यकता (वैकल्पिक)</label>
-              <textarea id="modalUserMessage" placeholder="अपना संदेश या प्रश्न यहां लिखें..."></textarea>
+              <label for="modalUserMessage">Message or Specific Need (Optional)</label>
+              <textarea id="modalUserMessage" placeholder="Write your message or inquiry here..."></textarea>
             </div>
           </div>
 
           <button type="submit" class="ny-btn ny-btn-primary modal-submit-btn">
-            <span id="modalSubmitBtnText">अनुरोध दर्ज करें</span>
+            <span id="modalSubmitBtnText">Submit Request</span>
             <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" fill="none"/></svg>
           </button>
         </form>
 
         <div class="modal-success-banner" id="modalSuccessBanner">
-          ✓ आपका अनुरोध और विवरण सफलतापूर्वक दर्ज कर लिया गया है। निषाद संकल्प अभियान की संबंधित टीम शीघ्र आपसे संपर्क करेगी।
+          ✓ Your request and details have been submitted successfully. Our team will contact you shortly.
         </div>
       </div>
 
@@ -102,8 +102,8 @@
 
     <!-- Modal Footer -->
     <div class="initiative-modal-footer">
-      <span>॥ निषाद संकल्प अभियान - जन-जन का सहयोग ॥</span>
-      <span>सुरक्षित व निःशुल्क सेवा</span>
+      <span>Nishad Sankalp Campaign - Empowering Communities</span>
+      <span>Secure & Free Service</span>
     </div>
 
   </div>
