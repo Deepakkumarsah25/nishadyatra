@@ -98,10 +98,9 @@ const seedGalleryData = async () => {
     const count = await SankalpPhoto.countDocuments();
     if (count === 0) {
       await SankalpPhoto.insertMany(defaultGalleryPhotos);
-      console.log("🌱 Default Sankalp Photo Gallery data seeded successfully!");
     }
   } catch (error) {
-    console.error("❌ Gallery data seed error:", error.message);
+    console.error("Gallery data seed error:", error.message);
   }
 };
 
