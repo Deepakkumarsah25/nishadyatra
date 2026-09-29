@@ -7,7 +7,7 @@ exports.getKalashYatraManager = async (req, res) => {
     const activeTab = req.query.tab || "hero";
 
     res.render("admin/kalash-yatra/index", {
-      title: "कलश यात्रा प्रबंधन (Kalash Yatra Manager)",
+      title: "Kalash Yatra Management",
       admin: req.session.admin,
       kalash,
       activeTab,
@@ -17,7 +17,7 @@ exports.getKalashYatraManager = async (req, res) => {
     });
   } catch (error) {
     console.error("Fetch Kalash Yatra manager error:", error);
-    res.status(500).redirect("/admin/dashboard?err=" + encodeURIComponent("कलश यात्रा डेटा लोड करने में त्रुटि आई।"));
+    res.status(500).redirect("/admin/dashboard?err=" + encodeURIComponent("Error loading Kalash Yatra data."));
   }
 };
 
@@ -62,10 +62,10 @@ exports.postUpdateHero = async (req, res) => {
     }
 
     doc.hero.stats = [
-      { number: stat0_num || "150+", label: stat0_label || "जिलों में विस्तार", sub: stat0_sub || "पवित्र संकल्प यात्रा" },
-      { number: stat1_num || "50,000+", label: stat1_label || "मंगल कलश पूजन", sub: stat1_sub || "वैदिक विधि-विधान" },
-      { number: stat2_num || "10,000+", label: stat2_label || "मातृशक्ति सहभागिता", sub: stat2_sub || "अग्रिम पंक्ति में" },
-      { number: stat3_num || "28+", label: stat3_label || "राज्यों में चेतना", sub: stat3_sub || "अखंड राष्ट्रीय अभियान" },
+      { number: stat0_num || "150+", label: stat0_label || "Districts Reached", sub: stat0_sub || "Sacred Pledge Journey" },
+      { number: stat1_num || "50,000+", label: stat1_label || "Auspicious Kalash Worship", sub: stat1_sub || "Vedic Rituals" },
+      { number: stat2_num || "10,000+", label: stat2_label || "Women Leadership", sub: stat2_sub || "Leading the Forefront" },
+      { number: stat3_num || "28+", label: stat3_label || "States Awakened", sub: stat3_sub || "National Campaign" },
     ];
 
     doc.hero.featuredVideo = {
@@ -77,7 +77,7 @@ exports.postUpdateHero = async (req, res) => {
     };
 
     await doc.save();
-    res.redirect("/admin/kalash-yatra?tab=hero&msg=" + encodeURIComponent("हीरो सेक्शन सफलतापूर्वक अपडेट हो गया।"));
+    res.redirect("/admin/kalash-yatra?tab=hero&msg=" + encodeURIComponent("Hero section successfully updated."));
   } catch (error) {
     console.error("Update Hero error:", error);
     res.redirect("/admin/kalash-yatra?tab=hero&err=" + encodeURIComponent(error.message));
@@ -110,7 +110,7 @@ exports.postUpdateMilestones = async (req, res) => {
     }
 
     await doc.save();
-    res.redirect("/admin/kalash-yatra?tab=milestones&msg=" + encodeURIComponent("यात्रा पड़ाव (5 माइलस्टोन्स) सफलतापूर्वक अपडेट हो गए।"));
+    res.redirect("/admin/kalash-yatra?tab=milestones&msg=" + encodeURIComponent("Yatra milestones (5 stops) successfully updated."));
   } catch (error) {
     console.error("Update Milestones error:", error);
     res.redirect("/admin/kalash-yatra?tab=milestones&err=" + encodeURIComponent(error.message));
@@ -124,6 +124,8 @@ exports.postAddVideo = async (req, res) => {
     const {
       title,
       videoUrl,
+      thumbnail,
+      personOrPlace,
       category,
       state,
       district,
@@ -135,25 +137,27 @@ exports.postAddVideo = async (req, res) => {
     } = req.body;
 
     if (!title || !videoUrl) {
-      return res.redirect("/admin/kalash-yatra?tab=videos&err=" + encodeURIComponent("वीडियो शीर्षक और URL आवश्यक हैं।"));
+      return res.redirect("/admin/kalash-yatra?tab=videos&err=" + encodeURIComponent("Video title and URL are required."));
     }
 
     doc.videos.unshift({
       title: title.trim(),
       videoUrl: videoUrl.trim(),
+      thumbnail: thumbnail ? thumbnail.trim() : "",
+      personOrPlace: personOrPlace ? personOrPlace.trim() : "",
       category: category || "yatra",
       state: state || "bihar",
-      district: district ? district.trim().toLowerCase() : "gopalganj",
+      district: district ? district.trim() : "गोपालगंज",
       duration: duration || "12:00 Min",
       viewsCount: viewsCount || "10K",
-      date: date || new Date().toLocaleDateString("hi-IN"),
+      date: date || new Date().toLocaleDateString("en-US"),
       description: description || "",
-      tag: tag || (category === "speech" ? "संबोधन" : category === "program" ? "कार्यक्रम" : "कलश यात्रा"),
+      tag: tag || (category === "speech" ? "Speech" : category === "program" ? "Program" : "Kalash Yatra"),
       order: doc.videos.length + 1,
     });
 
     await doc.save();
-    res.redirect("/admin/kalash-yatra?tab=videos&msg=" + encodeURIComponent("नया वीडियो सफलतापूर्वक जोड़ दिया गया।"));
+    res.redirect("/admin/kalash-yatra?tab=videos&msg=" + encodeURIComponent("New video successfully added."));
   } catch (error) {
     console.error("Add Video error:", error);
     res.redirect("/admin/kalash-yatra?tab=videos&err=" + encodeURIComponent(error.message));
@@ -168,12 +172,14 @@ exports.postUpdateVideo = async (req, res) => {
     const video = doc.videos.id(videoId);
 
     if (!video) {
-      return res.redirect("/admin/kalash-yatra?tab=videos&err=" + encodeURIComponent("वीडियो नहीं मिला।"));
+      return res.redirect("/admin/kalash-yatra?tab=videos&err=" + encodeURIComponent("Video not found."));
     }
 
     const {
       title,
       videoUrl,
+      thumbnail,
+      personOrPlace,
       category,
       state,
       district,
@@ -184,11 +190,13 @@ exports.postUpdateVideo = async (req, res) => {
       tag,
     } = req.body;
 
-    video.title = title || video.title;
-    video.videoUrl = videoUrl || video.videoUrl;
+    video.title = title ? title.trim() : video.title;
+    video.videoUrl = videoUrl ? videoUrl.trim() : video.videoUrl;
+    if (typeof thumbnail !== "undefined") video.thumbnail = thumbnail.trim();
+    if (typeof personOrPlace !== "undefined") video.personOrPlace = personOrPlace.trim();
     video.category = category || video.category;
     video.state = state || video.state;
-    video.district = district ? district.trim().toLowerCase() : video.district;
+    video.district = district ? district.trim() : video.district;
     video.duration = duration || video.duration;
     video.viewsCount = viewsCount || video.viewsCount;
     video.date = date || video.date;
@@ -196,7 +204,7 @@ exports.postUpdateVideo = async (req, res) => {
     video.tag = tag || video.tag;
 
     await doc.save();
-    res.redirect("/admin/kalash-yatra?tab=videos&msg=" + encodeURIComponent("वीडियो सफलतापूर्वक अपडेट किया गया।"));
+    res.redirect("/admin/kalash-yatra?tab=videos&msg=" + encodeURIComponent("Video successfully updated."));
   } catch (error) {
     console.error("Update Video error:", error);
     res.redirect("/admin/kalash-yatra?tab=videos&err=" + encodeURIComponent(error.message));
@@ -212,7 +220,7 @@ exports.postDeleteVideo = async (req, res) => {
     doc.videos.pull({ _id: videoId });
     await doc.save();
 
-    res.redirect("/admin/kalash-yatra?tab=videos&msg=" + encodeURIComponent("वीडियो सफलतापूर्वक हटा दिया गया।"));
+    res.redirect("/admin/kalash-yatra?tab=videos&msg=" + encodeURIComponent("Video successfully deleted."));
   } catch (error) {
     console.error("Delete Video error:", error);
     res.redirect("/admin/kalash-yatra?tab=videos&err=" + encodeURIComponent(error.message));
@@ -274,37 +282,86 @@ exports.postUpdatePillars = async (req, res) => {
       {
         number: "01",
         iconKey: "water",
-        title: p0_title || "पवित्र जल एवं पर्यावरण संरक्षण संकल्प",
+        title: p0_title || "Sacred Water & Environmental Conservation Pledge",
         description: p0_desc || "",
         order: 1,
       },
       {
         number: "02",
         iconKey: "women",
-        title: p1_title || "मातृशक्ति का गौरव एवं सशक्तिकरण",
+        title: p1_title || "Pride & Empowerment of Women",
         description: p1_desc || "",
         order: 2,
       },
       {
         number: "03",
         iconKey: "unity",
-        title: p2_title || "सामाजिक समरसता व अखंड एकजुटता",
+        title: p2_title || "Social Harmony & Solid Unity",
         description: p2_desc || "",
         order: 3,
       },
       {
         number: "04",
         iconKey: "education",
-        title: p3_title || "शिक्षा, संस्कार और स्वावलंबन की राह",
+        title: p3_title || "Path to Education, Values & Self-Reliance",
         description: p3_desc || "",
         order: 4,
       },
     ];
 
     await doc.save();
-    res.redirect("/admin/kalash-yatra?tab=pillars&msg=" + encodeURIComponent("चार महा-संकल्प व फ़ोटो कोलाज सफलतापूर्वक अपडेट हो गए।"));
+    res.redirect("/admin/kalash-yatra?tab=pillars&msg=" + encodeURIComponent("Four major pledges and photo collage successfully updated."));
   } catch (error) {
     console.error("Update Pillars error:", error);
     res.redirect("/admin/kalash-yatra?tab=pillars&err=" + encodeURIComponent(error.message));
   }
 };
+
+// 7. Update Democratic Pledge (लोकतांत्रिक महा-संकल्प)
+exports.postUpdatePledge = async (req, res) => {
+  try {
+    const doc = await KalashYatra.getOrSeed();
+    const {
+      enabled,
+      badge,
+      title,
+      subtitle,
+      pledgeText,
+      signOff,
+      points,
+      videoUrl,
+    } = req.body;
+
+    if (!doc.democraticPledge) {
+      doc.democraticPledge = {};
+    }
+
+    doc.democraticPledge.enabled = enabled === "on" || enabled === true || enabled === "true";
+    doc.democraticPledge.badge = badge ? badge.trim() : "🇮🇳 ऐतिहासिक लोकतांत्रिक महा-संकल्प";
+    doc.democraticPledge.title = title ? title.trim() : "लोकतांत्रिक संकल्प पत्र";
+    doc.democraticPledge.subtitle = subtitle ? subtitle.trim() : "";
+    doc.democraticPledge.pledgeText = pledgeText
+      ? pledgeText.trim()
+      : "आज हम लोकतांत्रिक संकल्प लेते हैं कि आगामी चुनाव में भाजपा के पक्ष में मतदान नहीं करेंगे तथा अपने विवेक और विचार के आधार पर अपने मताधिकार का प्रयोग करेंगे।";
+    doc.democraticPledge.signOff = signOff
+      ? signOff.trim()
+      : "— समस्त समाज, युवा एवं मातृशक्ति का सामूहिक संकल्प";
+    doc.democraticPledge.videoUrl = videoUrl ? videoUrl.trim() : "";
+
+    if (typeof points !== "undefined") {
+      doc.democraticPledge.keyPoints = (Array.isArray(points) ? points : points.split("\n"))
+        .map((p) => p.trim())
+        .filter(Boolean);
+    }
+
+    await doc.save();
+    res.redirect(
+      "/admin/kalash-yatra?tab=pledge&msg=" +
+        encodeURIComponent("लोकतांत्रिक महा-संकल्प पत्र सफलतापूर्वक सहेजा गया।")
+    );
+  } catch (error) {
+    console.error("Update Pledge error:", error);
+    res.redirect("/admin/kalash-yatra?tab=pledge&err=" + encodeURIComponent(error.message));
+  }
+};
+

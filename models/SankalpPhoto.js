@@ -4,13 +4,13 @@ const sankalpPhotoSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, "नाम आवश्यक है"],
+      required: [true, "Name is required"],
       trim: true,
-      default: "सनातनी निषाद",
+      default: "Sanatani Nishad",
     },
     district: {
       type: String,
-      required: [true, "जिला आवश्यक है"],
+      required: [true, "District is required"],
       trim: true,
       index: true,
     },
@@ -30,7 +30,7 @@ const sankalpPhotoSchema = new mongoose.Schema(
     },
     imageUrl: {
       type: String,
-      required: [true, "तस्वीर URL अथवा फाइल आवश्यक है"],
+      required: [true, "Image URL or file is required"],
       trim: true,
     },
     imageFilename: {
@@ -63,7 +63,7 @@ sankalpPhotoSchema.virtual("formattedDate").get(function () {
   try {
     const d = new Date(this.date);
     if (isNaN(d.getTime())) return "";
-    return d.toLocaleDateString("hi-IN", {
+    return d.toLocaleDateString("en-US", {
       day: "numeric",
       month: "long",
       year: "numeric",

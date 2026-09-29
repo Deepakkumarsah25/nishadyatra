@@ -35,7 +35,7 @@ exports.login = async (req, res) => {
     if (!email || !password) {
       return res.status(400).render("admin/auth/login", {
         title: "Admin Login",
-        error: "Email और password दोनों required हैं।",
+        error: "Both email and password are required.",
         success: null,
       });
     }
@@ -51,7 +51,7 @@ exports.login = async (req, res) => {
     if (!admin) {
       return res.status(401).render("admin/auth/login", {
         title: "Admin Login",
-        error: "Invalid email या password।",
+        error: "Invalid email or password.",
         success: null,
       });
     }
@@ -63,7 +63,7 @@ exports.login = async (req, res) => {
     if (!admin.isActive) {
       return res.status(403).render("admin/auth/login", {
         title: "Admin Login",
-        error: "Admin account inactive है।",
+        error: "Admin account is inactive.",
         success: null,
       });
     }
@@ -80,7 +80,7 @@ exports.login = async (req, res) => {
     if (!passwordMatch) {
       return res.status(401).render("admin/auth/login", {
         title: "Admin Login",
-        error: "Invalid email या password।",
+        error: "Invalid email or password.",
         success: null,
       });
     }
@@ -91,14 +91,11 @@ exports.login = async (req, res) => {
 
     req.session.regenerate((sessionError) => {
       if (sessionError) {
-        console.error(
-          "❌ Session Regenerate Error:",
-          sessionError
-        );
+        console.error("Session Regenerate Error:", sessionError);
 
         return res.status(500).render("admin/auth/login", {
           title: "Admin Login",
-          error: "Login session create नहीं हो सका।",
+          error: "Could not create login session.",
           success: null,
         });
       }
@@ -120,30 +117,23 @@ exports.login = async (req, res) => {
 
       req.session.save((saveError) => {
         if (saveError) {
-          console.error(
-            "❌ Session Save Error:",
-            saveError
-          );
+          console.error("Session Save Error:", saveError);
 
           return res.status(500).render(
             "admin/auth/login",
             {
               title: "Admin Login",
-              error: "Login session save नहीं हो सका।",
+              error: "Could not save login session.",
               success: null,
             }
           );
         }
 
-        console.log(
-          `✅ Admin Login: ${admin.email}`
-        );
-
         return res.redirect("/admin/dashboard");
       });
     });
   } catch (error) {
-    console.error("❌ Admin Login Error:", error);
+    console.error("Admin Login Error:", error);
 
     return res.status(500).render("admin/auth/login", {
       title: "Admin Login",
@@ -160,7 +150,7 @@ exports.login = async (req, res) => {
 exports.logout = (req, res) => {
   req.session.destroy((error) => {
     if (error) {
-      console.error("❌ Logout Error:", error);
+      console.error("Logout Error:", error);
 
       return res.redirect("/admin/dashboard");
     }
@@ -172,8 +162,6 @@ exports.logout = (req, res) => {
       secure: process.env.NODE_ENV === "production",
       path: "/",
     });
-
-    console.log("✅ Admin Logout");
 
     return res.redirect("/admin/login");
   });

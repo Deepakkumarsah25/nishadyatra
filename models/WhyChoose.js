@@ -26,34 +26,34 @@ const whyChooseSchema = new mongoose.Schema(
   {
     sectionTag: {
       type: String,
-      default: "पारदर्शिता और प्रतिबद्धता",
+      default: "Transparency & Commitment",
       trim: true,
     },
     sectionTitle: {
       type: String,
-      default: "निषाद संकल्प अभियान",
+      default: "Why Choose the",
       trim: true,
     },
     highlightText: {
       type: String,
-      default: "ही क्यों चुनें?",
+      default: "Nishad Sankalp Campaign?",
       trim: true,
     },
     sectionSubtitle: {
       type: String,
       default:
-        "हमारा उद्देश्य राजनीतिक स्वार्थ नहीं, बल्कि समाज के अंतिम व्यक्ति तक शिक्षा, स्वाभिमान, विधिक सुरक्षा और आर्थिक उन्नति पहुंचाना है।",
+        "Our objective is not political ambition, but ensuring that education, self-respect, legal protection, and economic progress reach the last person in society.",
       trim: true,
     },
     introHeading: {
       type: String,
-      default: "धरातलीय सत्य और अटूट निष्ठा से बना हमारा आधार",
+      default: "A Foundation Built on Ground Realities & Unwavering Dedication",
       trim: true,
     },
     introDesc: {
       type: String,
       default:
-        "वर्षों के संघर्ष और निरंतर सेवा से हमने समाज का अटूट विश्वास अर्जित किया है। हर कदम पर आपके साथ चलना ही हमारा प्रथम कर्तव्य है।",
+        "Through relentless struggle and dedicated public service, we have earned the lasting trust of our community. Standing by your side at every step is our highest calling.",
       trim: true,
     },
     pillars: {
@@ -63,21 +63,21 @@ const whyChooseSchema = new mongoose.Schema(
     quoteText: {
       type: String,
       default:
-        "जब समाज का एक-एक हाथ साथ जुड़ता है, तो इतिहास की दिशा बदल जाती है। निषाद संकल्प अभियान आपकी आवाज है।",
+        "When each hand in the community joins together in purpose, the course of history transforms. Nishad Sankalp Campaign is your voice.",
       trim: true,
     },
     pledgePoints: {
       type: [String],
       default: [
-        "निःशुल्क सदस्यता एवं पारदर्शी भागीदारी",
-        "गांव व ब्लॉक स्तर पर प्रत्यक्ष संवाद बैठकें",
-        "छात्रों और युवाओं के लिए व्यक्तिगत मार्गदर्शन",
-        "आपदा व संकट में तत्काल स्वयंसेवक दल सेवा",
+        "Free membership and transparent community participation",
+        "Direct outreach meetings at the village and block levels",
+        "Personalized guidance and mentorship for students and youth",
+        "Immediate volunteer response teams during crises and emergencies",
       ],
     },
     pledgeBtnText: {
       type: String,
-      default: "आज ही संकल्प ग्रहण करें",
+      default: "Take the Pledge Today",
       trim: true,
     },
     pledgeBtnLink: {

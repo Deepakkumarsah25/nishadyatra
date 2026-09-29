@@ -20,12 +20,12 @@ const MONGODB_URI = process.env.MONGODB_URI;
 // ========================================
 
 if (!MONGODB_URI) {
-  console.error("❌ MONGODB_URI is missing in .env");
+  console.error("MONGODB_URI is missing in .env");
   process.exit(1);
 }
 
 if (!process.env.SESSION_SECRET) {
-  console.error("❌ SESSION_SECRET is missing in .env");
+  console.error("SESSION_SECRET is missing in .env");
   process.exit(1);
 }
 
@@ -179,10 +179,6 @@ const startServer = async () => {
     // Connect MongoDB
     await mongoose.connect(MONGODB_URI);
 
-    console.log("================================");
-    console.log("✅ MongoDB Connected");
-    console.log("================================");
-
     // Automatically create admin if not exists
     await createDefaultAdmin();
 
@@ -193,31 +189,11 @@ const startServer = async () => {
     await seedGalleryData();
 
     app.listen(PORT, "0.0.0.0", () => {
-      console.log("================================");
-      console.log("🚀 Server running!");
-      console.log(`   ➜ Local:   http://localhost:${PORT}`);
-      console.log(`   ➜ Network: http://192.168.1.23:${PORT}`);
-      console.log(
-        `   🔐 Admin Login: http://localhost:${PORT}/admin/login`
-      );
-      console.log(
-        `   📊 Admin Dashboard: http://localhost:${PORT}/admin/dashboard`
-      );
-      console.log(
-        `   🏡 Admin Home Manager: http://localhost:${PORT}/admin/home`
-      );
-      console.log(
-        `   🪔 Admin Kalash Yatra: http://localhost:${PORT}/admin/kalash-yatra`
-      );
-      console.log(
-        `   🖼️ Admin Gallery: http://localhost:${PORT}/admin/gallery`
-      );
-      console.log(`   🎥 Video Page: http://localhost:${PORT}/video`);
-      console.log(`   🖼️ Public Gallery: http://localhost:${PORT}/gallery`);
-      console.log("================================");
+      console.log(`Server running at http://localhost:${PORT}`);
+      console.log(`Admin Login: http://localhost:${PORT}/admin/login`);
     });
   } catch (error) {
-    console.error("❌ Server Startup Error:", error.message);
+    console.error("Server Startup Error:", error.message);
     process.exit(1);
   }
 };

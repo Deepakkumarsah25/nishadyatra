@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%= typeof title !== 'undefined' ? title : 'निषाद संकल्प अभियान' %> - एकता, शिक्षा और सशक्तिकरण</title>
+    <title><%= typeof title !== 'undefined' ? title : 'Nishad Sankalp Campaign' %> - Unity, Education & Empowerment</title>
 
     <!-- Google Fonts for authentic Devanagari typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -16,7 +16,7 @@
     <!-- Modular Component CSS -->
     <link rel="stylesheet" href="/css/hero.css" />
     <link rel="stylesheet" href="/css/sidebar.css" />
-    <link rel="stylesheet" href="/css/what-we-do.css" />
+    <link rel="stylesheet" href="/css/video-showcase.css" />
     <link rel="stylesheet" href="/css/why-choose.css" />
     <link rel="stylesheet" href="/css/initiative-modal.css" />
   </head>
@@ -35,8 +35,8 @@
       <!-- 1. Hero Section -->
       <%- include("components/hero") %>
 
-      <!-- 2. What We Do Section -->
-      <%- include("components/what-we-do") %>
+      <!-- 2. Video Showcase Section (Highlight & Latest Videos) -->
+      <%- include("components/video-showcase") %>
 
       <!-- 3. Sankalp Photo Gallery Preview -->
       <%- include("components/gallery-preview") %>

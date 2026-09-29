@@ -7,21 +7,21 @@
     <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 40px;">
       <div>
         <div style="display: inline-flex; align-items: center; gap: 8px; background: #fff0ec; color: #d72a2a; padding: 5px 14px; border-radius: 20px; font-size: 13px; font-weight: 800; border: 1px solid #f7c9be; margin-bottom: 12px;">
-          <span>॥ जन-भागीदारी ॥</span>
+          <span>Public Participation</span>
           <span>•</span>
-          <span>संकल्प लेते साथी</span>
+          <span>Members Taking Pledge</span>
         </div>
         <h2 style="font-family: 'Rozha One', 'Mukta', serif; font-size: clamp(28px, 4vw, 42px); color: #2c1e1e; line-height: 1.2; font-weight: 800;">
-          संकल्प फोटो — <span style="color: #d72a2a;">Image Gallery</span>
+          <span style="color: #d72a2a;">Image Gallery</span>
         </h2>
         <p style="font-size: 15px; color: #78665f; margin-top: 8px; max-width: 600px; line-height: 1.5;">
-          विभिन्न जनपदों से निषाद संकल्प अभियान के प्रति समर्पित समाज बंधुओं एवं जनसामान्य द्वारा भेजी गई तस्वीरें।
+          Photographs shared by devoted community members and citizens from various districts.
         </p>
       </div>
 
       <div>
         <a href="/gallery" class="btn-primary" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 10px; background: linear-gradient(135deg, #d72a2a, #a91c1c); color: #fff; font-weight: 800; font-size: 14px; text-decoration: none; box-shadow: 0 4px 15px rgba(215, 42, 42, 0.25);">
-          <span>संपूर्ण गैलरी देखें (All Photos)</span>
+          <span>View Full Gallery</span>
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
       </div>
@@ -45,13 +45,13 @@
                 📍 <%= photo.district %>
               </span>
               <span style="position: absolute; bottom: 12px; right: 12px; background: rgba(0,0,0,0.65); color: #fff; font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 20px;">
-                📅 <%= photo.formattedDate || (photo.date ? new Date(photo.date).toLocaleDateString('hi-IN') : '') %>
+                📅 <%= photo.formattedDate || (photo.date ? new Date(photo.date).toLocaleDateString('en-US') : '') %>
               </span>
             </div>
             <div style="padding: 16px 18px;">
               <strong style="display: block; font-size: 16px; color: #2c1e1e; font-weight: 800; margin-bottom: 4px;"><%= photo.name %></strong>
               <p style="font-size: 12px; color: #806e67; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-                <%= photo.caption || 'अखंड निषाद संकल्प अभियान के प्रति समर्पित भाव से लिया गया पावन संकल्प।' %>
+                <%= photo.caption || 'A solemn pledge taken in dedication to the Nishad Sankalp Campaign.' %>
               </p>
             </div>
           </a>

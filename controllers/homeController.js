@@ -5,6 +5,7 @@ const SiteNotice = require("../models/SiteNotice");
 const HomeQuickInfo = require("../models/HomeQuickInfo");
 const InitiativeInquiry = require("../models/InitiativeInquiry");
 const SankalpPhoto = require("../models/SankalpPhoto");
+const KalashYatra = require("../models/KalashYatra");
 const {
   defaultHeroSlides,
   defaultInitiatives,
@@ -17,7 +18,7 @@ const { defaultGalleryPhotos } = require("../scripts/seedGalleryData");
 // Public Home Page
 exports.getHomePage = async (req, res) => {
   try {
-    const [heroSlides, initiatives, whyChooseDoc, notices, quickInfoDoc, galleryPhotos] =
+    const [heroSlides, initiatives, whyChooseDoc, notices, quickInfoDoc, galleryPhotos, kalashDoc] =
       await Promise.all([
         HeroSlide.find({ isActive: true }).sort({ order: 1, createdAt: 1 }),
         Initiative.find({ isActive: true }).sort({ order: 1, createdAt: 1 }),
@@ -25,6 +26,7 @@ exports.getHomePage = async (req, res) => {
         SiteNotice.find({ isActive: true }).sort({ order: 1, createdAt: 1 }),
         HomeQuickInfo.findOne(),
         SankalpPhoto.find({ isPublished: true }).sort({ order: 1, date: -1 }).limit(6),
+        KalashYatra.getOrSeed().catch(() => KalashYatra.defaultData),
       ]);
 
     // Fallbacks if database is completely empty or just initialized
@@ -39,6 +41,14 @@ exports.getHomePage = async (req, res) => {
     const finalGalleryPhotos =
       galleryPhotos && galleryPhotos.length > 0 ? galleryPhotos : defaultGalleryPhotos.slice(0, 4);
 
+    const kalash = kalashDoc || KalashYatra.defaultData;
+    const highlightVideo = (kalash && kalash.hero && kalash.hero.featuredVideo)
+      ? kalash.hero.featuredVideo
+      : null;
+    const latestVideos = (kalash && kalash.videos && kalash.videos.length > 0)
+      ? kalash.videos.slice(0, 4)
+      : (kalash && kalash.milestonesSection && kalash.milestonesSection.items ? kalash.milestonesSection.items.slice(0, 4) : []);
+
     // Convert initiatives to client-side modal dictionary
     const initiativesModalMap = {};
     finalInitiatives.forEach((item) => {
@@ -52,13 +62,13 @@ exports.getHomePage = async (req, res) => {
             : item.points || [],
         helplineText: item.helplineText || finalQuickInfo.helplineText,
         helplineTel: item.helplineTel || finalQuickInfo.helplineTel,
-        formTitle: item.formTitle || "पंजीकरण एवं सहायता फॉर्म",
-        formSubmitText: item.formSubmitText || "सहयोग अनुरोध भेजें",
+        formTitle: item.formTitle || "Registration & Support Form",
+        formSubmitText: item.formSubmitText || "Send Support Request",
       };
     });
 
     res.render("index", {
-      title: "निषाद संकल्प अभियान",
+      title: "Nishad Sankalp Campaign",
       heroSlides: finalHeroSlides,
       initiatives: finalInitiatives,
       initiativesModalMap,
@@ -66,12 +76,16 @@ exports.getHomePage = async (req, res) => {
       notices: finalNotices,
       quickInfo: finalQuickInfo,
       galleryPhotos: finalGalleryPhotos,
+      kalash,
+      highlightVideo,
+      latestVideos,
     });
   } catch (error) {
     console.error("Home page render error:", error);
+    const kalashFallback = KalashYatra.defaultData;
     // Safe render with defaults so the user's site never crashes
     res.render("index", {
-      title: "निषाद संकल्प अभियान",
+      title: "Nishad Sankalp Campaign",
       heroSlides: defaultHeroSlides,
       initiatives: defaultInitiatives,
       initiativesModalMap: {},
@@ -79,6 +93,9 @@ exports.getHomePage = async (req, res) => {
       notices: defaultNotices,
       quickInfo: defaultQuickInfo,
       galleryPhotos: defaultGalleryPhotos.slice(0, 4),
+      kalash: kalashFallback,
+      highlightVideo: kalashFallback?.hero?.featuredVideo || null,
+      latestVideos: (kalashFallback?.videos || []).slice(0, 4),
     });
   }
 };
@@ -93,22 +110,22 @@ exports.submitPledge = async (req, res) => {
 
     const inquiry = await InitiativeInquiry.create({
       type: "pledge",
-      category: "ऑनलाइन संकल्प",
+      category: "Online Pledge",
       name: name.trim(),
       phone: phone.trim(),
       district: district ? district.trim() : "",
-      message: "वेबसाइट साइडबार से ऑनलाइन संकल्प दर्ज किया गया।",
+      message: "Online pledge submitted via website sidebar.",
       status: "new",
     });
 
     res.json({
       success: true,
-      message: "आपका संकल्प सफलतापूर्वक दर्ज कर लिया गया है।",
+      message: "Your pledge has been successfully registered.",
       id: inquiry._id,
     });
   } catch (error) {
     console.error("Pledge submission error:", error);
-    res.status(500).json({ success: false, message: "त्रुटि हुई, पुनः प्रयास करें।" });
+    res.status(500).json({ success: false, message: "An error occurred, please try again." });
   }
 };
 
@@ -122,7 +139,7 @@ exports.submitInitiativeInquiry = async (req, res) => {
 
     const inquiry = await InitiativeInquiry.create({
       type: "initiative",
-      category: category ? category.trim() : "पहल सहायता",
+      category: category ? category.trim() : "Initiative Support",
       name: name.trim(),
       phone: phone.trim(),
       district: district ? district.trim() : "",
@@ -132,11 +149,11 @@ exports.submitInitiativeInquiry = async (req, res) => {
 
     res.json({
       success: true,
-      message: "आपका अनुरोध सफलतापूर्वक दर्ज कर लिया गया है।",
+      message: "Your request has been successfully registered.",
       id: inquiry._id,
     });
   } catch (error) {
     console.error("Initiative submission error:", error);
-    res.status(500).json({ success: false, message: "त्रुटि हुई, पुनः प्रयास करें।" });
+    res.status(500).json({ success: false, message: "An error occurred, please try again." });
   }
 };

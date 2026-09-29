@@ -35,7 +35,7 @@ const fileFilter = (req, file, cb) => {
   if (extName || mimeType || file.mimetype.startsWith("image/")) {
     return cb(null, true);
   }
-  cb(new Error("केवल छवियां (JPG, PNG, WEBP) ही अपलोड की जा सकती हैं!"));
+  cb(new Error("Only images (JPG, PNG, WEBP, AVIF, GIF) can be uploaded!"));
 };
 
 const upload = multer({
