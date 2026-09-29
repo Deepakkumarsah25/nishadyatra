@@ -5,6 +5,7 @@ const SiteNotice = require("../models/SiteNotice");
 const HomeQuickInfo = require("../models/HomeQuickInfo");
 const InitiativeInquiry = require("../models/InitiativeInquiry");
 const SankalpPhoto = require("../models/SankalpPhoto");
+const KalashYatra = require("../models/KalashYatra");
 const {
   defaultHeroSlides,
   defaultInitiatives,
@@ -17,7 +18,7 @@ const { defaultGalleryPhotos } = require("../scripts/seedGalleryData");
 // Public Home Page
 exports.getHomePage = async (req, res) => {
   try {
-    const [heroSlides, initiatives, whyChooseDoc, notices, quickInfoDoc, galleryPhotos] =
+    const [heroSlides, initiatives, whyChooseDoc, notices, quickInfoDoc, galleryPhotos, kalashDoc] =
       await Promise.all([
         HeroSlide.find({ isActive: true }).sort({ order: 1, createdAt: 1 }),
         Initiative.find({ isActive: true }).sort({ order: 1, createdAt: 1 }),
@@ -25,6 +26,7 @@ exports.getHomePage = async (req, res) => {
         SiteNotice.find({ isActive: true }).sort({ order: 1, createdAt: 1 }),
         HomeQuickInfo.findOne(),
         SankalpPhoto.find({ isPublished: true }).sort({ order: 1, date: -1 }).limit(6),
+        KalashYatra.getOrSeed().catch(() => KalashYatra.defaultData),
       ]);
 
     // Fallbacks if database is completely empty or just initialized
@@ -38,6 +40,14 @@ exports.getHomePage = async (req, res) => {
     const finalQuickInfo = quickInfoDoc || defaultQuickInfo;
     const finalGalleryPhotos =
       galleryPhotos && galleryPhotos.length > 0 ? galleryPhotos : defaultGalleryPhotos.slice(0, 4);
+
+    const kalash = kalashDoc || KalashYatra.defaultData;
+    const highlightVideo = (kalash && kalash.hero && kalash.hero.featuredVideo)
+      ? kalash.hero.featuredVideo
+      : null;
+    const latestVideos = (kalash && kalash.videos && kalash.videos.length > 0)
+      ? kalash.videos.slice(0, 4)
+      : (kalash && kalash.milestonesSection && kalash.milestonesSection.items ? kalash.milestonesSection.items.slice(0, 4) : []);
 
     // Convert initiatives to client-side modal dictionary
     const initiativesModalMap = {};
@@ -66,9 +76,13 @@ exports.getHomePage = async (req, res) => {
       notices: finalNotices,
       quickInfo: finalQuickInfo,
       galleryPhotos: finalGalleryPhotos,
+      kalash,
+      highlightVideo,
+      latestVideos,
     });
   } catch (error) {
     console.error("Home page render error:", error);
+    const kalashFallback = KalashYatra.defaultData;
     // Safe render with defaults so the user's site never crashes
     res.render("index", {
       title: "Nishad Sankalp Campaign",
@@ -79,6 +93,9 @@ exports.getHomePage = async (req, res) => {
       notices: defaultNotices,
       quickInfo: defaultQuickInfo,
       galleryPhotos: defaultGalleryPhotos.slice(0, 4),
+      kalash: kalashFallback,
+      highlightVideo: kalashFallback?.hero?.featuredVideo || null,
+      latestVideos: (kalashFallback?.videos || []).slice(0, 4),
     });
   }
 };
