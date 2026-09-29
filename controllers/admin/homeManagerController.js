@@ -5,6 +5,7 @@ const SiteNotice = require("../../models/SiteNotice");
 const HomeQuickInfo = require("../../models/HomeQuickInfo");
 const InitiativeInquiry = require("../../models/InitiativeInquiry");
 const SankalpPhoto = require("../../models/SankalpPhoto");
+const VideoNews = require("../../models/news/VideoNews");
 
 exports.getHomeDashboard = async (req, res) => {
   try {
@@ -16,6 +17,8 @@ exports.getHomeDashboard = async (req, res) => {
       inquiriesCount,
       newInquiriesCount,
       photosCount,
+      newsCount,
+      newsHighlightCount,
     ] = await Promise.all([
       HeroSlide.countDocuments(),
       Initiative.countDocuments(),
@@ -24,6 +27,11 @@ exports.getHomeDashboard = async (req, res) => {
       InitiativeInquiry.countDocuments(),
       InitiativeInquiry.countDocuments({ status: "new" }),
       SankalpPhoto.countDocuments(),
+      VideoNews.countDocuments({ published: true }).catch(() => 0),
+      VideoNews.countDocuments({
+        published: true,
+        $or: [{ isHighlighted: true }, { featured: true }],
+      }).catch(() => 0),
     ]);
 
     const pillarsCount = whyChooseDoc?.pillars?.length || 0;
@@ -39,6 +47,8 @@ exports.getHomeDashboard = async (req, res) => {
         inquiriesCount,
         newInquiriesCount,
         photosCount,
+        newsCount,
+        newsHighlightCount,
       },
       currentPath: "/admin/home",
     });
