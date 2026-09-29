@@ -369,7 +369,6 @@ kalashYatraSchema.statics.getOrSeed = async function () {
   let doc = await this.findOne();
   if (!doc) {
     doc = await this.create(defaultKalashYatraData);
-    console.log("🌱 Default Kalash Yatra content seeded successfully.");
   }
   return doc;
 };
