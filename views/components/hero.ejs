@@ -64,7 +64,7 @@
 
                 <% if (slide.secondaryBtnText) { %>
                   <a
-                    href="<%= slide.secondaryBtnLink || '#what-we-do' %>"
+                    href="<%= (slide.secondaryBtnLink && slide.secondaryBtnLink !== '#what-we-do') ? slide.secondaryBtnLink : '#about' %>"
                     class="ny-btn ny-btn-outline"
                     <%= slide.secondaryBtnInitiative ? 'data-initiative="' + slide.secondaryBtnInitiative + '"' : '' %>
                   >
