@@ -1,613 +1,172 @@
 <%
-function ytId(url){ try{ const u=new URL(url); if(u.hostname==='youtu.be') return u.pathname.slice(1); return u.searchParams.get('v') || u.pathname.split('/').filter(Boolean).pop() || ''; }catch(e){ return ''; } }
-function fmtDate(d){ try{ return new Date(d).toLocaleDateString('en-US',{day:'numeric',month:'short',year:'numeric'}); }catch(e){ return ''; } }
-function hay(n){
-  return [(n.title||''),(n.description||''),(n.category||'')].join(' ').toLowerCase();
-}
-function getYoutubeId(n){
-  if (n.youtubeId) return n.youtubeId;
-  if (n.youtubeUrl) {
-    try {
-      const u = new URL(n.youtubeUrl);
-      if (u.hostname === 'youtu.be') return u.pathname.slice(1);
-      return u.searchParams.get('v') || u.pathname.split('/').filter(Boolean).pop() || '';
-    } catch(e) {}
-  }
-  return '';
-}
-function isYoutube(n){
-  return String(n.videoType || '').toLowerCase() === 'youtube' || !!getYoutubeId(n);
-}
-function isUpload(n){
-  return !isYoutube(n) && !!n.videoUrl;
-}
-function mediaPath(n){ return n.videoUrl || ''; }
-function thumbnailPath(n){ return n.thumbnail || ''; }
-function metaLine(n){ return [(n.category||''), fmtDate(n.publishedAt||n.createdAt)].filter(Boolean).join(' · '); }
-
-const items = Array.isArray(news) ? news : [];
-const videos = items;
-const youtubeCount = items.filter(isYoutube).length;
-const uploadCount = items.filter(isUpload).length;
-const cats = [...new Set(items.slice(1).map(n => (n.category||'').trim()).filter(Boolean))];
-const featured = items[0] || null;
-const gridItems = items.slice(1);
-const tickerItems = items.slice(0, 6);
-const stats = [
-  { n: items.length, label: 'Published Videos' },
-  { n: youtubeCount, label: 'YouTube Videos' },
-  { n: uploadCount, label: 'Uploaded Videos' },
-  { n: cats.length, label: 'Categories' }
-];
+const articles = Array.isArray(remaining) ? remaining : [];
+const featuredItems = Array.isArray(featured) ? featured : (featured ? [featured] : []);
+const fmtDate = (value) => value ? new Date(value).toLocaleDateString('hi-IN', { day:'numeric', month:'long', year:'numeric' }) : '';
+const catClass = (cat) => (cat || 'Digital Media') === 'Print Media' ? 'press-category--print' : 'press-category--digital';
+const pageUrl = (number) => {
+  const params = new URLSearchParams();
+  if (query?.state) params.set('state', query.state);
+  if (query?.district) params.set('district', query.district);
+  if (query?.category) params.set('category', query.category);
+  if (query?.q) params.set('q', query.q);
+  params.set('page', String(number));
+  return '/news?' + params.toString();
+};
 %><!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title><%= title || "News" %> | Nishad Sankalp Campaign</title>
-  <meta name="description" content="Latest news, stories, videos, and ground updates from Nishad Sankalp Campaign.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&family=Noto+Serif:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title><%= title %> | निषाद आरक्षण संकल्प अभियान</title>
+  <meta name="description" content="निषाद आरक्षण संकल्प अभियान से जुड़ी ताज़ा खबरें और मीडिया रिपोर्ट।">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/news/video_news.css">
-  <script src="https://unpkg.com/lenis@1/dist/lenis.min.js" defer></script>
 </head>
-<body>
-<%- include('../common/navbar') %>
-<main class="news-page">
-
-  <% if (items.length) { %>
-  <!-- ══ LATEST HEADLINES · NEWS TICKER ══ -->
-  <div class="news-ticker" data-testid="news-ticker" aria-label="Latest News">
-    <div class="ticker-label"><span class="live-dot" aria-hidden="true"></span>Latest Updates</div>
-    <div class="ticker-viewport">
-      <div class="ticker-track">
-        <% for (let pass = 0; pass < 2; pass++) { %>
-        <div class="ticker-strip" <%- pass === 1 ? 'aria-hidden="true"' : '' %>>
-          <% tickerItems.forEach(n => { %>
-          <span class="ticker-item">
-            <a href="#newsGrid" class="ticker-link" data-scroll-grid data-testid="ticker-link"><%= n.title %></a>
-            <span class="ticker-separator" aria-hidden="true">◆</span>
-          </span>
+<body><%- include('../common/navbar') %>
+<main class="press-page">
+  <section class="press-hero"><% if (heroPoster) { %><div class="press-hero-poster" aria-hidden="true"><img src="<%= heroPoster %>" alt=""></div><% } %><div class="press-container"><div class="press-hero-copy"><h1>न्यूज़ <span>&amp;</span> प्रेस</h1><p>निषाद आरक्षण संकल्प अभियान से जुड़ी ताज़ा खबरें और मीडिया रिपोर्ट।</p>
+    <div class="press-stats" aria-label="समाचार आंकड़े">
+      <div class="press-stat"><strong><%= stats.news %></strong><span>कुल खबरें</span></div>
+      <div class="press-stat"><strong><%= stats.videos %></strong><span>कुल वीडियो</span></div>
+      <div class="press-stat"><strong><%= stats.districts %></strong><span>ज़िले</span></div>
+      <div class="press-stat"><strong><%= stats.states %></strong><span>राज्य</span></div>
+    </div>
+  </div></div></section>
+  <section class="press-container press-content">
+    <% if (featuredItems.length) { %>
+      <section class="press-featured-section" aria-label="मुख्य खबरें">
+        <div class="press-featured-track" id="featuredTrack">
+          <% featuredItems.forEach((item) => { %>
+            <article class="press-featured-slide">
+              <a class="press-feature-image" href="<%= item.externalUrl || '/news/' + item._id %>" <%= item.externalUrl ? 'target="_blank" rel="noopener noreferrer"' : '' %>>
+                <% if (item.thumbnailPath) { %><img src="<%= item.thumbnailPath %>" alt="<%= item.title %>" fetchpriority="high"><% } else { %><span class="press-image-fallback">प्रेस कवरेज</span><% } %>
+                <span class="press-feature-label">मुख्य खबर</span>
+              </a>
+              <div class="press-feature-body"><div class="press-meta"><span class="press-category <%= catClass(item.category) %>"><%= item.category || 'Digital Media' %></span><time><%= fmtDate(item.publicationDate || item.publishedAt) %></time></div>
+                <h2><%= item.title %></h2><p class="press-source">स्रोत: <strong><%= item.source || 'मीडिया' %></strong></p>
+                <% if (item.state || item.district) { %><p class="press-location"><%= [item.district, item.state].filter(Boolean).join(', ') %></p><% } %>
+                <% if (item.summary) { %><p class="press-summary"><%= item.summary %></p><% } %>
+                <div class="press-card-actions"><a class="press-read" href="<%= item.externalUrl || '/news/' + item._id %>" <%= item.externalUrl ? 'target="_blank" rel="noopener noreferrer"' : '' %>>पूरी खबर पढ़ें <span aria-hidden="true">↗</span></a></div>
+              </div>
+            </article>
           <% }) %>
         </div>
-        <% } %>
-      </div>
-    </div>
-  </div>
-  <% } %>
+        <% if (featuredItems.length > 1) { %><div class="press-carousel-controls"><button type="button" id="featuredPrev" aria-label="Previous featured story">‹</button><span id="featuredPosition">1 / <%= featuredItems.length %></span><button type="button" id="featuredNext" aria-label="Next featured story">›</button></div><% } %>
+      </section>
+    <% } %>
 
-  <!-- ══ HERO ══ -->
-  <section class="hero">
-    <div class="hero-background" aria-hidden="true">
-      <span class="hero-ring hero-ring-one"></span>
-      <span class="hero-ring hero-ring-two"></span>
-      <span class="hero-ring hero-ring-three"></span>
-      <span class="hero-glow"></span>
-    </div>
-    <div class="hero-content news-container">
-      
-      <h1 class="hero-title">
-        <span class="hero-line" style="--delay:.16s"><span>Sankalp Newsroom</span></span>
-      </h1>
-      <p class="hero-subtitle fade-in" style="--delay:.48s">Latest news, stories, and ground reports — directly from the field.</p>
-      <div class="hero-meta fade-in" style="--delay:.62s">
-        <% if (items.length) { %>
-        <span class="live-chip" data-testid="hero-published-count"><span class="live-dot" aria-hidden="true"></span><%= items.length %> Published Updates</span>
-        <% } %>
-        <span class="hero-date">Today · <%= fmtDate(Date.now()) %></span>
-      </div>
-    </div>
-  </section>
-
-  <% if (!items.length) { %>
-  <!-- ══ EMPTY STATE ══ -->
-  <section class="section">
-    <div class="empty-state reveal" data-testid="empty-state">
-      <svg class="empty-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8L12 2z" fill="currentColor"/></svg>
-      <h2>New Updates Coming Soon</h2>
-      <p>Check back shortly for the latest updates from the movement.</p>
-    </div>
-  </section>
-  <% } else { %>
-
-
-
-  <% if (featured) { %>
-  <!-- ══ TOP STORY · FEATURED ══ -->
-  <section class="section featured-section">
-    <article class="featured-story reveal" data-testid="featured-story">
-      <% const fyid = getYoutubeId(featured); %>
-      <div class="featured-media video-media"
-           data-youtube="<%= fyid %>"
-           data-upload="<%= mediaPath(featured) %>"
-           data-title="<%= featured.title %>"
-           data-meta="<%= metaLine(featured) %>"
-           data-preview="1">
-        <% if (thumbnailPath(featured)) { %>
-          <img src="<%= thumbnailPath(featured) %>" alt="<%= featured.title %>" loading="eager">
-        <% } else if (isYoutube(featured) && fyid) { %>
-          <img src="https://i.ytimg.com/vi/<%= fyid %>/maxresdefault.jpg" alt="<%= featured.title %>" loading="eager" onerror="this.src='https://i.ytimg.com/vi/<%= fyid %>/hqdefault.jpg'">
-        <% } else { %>
-          <div class="media-fallback">N</div>
-        <% } %>
-        <span class="featured-flag" aria-hidden="true">Top Story</span>
-        <% if (true) { %>
-        <button class="play-button large-play-button" type="button" aria-label="Play video" data-testid="featured-play">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
-        </button>
-        <% } %>
-      </div>
-      <div class="featured-body">
-        <span class="eyebrow">FEATURED · TOP STORY</span>
-        <div class="meta-row">
-          <span class="filter-chip chip-solid"><%= featured.category || 'Video' %></span>
-          <time class="meta-time"><%= fmtDate(featured.publishedAt || featured.createdAt) %></time>
-        </div>
-        <h2 class="featured-title"><%= featured.title %></h2>
-        <% if (featured.description) { %><p class="featured-summary"><%= featured.description %></p><% } %>
-        <details class="story-details" data-testid="featured-story-toggle">
-          <summary>Read Full Story</summary>
-          <div class="story-text"><%= featured.description %></div>
-        </details>
-      </div>
-    </article>
-  </section>
-  <% } %>
-
-  <% if (videos.length) { %>
-  <!-- ══ VIDEO CORNER ══ -->
-  <section class="section section-tight">
-    <div class="section-header">
-      <div class="reveal">
-        <span class="eyebrow">VIDEO GALLERY</span>
-        <h2 class="section-title">Video Corner</h2>
-      </div>
-      <div class="row-navigation reveal" style="--delay:.1s">
-        <button class="nav-button" id="videoPrev" type="button" aria-label="Previous videos" data-testid="video-row-prev">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.4 7.4L14 6l-6 6 6 6 1.4-1.4L10.8 12z" fill="currentColor"/></svg>
-        </button>
-        <button class="nav-button" id="videoNext" type="button" aria-label="Next videos" data-testid="video-row-next">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.6 16.6L10 18l6-6-6-6-1.4 1.4 4.6 4.6z" fill="currentColor"/></svg>
-        </button>
-      </div>
-    </div>
-    <div class="video-row" id="videoRow" data-testid="video-row">
-      <% videos.forEach((v, i) => { const vyid = getYoutubeId(v); %>
-      <article class="video-card reveal" style="--delay:<%= (i % 4) * 0.07 %>s" data-testid="video-card-<%= i %>">
-        <div class="media video-media video-row-media"
-             data-youtube="<%= vyid %>"
-             data-upload="<%= mediaPath(v) %>"
-             data-title="<%= v.title %>"
-             data-meta="<%= metaLine(v) %>"
-             data-preview="1"
-             data-testid="video-media-<%= i %>">
-          <% if (thumbnailPath(v)) { %>
-            <img src="<%= thumbnailPath(v) %>" alt="<%= v.title %>" loading="lazy">
-          <% } else if (vyid) { %>
-            <img src="https://i.ytimg.com/vi/<%= vyid %>/hqdefault.jpg" alt="<%= v.title %>" loading="lazy">
-          <% } else { %>
-            <div class="media-fallback">N</div>
-          <% } %>
-          <span class="video-badge">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
-            <%= isYoutube(v) ? 'YouTube Video' : 'Uploaded Video' %>
-          </span>
-          <button class="play-button" type="button" aria-label="Play video" data-testid="video-play-<%= i %>">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
-          </button>
-        </div>
-        <div class="video-body">
-          <div class="video-meta"><span class="video-category"><%= v.category || 'Video' %></span><time><%= fmtDate(v.publishedAt || v.createdAt) %></time></div>
-          <h3 class="video-title"><%= v.title %></h3>
-        </div>
-      </article>
-      <% }) %>
-    </div>
-  </section>
-  <% } %>
-
-  <% if (gridItems.length) { %>
-  <!-- ══ LATEST NEWS · GRID ══ -->
-  <section class="section grid-section" id="news-grid">
-    <div class="section-header">
-      <div class="reveal">
-        <span class="eyebrow">LATEST UPDATES</span>
-        <h2 class="section-title">Latest News</h2>
-        <span class="result-count" id="resultCount" data-testid="result-count"><%= gridItems.length %> Articles</span>
-      </div>
-      <label class="search-box reveal" style="--delay:.1s">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 10-.7.7l.27.28v.79l5 4.99L20.49 19zm-6 0A4.5 4.5 0 1114 9.5 4.5 4.5 0 019.5 14z" fill="currentColor"/></svg>
-        <input id="newsSearch" type="search" placeholder="Search news…" aria-label="Search news" data-testid="news-search-input">
-      </label>
-    </div>
-    <div class="filter-chips reveal" id="newsFilters" style="--delay:.15s" data-testid="category-filter" role="group" aria-label="Choose Category">
-      <button class="filter-chip is-active" type="button" data-cat="all" data-testid="filter-chip-all">All</button>
-      <% cats.forEach(c => { %>
-      <button class="filter-chip" type="button" data-cat="<%= c %>" data-testid="filter-chip-<%= c %>"><%= c %></button>
-      <% }) %>
-    </div>
-    <div class="news-grid" id="newsGrid" data-testid="news-grid">
-      <% gridItems.forEach((item, i) => { const gid = getYoutubeId(item); %>
-      <article class="news-card reveal"
-               style="--delay:<%= (i % 3) * 0.08 %>s"
-               data-search="<%= hay(item) %>"
-               data-category="<%= (item.category || '').trim() %>"
-               data-testid="news-card-<%= i %>">
-        <% if (true) { %>
-        <div class="media video-media"
-             data-youtube="<%= gid %>"
-             data-upload="<%= mediaPath(item) %>"
-             data-title="<%= item.title %>"
-             data-meta="<%= metaLine(item) %>"
-             data-preview="1"
-             data-testid="card-video-media-<%= i %>">
-          <% if (thumbnailPath(item)) { %>
-            <img src="<%= thumbnailPath(item) %>" alt="<%= item.title %>" loading="lazy">
-          <% } else if (gid) { %>
-            <img src="https://i.ytimg.com/vi/<%= gid %>/hqdefault.jpg" alt="<%= item.title %>" loading="lazy">
-          <% } else { %>
-            <div class="media-fallback">N</div>
-          <% } %>
-          <span class="video-badge">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
-            <%= isYoutube(item) ? 'YouTube Video' : 'Uploaded Video' %>
-          </span>
-          <button class="play-button" type="button" aria-label="Play video" data-testid="card-video-play-<%= i %>">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
-          </button>
-        </div>
-        <% } else if (thumbnailPath(item)) { %>
-        <div class="media">
-          <img src="<%= thumbnailPath(item) %>" alt="<%= item.title %>" loading="lazy">
-          <span class="video-badge">News</span>
-        </div>
-        <% } %>
-        <div class="news-card-body">
-          <div class="news-card-meta">
-            <span class="news-category"><%= item.category || 'News' %></span>
-            <time><%= fmtDate(item.publishedAt || item.createdAt) %></time>
+    <div class="press-list-heading"><div><h2>सभी समाचार</h2><span class="press-result-count"></span></div><label class="press-search" for="newsSearch"><span aria-hidden="true">⌕</span><input id="newsSearch" name="q" type="search" form="newsFilters" value="<%= query.q || '' %>" placeholder="Search.." aria-label="खबर या स्रोत खोजें"></label></div>
+    <form class="press-filters" method="get" action="/news" id="newsFilters">
+      <label class="press-select-label">राज्य<select name="state" id="stateFilter" data-auto-submit><option value="">सभी राज्य</option><% [...new Set(locations.map((location) => location._id.state))].forEach((stateName) => { %><option value="<%= stateName %>" <%= query.state === stateName ? 'selected' : '' %>><%= stateName %></option><% }) %></select></label>
+      <label class="press-select-label">ज़िला<select name="district" id="districtFilter" data-auto-submit><option value="">सभी ज़िले</option><% locations.forEach((location) => { %><option value="<%= location._id.district %>" data-state="<%= location._id.state %>" <%= query.district === location._id.district && (!query.state || query.state === location._id.state) ? 'selected' : '' %>><%= location._id.district %><%= !query.state ? ' · ' + location._id.state : '' %></option><% }) %></select></label>
+      <label class="press-select-label">मीडिया प्रकार<select name="category" data-auto-submit><option value="">सभी प्रकार</option><option value="Digital Media" <%= query.category === 'Digital Media' ? 'selected' : '' %>>डिजिटल मीडिया</option><option value="Print Media" <%= query.category === 'Print Media' ? 'selected' : '' %>>प्रिंट मीडिया</option></select></label>
+    </form>
+    <div class="press-results" id="pressResults" aria-live="polite" aria-busy="false">
+    <% if (articles.length) { %>
+      <div class="press-grid" id="pressGrid">
+        <% articles.forEach((item) => { %>
+        <article class="press-card">
+          <div class="press-card-image">
+            <% if(item.thumbnailPath){ %><img src="<%= item.thumbnailPath %>" alt="<%= item.title %>" loading="lazy"><% } else { %><span class="press-image-fallback">मीडिया खबर</span><% } %>
           </div>
-          <h3 class="news-card-title"><%= item.title %></h3>
-          <% if (item.description) { %><p class="news-summary"><%= item.description %></p><% } %>
-          <details class="story-details" data-testid="story-toggle-<%= i %>">
-            <summary>Read Full Story</summary>
-            <div class="story-text"><%= item.description || '' %></div>
-          </details>
-        </div>
-      </article>
-      <% }) %>
-    </div>
-    <div class="empty-state" id="noResults" hidden data-testid="no-results">
-      <svg class="empty-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8L12 2z" fill="currentColor"/></svg>
-      <h2>No Articles Found</h2>
-      <p>Try searching with a different term.</p>
+          <div class="press-card-body"><div class="press-meta"><span class="press-category <%= catClass(item.category) %>"><%= item.category || 'Digital Media' %></span><time><%= fmtDate(item.publicationDate || item.publishedAt) %></time></div>
+            <h3><a class="press-title-link" href="<%= item.externalUrl || '/news/' + item._id %>" <%= item.externalUrl ? 'target="_blank" rel="noopener noreferrer"' : '' %>><%= item.title %></a></h3>
+            <div class="press-card-info-row">
+              <p class="press-source">स्रोत: <strong><%= item.source || 'मीडिया' %></strong></p>
+              <% if (item.state || item.district) { %><p class="press-location"><%= [item.district, item.state].filter(Boolean).join(', ') %></p><% } %>
+            </div>
+            <% if(item.summary){ %><p class="press-summary"><%= item.summary %></p><% } %>
+            <a class="press-read" href="<%= item.externalUrl || '/news/' + item._id %>" <%= item.externalUrl ? 'target="_blank" rel="noopener noreferrer"' : '' %>>पूरी खबर पढ़ें <span aria-hidden="true">↗</span></a>
+          </div>
+        </article><% }) %>
+      </div>
+      <nav class="press-pagination" aria-label="समाचार पेज"><% if (page > 1) { %><a href="<%= pageUrl(page - 1) %>">← पिछला पेज</a><% } else { %><span></span><% } %><span>पेज <%= page %> / <%= totalPages %></span><% if (page < totalPages) { %><a href="<%= pageUrl(page + 1) %>">अगला पेज →</a><% } else { %><span></span><% } %></nav>
+    <% } else { %><div class="press-empty"><h3>कोई खबर नहीं मिली</h3><p>दूसरे फ़िल्टर से खोजकर देखें।</p></div><% } %>
     </div>
   </section>
-  <% } %>
-  <% } %>
-</main>
-
-<%- include('../common/footer') %>
-
-
-
-<!-- ══ FULL-SCREEN VIDEO MODAL ══ -->
-<div class="video-modal" id="videoModal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Video Player" data-testid="video-modal">
-  <button class="modal-close" id="videoModalClose" type="button" aria-label="Close" data-testid="video-modal-close">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="currentColor"/></svg>
-  </button>
-  <div class="modal-box">
-    <div class="video-player" id="videoPlayer"></div>
-    <div class="modal-caption">
-      <h2 id="videoModalTitle" data-testid="video-modal-title"></h2>
-      <span id="videoModalMeta"></span>
-    </div>
-  </div>
-</div>
-
+</main><%- include('../common/footer') %>
 <script>
-(function(){
-  'use strict';
-  const $  = (s, c) => (c || document).querySelector(s);
-  const $$ = (s, c) => Array.prototype.slice.call((c || document).querySelectorAll(s));
-  const fineHover = matchMedia('(hover: hover) and (pointer: fine)').matches;
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  /* ── Lenis smooth momentum scroll (CDN, optional) ── */
-  let lenis = null;
-  function initLenis(){
+(() => {
+  const track = document.getElementById('featuredTrack');
+  if (track) {
+    const slides = [...track.children]; let index = 0; let timer;
+    const show = (next) => { index = (next + slides.length) % slides.length; track.style.transform = `translateX(-${index * 100}%)`; const pos = document.getElementById('featuredPosition'); if (pos) pos.textContent = `${index + 1} / ${slides.length}`; };
+    const start = () => { if (slides.length > 1) timer = setInterval(() => show(index + 1), 5000); };
+    const restart = () => { clearInterval(timer); start(); };
+    document.getElementById('featuredPrev')?.addEventListener('click', () => { show(index - 1); restart(); });
+    document.getElementById('featuredNext')?.addEventListener('click', () => { show(index + 1); restart(); });
+    track.parentElement.addEventListener('mouseenter', () => clearInterval(timer));
+    track.parentElement.addEventListener('mouseleave', start); start();
+  }
+  const state = document.getElementById('stateFilter'); const district = document.getElementById('districtFilter');
+  const filterDistricts = () => { [...district.options].forEach((option) => { if (!option.value) return; option.hidden = !!state.value && option.dataset.state !== state.value; }); if (district.selectedOptions[0]?.hidden) district.value = ''; };
+  const form = document.getElementById('newsFilters');
+  const results = document.getElementById('pressResults');
+  let debounceTimer;
+  let activeRequest;
+  const buildUrl = (page = 1) => {
+    const url = new URL(form.action, window.location.origin);
+    const params = new URLSearchParams(new FormData(form));
+    params.delete('page');
+    if (page > 1) params.set('page', String(page));
+    url.search = params.toString();
+    return url;
+  };
+  const loadResults = async (url, historyMode = 'replace') => {
+    activeRequest?.abort();
+    activeRequest = new AbortController();
+    results.setAttribute('aria-busy', 'true');
     try {
-      if (window.Lenis && !reduce) {
-        lenis = new Lenis({ duration: 1.15, smoothWheel: true });
-        const raf = t => { lenis.raf(t); requestAnimationFrame(raf); };
-        requestAnimationFrame(raf);
-      }
-    } catch (e) {}
-  }
-  if (document.readyState === 'complete') initLenis();
-  else addEventListener('load', initLenis);
-
-  /* ── Ticker link → smooth scroll to grid ── */
-  $$('[data-scroll-grid]').forEach(a => a.addEventListener('click', e => {
-    e.preventDefault();
-    const g = $('#newsGrid');
-    if (!g) return;
-    if (lenis) lenis.scrollTo(g, { offset: -80 });
-    else g.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
-  }));
-
-  /* ── Scroll reveals ── */
-  const revealIO = new IntersectionObserver(es => es.forEach(en => {
-    if (en.isIntersecting) { en.target.classList.add('in-view'); revealIO.unobserve(en.target); }
-  }), { threshold: 0.12, rootMargin: '0px 0px -36px 0px' });
-  $$('.reveal').forEach(el => revealIO.observe(el));
-
-  /* ── Stat count-up ── */
-  function countUp(el){
-    const t = +el.dataset.count || 0;
-    if (reduce) { el.textContent = t; return; }
-    const s = performance.now(), d = 950;
-    (function step(n){
-      const p = Math.min(1, (n - s) / d);
-      el.textContent = Math.round(t * (1 - Math.pow(1 - p, 3)));
-      if (p < 1) requestAnimationFrame(step);
-    })(s);
-  }
-  const countIO = new IntersectionObserver(es => es.forEach(en => {
-    if (en.isIntersecting) { countUp(en.target); countIO.unobserve(en.target); }
-  }), { threshold: 0.5 });
-  $$('.stat-number').forEach(el => countIO.observe(el));
-
-  /* ── Hero rings parallax ── */
-  const rings = $$('.hero-ring');
-  if (rings.length && !reduce) {
-    let ticking = false;
-    addEventListener('scroll', () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        const y = window.scrollY || 0;
-        rings.forEach((r, i) => { r.style.transform = 'translate3d(0,' + (y * (0.05 + i * 0.035)).toFixed(1) + 'px,0)'; });
-        ticking = false;
+      const response = await fetch(url.pathname + url.search, {
+        signal: activeRequest.signal,
+        headers: { 'X-Requested-With': 'XMLHttpRequest', Accept: 'text/html' },
       });
-    }, { passive: true });
-  }
-
-  /* ── Search + category filter ── */
-  const searchInput = $('#newsSearch'), chipsWrap = $('#newsFilters'),
-        grid = $('#newsGrid'), noRes = $('#noResults'), countEl = $('#resultCount');
-  let activeCat = 'all';
-  function applyFilters(){
-    if (!grid) return;
-    const q = (searchInput ? searchInput.value : '').trim().toLowerCase();
-    let shown = 0;
-    $$('.news-card', grid).forEach(c => {
-      const okQ = !q || (c.dataset.search || '').includes(q);
-      const okC = activeCat === 'all' || c.dataset.category === activeCat;
-      const show = okQ && okC;
-      c.classList.toggle('is-hidden', !show);
-      if (show) shown++;
-    });
-    if (noRes) noRes.hidden = shown !== 0;
-    if (countEl) countEl.textContent = shown + ' Articles';
-  }
-  if (searchInput) searchInput.addEventListener('input', applyFilters);
-  if (chipsWrap) chipsWrap.addEventListener('click', e => {
-    const b = e.target.closest('.filter-chip');
-    if (!b) return;
-    $$('.filter-chip', chipsWrap).forEach(c => c.classList.remove('is-active'));
-    b.classList.add('is-active');
-    activeCat = b.dataset.cat;
-    applyFilters();
-  });
-
-  /* ── Full-screen video modal ── */
-  const modal = $('#videoModal'), player = $('#videoPlayer'),
-        mTitle = $('#videoModalTitle'), mMeta = $('#videoModalMeta');
-  function openModal(title, yt, up, meta){
-    mTitle.textContent = title || '';
-    mMeta.textContent = meta || '';
-    player.replaceChildren();
-    if (yt) {
-      const f = document.createElement('iframe');
-      f.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(yt) + '?autoplay=1&rel=0&playsinline=1';
-      f.title = title || 'Video';
-      f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-      f.allowFullscreen = true;
-      player.appendChild(f);
-    } else if (up) {
-      const v = document.createElement('video');
-      v.src = up; v.controls = true; v.autoplay = true; v.playsInline = true;
-      player.appendChild(v);
-    }
-    modal.classList.add('is-open');
-    modal.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-    if (lenis) lenis.stop();
-    hidePreview();
-  }
-  function closeModal(){
-    modal.classList.remove('is-open');
-    modal.setAttribute('aria-hidden', 'true');
-    player.replaceChildren();
-    document.body.style.overflow = '';
-    if (lenis) lenis.start();
-  }
-  $('#videoModalClose').addEventListener('click', closeModal);
-  modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { closeModal(); hidePreview(); }
-  });
-  document.addEventListener('click', e => {
-    const m = e.target.closest('.video-media');
-    if (!m) return;
-    const yt = m.dataset.youtube, up = m.dataset.upload;
-    if (!yt && !up) return;
-    openModal(m.dataset.title, yt, up, m.dataset.meta);
-  });
-
- /* ── Hover: whole card scales + video preview plays ── */
-function hidePreview(){
-  $$('.video-media.is-hovering').forEach(m => m.dispatchEvent(new Event('previewstop')));
-}
-
-if (fineHover) {
-  $$('.news-card, .video-card, .featured-story').forEach(host => {
-    const m = $('.video-media', host);
-    if (!m) return;
-    let pv = null;
-
-    function start(){
-      if (pv || modal.classList.contains('is-open')) return;
-      const yt = m.dataset.youtube, up = m.dataset.upload;
-      if (up) {
-        pv = document.createElement('video');
-        pv.src = up; pv.muted = true; pv.loop = true;
-        pv.autoplay = true; pv.playsInline = true;
-      } else if (yt) {
-        pv = document.createElement('iframe');
-        pv.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(yt) +
-          '?autoplay=1&mute=1&controls=0&loop=1&playlist=' + encodeURIComponent(yt) +
-          '&modestbranding=1&rel=0&playsinline=1';
-        pv.setAttribute('allow', 'autoplay; encrypted-media');
-        pv.setAttribute('frameborder', '0');
-      } else return;
-      const img = $('img', m);
-      if (img) img.style.display = 'none';
-      m.insertBefore(pv, m.firstChild);
-      if (pv.play) pv.play().catch(() => {});
-      m.classList.add('is-hovering');
-    }
-
-    function stop(){
-      m.classList.remove('is-hovering');
-      if (pv) { pv.remove(); pv = null; }
-      const img = $('img', m);
-      if (img) img.style.display = '';
-    }
-
-    host.addEventListener('mouseenter', start);
-    host.addEventListener('mouseleave', stop);
-    m.addEventListener('previewstop', stop);
-  });
-}
-  /* ── Mobile: autoplay only the most visible video ── */
-  const isMobile = matchMedia('(max-width: 700px)').matches;
-
-  if (isMobile && !reduce) {
-    const mobileVideos = $$('.video-media');
-    const visibility = new Map();
-
-    const mobileObserver = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        visibility.set(entry.target, {
-          isIntersecting: entry.isIntersecting,
-          ratio: entry.intersectionRatio
-        });
-      });
-
-      // Find the single video that occupies the largest visible area.
-      let activeVideo = null;
-      let highestRatio = 0;
-
-      mobileVideos.forEach(media => {
-        const state = visibility.get(media);
-        if (state && state.isIntersecting && state.ratio > highestRatio) {
-          highestRatio = state.ratio;
-          activeVideo = media;
-        }
-      });
-
-      // Only autoplay when a video is at least 55% visible.
-      if (activeVideo && highestRatio >= 0.55 && !modal.classList.contains('is-open')) {
-        mobileVideos.forEach(media => {
-          if (media === activeVideo) {
-            playMobilePreview(media);
-          } else {
-            stopMobilePreview(media);
-          }
-        });
-      } else {
-        mobileVideos.forEach(stopMobilePreview);
-      }
-    }, {
-      threshold: [0, 0.55, 0.75, 1]
-    });
-
-    function playMobilePreview(media) {
-      if (media.dataset.mobilePlaying === 'true' || modal.classList.contains('is-open')) return;
-
-      const yt = media.dataset.youtube;
-      const up = media.dataset.upload;
-      if (!yt && !up) return;
-
-      const oldImg = $('img', media);
-      if (oldImg) oldImg.style.display = 'none';
-
-      let preview;
-
-      if (up) {
-        preview = document.createElement('video');
-        preview.src = up;
-        preview.muted = true;
-        preview.defaultMuted = true;
-        preview.loop = true;
-        preview.autoplay = true;
-        preview.playsInline = true;
-        preview.setAttribute('muted', '');
-        preview.setAttribute('autoplay', '');
-        preview.setAttribute('playsinline', '');
-      } else {
-        preview = document.createElement('iframe');
-        preview.src =
-          'https://www.youtube-nocookie.com/embed/' +
-          encodeURIComponent(yt) +
-          '?autoplay=1&mute=1&controls=0&loop=1&playlist=' +
-          encodeURIComponent(yt) +
-          '&modestbranding=1&rel=0&playsinline=1';
-        preview.title = media.dataset.title || 'Video';
-        preview.allow = 'autoplay; encrypted-media; picture-in-picture';
-        preview.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture');
-        preview.setAttribute('frameborder', '0');
-      }
-
-      preview.classList.add('mobile-autoplay-preview');
-      media.insertBefore(preview, media.firstChild);
-      media.dataset.mobilePlaying = 'true';
-
-      if (preview.play) {
-        const promise = preview.play();
-        if (promise) promise.catch(() => {});
+      if (!response.ok) throw new Error(`News request failed (${response.status})`);
+      const html = await response.text();
+      const nextDocument = new DOMParser().parseFromString(html, 'text/html');
+      const nextResults = nextDocument.getElementById('pressResults');
+      if (!nextResults) throw new Error('News results were not found in the response.');
+      results.innerHTML = nextResults.innerHTML;
+      results.setAttribute('aria-busy', 'false');
+      if (historyMode === 'push') history.pushState({}, '', url.pathname + url.search);
+      else if (historyMode === 'replace') history.replaceState({}, '', url.pathname + url.search);
+    } catch (error) {
+      if (error.name !== 'AbortError') {
+        results.setAttribute('aria-busy', 'false');
+        console.error(error);
       }
     }
-
-    function stopMobilePreview(media) {
-      if (media.dataset.mobilePlaying !== 'true') return;
-
-      const preview = $('.mobile-autoplay-preview', media);
-      if (preview) preview.remove();
-
-      const img = $('img', media);
-      if (img) img.style.display = '';
-
-      media.dataset.mobilePlaying = 'false';
-    }
-
-    mobileVideos.forEach(media => mobileObserver.observe(media));
-
-    window.addEventListener('pagehide', () => {
-      mobileVideos.forEach(stopMobilePreview);
-    });
+  };
+  const scheduleResults = (delay = 350) => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => loadResults(buildUrl()), delay);
+  };
+  const clearFilters = () => {
+    form.querySelectorAll('select').forEach((select) => { select.value = ''; });
+    document.getElementById('newsSearch').value = '';
+    filterDistricts();
+  };
+  form.addEventListener('submit', (event) => { event.preventDefault(); scheduleResults(250); });
+  state?.addEventListener('change', () => { filterDistricts(); scheduleResults(300); });
+  district?.addEventListener('change', () => scheduleResults(300));
+  form.querySelector('[name="category"]')?.addEventListener('change', () => scheduleResults(300));
+  document.getElementById('newsSearch')?.addEventListener('input', () => scheduleResults(450));
+  results.addEventListener('click', (event) => {
+    const link = event.target.closest('.press-pagination a');
+    if (!link) return;
+    const target = new URL(link.href, window.location.origin);
+    if (target.origin !== window.location.origin) return;
+    event.preventDefault();
+    loadResults(target, 'push');
+  });
+  window.addEventListener('popstate', () => loadResults(new URL(window.location.href), 'none'));
+  filterDistricts();
+  const navigation = performance.getEntriesByType('navigation')[0];
+  if (navigation?.type === 'reload') {
+    clearFilters();
+    const cleanUrl = new URL(window.location.pathname, window.location.origin);
+    history.replaceState({}, '', cleanUrl.pathname);
+    loadResults(cleanUrl, 'none');
   }
-
-  /* ── Video row arrows ── */
-  const row = $('#videoRow');
-  const step = () => (row ? (row.firstElementChild ? row.firstElementChild.offsetWidth + 18 : 348) : 348);
-  const prev = $('#videoPrev'), next = $('#videoNext');
-  if (prev) prev.addEventListener('click', () => row.scrollBy({ left: -step(), behavior: 'smooth' }));
-  if (next) next.addEventListener('click', () => row.scrollBy({ left:  step(), behavior: 'smooth' }));
 })();
-</script>
-</body>
-</html>
+</script></body></html>

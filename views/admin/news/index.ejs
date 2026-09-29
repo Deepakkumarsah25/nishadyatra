@@ -1,7 +1,178 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title><%= title %> | Nishad Sankalp</title><link rel="stylesheet" href="/css/admin/news.css"></head><body>
-<header class="top"><a class="brand" href="/admin/dashboard"><span class="mark">N</span><span>Nishad Sankalp<small>CONTENT STUDIO</small></span></a><nav><a href="/admin/dashboard">Dashboard</a><a class="active" href="/admin/video_news">News</a><a href="/news" target="_blank">View site ↗</a></nav><form action="/admin/logout" method="post"><button class="logout">Sign out</button></form></header>
-<main class="wrap"><div class="heading"><div><div class="eyebrow">PUBLISHING</div><h1>News studio</h1><p>Manage stories, video coverage and what appears on your public news page.</p></div><a class="primary" href="/admin/video_news/add">＋ Create story</a></div>
-<section class="stats"><article><span>Total stories</span><strong><%= news.length %></strong></article><article><span>Published</span><strong><%= news.filter(n => n.published).length %></strong></article><article><span>Drafts</span><strong><%= news.filter(n => !n.published).length %></strong></article><article><span>Video stories</span><strong><%= news.filter(n => n.mediaType !== 'article').length %></strong></article></section>
-<section class="panel"><div class="panel-head"><div><h2>All stories</h2><p>Your latest coverage and updates</p></div><label class="search">⌕ <input id="search" placeholder="Search stories" aria-label="Search stories"></label></div>
-<% if (!news.length) { %><div class="empty"><span>✦</span><h2>Your newsroom starts here</h2><p>Create your first story and share it with the community.</p><a class="primary" href="/admin/video_news/add">Create your first story</a></div><% } else { %><div class="table-wrap"><table><thead><tr><th>STORY</th><th>FORMAT</th><th>STATUS</th><th>UPDATED</th><th></th></tr></thead><tbody id="rows"><% news.forEach(item => { %><tr data-title="<%= item.title.toLowerCase() %>"><td><div class="story"><% if(item.thumbnailPath){ %><img src="<%= item.thumbnailPath %>" alt=""><% } else { %><span class="thumb">✦</span><% } %><div><strong><%= item.title %></strong><small><%= item.category %><%= item.state ? ' · ' + item.state : '' %></small></div></div></td><td><span class="format"><%= item.mediaType === 'youtube' ? '▶ YouTube' : item.mediaType === 'upload' ? '▣ Uploaded video' : '▤ Article' %></span></td><td><span class="status <%= item.published ? 'live' : 'draft' %>"><i></i><%= item.published ? 'Published' : 'Draft' %></span></td><td><%= new Date(item.updatedAt).toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'}) %></td><td><div class="actions"><a class="quiet" href="/admin/video_news/edit/<%= item._id %>">Edit</a><form action="/admin/video_news/toggle/<%= item._id %>" method="post"><button class="quiet"><%= item.published ? 'Unpublish' : 'Publish' %></button></form><form action="/admin/video_news/delete/<%= item._id %>" method="post" onsubmit="return confirm('Delete this story and its uploaded media?')"><button class="delete">Delete</button></form></div></td></tr><% }) %></tbody></table></div><% } %>
-</section><footer>Stories are published to <a href="/news">your public news page</a>.</footer></main><script>document.getElementById('search')?.addEventListener('input',e=>{const q=e.target.value.toLowerCase();document.querySelectorAll('#rows tr').forEach(r=>r.hidden=!r.dataset.title.includes(q))})</script></body></html>
+<%- include("../common/header") %>
+<%- include("../common/sidebar", { currentPath }) %>
+<div class="admin-main">
+  <header class="admin-topbar">
+    <div class="topbar-left">
+      <button type="button" class="mobile-menu-trigger" id="adminMobileMenuBtn" aria-label="Open menu">☰</button>
+      <div class="page-heading"><h1>News &amp; Press</h1><p>Manage digital and print media coverage.</p></div>
+    </div>
+    <div class="topbar-right"><a href="/news" target="_blank" class="view-site-btn">View Live News ↗</a></div>
+  </header>
+  <div class="admin-body">
+    <main class="wrap news-admin-list">
+      <div class="heading">
+        <div>
+          <div class="eyebrow">PUBLISHING</div>
+          <h1>News &amp; Press</h1>
+          <p>Manage digital and print media coverage.</p>
+        </div>
+        <a class="primary" href="/admin/video_news/add">＋ Add News</a>
+      </div>
+
+      <section class="stats">
+        <article><span>Total Articles</span><strong><%= news.length %></strong></article>
+        <article>
+          <span>Published</span>
+          <strong><%= news.filter((item) => item.published).length %></strong>
+        </article>
+        <article>
+          <span>Drafts</span>
+          <strong><%= news.filter((item) => !item.published).length %></strong>
+        </article>
+        <article>
+          <span>Featured</span>
+          <strong><%= news.filter((item) => item.featured).length %></strong>
+        </article>
+      </section>
+
+      <section class="hero-poster-manager">
+        <div class="hero-poster-copy">
+          <span class="eyebrow">PUBLIC NEWS PAGE</span>
+          <h2>News Hero Poster</h2>
+          <p>Upload a wide banner for the full-width news hero. Recommended size: 1920 × 840 px (16:7), maximum file size 8 MB.</p>
+          <% if (posterError) { %><p class="poster-message is-error" role="alert"><%= posterError %></p><% } %>
+          <% if (typeof query !== 'undefined' && query.posterSaved) { %><p class="poster-message" role="status">Hero poster updated.</p><% } %>
+          <% if (typeof query !== 'undefined' && query.posterRemoved) { %><p class="poster-message" role="status">Hero poster removed.</p><% } %>
+          <form class="poster-upload-form" action="/admin/video_news/hero-poster" method="post" enctype="multipart/form-data">
+            <label class="field">Choose poster image
+              <input type="file" name="heroPoster" accept="image/jpeg,image/png,image/webp,image/avif" required>
+              <small>JPG, PNG, WebP, or AVIF · Maximum 8 MB. Uploading a new image replaces the current poster.</small>
+            </label>
+            <button class="primary" type="submit"><%= newsPageSetting?.heroPosterPath ? 'Replace Hero Poster' : 'Upload Hero Poster' %></button>
+          </form>
+        </div>
+        <div class="hero-poster-preview-wrap">
+          <% if (newsPageSetting?.heroPosterPath) { %>
+            <div class="hero-poster-mockup">
+              <img class="hero-poster-preview" src="<%= newsPageSetting.heroPosterPath %>" alt="Current news hero poster">
+              <span class="hero-poster-crop-label">VISIBLE AREA · 16:7</span>
+              <div class="hero-poster-overlay">
+                <span>NEWS &amp; PRESS</span>
+                <strong>Latest stories and updates</strong>
+                <small>Crop preview: this 16:7 area fills the banner. Text stays on the left and the image remains clear on the right.</small>
+              </div>
+            </div>
+            <form action="/admin/video_news/hero-poster/delete" method="post" onsubmit="return confirm('Remove the news hero poster?')">
+              <button class="delete poster-delete" type="submit">Remove Poster</button>
+            </form>
+          <% } else { %>
+            <div class="hero-poster-mockup hero-poster-empty"><span class="hero-poster-crop-label">VISIBLE AREA · 16:7</span><span>Banner crop preview will appear here after upload</span></div>
+          <% } %>
+        </div>
+      </section>
+
+      <section class="panel">
+        <form class="panel-head admin-filters" method="get" action="/admin/video_news">
+          <div>
+            <h2>All Articles</h2>
+            <p>Search and filter articles by media type and publication status.</p>
+          </div>
+          <label class="search">
+            ⌕
+            <input
+              name="q"
+              value="<%= filters.q || '' %>"
+              placeholder="Search headlines, sources, or summaries"
+              aria-label="Search headlines, sources, or summaries"
+            >
+          </label>
+          <select name="category" aria-label="Media type">
+            <option value="">All media types</option>
+            <option value="Digital Media" <%= filters.category === 'Digital Media' ? 'selected' : '' %>>Digital Media</option>
+            <option value="Print Media" <%= filters.category === 'Print Media' ? 'selected' : '' %>>Print Media</option>
+          </select>
+          <select name="status" aria-label="Publication status">
+            <option value="">All statuses</option>
+            <option value="published" <%= filters.status === 'published' ? 'selected' : '' %>>Published</option>
+            <option value="draft" <%= filters.status === 'draft' ? 'selected' : '' %>>Draft</option>
+          </select>
+          <button class="secondary" type="submit">Apply Filters</button>
+        </form>
+
+        <% if (!news.length) { %>
+          <div class="empty">
+            <span>✦</span>
+            <h2>No articles yet</h2>
+            <p>Add your first article to share media coverage.</p>
+            <a class="primary" href="/admin/video_news/add">Add Article</a>
+          </div>
+        <% } else { %>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Article</th>
+                  <th>Media Type</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% news.forEach((item) => { %>
+                  <tr>
+                    <td>
+                      <div class="story">
+                        <% if (item.thumbnailPath) { %>
+                          <img src="<%= item.thumbnailPath %>" alt="">
+                        <% } else { %>
+                          <span class="thumb">✦</span>
+                        <% } %>
+                        <div>
+                          <strong><%= item.title %></strong>
+                          <small>
+                            <%= item.source || 'No source provided' %><%= item.featured ? ' · Featured' : '' %>
+                          </small>
+                        </div>
+                      </div>
+                    </td>
+                    <td><span class="format"><%= item.category || 'Digital Media' %></span></td>
+                    <td>
+                      <span class="status <%= item.published ? 'live' : 'draft' %>">
+                        <i></i><%= item.published ? 'Published' : 'Draft' %>
+                      </span>
+                    </td>
+                    <td>
+                      <%= new Date(item.publicationDate || item.updatedAt).toLocaleDateString('en-IN', {
+                        day: 'numeric', month: 'short', year: 'numeric'
+                      }) %>
+                    </td>
+                    <td>
+                      <div class="actions">
+                        <a class="quiet" href="/admin/video_news/edit/<%= item._id %>">Edit</a>
+                        <form action="/admin/video_news/toggle/<%= item._id %>" method="post">
+                          <button class="quiet"><%= item.published ? 'Unpublish' : 'Publish' %></button>
+                        </form>
+                        <form
+                          action="/admin/video_news/delete/<%= item._id %>"
+                          method="post"
+                          onsubmit="return confirm('Delete this article?')"
+                        >
+                          <button class="delete">Delete</button>
+                        </form>
+                      </div>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } %>
+      </section>
+
+      <footer>
+        Articles appear on the public <a href="/news">News &amp; Press page</a>.
+      </footer>
+    </main>
+  </div>
+<%- include("../common/footer") %>

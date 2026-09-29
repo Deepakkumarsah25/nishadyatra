@@ -15,12 +15,10 @@ const storage = multer.diskStorage({
 
 module.exports = multer({
   storage,
-  limits: { fileSize: 500 * 1024 * 1024, files: 2 },
+  limits: { fileSize: 8 * 1024 * 1024, files: 1 },
   fileFilter: (_req, file, cb) => {
-    const allowed = file.fieldname === "video"
-      ? ["video/mp4", "video/webm", "video/quicktime"]
-      : ["image/jpeg", "image/png", "image/webp", "image/avif"];
-    if (!allowed.includes(file.mimetype)) return cb(new Error(`Unsupported ${file.fieldname} format.`));
+    const allowed = ["image/jpeg", "image/png", "image/webp", "image/avif"];
+    if (!allowed.includes(file.mimetype)) return cb(new Error("Choose a JPG, PNG, WebP or AVIF image."));
     cb(null, true);
   },
 });
