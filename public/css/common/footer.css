@@ -1,6 +1,5 @@
 /* =========================================
-   NISHAD SANKALP ABHIYAN
-   MODERN LIGHT FOOTER
+   NISHAD SANKALP CAMPAIGN - MODERN FOOTER
    ========================================= */
 
 :root {
@@ -8,33 +7,27 @@
   --footer-border: #ead8c5;
   --footer-red: #d72a2a;
   --footer-dark-red: #8c1a1a;
-  --footer-text: #6b4f4f;
-  --footer-muted: #876f62;
+  --footer-text: #4a3636;
+  --footer-muted: #786257;
 }
 
-/* Footer */
-
+/* Base Footer Shell */
 .site-footer {
   width: 100%;
-  margin-top: 70px;
-
+  margin-top: 60px;
   background: var(--footer-bg);
-
   border-top: 1px solid var(--footer-border);
-
   color: var(--footer-text);
+  position: relative;
+  overflow: hidden;
 }
 
-/* Red top line */
-
+/* Subtle Crimson Top Accent Line */
 .site-footer::before {
   content: "";
-
   display: block;
-
   width: 100%;
   height: 3px;
-
   background: linear-gradient(
     90deg,
     transparent,
@@ -46,132 +39,94 @@
 }
 
 /* =========================================
-   MAIN
+   FOOTER MAIN CONTAINER (3-COLUMN DESKTOP)
    ========================================= */
-
 .footer-main {
   width: min(1140px, calc(100% - 48px));
-
   margin: 0 auto;
-
   padding: 45px 0 35px;
-
   display: grid;
-
-  grid-template-columns:
-    1.4fr
-    1.3fr
-    1fr;
-
-  gap: 50px;
+  grid-template-columns: 1.4fr 1.3fr 1fr;
+  gap: 48px;
+  align-items: start;
 }
 
 /* =========================================
-   BRAND
+   COLUMN 1: BRAND
    ========================================= */
-
 .footer-brand {
-  max-width: 400px;
+  max-width: 380px;
 }
 
 .footer-logo {
   display: inline-flex;
-
   align-items: center;
-
-  gap: 10px;
-
+  gap: 12px;
   text-decoration: none;
-
   color: var(--footer-dark-red);
-
   font-size: 19px;
-
   font-weight: 800;
+  letter-spacing: -0.3px;
 }
 
 .footer-logo-mark {
   width: 40px;
   height: 40px;
-
   flex: 0 0 40px;
-
   display: flex;
-
   align-items: center;
   justify-content: center;
-
   border-radius: 10px;
-
-  background: var(--footer-red);
-
+  background: linear-gradient(135deg, #d72a2a, #8c1a1a);
   color: #ffffff;
-
   font-size: 19px;
-
   font-weight: 800;
-
-  box-shadow:
-    0 5px 12px rgba(215, 42, 42, 0.16);
+  box-shadow: 0 4px 12px rgba(215, 42, 42, 0.22);
 }
 
 .footer-brand p {
   margin: 16px 0 0;
-
   color: var(--footer-muted);
-
   font-size: 14px;
-
-  line-height: 1.8;
+  line-height: 1.75;
 }
 
 /* =========================================
-   HEADINGS
+   COLUMN HEADINGS
    ========================================= */
-
 .footer-links h3,
 .footer-contact h3 {
   position: relative;
-
-  margin: 2px 0 18px;
-
+  margin: 2px 0 16px;
   color: var(--footer-dark-red);
-
   font-size: 16px;
-
   font-weight: 800;
+  letter-spacing: -0.2px;
 }
 
 .footer-links h3::after,
 .footer-contact h3::after {
   content: "";
-
   display: block;
-
   width: 28px;
-  height: 2px;
-
-  margin-top: 7px;
-
+  height: 2.5px;
+  margin-top: 6px;
   border-radius: 10px;
-
   background: var(--footer-red);
 }
 
 /* =========================================
-   LINKS (QUICK LINKS: 3 LEFT & 3 RIGHT)
+   COLUMN 2: QUICK LINKS (3 LEFT & 3 RIGHT)
    ========================================= */
-
 .footer-links {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   width: 100%;
 }
 
 .footer-links-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(80px, 1fr));
+  grid-template-columns: repeat(2, minmax(100px, 1fr));
   column-gap: 24px;
   row-gap: 0;
   width: 100%;
@@ -186,14 +141,15 @@
 .footer-links a,
 .footer-contact a,
 .footer-contact span {
-  margin-bottom: 11px;
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 12px;
   color: var(--footer-muted);
   text-decoration: none;
   font-size: 14px;
+  font-weight: 600;
   white-space: nowrap;
-  transition:
-    color 0.2s ease,
-    transform 0.2s ease;
+  transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .footer-links-col a:hover,
@@ -204,180 +160,113 @@
 }
 
 /* =========================================
-   CONTACT
+   COLUMN 3: CONTACT
    ========================================= */
-
 .footer-contact {
   display: flex;
-
   flex-direction: column;
-
   align-items: flex-start;
 }
 
+.footer-contact a,
+.footer-contact span {
+  font-size: 13.5px;
+}
+
 /* =========================================
-   BOTTOM
+   FOOTER BOTTOM STRIP
    ========================================= */
-
 .footer-bottom {
-  width: min(1100px, calc(100% - 48px));
-
+  width: min(1140px, calc(100% - 48px));
   margin: 0 auto;
-
-  padding: 17px 0;
-
+  padding: 18px 0;
   border-top: 1px solid var(--footer-border);
-
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
-
   gap: 20px;
-
-  color: #927b6e;
-
-  font-size: 12px;
+  color: var(--footer-muted);
+  font-size: 12.5px;
+  font-weight: 500;
 }
 
 .footer-bottom span:first-child {
   color: var(--footer-text);
+  font-weight: 600;
 }
 
 /* =========================================
-   TABLET
-/* =========================================
-   TABLET & MOBILE RESPONSIVE
+   RESPONSIVE: TABLET (max-width: 860px)
    ========================================= */
-
-/* =========================================
-   TABLET & MOBILE RESPONSIVE (COMPACT DESIGN)
-   ========================================= */
-
 @media (max-width: 860px) {
   .site-footer {
-    margin-top: 30px;
-    padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+    margin-top: 40px;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
   }
 
   .footer-main {
-    width: min(100%, calc(100% - 28px));
-    padding: 24px 0 16px;
-    display: grid;
+    width: min(100%, calc(100% - 32px));
+    padding: 30px 0 20px;
     grid-template-columns: 1fr 1fr;
-    column-gap: 20px;
-    row-gap: 18px;
-    text-align: center;
+    column-gap: 24px;
+    row-gap: 24px;
   }
 
   .footer-brand {
     grid-column: 1 / -1;
     max-width: 100%;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .footer-logo {
-    justify-content: center;
-    font-size: 1.05rem;
-    gap: 8px;
-  }
-
-  .footer-logo-mark {
-    width: 34px;
-    height: 34px;
-    flex: 0 0 34px;
-    font-size: 0.95rem;
-  }
-
-  .footer-brand p {
-    max-width: 440px;
-    margin: 6px auto 0 auto;
-    font-size: 0.82rem;
-    line-height: 1.5;
-  }
-
-  .footer-links,
-  .footer-contact {
-    align-items: center;
-    width: 100%;
-  }
-
-  .footer-links h3,
-  .footer-contact h3 {
-    margin-bottom: 8px;
-    font-size: 0.94rem;
-  }
-
-  .footer-links h3::after,
-  .footer-contact h3::after {
-    margin: 4px auto 0 auto;
-    width: 20px;
-    height: 2px;
-  }
-
-  .footer-links-grid {
-    column-gap: 18px;
-    width: 100%;
-    max-width: 220px;
-    margin: 0 auto;
     text-align: left;
   }
 
-  .footer-links-col a,
-  .footer-links a,
-  .footer-contact a,
-  .footer-contact span {
-    font-size: 0.82rem;
-    margin-bottom: 5px;
-    padding: 2px 0;
-    line-height: 1.35;
-    display: block;
-  }
-
-  .footer-bottom {
-    width: min(100%, calc(100% - 28px));
-    padding: 10px 0 12px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    text-align: center;
-    gap: 6px;
-    font-size: 0.78rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .footer-main {
-    column-gap: 14px;
-    row-gap: 16px;
-    padding: 20px 0 14px;
+  .footer-logo {
+    font-size: 1.1rem;
   }
 
   .footer-brand p {
-    font-size: 0.78rem;
+    max-width: 520px;
+    margin-top: 10px;
+    font-size: 13.5px;
+  }
+
+  .footer-bottom {
+    width: min(100%, calc(100% - 32px));
+    padding: 14px 0;
+    font-size: 12px;
+  }
+}
+
+/* =========================================
+   RESPONSIVE: MOBILE (max-width: 560px)
+   ========================================= */
+@media (max-width: 560px) {
+  .site-footer {
+    margin-top: 30px;
+  }
+
+  .footer-main {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 24px 0 16px;
   }
 
   .footer-links-grid {
-    column-gap: 14px;
-    max-width: 190px;
+    max-width: 260px;
+    column-gap: 20px;
   }
 
   .footer-links-col a,
-  .footer-links a,
   .footer-contact a,
   .footer-contact span {
-    font-size: 0.78rem;
-    margin-bottom: 4px;
+    font-size: 13px;
+    margin-bottom: 9px;
   }
 
   .footer-bottom {
     flex-direction: column;
-    gap: 4px;
-    font-size: 0.74rem;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+    font-size: 11.5px;
+    padding: 12px 0 16px;
   }
 }

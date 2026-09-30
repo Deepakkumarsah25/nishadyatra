@@ -140,12 +140,31 @@
         border-top: 1px solid var(--admin-border-subtle);
       }
 
-      @media (max-width: 900px) {
+      @media (max-width: 1150px) {
         .home-stats-grid {
           grid-template-columns: repeat(2, 1fr);
         }
+      }
+      @media (max-width: 1024px) {
         .modules-grid {
           grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 600px) {
+        .home-stats-grid {
+          grid-template-columns: 1fr;
+          gap: 12px;
+        }
+        .module-card {
+          padding: 18px;
+        }
+        .module-actions {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .module-actions a {
+          text-align: center;
+          justify-content: center;
         }
       }
     </style>

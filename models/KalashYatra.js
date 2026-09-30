@@ -590,6 +590,7 @@ const kalashYatraSchema = new mongoose.Schema(
         description: { type: String, default: "" },
         tag: { type: String, default: "संकल्प यात्रा" },
         order: { type: Number, default: 0 },
+        isHighlighted: { type: Boolean, default: false },
       },
     ],
 

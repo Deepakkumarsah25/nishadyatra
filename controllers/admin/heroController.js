@@ -1,13 +1,14 @@
 const HeroSlide = require("../../models/HeroSlide");
+const { defaultHeroSlides } = require("../../scripts/seedHomeData");
 
 // List all slides
 exports.getHeroSlides = async (req, res) => {
   try {
-    const slides = await HeroSlide.find().sort({ order: 1, createdAt: -1 });
+    const slides = await HeroSlide.find().sort({ order: 1, createdAt: 1 });
     res.render("admin/home/hero-list", {
       title: "Hero Slider Management",
       admin: req.session.admin,
-      slides,
+      slides: slides || [],
       currentPath: "/admin/home/hero",
       message: req.query.msg || null,
       error: req.query.err || null,
@@ -51,20 +52,31 @@ exports.postCreateHeroSlide = async (req, res) => {
       isActive,
     } = req.body;
 
+    let finalImageUrl = "";
+    if (req.file) {
+      finalImageUrl = "/uploads/hero/" + req.file.filename;
+    } else if (imageUrl && imageUrl.trim()) {
+      finalImageUrl = imageUrl.trim();
+    }
+
+    if (!finalImageUrl) {
+      finalImageUrl = "https://images.unsplash.com/photo-1532375810709-75b1da00537c?auto=format&fit=crop&w=1920&q=85";
+    }
+
     await HeroSlide.create({
-      tag: tag || "National & Social Service",
-      badgeText: badgeText || "",
-      headingPrefix: headingPrefix || "",
-      highlightText: highlightText || "",
-      headingSuffix: headingSuffix || "",
-      description: description || "",
-      imageUrl: imageUrl || "https://images.unsplash.com/photo-1532375810709-75b1da00537c?auto=format&fit=crop&w=1920&q=85",
-      primaryBtnText: primaryBtnText || "Join Campaign",
-      primaryBtnLink: primaryBtnLink || "#quickActionSidebar",
-      primaryBtnInitiative: primaryBtnInitiative || "",
-      secondaryBtnText: secondaryBtnText || "Our Key Initiatives",
-      secondaryBtnLink: secondaryBtnLink || "#what-we-do",
-      secondaryBtnInitiative: secondaryBtnInitiative || "",
+      tag: (tag && tag.trim()) || "National & Social Service",
+      badgeText: (badgeText && badgeText.trim()) || "",
+      headingPrefix: (headingPrefix && headingPrefix.trim()) || "",
+      highlightText: (highlightText && highlightText.trim()) || "",
+      headingSuffix: (headingSuffix && headingSuffix.trim()) || "",
+      description: (description && description.trim()) || "",
+      imageUrl: finalImageUrl,
+      primaryBtnText: (primaryBtnText && primaryBtnText.trim()) || "Join Campaign",
+      primaryBtnLink: (primaryBtnLink && primaryBtnLink.trim()) || "#quickActionSidebar",
+      primaryBtnInitiative: (primaryBtnInitiative && primaryBtnInitiative.trim()) || "",
+      secondaryBtnText: (secondaryBtnText && secondaryBtnText.trim()) || "Our Key Initiatives",
+      secondaryBtnLink: (secondaryBtnLink && secondaryBtnLink.trim()) || "#what-we-do",
+      secondaryBtnInitiative: (secondaryBtnInitiative && secondaryBtnInitiative.trim()) || "",
       order: Number(order) || 0,
       isActive: isActive === "on" || isActive === "true" || isActive === true,
     });
@@ -108,6 +120,11 @@ exports.getEditHeroSlide = async (req, res) => {
 // Process edit slide
 exports.postEditHeroSlide = async (req, res) => {
   try {
+    const existingSlide = await HeroSlide.findById(req.params.id);
+    if (!existingSlide) {
+      return res.redirect("/admin/home/hero?err=Slide not found");
+    }
+
     const {
       tag,
       badgeText,
@@ -126,23 +143,30 @@ exports.postEditHeroSlide = async (req, res) => {
       isActive,
     } = req.body;
 
-    await HeroSlide.findByIdAndUpdate(req.params.id, {
-      tag,
-      badgeText,
-      headingPrefix,
-      highlightText,
-      headingSuffix,
-      description,
-      imageUrl,
-      primaryBtnText,
-      primaryBtnLink,
-      primaryBtnInitiative,
-      secondaryBtnText,
-      secondaryBtnLink,
-      secondaryBtnInitiative,
-      order: Number(order) || 0,
-      isActive: isActive === "on" || isActive === "true" || isActive === true,
-    });
+    let finalImageUrl = existingSlide.imageUrl;
+    if (req.file) {
+      finalImageUrl = "/uploads/hero/" + req.file.filename;
+    } else if (imageUrl && imageUrl.trim()) {
+      finalImageUrl = imageUrl.trim();
+    }
+
+    existingSlide.tag = (tag && tag.trim()) || existingSlide.tag;
+    existingSlide.badgeText = typeof badgeText !== "undefined" ? badgeText.trim() : existingSlide.badgeText;
+    existingSlide.headingPrefix = typeof headingPrefix !== "undefined" ? headingPrefix.trim() : existingSlide.headingPrefix;
+    existingSlide.highlightText = typeof highlightText !== "undefined" ? highlightText.trim() : existingSlide.highlightText;
+    existingSlide.headingSuffix = typeof headingSuffix !== "undefined" ? headingSuffix.trim() : existingSlide.headingSuffix;
+    existingSlide.description = typeof description !== "undefined" ? description.trim() : existingSlide.description;
+    existingSlide.imageUrl = finalImageUrl;
+    existingSlide.primaryBtnText = (primaryBtnText && primaryBtnText.trim()) || "";
+    existingSlide.primaryBtnLink = (primaryBtnLink && primaryBtnLink.trim()) || "#quickActionSidebar";
+    existingSlide.primaryBtnInitiative = typeof primaryBtnInitiative !== "undefined" ? primaryBtnInitiative.trim() : "";
+    existingSlide.secondaryBtnText = (secondaryBtnText && secondaryBtnText.trim()) || "";
+    existingSlide.secondaryBtnLink = (secondaryBtnLink && secondaryBtnLink.trim()) || "#what-we-do";
+    existingSlide.secondaryBtnInitiative = typeof secondaryBtnInitiative !== "undefined" ? secondaryBtnInitiative.trim() : "";
+    existingSlide.order = Number(order) || 0;
+    existingSlide.isActive = isActive === "on" || isActive === "true" || isActive === true;
+
+    await existingSlide.save();
 
     res.redirect("/admin/home/hero?msg=Slide updated successfully");
   } catch (error) {
@@ -181,5 +205,20 @@ exports.toggleHeroSlideStatus = async (req, res) => {
   } catch (error) {
     console.error("Toggle status error:", error);
     res.redirect("/admin/home/hero?err=Failed to change status");
+  }
+};
+
+// Seed default slides if list is empty
+exports.restoreDefaultSlides = async (req, res) => {
+  try {
+    const count = await HeroSlide.countDocuments();
+    if (count === 0) {
+      await HeroSlide.insertMany(defaultHeroSlides);
+      return res.redirect("/admin/home/hero?msg=Default hero slides restored successfully");
+    }
+    res.redirect("/admin/home/hero?msg=Hero slides already exist");
+  } catch (error) {
+    console.error("Restore slides error:", error);
+    res.redirect("/admin/home/hero?err=Failed to restore default slides");
   }
 };

@@ -2,8 +2,8 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
-// Ensure upload directory exists: uploads/videos
-const uploadDir = path.join(__dirname, "..", "uploads", "videos");
+// Ensure upload directory exists: uploads/hero
+const uploadDir = path.join(__dirname, "..", "uploads", "hero");
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
@@ -20,35 +20,33 @@ const storage = multer.diskStorage({
       .replace(/[^a-zA-Z0-9_-]/g, "_")
       .substring(0, 35);
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e6);
-    cb(null, `video-${cleanBase}-${uniqueSuffix}${ext || ".mp4"}`);
+    cb(null, `hero-${cleanBase}-${uniqueSuffix}${ext || ".jpg"}`);
   },
 });
 
+// File filter: accept image formats only
 const fileFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith("video/") || file.mimetype.startsWith("image/")) {
+  const allowedExtensions = /jpeg|jpg|png|webp|avif|gif/;
+  const extName = allowedExtensions.test(
+    path.extname(file.originalname).toLowerCase()
+  );
+  const mimeType = allowedExtensions.test(file.mimetype) || file.mimetype.startsWith("image/");
+
+  if (extName || mimeType) {
     return cb(null, true);
   }
-  const allowed = /\.(mp4|webm|ogg|mov|mkv|jpg|jpeg|png|webp|avif|gif)$/i;
-  if (allowed.test(file.originalname)) {
-    return cb(null, true);
-  }
-  return cb(null, true);
+  cb(new Error("Only images (JPG, PNG, WEBP, AVIF, GIF) can be uploaded!"));
 };
 
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 150 * 1024 * 1024, // 150 MB limit
+    fileSize: 15 * 1024 * 1024, // 15 MB limit
   },
   fileFilter: fileFilter,
 });
 
-const kalashVideoUpload = upload.fields([
-  { name: "videoFile", maxCount: 1 },
-  { name: "thumbnailFile", maxCount: 1 },
-]);
-
 module.exports = {
-  kalashVideoUpload,
+  uploadHeroImage: upload.single("imageFile"),
   uploadDir,
 };

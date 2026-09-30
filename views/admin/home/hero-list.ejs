@@ -1,6 +1,97 @@
 <%- include("../common/header") %>
 <%- include("../common/sidebar") %>
 
+<style>
+  .hero-stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .hero-stat-card {
+    background: #ffffff;
+    border: 1px solid var(--admin-border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+  }
+  .hero-stat-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .hero-stat-val strong {
+    display: block;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--admin-text-dark);
+    line-height: 1.1;
+  }
+  .hero-stat-val span {
+    font-size: 11px;
+    color: var(--admin-text-muted);
+    font-weight: 600;
+  }
+  .hero-card-table {
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+  .hero-thumb-wrap {
+    position: relative;
+    width: 120px;
+    height: 68px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--admin-border);
+    background: #f4ece6;
+  }
+  .hero-thumb-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+  .hero-thumb-wrap:hover img {
+    transform: scale(1.08);
+  }
+  .hero-order-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: #fbf7f4;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 13px;
+    color: var(--admin-primary-dark);
+  }
+  .hero-btn-pill {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    background: #faf5f0;
+    border: 1px solid var(--admin-border-subtle);
+    color: #554440;
+    margin-bottom: 3px;
+    max-width: 240px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+</style>
+
 <div class="admin-main">
   <!-- Topbar -->
   <header class="admin-topbar">
@@ -11,17 +102,20 @@
       <div class="page-heading">
         <h1>
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--admin-primary)" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          Hero Slider Manager
+          Hero Slider Management
         </h1>
-        <p>Manage home page main slider banners, headlines, and call-to-action links</p>
+        <p>होम पेज का मुख्य हीरो स्लाइडर, बैनर इमेज, हेडिंग और बटन लिंक प्रबंधित करें</p>
       </div>
     </div>
     <div class="topbar-right">
       <a href="/admin/home/hero/new" class="btn-admin btn-admin-primary">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        <span>Add New Slide</span>
+        <span>+ Add New Slide</span>
       </a>
-      <a href="/" target="_blank" class="view-site-btn">View Website</a>
+      <a href="/" target="_blank" class="view-site-btn">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        <span>View Live Website</span>
+      </a>
     </div>
   </header>
 
@@ -34,78 +128,156 @@
       <div class="admin-alert admin-alert-error">⚠ <%= error %></div>
     <% } %>
 
+    <%
+      const totalCount = slides ? slides.length : 0;
+      const activeCount = slides ? slides.filter(s => s.isActive).length : 0;
+      const hiddenCount = totalCount - activeCount;
+    %>
+
+    <!-- Quick Stats -->
+    <div class="hero-stats-row">
+      <div class="hero-stat-card">
+        <div class="hero-stat-icon" style="background: #fff0ec; color: var(--admin-primary);">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        </div>
+        <div class="hero-stat-val">
+          <strong><%= totalCount %></strong>
+          <span>Total Slides</span>
+        </div>
+      </div>
+
+      <div class="hero-stat-card">
+        <div class="hero-stat-icon" style="background: #e8f5e9; color: #2e7d32;">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="hero-stat-val">
+          <strong><%= activeCount %></strong>
+          <span>Active (Visible)</span>
+        </div>
+      </div>
+
+      <div class="hero-stat-card">
+        <div class="hero-stat-icon" style="background: #f5f5f5; color: #757575;">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><line x1="1" y1="1" x2="23" y2="23"/><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/></svg>
+        </div>
+        <div class="hero-stat-val">
+          <strong><%= hiddenCount %></strong>
+          <span>Hidden</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slides List Card -->
     <div class="admin-card">
       <div class="admin-card-header">
-        <h3>
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-          Available Hero Slides (<%= slides.length %>)
-        </h3>
-        <span style="font-size: 12px; color: var(--admin-text-muted);">Ordered list (lower order number appears first)</span>
+        <div>
+          <h3>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+            Hero Slides List (<%= totalCount %>)
+          </h3>
+          <span style="font-size: 11px; color: var(--admin-text-muted); display: block; margin-top: 2px;">
+            क्रम संख्या (Order) के आधार पर स्लाइड प्रदर्शित होती हैं। कम संख्या वाली स्लाइड पहले दिखेगी।
+          </span>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <% if (totalCount === 0) { %>
+            <form action="/admin/home/hero/restore-defaults" method="POST" style="display: inline;">
+              <button type="submit" class="btn-admin btn-admin-outline btn-admin-sm">Restore Default Slides</button>
+            </form>
+          <% } %>
+          <a href="/admin/home/hero/new" class="btn-admin btn-admin-primary btn-admin-sm">+ New Slide</a>
+        </div>
       </div>
 
       <div class="admin-table-wrapper">
-        <table class="admin-table">
+        <table class="admin-table hero-card-table">
           <thead>
             <tr>
-              <th style="width: 70px;">Order</th>
-              <th style="width: 120px;">Image</th>
-              <th>Title & Description</th>
-              <th>Tag / Badge</th>
-              <th>Button Links</th>
-              <th style="width: 100px;">Status</th>
-              <th style="width: 160px; text-align: right;">Actions</th>
+              <th style="width: 60px; text-align: center;">Order</th>
+              <th style="width: 130px;">Image Banner</th>
+              <th>Headline & Description</th>
+              <th style="width: 180px;">Tag & Badge</th>
+              <th style="width: 220px;">Button Links</th>
+              <th style="width: 100px; text-align: center;">Status</th>
+              <th style="width: 140px; text-align: right;">Actions</th>
             </tr>
           </thead>
           <tbody>
             <% if (slides && slides.length > 0) { %>
               <% slides.forEach(function(slide) { %>
                 <tr>
-                  <td><strong>#<%= slide.order %></strong></td>
-                  <td>
-                    <img class="hero-slide-thumbnail" src="<%= slide.imageUrl %>" alt="<%= slide.tag %>" onerror="this.src='https://placehold.co/180x110/eadfd7/333?text=Slide'"/>
+                  <!-- Order -->
+                  <td style="text-align: center;">
+                    <span class="hero-order-pill">#<%= slide.order %></span>
                   </td>
+
+                  <!-- Thumbnail -->
                   <td>
-                    <div style="font-weight: 700; font-size: 14px; color: var(--admin-text-dark); margin-bottom: 3px;">
-                      <%= slide.headingPrefix %> <span style="color: var(--admin-primary);"><%= slide.highlightText %></span> <%= slide.headingSuffix %>
-                    </div>
-                    <div style="font-size: 11px; color: var(--admin-text-muted); line-height: 1.4; max-width: 420px;">
-                      <%= slide.description ? slide.description.substring(0, 110) + '...' : '' %>
+                    <div class="hero-thumb-wrap">
+                      <img src="<%= slide.imageUrl %>" alt="<%= slide.tag %>" onerror="this.src='https://placehold.co/180x110/eadfd7/333?text=Slide'"/>
                     </div>
                   </td>
+
+                  <!-- Headline & Description -->
                   <td>
-                    <span style="display:inline-block; font-size: 11px; font-weight: 700; background: var(--admin-primary-light); color: var(--admin-primary); padding: 3px 8px; border-radius: 4px;">
-                      <%= slide.tag %>
-                    </span>
-                    <% if (slide.badgeText) { %>
-                      <div style="font-size: 10px; color: var(--admin-text-muted); margin-top: 4px; max-width: 200px;">
-                        <%= slide.badgeText %>
+                    <div style="font-weight: 800; font-size: 14px; color: var(--admin-text-dark); margin-bottom: 4px; line-height: 1.3;">
+                      <%= slide.headingPrefix ? slide.headingPrefix + ' ' : '' %><span style="color: var(--admin-primary);"><%= slide.highlightText || '' %></span><%= slide.headingSuffix ? ' ' + slide.headingSuffix : '' %>
+                    </div>
+                    <% if (slide.description) { %>
+                      <div style="font-size: 12px; color: var(--admin-text-muted); line-height: 1.45; max-width: 420px;">
+                        <%= slide.description.length > 120 ? slide.description.substring(0, 120) + '...' : slide.description %>
                       </div>
                     <% } %>
                   </td>
+
+                  <!-- Tag & Badge -->
                   <td>
-                    <div style="font-size: 11px;">
-                      <strong>1:</strong> <%= slide.primaryBtnText %> (<%= slide.primaryBtnLink %>)
-                    </div>
-                    <div style="font-size: 11px; color: var(--admin-text-muted);">
-                      <strong>2:</strong> <%= slide.secondaryBtnText %> (<%= slide.secondaryBtnLink %>)
-                    </div>
+                    <% if (slide.tag) { %>
+                      <div style="margin-bottom: 4px;">
+                        <span style="display: inline-block; font-size: 11px; font-weight: 800; background: var(--admin-primary-light); color: var(--admin-primary); padding: 3px 8px; border-radius: 5px;">
+                          <%= slide.tag %>
+                        </span>
+                      </div>
+                    <% } %>
+                    <% if (slide.badgeText) { %>
+                      <div style="font-size: 11px; color: #7a6760; line-height: 1.3;">
+                        <%= slide.badgeText.length > 60 ? slide.badgeText.substring(0, 60) + '...' : slide.badgeText %>
+                      </div>
+                    <% } %>
                   </td>
+
+                  <!-- Button Links -->
                   <td>
+                    <% if (slide.primaryBtnText) { %>
+                      <div class="hero-btn-pill" title="<%= slide.primaryBtnLink %>">
+                        <strong style="color: var(--admin-primary);">BTN 1:</strong> <%= slide.primaryBtnText %> (<%= slide.primaryBtnLink %>)
+                      </div>
+                    <% } %>
+                    <% if (slide.secondaryBtnText) { %>
+                      <div class="hero-btn-pill" title="<%= slide.secondaryBtnLink %>">
+                        <strong style="color: #63534d;">BTN 2:</strong> <%= slide.secondaryBtnText %> (<%= slide.secondaryBtnLink %>)
+                      </div>
+                    <% } %>
+                  </td>
+
+                  <!-- Status Toggle -->
+                  <td style="text-align: center;">
                     <form action="/admin/home/hero/toggle/<%= slide._id %>" method="POST" style="display:inline;">
-                      <button type="submit" class="badge-status <%= slide.isActive ? 'badge-active' : 'badge-inactive' %>" style="border:none; cursor:pointer;" title="Click to toggle status">
-                        <%= slide.isActive ? 'Active' : 'Hidden' %>
+                      <button type="submit" class="badge-status <%= slide.isActive ? 'badge-active' : 'badge-inactive' %>" style="border:none; cursor:pointer;" title="Click to toggle visibility">
+                        <%= slide.isActive ? '✓ Active' : '✕ Hidden' %>
                       </button>
                     </form>
                   </td>
-                  <td style="text-align: right;">
-                    <div class="table-actions">
-                      <a href="/admin/home/hero/edit/<%= slide._id %>" class="btn-edit" title="Edit Slide">
-                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+
+                  <!-- Actions -->
+                    <div style="display: inline-flex; gap: 6px;">
+                      <a href="/admin/home/hero/edit/<%= slide._id %>" class="btn-admin btn-admin-outline btn-admin-sm" title="Edit Slide">
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                         <span>Edit</span>
                       </a>
-                      <form action="/admin/home/hero/delete/<%= slide._id %>" method="POST" onsubmit="return confirm('Are you sure you want to delete this slide?');" style="display:inline; margin: 0;">
-                        <button type="submit" class="btn-del" title="Delete Slide">
-                          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                      <form action="/admin/home/hero/delete/<%= slide._id %>" method="POST" onsubmit="return confirm('क्या आप वाकई इस स्लाइड को हटाना चाहते हैं? (Delete this slide?)');" style="display:inline;">
+                        <button type="submit" class="btn-admin btn-admin-danger btn-admin-sm" title="Delete Slide">
+                          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                           <span>Delete</span>
                         </button>
                       </form>
@@ -115,8 +287,20 @@
               <% }); %>
             <% } else { %>
               <tr>
-                <td colspan="7" style="text-align:center; padding: 40px; color: var(--admin-text-muted);">
-                  No hero slides found. Click the button above to create a new slide.
+                <td colspan="7" style="text-align:center; padding: 48px 20px; color: var(--admin-text-muted);">
+                  <div style="font-size: 32px; margin-bottom: 10px;">🖼️</div>
+                  <div style="font-size: 15px; font-weight: 700; color: var(--admin-text-dark); margin-bottom: 6px;">
+                    No Hero Slides Found
+                  </div>
+                  <p style="font-size: 13px; max-width: 440px; margin: 0 auto 18px; line-height: 1.5;">
+                    होम पेज पर दिखाने के लिए नई स्लाइड जोड़ें या डिफ़ॉल्ट स्लाइड पुनर्स्थापित करें।
+                  </p>
+                  <div style="display: flex; gap: 10px; justify-content: center;">
+                    <a href="/admin/home/hero/new" class="btn-admin btn-admin-primary">+ Add New Slide</a>
+                    <form action="/admin/home/hero/restore-defaults" method="POST" style="display: inline;">
+                      <button type="submit" class="btn-admin btn-admin-outline">Restore Default Slides</button>
+                    </form>
+                  </div>
                 </td>
               </tr>
             <% } %>
