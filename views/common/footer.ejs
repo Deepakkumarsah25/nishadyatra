@@ -1,68 +1,23 @@
-<link rel="stylesheet" href="/css/common/footer.css" />
+</div><!-- /.admin-main -->
+  </div><!-- /.dashboard-layout -->
 
-<footer class="site-footer" id="contact">
+  <script>
+    // Mobile Sidebar Toggle
+    const mobileBtn = document.getElementById("adminMobileMenuBtn");
+    const sidebar = document.getElementById("adminSidebar");
+    const backdrop = document.getElementById("adminSidebarBackdrop");
 
-  <div class="footer-main">
+    if (mobileBtn && sidebar && backdrop) {
+      mobileBtn.addEventListener("click", () => {
+        sidebar.classList.toggle("open");
+        backdrop.classList.toggle("open");
+      });
 
-    <!-- Brand -->
-    <div class="footer-brand">
-      <a href="/" class="footer-logo">
-        <span class="footer-logo-mark">N</span>
-        <span>Nishad Sankalp Campaign</span>
-      </a>
-
-      <p>
-        An initiative to give a new direction to society with the pledge of unity, awareness, and progress.
-      </p>
-    </div>
-
-    <!-- Links -->
-    <div class="footer-links">
-      <h3>Quick Links</h3>
-
-      <div class="footer-links-grid">
-        <div class="footer-links-col">
-          <a href="/">Home</a>
-          <a href="/#about">About</a>
-          <a href="/video">Video</a>
-        </div>
-        <div class="footer-links-col">
-          <a href="/gallery">Gallery</a>
-          <a href="/news">News</a>
-          <a href="/#contact">Contact</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Contact -->
-    <div class="footer-contact">
-      <h3>Contact Us</h3>
-
-      <a href="mailto:info@example.com">
-        ✉ info@example.com
-      </a>
-
-      <a href="tel:+919999999999">
-        ☎ +91 99999 99999
-      </a>
-
-      <span>📍 India</span>
-    </div>
-
-  </div>
-
-  <div class="footer-bottom">
-    <span>
-      © <span id="footerYear"></span>
-      Nishad Sankalp Campaign
-    </span>
-
-    <span>All Rights Reserved</span>
-  </div>
-
-</footer>
-
-<script>
-  document.getElementById("footerYear").textContent =
-    new Date().getFullYear();
-</script>
+      backdrop.addEventListener("click", () => {
+        sidebar.classList.remove("open");
+        backdrop.classList.remove("open");
+      });
+    }
+  </script>
+</body>
+</html>
