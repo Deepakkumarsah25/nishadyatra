@@ -1325,7 +1325,161 @@
        FILTER CONSOLE (SEARCH & CATEGORIES)
     ===================================================== */
     .filter-console-section {
-      padding: 40px 0 20px;
+      padding: 20px 0 16px;
+    }
+
+    .filter-normal-card {
+      background: #ffffff;
+      border: 1.5px solid #ebdcd3;
+      border-radius: 14px;
+      padding: 14px 18px;
+      box-shadow: 0 4px 18px rgba(45, 15, 10, 0.05);
+      margin-bottom: 24px;
+    }
+
+    .filter-normal-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .filter-col-search {
+      flex: 1.6;
+      min-width: 240px;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .filter-col-icon {
+      position: absolute;
+      left: 14px;
+      color: #9c2727;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+
+    .filter-normal-input {
+      width: 100%;
+      height: 44px;
+      padding: 0 34px 0 40px;
+      border: 1.5px solid #e7ded7;
+      border-radius: 9px;
+      font-size: 14px;
+      color: #2c1e1e;
+      background: #fdfcfb;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .filter-normal-input:focus {
+      border-color: #c92a2a;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(201, 42, 42, 0.1);
+    }
+
+    .filter-col-select {
+      flex: 1;
+      min-width: 170px;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .filter-normal-select {
+      width: 100%;
+      height: 44px;
+      padding: 0 32px 0 38px;
+      border: 1.5px solid #e7ded7;
+      border-radius: 9px;
+      font-size: 14px;
+      color: #2c1e1e;
+      background: #fdfcfb;
+      outline: none;
+      cursor: pointer;
+      appearance: none;
+      transition: all 0.2s ease;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='%2378665f'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+    }
+
+    .filter-normal-select:focus {
+      border-color: #c92a2a;
+      background-color: #ffffff;
+      box-shadow: 0 0 0 3px rgba(201, 42, 42, 0.1);
+    }
+
+    .filter-col-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .btn-filter-reset {
+      height: 44px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1.5px solid #e7ded7;
+      background: #ffffff;
+      color: #8b2020;
+      font-size: 13.5px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-filter-reset:hover {
+      background: #fff0ec;
+      border-color: #f5b8a8;
+      color: #c92a2a;
+    }
+
+    .filter-count-badge {
+      height: 44px;
+      padding: 0 14px;
+      border-radius: 9px;
+      background: #fbf5f1;
+      border: 1px solid #ebdcd3;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #6d5b54;
+      white-space: nowrap;
+    }
+
+    .filter-count-badge strong {
+      color: #c92a2a;
+      font-weight: 800;
+      font-size: 15px;
+    }
+
+    @media (max-width: 768px) {
+      .filter-normal-bar {
+        padding: 12px;
+      }
+      .filter-col-search, .filter-col-select {
+        flex: 1 1 100%;
+        min-width: 100%;
+      }
+      .filter-col-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+      .btn-filter-reset {
+        flex: 1;
+        justify-content: center;
+      }
     }
 
     .filter-card {
@@ -3480,20 +3634,87 @@
 
       <div class="storycase-container">
 
-        <% const featMilestone = (typeof kalash !== 'undefined' && kalash.milestonesSection && kalash.milestonesSection.items && kalash.milestonesSection.items.length > 0) ? kalash.milestonesSection.items[0] : null; %>
+        <%
+          const stateNamesMap = {
+            'bihar': 'बिहार',
+            'uttar-pradesh': 'उत्तर प्रदेश',
+            'madhya-pradesh': 'मध्य प्रदेश',
+            'jharkhand': 'झारखंड',
+            'rajasthan': 'राजस्थान'
+          };
+
+          function resolveHighlightThumb(thumb, vUrl) {
+            if (thumb && thumb.trim() && !thumb.includes('kalash-yatra-hero.jpg')) {
+              return thumb.trim();
+            }
+            const m = (vUrl || '').match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/|v\/))([\w-]{11})/);
+            if (m && m[1]) {
+              return 'https://img.youtube.com/vi/' + m[1] + '/hqdefault.jpg';
+            }
+            return thumb && thumb.trim() ? thumb.trim() : '/images/democratic-pledge-featured.jpg';
+          }
+
+          let featMilestone = null;
+
+          // 1. Priority: Whichever video is highlighted in admin (isHighlighted === true)
+          const highlightedVid = (typeof kalash !== 'undefined' && kalash.videos && kalash.videos.length > 0)
+            ? kalash.videos.find(v => v.isHighlighted)
+            : null;
+
+          if (highlightedVid) {
+            const sKey = highlightedVid.state || 'bihar';
+            const sName = stateNamesMap[sKey] || highlightedVid.stateName || 'बिहार';
+            const resolvedThumb = resolveHighlightThumb(highlightedVid.thumbnail, highlightedVid.videoUrl);
+            featMilestone = {
+              stateKey: sKey,
+              stateName: sName,
+              district: highlightedVid.district || 'गोपालगंज',
+              title: highlightedVid.title,
+              image: resolvedThumb,
+              description: highlightedVid.description && highlightedVid.description.trim()
+                ? highlightedVid.description.trim()
+                : 'हजारों नागरिकों और मातृशक्तियों ने शपथ ली: आगामी चुनाव में भाजपा के पक्ष में मतदान नहीं करेंगे तथा अपने विवेक और विचार के आधार पर अपने मताधिकार का प्रयोग करेंगे।',
+              tag: highlightedVid.tag || '🚩 मुख्य संकल्प वीडियो',
+              videoUrl: highlightedVid.videoUrl,
+              duration: highlightedVid.duration || 'Video',
+            };
+          } else if (typeof kalash !== 'undefined' && kalash.hero && kalash.hero.featuredVideo && kalash.hero.featuredVideo.title) {
+            // 2. Fallback: kalash.hero.featuredVideo
+            const fv = kalash.hero.featuredVideo;
+            featMilestone = {
+              stateKey: 'bihar',
+              stateName: 'बिहार',
+              district: 'मुख्य संकल्प',
+              title: fv.title,
+              image: resolveHighlightThumb(fv.posterImage, fv.videoUrl),
+              description: 'हजारों नागरिकों और मातृशक्तियों ने शपथ ली: आगामी चुनाव में भाजपा के पक्ष में मतदान नहीं करेंगे तथा अपने विवेक और विचार के आधार पर अपने मताधिकार का प्रयोग करेंगे।',
+              tag: fv.badge || '🚩 मुख्य संकल्प वीडियो',
+              videoUrl: fv.videoUrl,
+              duration: fv.duration || 'Video',
+            };
+          } else if (typeof kalash !== 'undefined' && kalash.milestonesSection && kalash.milestonesSection.items && kalash.milestonesSection.items.length > 0) {
+            // 3. Fallback: milestonesSection item 0
+            featMilestone = kalash.milestonesSection.items[0];
+          }
+        %>
         <% if (featMilestone) { %>
         <!-- 1. Featured Big Story Card -->
         <article class="storycase-featured-card">
-          <div class="storycase-featured-media">
+          <div class="storycase-featured-media btn-watch-featured" data-video="<%= featMilestone.videoUrl %>" data-title="<%= featMilestone.title %>" style="cursor: pointer;" title="वीडियो देखने के लिए क्लिक करें">
             <img
               src="<%= featMilestone.image %>"
               alt="<%= featMilestone.title %>"
               class="storycase-featured-img"
               loading="lazy"
+              onerror="this.src='/images/democratic-pledge-featured.jpg'"
             />
             <div class="storycase-featured-overlay"></div>
+            <!-- Center Animated Play Button on Thumbnail -->
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 68px; height: 68px; border-radius: 50%; background: rgba(215, 42, 42, 0.92); color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 8px rgba(255,255,255,0.22), 0 8px 25px rgba(0,0,0,0.4); transition: transform 0.25s ease; z-index: 3;" onmouseover="this.style.transform='translate(-50%, -50%) scale(1.1)';" onmouseout="this.style.transform='translate(-50%, -50%) scale(1)';">
+              <svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor" style="margin-left: 3px;"><path d="M8 5v14l11-7z"/></svg>
+            </div>
             <div class="storycase-featured-badge">
-              <span><%= featMilestone.tag || '★ प्रमुख केंद्र • ऐतिहासिक महा-संकल्प' %></span>
+              <span><%= featMilestone.tag || '★ मुख्य संकल्प वीडियो' %></span>
             </div>
             <div class="storycase-featured-caption">
               <h4><%= featMilestone.title %></h4>
@@ -3510,7 +3731,7 @@
             <div>
               <div class="storycase-meta-tag-row">
                 <span class="storycase-tag-pill crimson"><%= featMilestone.stateName %> • <%= featMilestone.district %></span>
-                <span class="storycase-tag-pill gold"><%= featMilestone.tag || 'विशेष संकल्प' %></span>
+                <span class="storycase-tag-pill gold"><%= featMilestone.tag || 'मुख्य संकल्प वीडियो' %></span>
               </div>
 
               <h3><%= featMilestone.title %></h3>
@@ -3523,49 +3744,15 @@
                 <span><%= featMilestone.stateName %> के संकल्प वीडियो ↓</span>
               </button>
               <button type="button" class="btn-storycase-outline btn-watch-featured" data-video="<%= featMilestone.videoUrl %>" data-title="<%= featMilestone.title %>">
-                <span>संकल्प झलकियां देखें ▶</span>
+                <span>संकल्प वीडियो देखें ▶</span>
               </button>
             </div>
           </div>
         </article>
         <% } %>
 
-        <!-- 2. Four Complementary Visual Story Cards -->
-        <div class="storycase-grid-4">
-          <% const subMilestones = (typeof kalash !== 'undefined' && kalash.milestonesSection && kalash.milestonesSection.items && kalash.milestonesSection.items.length > 1) ? kalash.milestonesSection.items.slice(1) : []; %>
-          <% subMilestones.forEach((item) => { %>
-            <article class="storycase-card">
-              <div class="storycase-card-thumb">
-                <img src="<%= item.image %>" alt="<%= item.title %>" loading="lazy" />
-                <span class="storycase-card-tag"><%= item.stateName %> • <%= item.district %></span>
-              </div>
-              <div class="storycase-card-body">
-                <div>
-                  <h4><%= item.title %></h4>
-                  <p><%= item.description %></p>
-                </div>
-                <div class="storycase-card-footer">
-                  <span class="storycase-location-text"><%= item.district %>, <%= item.stateName %></span>
-                  <span class="btn-card-filter-link btn-jump-filter-state" data-state="<%= item.stateKey %>">संकल्प वीडियो देखें →</span>
-                </div>
-              </div>
-            </article>
-          <% }) %>
-        </div>
 
-        <!-- 3. Seamless Transition Ribbon connecting into Filter Console (NO GAP) -->
-        <div class="storycase-transition-bar">
-          <div class="transition-text-group">
-            <div class="transition-icon-circle">📜</div>
-            <div>
-              <h5>लोकतांत्रिक महा-संकल्प यात्रा वीडियो एवं संबोधन नीचे उपलब्ध हैं</h5>
-              <p>राज्य, ज़िला अथवा श्रेणी का चयन कर जन-जागरण व मताधिकार संकल्प वीडियो तुरंत देखें</p>
-            </div>
-          </div>
-          <button type="button" class="btn-jump-filter" id="btnJumpToFilter">
-            <span>संकल्प वीडियो एवं संकलन देखें ↓</span>
-          </button>
-        </div>
+
 
       </div>
 
@@ -3593,122 +3780,83 @@
 
     <section class="filter-console-section" id="filterConsole">
       <div class="container">
-        <div class="filter-card">
-
-          <!-- Filter Top Bar -->
-          <div class="filter-header-bar">
-            <div class="filter-title-group">
-              <div class="filter-icon-box">
-                <svg viewBox="0 0 24 24">
-                  <path d="M3 4h18v2H3V4zm3 7h12v2H6v-2zm4 7h4v2h-4v-2z"/>
+        <div class="filter-normal-card">
+          
+          <div class="filter-normal-row">
+            <!-- 1. Search Box -->
+            <div class="filter-col-search">
+              <span class="filter-col-icon">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <circle cx="11" cy="11" r="8"/>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"/>
                 </svg>
-              </div>
-              <div class="filter-heading-text">
-                <h3>लोकतांत्रिक संकल्प वीडियो एवं खोज केंद्र</h3>
-                <p>राज्य, ज़िला अथवा नाम/कीवर्ड के अनुसार लोकतांत्रिक संकल्प व जन-जागरण वीडियो तुरंत खोजें</p>
-              </div>
+              </span>
+              <input
+                type="search"
+                id="searchFilter"
+                class="filter-normal-input"
+                placeholder="वीडियो खोजें (Search title, district, topic)..."
+                autocomplete="off"
+              />
+              <button type="button" class="search-clear-btn" id="searchClearBtn" aria-label="खोज साफ़ करें">✕</button>
             </div>
 
-            <div class="filter-top-actions">
-              <div class="count-indicator">
-                <span>उपलब्ध:</span>
-                <strong id="resultCount">20</strong>
-                <span>वीडियो</span>
-              </div>
+            <!-- 2. State Select -->
+            <div class="filter-col-select">
+              <span class="filter-col-icon">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/>
+                </svg>
+              </span>
+              <select id="stateFilter" class="filter-normal-select">
+                <option value="all">सभी राज्य (All States)</option>
+                <option value="bihar">बिहार (Bihar)</option>
+                <option value="madhya-pradesh">मध्य प्रदेश (Madhya Pradesh)</option>
+                <option value="uttar-pradesh">उत्तर प्रदेश (Uttar Pradesh)</option>
+                <option value="jharkhand">झारखंड (Jharkhand)</option>
+                <option value="rajasthan">राजस्थान (Rajasthan)</option>
+              </select>
+            </div>
 
-              <button type="button" class="btn-reset-filters" id="clearFilters">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+            <!-- 3. District Select -->
+            <div class="filter-col-select">
+              <span class="filter-col-icon">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
+                  <path d="M15 11V5l-3-3-3 3v2H3v14h18V11h-6zm-8 7H5v-2h2v2zm0-4H5v-2h2v2zm0-4H5V8h2v2zm6 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V8h2v2zm0-4h-2V4h2v2zm6 12h-2v-2h2v2zm0-4h-2v-2h2v2z"/>
+                </svg>
+              </span>
+              <span id="districtLabel" style="display:none;">ज़िला चुनें (Select District)</span>
+              <select id="districtFilter" class="filter-normal-select">
+                <option value="all">सभी ज़िले (All Districts)</option>
+              </select>
+            </div>
+
+            <!-- 4. Reset & Video Count Badge -->
+            <div class="filter-col-actions">
+              <button type="button" class="btn-filter-reset" id="clearFilters" title="फ़िल्टर रीसेट करें">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2">
                   <path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
                 </svg>
                 <span>रीसेट (Reset)</span>
               </button>
 
-              <!-- Drawer Close Button for Mobile Screens -->
-              <button type="button" class="drawer-mobile-close" id="mobileFilterClose" aria-label="फ़िल्टर बंद करें">
-                ✕
-              </button>
-            </div>
-          </div>
-
-          <!-- Inputs Grid: State, District, Search -->
-          <div class="filter-input-grid">
-
-            <!-- State -->
-            <div class="form-group-custom">
-              <label for="stateFilter">
-                <svg viewBox="0 0 24 24">
-                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/>
-                </svg>
-                <span>राज्य चुनें (Select State)</span>
-              </label>
-              <div class="custom-select-wrapper">
-                <select id="stateFilter" class="styled-select">
-                  <option value="all">सभी राज्य (Pan India)</option>
-                  <option value="bihar">बिहार (Bihar)</option>
-                  <option value="madhya-pradesh">मध्य प्रदेश (Madhya Pradesh)</option>
-                  <option value="uttar-pradesh">उत्तर प्रदेश (Uttar Pradesh)</option>
-                  <option value="jharkhand">झारखंड (Jharkhand)</option>
-                  <option value="rajasthan">राजस्थान (Rajasthan)</option>
-                </select>
-                <span class="select-arrow">
-                  <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-                </span>
+              <div class="filter-count-badge">
+                <strong id="resultCount">20</strong>
+                <span>वीडियो</span>
               </div>
             </div>
 
-            <!-- District -->
-            <div class="form-group-custom">
-              <label for="districtFilter">
-                <svg viewBox="0 0 24 24">
-                  <path d="M15 11V5l-3-3-3 3v2H3v14h18V11h-6zm-8 7H5v-2h2v2zm0-4H5v-2h2v2zm0-4H5V8h2v2zm6 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V8h2v2zm0-4h-2V4h2v2zm6 12h-2v-2h2v2zm0-4h-2v-2h2v2z"/>
-                </svg>
-                <span id="districtLabel">ज़िला चुनें (Select District)</span>
-              </label>
-              <div class="custom-select-wrapper">
-                <select id="districtFilter" class="styled-select">
-                  <option value="all">सभी ज़िले (All Districts)</option>
-                </select>
-                <span class="select-arrow">
-                  <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-                </span>
-              </div>
-            </div>
-
-            <!-- Search -->
-            <div class="form-group-custom">
-              <label for="searchFilter">
-                <svg viewBox="0 0 24 24">
-                  <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-                </svg>
-                <span>नाम अथवा कीवर्ड से खोजें (Search)</span>
-              </label>
-              <div class="custom-input-wrapper">
-                <span class="search-icon-inside">
-                  <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-                </span>
-                <input
-                  type="search"
-                  id="searchFilter"
-                  class="styled-input with-icon"
-                  placeholder="उदा. गोपालगंज, पटना, संकल्प, जन-जागरण, भाषण..."
-                  autocomplete="off"
-                />
-                <button type="button" class="search-clear-btn" id="searchClearBtn" aria-label="खोज साफ़ करें">×</button>
-              </div>
-            </div>
-
+            <!-- Drawer close button (hidden) -->
+            <button type="button" class="drawer-mobile-close" id="mobileFilterClose" style="display: none;" aria-label="Close">✕</button>
           </div>
 
           <!-- Active Filter Chips Tray -->
           <div class="active-chips-tray" id="activeFilters"></div>
 
-          <!-- Mobile Drawer Footer Apply Button -->
-          <div class="drawer-apply-footer">
+          <!-- Mobile Drawer Apply (hidden on desktop) -->
+          <div class="drawer-apply-footer" style="display: none;">
             <button type="button" class="btn-apply-drawer" id="btnApplyDrawer">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>
-              </svg>
-              <span>वीडियो देखें (<span id="drawerResultCount">20</span> परिणाम)</span>
+              <span>वीडियो देखें (<span id="drawerResultCount">20</span>)</span>
             </button>
           </div>
 
