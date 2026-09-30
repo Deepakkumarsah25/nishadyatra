@@ -12,6 +12,7 @@ const {
   create,
   delete: deleteNews,
   togglePublish,
+  toggleHighlight,
   frontend,
   detail,
 } = require("../../controllers/news/videoNewsController");
@@ -63,5 +64,6 @@ router.post(
 );
 router.post("/admin/video_news/delete/:id", authMiddleware, deleteNews);
 router.post("/admin/video_news/toggle/:id", authMiddleware, togglePublish);
+router.post("/admin/video_news/toggle-highlight/:id", authMiddleware, toggleHighlight);
 
 module.exports = router;

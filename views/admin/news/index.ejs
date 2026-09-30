@@ -33,6 +33,10 @@
           <span>Featured</span>
           <strong><%= news.filter((item) => item.featured).length %></strong>
         </article>
+        <article>
+          <span>Highlight (होमपेज)</span>
+          <strong style="color: #b45309;">★ <%= news.filter((item) => item.isHighlighted || item.featured).length %></strong>
+        </article>
       </section>
 
       <section class="hero-poster-manager">
@@ -114,6 +118,7 @@
                   <th>Article</th>
                   <th>Media Type</th>
                   <th>Status</th>
+                  <th>Highlight</th>
                   <th>Date</th>
                   <th>Actions</th>
                 </tr>
@@ -143,6 +148,15 @@
                       </span>
                     </td>
                     <td>
+                      <% if (item.isHighlighted || item.featured) { %>
+                        <span class="status live" style="background: #fff8e6; color: #b45309; border: 1px solid #fde68a; font-weight: 700;">
+                          ★ Highlighted
+                        </span>
+                      <% } else { %>
+                        <span class="status draft" style="color: #8c7e77;">Regular</span>
+                      <% } %>
+                    </td>
+                    <td>
                       <%= new Date(item.publicationDate || item.updatedAt).toLocaleDateString('en-IN', {
                         day: 'numeric', month: 'short', year: 'numeric'
                       }) %>
@@ -150,13 +164,19 @@
                     <td>
                       <div class="actions">
                         <a class="quiet" href="/admin/video_news/edit/<%= item._id %>">Edit</a>
-                        <form action="/admin/video_news/toggle/<%= item._id %>" method="post">
+                        <form action="/admin/video_news/toggle-highlight/<%= item._id %>" method="post" style="display:inline;">
+                          <button class="quiet" type="submit" title="Toggle Home Page Highlight" style="<%= (item.isHighlighted || item.featured) ? 'color: #b45309; font-weight: 700;' : '' %>">
+                            <%= (item.isHighlighted || item.featured) ? '★ Unhighlight' : '☆ Highlight' %>
+                          </button>
+                        </form>
+                        <form action="/admin/video_news/toggle/<%= item._id %>" method="post" style="display:inline;">
                           <button class="quiet"><%= item.published ? 'Unpublish' : 'Publish' %></button>
                         </form>
                         <form
                           action="/admin/video_news/delete/<%= item._id %>"
                           method="post"
                           onsubmit="return confirm('Delete this article?')"
+                          style="display:inline;"
                         >
                           <button class="delete">Delete</button>
                         </form>

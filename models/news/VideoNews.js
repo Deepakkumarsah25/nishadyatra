@@ -15,6 +15,7 @@ const newsSchema = new mongoose.Schema(
     },
     externalUrl: { type: String, trim: true, maxlength: 1000, default: "" },
     featured: { type: Boolean, default: false },
+    isHighlighted: { type: Boolean, default: false },
     // Retained for compatibility with the earlier demo and its existing records.
     state: { type: String, trim: true, default: "", maxlength: 80 },
     district: { type: String, trim: true, default: "", maxlength: 80 },
@@ -35,6 +36,7 @@ const newsSchema = new mongoose.Schema(
 
 newsSchema.index({ published: 1, publicationDate: -1, publishedAt: -1 });
 newsSchema.index({ category: 1, featured: -1 });
+newsSchema.index({ published: 1, isHighlighted: -1 });
 newsSchema.index({ published: 1, state: 1, district: 1, publicationDate: -1 });
 
 module.exports = mongoose.models.VideoNews || mongoose.model("VideoNews", newsSchema);

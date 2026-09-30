@@ -182,6 +182,11 @@ exports.create = async (req, res, next) => {
     const doc = existing || new VideoNews();
     const previousThumbnail = existing?.thumbnailPath;
 
+    const isHighlighted =
+      req.body.isHighlighted === "on" ||
+      req.body.isHighlighted === "true" ||
+      req.body.featured === "on";
+
     Object.assign(doc, {
       title,
       content,
@@ -192,7 +197,8 @@ exports.create = async (req, res, next) => {
       category,
       publicationDate,
       externalUrl,
-      featured: req.body.featured === "on",
+      featured: isHighlighted,
+      isHighlighted,
       thumbnailPath: file
         ? `/uploads/news/${file.filename}`
         : existing?.thumbnailPath || "",
@@ -264,6 +270,22 @@ exports.togglePublish = async (req, res, next) => {
     item.publishedAt = item.published
       ? item.publishedAt || new Date()
       : null;
+
+    await item.save();
+    res.redirect("/admin/video_news");
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.toggleHighlight = async (req, res, next) => {
+  try {
+    const item = await VideoNews.findById(req.params.id);
+    if (!item) return res.redirect("/admin/video_news");
+
+    const currentStatus = Boolean(item.isHighlighted || item.featured);
+    item.isHighlighted = !currentStatus;
+    item.featured = !currentStatus;
 
     await item.save();
     res.redirect("/admin/video_news");
