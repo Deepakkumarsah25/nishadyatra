@@ -1,0 +1,570 @@
+/* ==========================================================================
+   CONTACT US PAGE - STYLESHEET (CLEAN, MINIMAL & SMOOTH)
+   Inspired by modern official leader & campaign portals (e.g. amitshah.co.in)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Base & Page Wrapper
+   -------------------------------------------------------------------------- */
+body.contact-page-body {
+  background-color: #f8fafc;
+  color: #0f172a;
+  font-family: 'Mukta', 'Noto Sans Devanagari', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --------------------------------------------------------------------------
+   2. Minimal Top Banner (Smooth Background Image & Title ONLY)
+   -------------------------------------------------------------------------- */
+.contact-top-banner {
+  position: relative;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #ffffff;
+  padding: clamp(38px, 6vw, 56px) 20px clamp(34px, 5vw, 50px);
+  text-align: center;
+  margin-top: var(--navbar-height, 64px);
+  border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.contact-banner-inner {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.contact-banner-title {
+  font-family: 'Rozha One', 'Noto Serif Devanagari', Georgia, serif;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.2;
+  margin: 0;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+  letter-spacing: 0.5px;
+}
+
+/* --------------------------------------------------------------------------
+   3. Main Contact Section & 2-Column Grid
+   -------------------------------------------------------------------------- */
+.contact-main-wrapper {
+  background-color: #f8fafc;
+  padding: 40px 0 70px 0;
+}
+
+.contact-two-col {
+  display: grid;
+  grid-template-columns: 1.15fr 0.95fr;
+  gap: 32px;
+  align-items: start;
+}
+
+@media (max-width: 960px) {
+  .contact-two-col {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   4. Common Card Boxes (Form & Connect)
+   -------------------------------------------------------------------------- */
+.contact-form-box,
+.contact-connect-box {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: clamp(22px, 3.8vw, 36px);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03), 0 8px 24px rgba(15, 23, 42, 0.03);
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.contact-form-box:hover,
+.contact-connect-box:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04), 0 12px 30px rgba(15, 23, 42, 0.05);
+}
+
+.contact-box-header {
+  margin-bottom: 22px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.contact-box-title {
+  font-family: 'Rozha One', 'Noto Serif Devanagari', Georgia, serif;
+  font-size: clamp(1.45rem, 2.7vw, 1.85rem);
+  font-weight: 800;
+  margin: 0 0 6px 0;
+  line-height: 1.25;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Rich, vibrant gradient text for Contact Us and संदेश भेजें */
+.title-gradient {
+  background: linear-gradient(125deg, #dc2626 0%, #ea580c 45%, #e11d48 85%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+  letter-spacing: 0.4px;
+  filter: drop-shadow(0 1px 1px rgba(220, 38, 38, 0.12));
+}
+
+/* Colorful badge for / Write to Us */
+.title-sub-badge {
+  font-family: 'Mukta', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #fff1f2 0%, #ffedd5 100%);
+  color: #c2410c;
+  border: 1px solid #fed7aa;
+  padding: 3px 12px;
+  border-radius: 99px;
+  letter-spacing: 0.3px;
+  display: inline-flex;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(234, 88, 12, 0.08);
+  vertical-align: middle;
+}
+
+/* Vivid colorful accent underline under the headers */
+.contact-colorful-bar {
+  width: 58px;
+  height: 4px;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #dc2626 0%, #ea580c 50%, #f59e0b 100%);
+  margin: 6px 0 10px 0;
+  box-shadow: 0 2px 6px rgba(234, 88, 12, 0.25);
+}
+
+.contact-box-header p {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* --------------------------------------------------------------------------
+   5. Form Controls & Elements
+   -------------------------------------------------------------------------- */
+.form-fields-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.form-field-full {
+  grid-column: 1 / -1;
+}
+
+.form-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.form-label span.req {
+  color: #dc2626;
+}
+
+.form-control-input,
+.form-control-textarea {
+  width: 100%;
+  padding: 11px 14px;
+  font-family: inherit;
+  font-size: 0.92rem;
+  color: #0f172a;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-control-input::placeholder,
+.form-control-textarea::placeholder {
+  color: #94a3b8;
+}
+
+.form-control-input:focus,
+.form-control-textarea:focus {
+  background: #ffffff;
+  border-color: #801818;
+  box-shadow: 0 0 0 3px rgba(128, 24, 24, 0.12);
+}
+
+.form-control-textarea {
+  resize: vertical;
+  min-height: 115px;
+}
+
+.form-char-indicator {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  text-align: right;
+  margin-top: 2px;
+}
+
+.form-submit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 24px;
+  background: #801818;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.98rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(128, 24, 24, 0.2);
+  transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  margin-top: 4px;
+}
+
+.form-submit-btn:hover:not(:disabled) {
+  background: #681313;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(128, 24, 24, 0.28);
+}
+
+.form-submit-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.form-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .form-fields-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   6. Right Column: Contact List (Address, Phone, Email, WhatsApp)
+   -------------------------------------------------------------------------- */
+.connect-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.connect-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  padding: 16px 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.connect-item:first-child {
+  padding-top: 0;
+}
+
+.connect-item:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+/* Consistent, Sleek Icon Container */
+.connect-icon-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: #f8fafc;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+  margin-top: 2px;
+  transition: all 0.2s ease;
+}
+
+.connect-icon-circle svg {
+  width: 18px;
+  height: 18px;
+}
+
+.connect-item:hover .connect-icon-circle {
+  background: #f1f5f9;
+  color: #801818;
+  border-color: #cbd5e1;
+}
+
+.connect-text-group {
+  flex: 1;
+  min-width: 0;
+}
+
+.connect-label {
+  display: block;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.connect-address-text {
+  font-size: 0.94rem;
+  color: #1e293b;
+  line-height: 1.55;
+  margin: 0 0 8px 0;
+  font-weight: 500;
+}
+
+/* Minimal Google Maps Action Link */
+.connect-map-wrap {
+  margin-top: 4px;
+}
+
+.connect-map-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #334155;
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  width: fit-content;
+}
+
+.connect-map-link:hover {
+  background: #0f172a;
+  color: #ffffff;
+  border-color: #0f172a;
+}
+
+.connect-map-link svg {
+  flex-shrink: 0;
+}
+
+/* Links Stack (Phone & Email) */
+.connect-links-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.connect-value-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.connect-direct-link {
+  font-size: 0.94rem;
+  font-weight: 600;
+  color: #0f172a;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.connect-direct-link:hover {
+  color: #801818;
+}
+
+/* WhatsApp Inline Action Button */
+.connect-wa-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #166534;
+  padding: 3px 9px;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.connect-wa-btn:hover {
+  background: #166534;
+  color: #ffffff;
+  border-color: #166534;
+}
+
+/* Copy Action Button */
+.contact-copy-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 3px 6px;
+  border-radius: 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.contact-copy-btn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+  border-color: #e2e8f0;
+}
+
+.contact-copy-btn.copied {
+  background: #ecfdf5;
+  color: #059669;
+  border-color: #a7f3d0;
+}
+
+.contact-copy-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* --------------------------------------------------------------------------
+   7. Social Media Icons (Simple, Smooth, Inline)
+   -------------------------------------------------------------------------- */
+.connect-social-block {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.connect-social-title {
+  display: block;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+}
+
+.connect-social-icons {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.social-ico-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.social-ico-btn svg {
+  width: 17px;
+  height: 17px;
+  transition: transform 0.2s ease;
+}
+
+.social-ico-btn:hover {
+  transform: translateY(-2px);
+  color: #ffffff;
+}
+
+.social-ico-btn:hover svg {
+  transform: scale(1.08);
+}
+
+.social-ico-btn.facebook:hover {
+  background: #1877f2;
+  border-color: #1877f2;
+}
+
+.social-ico-btn.twitter:hover {
+  background: #0f172a;
+  border-color: #0f172a;
+}
+
+.social-ico-btn.instagram:hover {
+  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  border-color: #dc2743;
+}
+
+.social-ico-btn.youtube:hover {
+  background: #ff0000;
+  border-color: #ff0000;
+}
+
+.social-ico-btn.telegram:hover {
+  background: #229ed9;
+  border-color: #229ed9;
+}
+
+/* --------------------------------------------------------------------------
+   8. Alerts
+   -------------------------------------------------------------------------- */
+.contact-alert {
+  padding: 11px 15px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  line-height: 1.4;
+  animation: fadeIn 0.25s ease;
+}
+
+.contact-alert-success {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #065f46;
+}
+
+.contact-alert-error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
