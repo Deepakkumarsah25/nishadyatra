@@ -1932,7 +1932,8 @@
       border-color: rgba(185, 28, 28, 0.35);
     }
 
-    .video-card-item.hidden {
+    .video-card-item.hidden,
+    .video-card-item.paged-out {
       display: none !important;
     }
 
@@ -2104,7 +2105,7 @@
       color: var(--primary-crimson);
     }
 
-    /* Person / Place Row (व्यक्ति / स्थान का नाम) */
+    /* People Count Row (उपस्थित जनसमूह / संख्या) */
     .card-meta-line {
       display: flex;
       align-items: center;
@@ -2114,14 +2115,27 @@
       color: var(--text-body);
     }
 
+    .card-people-line,
     .card-person-line {
-      background: var(--canvas-alt);
-      border: 1px solid var(--border-light);
-      padding: 6px 12px;
+      background: linear-gradient(135deg, #fffaf5 0%, #fdf3eb 100%);
+      border: 1px solid #fed7aa;
+      padding: 7px 12px;
       border-radius: var(--radius-sm);
       margin-bottom: 12px;
+      box-shadow: 0 2px 8px rgba(185, 28, 28, 0.04);
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
+    .video-card-item:hover .card-people-line,
+    .video-card-item:hover .card-person-line {
+      border-color: #fdba74;
+      background: #fff5eb;
+    }
+
+    .card-people-line .meta-icon,
     .card-person-line .meta-icon {
       display: inline-flex;
       align-items: center;
@@ -2129,23 +2143,25 @@
       flex-shrink: 0;
     }
 
+    .card-people-line .meta-icon svg,
     .card-person-line .meta-icon svg {
-      width: 15px;
-      height: 15px;
+      width: 17px;
+      height: 17px;
       fill: currentColor;
     }
 
+    .card-people-line .meta-label,
     .card-person-line .meta-label {
-      font-size: 11px;
-      color: var(--text-muted);
+      font-size: 11.5px;
+      color: var(--gold-dark);
       font-weight: 700;
-      text-transform: uppercase;
       letter-spacing: 0.3px;
       white-space: nowrap;
     }
 
+    .card-people-line .meta-val,
     .card-person-line .meta-val {
-      font-size: 13px;
+      font-size: 13.5px;
       font-weight: 800;
       color: var(--crimson-deep);
       overflow: hidden;
@@ -3737,7 +3753,7 @@
 
         <div class="video-cards-grid view-grid" id="videoGrid">
           <% const videoList = (typeof kalash !== 'undefined' && kalash.videos && kalash.videos.length > 0) ? kalash.videos : []; %>
-          <% videoList.forEach((vid) => { %>
+          <% videoList.forEach((vid, index) => { %>
             <% 
               let ytId = '';
               if (vid.videoUrl) {
@@ -3754,11 +3770,13 @@
               const thumbImg = vid.thumbnail || (ytId ? ('https://img.youtube.com/vi/' + ytId + '/hqdefault.jpg') : '/images/kalash-yatra-hero.jpg');
             %>
             <article
-              class="video-card-item"
+              class="video-card-item<%= index >= 9 ? ' paged-out hidden' : '' %>"
+              <%= index >= 9 ? 'style="display: none;"' : '' %>
               data-category="<%= vid.category || 'yatra' %>"
               data-state="<%= vid.state || 'bihar' %>"
               data-district="<%= (vid.district || '').trim() %>"
               data-person="<%= (vid.personOrPlace || '').trim() %>"
+              data-people="<%= (vid.peopleCount || (vid.personOrPlace || '')).trim() %>"
               data-date="<%= vid.date || '' %>"
               data-video="<%= vid.videoUrl %>"
               data-title="<%= vid.title %>"
@@ -3791,7 +3809,7 @@
 
               <div class="card-info-box">
                 <div class="card-tags-row">
-                  <span class="card-category-tag"><%= vid.tag || (vid.category === 'sankalp' ? 'संकल्प यात्रा' : vid.category === 'speech' ? 'संबोधन' : vid.category === 'program' ? 'जन-जागरण' : 'लोकतांत्रिक संकल्प') %></span>
+                  <span class="card-category-tag"><%= (vid.tag && /kalash|कलश/i.test(vid.tag)) ? 'संकल्प यात्रा' : (vid.tag || (vid.category === 'sankalp' || vid.category === 'yatra' ? 'संकल्प यात्रा' : vid.category === 'speech' ? 'संबोधन' : vid.category === 'program' ? 'जन-जागरण' : 'संकल्प यात्रा')) %></span>
                   <span class="card-district-pill">
                     <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
                     ज़िला: <strong><%= vid.district || '—' %></strong>
@@ -3800,13 +3818,13 @@
 
                 <h3 class="card-title-text"><%= vid.title %></h3>
 
-                <!-- व्यक्ति / स्थान का नाम (Person / Place Name) -->
-                <div class="card-meta-line card-person-line">
+                <!-- उपस्थित जनसमूह / संख्या (People Count) -->
+                <div class="card-meta-line card-people-line">
                   <span class="meta-icon">
-                    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                    <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
                   </span>
-                  <span class="meta-label">व्यक्ति / स्थान:</span>
-                  <span class="meta-val"><%= vid.personOrPlace || (vid.district ? (vid.district + ' (संकल्प सभा स्थल)') : 'संकल्प स्थल') %></span>
+                  <span class="meta-label">उपस्थित जनसमूह:</span>
+                  <span class="meta-val"><%= vid.peopleCount || (vid.personOrPlace || (vid.viewsCount ? (vid.viewsCount + '+ लोग') : '5,000+ लोग')) %></span>
                 </div>
 
                 <p class="card-description-text">
@@ -3885,8 +3903,8 @@
     <div class="modal-content-shell">
       <div class="modal-top-bar">
         <div class="modal-title-wrap">
-          <span class="meta-tag-pill" id="modalCategoryBadge">लोकतांत्रिक संकल्प</span>
-          <h4 id="modalVideoTitle">लोकतांत्रिक संकल्प वीडियो प्लेयर</h4>
+          <span class="meta-tag-pill" id="modalCategoryBadge">संकल्प यात्रा</span>
+          <h4 id="modalVideoTitle">संकल्प यात्रा वीडियो प्लेयर</h4>
         </div>
         <div class="modal-actions-right">
           <button type="button" class="modal-share-btn" id="modalShareBtn" title="Copy video link">
@@ -3903,7 +3921,7 @@
         <iframe
           id="modalVideoIframe"
           src=""
-          title="लोकतांत्रिक महा-संकल्प यात्रा वीडियो प्लेयर"
+          title="संकल्प यात्रा वीडियो प्लेयर"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowfullscreen
         ></iframe>
@@ -3913,9 +3931,9 @@
       <div class="modal-meta-strip">
         <div class="modal-meta-col">
           <div class="modal-meta-item">
-            <span class="m-icon">👤</span>
-            <span class="m-label">व्यक्ति / स्थान:</span>
-            <strong class="m-val" id="modalVideoPerson">—</strong>
+            <span class="m-icon">👥</span>
+            <span class="m-label">उपस्थित जनसमूह:</span>
+            <strong class="m-val" id="modalVideoPeople">—</strong>
           </div>
           <div class="modal-meta-item">
             <span class="m-icon">📍</span>
@@ -4553,16 +4571,17 @@
         return url;
       }
 
-      function openModalVideo(url, title, category, personOrPlace, district, date) {
+      function openModalVideo(url, title, category, peopleCount, district, date) {
         if (!url) return;
 
-        const embedUrl = parseYouTubeUrl(url);
+        const isDirectVideo = url.startsWith("/uploads/") || /\.(mp4|webm|ogg|mov|mkv)(\?.*)?$/i.test(url);
+        const embedUrl = isDirectVideo ? url : parseYouTubeUrl(url);
 
         // Update Frame Content
         if (modalVideoFrameWrap) {
-          if (embedUrl.endsWith(".mp4") || embedUrl.endsWith(".webm")) {
+          if (isDirectVideo || embedUrl.endsWith(".mp4") || embedUrl.endsWith(".webm")) {
             modalVideoFrameWrap.innerHTML = `
-              <video src="${embedUrl}" controls autoplay style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;">
+              <video src="${embedUrl}" controls autoplay playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;">
                 आपका ब्राउज़र यह वीडियो चलाने में असमर्थ है।
               </video>
             `;
@@ -4573,7 +4592,7 @@
               <iframe
                 id="modalVideoIframe"
                 src="${finalSrc}"
-                title="${title || 'लोकतांत्रिक महा-संकल्प यात्रा वीडियो'}"
+                title="${title || 'संकल्प यात्रा विशेष वीडियो'}"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowfullscreen
                 style="position:absolute;inset:0;width:100%;height:100%;border:none;"
@@ -4584,8 +4603,13 @@
 
         // Update Metadata
         if (modalVideoTitle) modalVideoTitle.textContent = title || "लोकतांत्रिक संकल्प विशेष वीडियो";
-        if (modalCategoryBadge) modalCategoryBadge.textContent = category || "लोकतांत्रिक संकल्प";
-        if (modalVideoPerson) modalVideoPerson.textContent = personOrPlace || "संकल्प सभा स्थल";
+        if (modalCategoryBadge) {
+          let catText = category || "संकल्प यात्रा";
+          if (/kalash|कलश/i.test(catText)) catText = "संकल्प यात्रा";
+          modalCategoryBadge.textContent = catText;
+        }
+        const modalVideoPeople = document.getElementById("modalVideoPeople");
+        if (modalVideoPeople) modalVideoPeople.textContent = peopleCount || "5,000+ लोग";
         if (modalVideoDistrict) modalVideoDistrict.textContent = district || "प्रमुख केंद्र";
         if (modalVideoDate) modalVideoDate.textContent = date || "विशेष जन-सभा";
         activeVideoShareUrl = url;
@@ -4607,12 +4631,13 @@
         card.addEventListener("click", function () {
           const videoUrl = card.dataset.video;
           const videoTitle = card.dataset.title || card.querySelector("h3")?.textContent?.trim();
-          const categoryTag = card.querySelector(".card-category-tag")?.textContent?.trim() || "लोकतांत्रिक संकल्प";
-          const person = card.dataset.person || "";
+          let categoryTag = card.querySelector(".card-category-tag")?.textContent?.trim() || "संकल्प यात्रा";
+          if (/kalash|कलश/i.test(categoryTag)) categoryTag = "संकल्प यात्रा";
+          const people = card.dataset.people || card.querySelector(".card-people-line .meta-val")?.textContent?.trim() || "5,000+ लोग";
           const district = card.dataset.district || "";
           const date = card.dataset.date || "";
 
-          openModalVideo(videoUrl, videoTitle, categoryTag, person, district, date);
+          openModalVideo(videoUrl, videoTitle, categoryTag, people, district, date);
         });
       });
 
