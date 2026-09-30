@@ -168,6 +168,25 @@ exports.postUpdateMilestones = async (req, res) => {
   }
 };
 
+// Helper to extract YouTube video ID from various URL formats
+function getYouTubeId(url) {
+  if (!url || typeof url !== "string") return "";
+  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/|v\/))([\w-]{11})/);
+  return match ? match[1] : "";
+}
+
+// Helper to resolve an effective thumbnail URL
+function resolveVideoThumbnail(thumbnail, videoUrl, fallback = "/images/kalash-yatra-hero.jpg") {
+  if (thumbnail && thumbnail.trim() && !thumbnail.includes("/images/kalash-yatra-hero.jpg")) {
+    return thumbnail.trim();
+  }
+  const ytId = getYouTubeId(videoUrl);
+  if (ytId) {
+    return `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
+  }
+  return thumbnail && thumbnail.trim() ? thumbnail.trim() : fallback;
+}
+
 // 3. Add Video to Gallery
 exports.postAddVideo = async (req, res) => {
   try {
@@ -199,6 +218,12 @@ exports.postAddVideo = async (req, res) => {
     // Check if thumbnail file was manually uploaded
     if (req.files && req.files.thumbnailFile && req.files.thumbnailFile[0]) {
       finalThumbnail = "/uploads/videos/" + req.files.thumbnailFile[0].filename;
+    } else if (!finalThumbnail) {
+      // Auto-resolve YouTube thumbnail if not provided
+      const autoYtThumb = resolveVideoThumbnail("", finalVideoUrl, "");
+      if (autoYtThumb) {
+        finalThumbnail = autoYtThumb;
+      }
     }
 
     if (!title || !finalVideoUrl) {
@@ -209,6 +234,24 @@ exports.postAddVideo = async (req, res) => {
     }
 
     const formattedPeopleCount = peopleCount && peopleCount.trim() ? peopleCount.trim() : "5,000+ लोग";
+
+    const isHighlighted =
+      req.body.isHighlighted === "on" ||
+      req.body.isHighlighted === "true" ||
+      req.body.isHighlighted === true;
+
+    if (isHighlighted && doc.videos) {
+      doc.videos.forEach((v) => {
+        v.isHighlighted = false;
+      });
+      doc.hero.featuredVideo = {
+        title: title.trim(),
+        duration: duration || "12:00 Min",
+        videoUrl: finalVideoUrl,
+        posterImage: resolveVideoThumbnail(finalThumbnail, finalVideoUrl),
+        badge: "★ मुख्य संकल्प वीडियो",
+      };
+    }
 
     doc.videos.unshift({
       title: title.trim(),
@@ -225,6 +268,7 @@ exports.postAddVideo = async (req, res) => {
       description: description || "",
       tag: tag || (category === "speech" ? "संबोधन" : category === "program" ? "जन-जागरण" : "संकल्प यात्रा"),
       order: doc.videos.length + 1,
+      isHighlighted: isHighlighted,
     });
 
     await doc.save();
@@ -232,8 +276,8 @@ exports.postAddVideo = async (req, res) => {
     await AdminActivityLog.record({
       req,
       section: "वीडियो गैलरी (Videos)",
-      action: "नया वीडियो जोड़ा गया",
-      details: `शीर्षक: "${title.trim()}", उपस्थित जनसमूह: "${formattedPeopleCount}", ज़िला: "${district || 'गोपालगंज'}"`,
+      action: isHighlighted ? "नया वीडियो जोड़ा गया और होम पेज पर हाइलाइट किया गया" : "नया वीडियो जोड़ा गया",
+      details: `शीर्षक: "${title.trim()}", उपस्थित जनसमूह: "${formattedPeopleCount}", ज़िला: "${district || 'गोपालगंज'}"${isHighlighted ? ' [होम पेज मुख्य वीडियो]' : ''}`,
     });
 
     res.redirect("/admin/kalash-yatra?tab=videos&msg=" + encodeURIComponent("नया वीडियो सफलतापूर्वक जोड़ दिया गया।"));
@@ -268,6 +312,7 @@ exports.postUpdateVideo = async (req, res) => {
       date,
       description,
       tag,
+      isHighlighted,
     } = req.body;
 
     video.title = title ? title.trim() : video.title;
@@ -279,11 +324,18 @@ exports.postUpdateVideo = async (req, res) => {
       video.videoUrl = videoUrl.trim();
     }
 
-    // Handle manual thumbnail upload if provided
+    // Handle manual thumbnail upload or URL update
     if (req.files && req.files.thumbnailFile && req.files.thumbnailFile[0]) {
       video.thumbnail = "/uploads/videos/" + req.files.thumbnailFile[0].filename;
-    } else if (typeof thumbnail !== "undefined" && thumbnail.trim()) {
-      video.thumbnail = thumbnail.trim();
+    } else if (typeof thumbnail !== "undefined") {
+      const trimmedThumb = thumbnail.trim();
+      if (trimmedThumb) {
+        video.thumbnail = trimmedThumb;
+      } else {
+        // If left empty, auto-detect YouTube thumbnail if applicable
+        const ytId = getYouTubeId(video.videoUrl);
+        video.thumbnail = ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : "";
+      }
     }
 
     if (typeof peopleCount !== "undefined") {
@@ -301,18 +353,90 @@ exports.postUpdateVideo = async (req, res) => {
     video.description = description || video.description;
     video.tag = tag || video.tag;
 
+    const shouldHighlight =
+      isHighlighted === "on" || isHighlighted === "true" || isHighlighted === true;
+
+    if (shouldHighlight) {
+      doc.videos.forEach((v) => {
+        v.isHighlighted = v._id.toString() === videoId;
+      });
+      video.isHighlighted = true;
+    } else if (typeof isHighlighted !== "undefined") {
+      video.isHighlighted = false;
+    }
+
+    // Keep doc.hero.featuredVideo fully in sync if this video is currently highlighted
+    if (video.isHighlighted) {
+      doc.hero.featuredVideo = {
+        title: video.title,
+        duration: video.duration || "12:00 Min",
+        videoUrl: video.videoUrl,
+        posterImage: resolveVideoThumbnail(video.thumbnail, video.videoUrl),
+        badge: "★ मुख्य संकल्प वीडियो",
+      };
+    }
+
     await doc.save();
 
     await AdminActivityLog.record({
       req,
       section: "वीडियो गैलरी (Videos)",
       action: "वीडियो विवरण संपादित किया गया (Edited)",
-      details: `शीर्षक: "${video.title}", उपस्थित जनसमूह: "${video.peopleCount || '—'}", ज़िला: "${video.district || '—'}"`,
+      details: `शीर्षक: "${video.title}", उपस्थित जनसमूह: "${video.peopleCount || '—'}", ज़िला: "${video.district || '—'}"${video.isHighlighted ? ' [होम पेज मुख्य वीडियो]' : ''}`,
     });
 
     res.redirect("/admin/kalash-yatra?tab=videos&msg=" + encodeURIComponent("वीडियो सफलतापूर्वक अपडेट किया गया।"));
   } catch (error) {
     console.error("Update Video error:", error);
+    res.redirect("/admin/kalash-yatra?tab=videos&err=" + encodeURIComponent(error.message));
+  }
+};
+
+// 4b. Highlight Video for Home Page Showcase
+exports.postHighlightVideo = async (req, res) => {
+  try {
+    const { videoId } = req.params;
+    const doc = await KalashYatra.getOrSeed();
+    const video = doc.videos.id(videoId);
+
+    if (!video) {
+      return res.redirect("/admin/kalash-yatra?tab=videos&err=" + encodeURIComponent("वीडियो नहीं मिला।"));
+    }
+
+    // Unset highlight for all videos, set for this one
+    doc.videos.forEach((v) => {
+      v.isHighlighted = v._id.toString() === videoId;
+    });
+
+    const effectivePoster = resolveVideoThumbnail(video.thumbnail, video.videoUrl);
+    if (!video.thumbnail && effectivePoster) {
+      video.thumbnail = effectivePoster;
+    }
+
+    // Also update doc.hero.featuredVideo so all featured references stay in sync!
+    doc.hero.featuredVideo = {
+      title: video.title,
+      duration: video.duration || "12:30 Min",
+      videoUrl: video.videoUrl,
+      posterImage: effectivePoster,
+      badge: "★ मुख्य संकल्प वीडियो",
+    };
+
+    await doc.save();
+
+    await AdminActivityLog.record({
+      req,
+      section: "वीडियो गैलरी (Videos)",
+      action: "मुख्य होम पेज वीडियो हाइलाइट किया गया (Highlight Video)",
+      details: `वीडियो "${video.title}" को होम पेज पर मुख्य वीडियो के रूप में सेट किया गया।`,
+    });
+
+    res.redirect(
+      "/admin/kalash-yatra?tab=videos&msg=" +
+        encodeURIComponent(`"${video.title.substring(0, 32)}..." को होम पेज पर मुख्य वीडियो बना दिया गया है!`)
+    );
+  } catch (error) {
+    console.error("Highlight Video error:", error);
     res.redirect("/admin/kalash-yatra?tab=videos&err=" + encodeURIComponent(error.message));
   }
 };

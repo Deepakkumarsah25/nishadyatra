@@ -1,6 +1,208 @@
 <%- include("../common/header") %>
 <%- include("../common/sidebar") %>
 
+<style>
+  .hero-form-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(360px, 1fr);
+    gap: 26px;
+    align-items: start;
+  }
+  @media (max-width: 1100px) {
+    .hero-form-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .upload-dropzone {
+    border: 2px dashed var(--admin-border);
+    border-radius: 12px;
+    background: #faf6f2;
+    padding: 22px 18px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+  }
+  .upload-dropzone:hover, .upload-dropzone.dragover {
+    border-color: var(--admin-primary);
+    background: #fff5f2;
+  }
+  .upload-dropzone input[type="file"] {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 5;
+  }
+  .upload-dropzone svg {
+    color: var(--admin-primary);
+    margin-bottom: 8px;
+  }
+
+  /* Live Preview Box */
+  .preview-sticky-card {
+    position: sticky;
+    top: 92px;
+    background: #ffffff;
+    border: 1px solid var(--admin-border);
+    border-radius: 14px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.04);
+    overflow: hidden;
+  }
+  .preview-card-header {
+    padding: 14px 18px;
+    background: #faf7f5;
+    border-bottom: 1px solid var(--admin-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .preview-badge-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: #e8f5e9;
+    color: #2e7d32;
+    font-size: 11px;
+    font-weight: 800;
+  }
+  .preview-badge-live::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #2e7d32;
+    box-shadow: 0 0 6px rgba(46, 125, 50, 0.6);
+  }
+
+  /* Simulated Slide on Front-end */
+  .sim-hero-banner {
+    position: relative;
+    width: 100%;
+    height: 290px;
+    background: #1e1212;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    padding: 24px;
+    color: #ffffff;
+  }
+  .sim-hero-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    filter: brightness(0.92);
+  }
+  .sim-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(25, 12, 12, 0.88) 0%, rgba(25, 12, 12, 0.55) 60%, rgba(25, 12, 12, 0.2) 100%);
+    z-index: 2;
+  }
+  .sim-hero-content {
+    position: relative;
+    z-index: 3;
+    max-width: 100%;
+  }
+  .sim-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #ebd9cb;
+    border-radius: 6px;
+    padding: 2px 8px 2px 3px;
+    margin-bottom: 10px;
+  }
+  .sim-pill-badge {
+    background: #d72a2a;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .sim-pill-text {
+    font-size: 10px;
+    font-weight: 700;
+    color: #382121;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .sim-heading {
+    font-size: 18px;
+    font-weight: 800;
+    line-height: 1.25;
+    margin-bottom: 8px;
+    color: #ffffff;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+  }
+  .sim-highlight {
+    color: #ffbe3b;
+  }
+  .sim-desc {
+    font-size: 11px;
+    color: #f7eee7;
+    line-height: 1.45;
+    margin-bottom: 14px;
+    max-width: 90%;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .sim-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .sim-btn-primary {
+    background: #d72a2a;
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 6px 12px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .sim-btn-outline {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 6px;
+  }
+
+  .field-section-head {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--admin-primary-dark);
+    margin: 24px 0 14px;
+    padding-bottom: 6px;
+    border-bottom: 1.5px dashed var(--admin-border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .field-section-head:first-of-type {
+    margin-top: 0;
+  }
+</style>
+
 <div class="admin-main">
   <!-- Topbar -->
   <header class="admin-topbar">
@@ -10,10 +212,10 @@
       </button>
       <div class="page-heading">
         <h1>
-          <a href="/admin/home/hero" style="color: var(--admin-text-muted); margin-right: 6px;">←</a>
+          <a href="/admin/home/hero" style="color: var(--admin-text-muted); margin-right: 6px;" title="Back">←</a>
           <%= isEdit ? 'Edit Hero Slide' : 'Add New Hero Slide' %>
         </h1>
-        <p>Customize slider text, imagery, and button actions</p>
+        <p>स्लाइडर का टेक्स्ट, बैनर फोटो और कॉल-टू-एक्शन बटन कस्टमाइज़ करें</p>
       </div>
     </div>
     <div class="topbar-right">
@@ -27,123 +229,385 @@
       <div class="admin-alert admin-alert-error">⚠ <%= error %></div>
     <% } %>
 
-    <div class="admin-card" style="max-width: 900px; margin: 0 auto;">
-      <div class="admin-card-header">
-        <h3>
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-          Hero Slide Details Form
-        </h3>
+    <div class="hero-form-layout">
+      <!-- LEFT: FORM -->
+      <div class="admin-card" style="margin-bottom: 0;">
+        <div class="admin-card-header">
+          <h3>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            Slide Details Editor
+          </h3>
+          <span style="font-size: 11px; color: var(--admin-text-muted);">* marked fields are important</span>
+        </div>
+
+        <div class="admin-card-body">
+          <form action="<%= isEdit ? '/admin/home/hero/edit/' + slide._id : '/admin/home/hero/new' %>" method="POST" enctype="multipart/form-data" id="heroSlideForm">
+
+            <!-- 1. Background Image -->
+            <div class="field-section-head">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <span>1. Background Image / बैनर फोटो</span>
+            </div>
+
+            <!-- Upload File Box -->
+            <div class="form-group">
+              <label>Upload Image File (कंप्यूटर से फोटो चुनें)</label>
+              <div class="upload-dropzone" id="dropzone">
+                <input type="file" name="imageFile" id="imageFileInput" accept="image/*" />
+                <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <div style="font-size: 13px; font-weight: 700; color: var(--admin-text-dark);" id="dropzoneLabel">
+                  Click or drag image here to upload
+                </div>
+                <div class="form-hint" style="margin-top: 4px;">Supports JPG, PNG, WEBP (Recommended: 1920x1080)</div>
+              </div>
+            </div>
+
+            <!-- OR Image URL / Path -->
+            <div class="form-group">
+              <label for="imageUrl">OR Image URL / File Path (या इमेज का लिंक दर्ज करें)</label>
+              <input
+                type="text"
+                id="imageUrl"
+                name="imageUrl"
+                class="form-control"
+                placeholder="https://images.unsplash.com/... or /uploads/hero/..."
+                value="<%= slide ? slide.imageUrl : '' %>"
+              />
+              <div class="form-hint">You can paste an external URL or existing uploaded path.</div>
+            </div>
+
+            <!-- 2. Badges and Tags -->
+            <div class="field-section-head">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+              <span>2. Pill Tag & Badge Subtitle / टैग एवं सब-बैज</span>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label for="tag">Pill Tag * (मुख्य टैग)</label>
+                <input
+                  type="text"
+                  id="tag"
+                  name="tag"
+                  class="form-control"
+                  placeholder="e.g. National & Social Service"
+                  value="<%= slide ? slide.tag : 'National & Social Service' %>"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="badgeText">Badge Subtitle (उप-शीर्षक)</label>
+                <input
+                  type="text"
+                  id="badgeText"
+                  name="badgeText"
+                  class="form-control"
+                  placeholder="e.g. Jai Nishadraj • Sacred Consciousness Pledge"
+                  value="<%= slide ? slide.badgeText : 'Jai Nishadraj • Sacred Consciousness & Empowerment Pledge' %>"
+                />
+              </div>
+            </div>
+
+            <!-- 3. Heading Composition -->
+            <div class="field-section-head">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+              <span>3. Heading Composition / मुख्य शीर्षक संरचना</span>
+            </div>
+
+            <div class="form-grid-3">
+              <div class="form-group">
+                <label for="headingPrefix">Prefix (शुरुआती शब्द)</label>
+                <input
+                  type="text"
+                  id="headingPrefix"
+                  name="headingPrefix"
+                  class="form-control"
+                  placeholder="e.g. Unity, Self-Respect and"
+                  value="<%= slide ? slide.headingPrefix : '' %>"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="highlightText">Highlight Text (सुनहरा/हाइलाइट टेक्स्ट)</label>
+                <input
+                  type="text"
+                  id="highlightText"
+                  name="highlightText"
+                  class="form-control"
+                  placeholder="e.g. a Brighter Future"
+                  value="<%= slide ? slide.highlightText : '' %>"
+                  style="border-color: #f7c9be;"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="headingSuffix">Suffix (अंतिम शब्द)</label>
+                <input
+                  type="text"
+                  id="headingSuffix"
+                  name="headingSuffix"
+                  class="form-control"
+                  placeholder="e.g. A Resolute Step Ahead"
+                  value="<%= slide ? slide.headingSuffix : '' %>"
+                />
+              </div>
+            </div>
+
+            <!-- 4. Description -->
+            <div class="form-group">
+              <label for="description">Detailed Description (विस्तृत विवरण)</label>
+              <textarea
+                id="description"
+                name="description"
+                class="form-control"
+                rows="3"
+                placeholder="स्लाइड का मुख्य संदेश लिखें..."
+              ><%= slide ? slide.description : '' %></textarea>
+            </div>
+
+            <!-- 5. Primary CTA Button -->
+            <div class="field-section-head">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="15" y1="12" x2="12" y2="9"/><line x1="15" y1="12" x2="12" y2="15"/></svg>
+              <span>4. Call-to-Action Buttons / मुख्य बटन</span>
+            </div>
+
+            <!-- Primary Button Group -->
+            <div style="background: #faf6f2; padding: 14px; border-radius: 10px; margin-bottom: 14px; border: 1px solid var(--admin-border-subtle);">
+              <strong style="display: block; font-size: 12px; color: var(--admin-primary); margin-bottom: 10px;">Primary Button 1 (प्राथमिक बटन)</strong>
+              <div class="form-grid-3">
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label for="primaryBtnText">Button Label</label>
+                  <input type="text" id="primaryBtnText" name="primaryBtnText" class="form-control" placeholder="e.g. Join Campaign" value="<%= slide ? slide.primaryBtnText : 'Join Campaign' %>" />
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label for="primaryBtnLink">Button Link (URL)</label>
+                  <input type="text" id="primaryBtnLink" name="primaryBtnLink" class="form-control" placeholder="#quickActionSidebar" value="<%= slide ? slide.primaryBtnLink : '#quickActionSidebar' %>" />
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label for="primaryBtnInitiative">Modal Key (Optional)</label>
+                  <input type="text" id="primaryBtnInitiative" name="primaryBtnInitiative" class="form-control" placeholder="e.g. river-rights" value="<%= slide ? slide.primaryBtnInitiative : '' %>" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Secondary Button Group -->
+            <div style="background: #faf6f2; padding: 14px; border-radius: 10px; margin-bottom: 18px; border: 1px solid var(--admin-border-subtle);">
+              <strong style="display: block; font-size: 12px; color: #554440; margin-bottom: 10px;">Secondary Button 2 (द्वितीयक बटन)</strong>
+              <div class="form-grid-3">
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label for="secondaryBtnText">Button Label</label>
+                  <input type="text" id="secondaryBtnText" name="secondaryBtnText" class="form-control" placeholder="e.g. Our Key Initiatives" value="<%= slide ? slide.secondaryBtnText : 'Our Key Initiatives' %>" />
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label for="secondaryBtnLink">Button Link (URL)</label>
+                  <input type="text" id="secondaryBtnLink" name="secondaryBtnLink" class="form-control" placeholder="#what-we-do" value="<%= slide ? slide.secondaryBtnLink : '#what-we-do' %>" />
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label for="secondaryBtnInitiative">Modal Key (Optional)</label>
+                  <input type="text" id="secondaryBtnInitiative" name="secondaryBtnInitiative" class="form-control" placeholder="e.g. youth-wing" value="<%= slide ? slide.secondaryBtnInitiative : '' %>" />
+                </div>
+              </div>
+            </div>
+
+            <!-- 6. Order & Status -->
+            <div class="field-section-head">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              <span>5. Display Settings / प्रदर्शन सेटिंग्स</span>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label for="order">Display Order (क्रम संख्या)</label>
+                <input
+                  type="number"
+                  id="order"
+                  name="order"
+                  class="form-control"
+                  value="<%= slide ? slide.order : 0 %>"
+                  min="0"
+                />
+                <div class="form-hint">Lower numbers display first (1, 2, 3...)</div>
+              </div>
+
+              <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin-top: 26px;">
+                <input
+                  type="checkbox"
+                  id="isActive"
+                  name="isActive"
+                  value="true"
+                  <%= !slide || slide.isActive ? 'checked' : '' %>
+                  style="width: 20px; height: 20px; accent-color: var(--admin-primary); cursor: pointer;"
+                />
+                <label for="isActive" style="margin-bottom: 0; cursor: pointer; font-size: 13px; font-weight: 700;">
+                  स्लाइड सक्रिय रखें (Keep slide active & visible)
+                </label>
+              </div>
+            </div>
+
+            <!-- Submit Button Bar -->
+            <div style="display: flex; gap: 12px; margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--admin-border);">
+              <button type="submit" class="btn-admin btn-admin-primary">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                <span><%= isEdit ? 'Save Changes' : 'Publish Slide' %></span>
+              </button>
+              <a href="/admin/home/hero" class="btn-admin btn-admin-outline">Cancel</a>
+            </div>
+
+          </form>
+        </div>
       </div>
 
-      <div class="admin-card-body">
-        <form action="<%= isEdit ? '/admin/home/hero/edit/' + slide._id : '/admin/home/hero/new' %>" method="POST">
-          
-          <!-- 1. Background Image -->
-          <div class="form-group">
-            <label for="imageUrl">Background Image URL *</label>
-            <input type="url" id="imageUrl" name="imageUrl" class="form-control" placeholder="https://images.unsplash.com/..." value="<%= slide ? slide.imageUrl : '' %>" required oninput="document.getElementById('previewImg').src = this.value;"/>
-            <div class="form-hint">Provide a high-resolution (1920x1080) image link.</div>
-            <div style="margin-top: 10px;">
-              <img id="previewImg" src="<%= slide && slide.imageUrl ? slide.imageUrl : 'https://placehold.co/600x300/eadfd7/666?text=Image+Preview' %>" alt="Preview" style="max-width: 100%; height: 180px; object-fit: cover; border-radius: 8px; border: 1px solid var(--admin-border);" onerror="this.src='https://placehold.co/600x300/eadfd7/666?text=Invalid+Image+URL';"/>
+      <!-- RIGHT: LIVE PREVIEW -->
+      <div>
+        <div class="preview-sticky-card">
+          <div class="preview-card-header">
+            <div>
+              <strong style="font-size: 13px; color: var(--admin-text-dark); display: block;">Live Interactive Preview</strong>
+              <small style="font-size: 11px; color: var(--admin-text-muted);">Real-time simulation of hero slide</small>
+            </div>
+            <span class="preview-badge-live">Live</span>
+          </div>
+
+          <!-- Preview Container -->
+          <div class="sim-hero-banner" id="simHeroBanner">
+            <img
+              id="simBgImg"
+              class="sim-hero-bg"
+              src="<%= slide && slide.imageUrl ? slide.imageUrl : 'https://images.unsplash.com/photo-1532375810709-75b1da00537c?auto=format&fit=crop&w=1200&q=80' %>"
+              alt="Preview"
+              onerror="this.src='https://placehold.co/800x400/221313/fff?text=Hero+Image+Preview'"
+            />
+            <div class="sim-hero-overlay"></div>
+
+            <div class="sim-hero-content">
+              <div class="sim-pill" id="simPill">
+                <span class="sim-pill-badge" id="simPillTag"><%= slide ? slide.tag : 'National & Social Service' %></span>
+                <span class="sim-pill-text" id="simPillText"><%= slide && slide.badgeText ? slide.badgeText : 'Jai Nishadraj • Sacred Consciousness' %></span>
+              </div>
+
+              <div class="sim-heading">
+                <span id="simHeadPrefix"><%= slide ? slide.headingPrefix : 'Unity, Self-Respect and' %></span>
+                <span class="sim-highlight" id="simHeadHighlight"><%= slide ? slide.highlightText : 'a Brighter Future' %></span>
+                <span id="simHeadSuffix"><%= slide ? slide.headingSuffix : 'A Resolute Step Ahead' %></span>
+              </div>
+
+              <div class="sim-desc" id="simDesc">
+                <%= slide && slide.description ? slide.description : 'Grassroots movement dedicated to organizing every section of our community and preserving cultural pride.' %>
+              </div>
+
+              <div class="sim-actions">
+                <div class="sim-btn-primary" id="simBtnPrimary">
+                  <span id="simBtnPrimaryText"><%= slide && slide.primaryBtnText ? slide.primaryBtnText : 'Join Campaign' %></span>
+                  <span>→</span>
+                </div>
+                <div class="sim-btn-outline" id="simBtnSecondary">
+                  <span id="simBtnSecondaryText"><%= slide && slide.secondaryBtnText ? slide.secondaryBtnText : 'Our Key Initiatives' %></span>
+                </div>
+              </div>
             </div>
           </div>
 
-          <!-- 2. Badges and Tags -->
-          <div class="form-grid-2">
-            <div class="form-group">
-              <label for="tag">Pill Tag *</label>
-              <input type="text" id="tag" name="tag" class="form-control" placeholder="e.g. National & Community Upliftment" value="<%= slide ? slide.tag : 'Community Welfare' %>" required />
-            </div>
-
-            <div class="form-group">
-              <label for="badgeText">Badge Subtitle</label>
-              <input type="text" id="badgeText" name="badgeText" class="form-control" placeholder="e.g. Jai Nishadraj • United Consciousness Pledge" value="<%= slide ? slide.badgeText : '' %>" />
-            </div>
+          <div style="padding: 14px 18px; font-size: 11.5px; color: var(--admin-text-muted); background: #faf7f5; border-top: 1px solid var(--admin-border); line-height: 1.4;">
+            💡 <strong>टिप:</strong> फॉर्म में बदलाव करते ही यहां तुरंत दिखेगा कि वेबसाइट पर यह स्लाइड कैसी दिखेगी।
           </div>
-
-          <!-- 3. Heading Composition -->
-          <div class="form-grid-3">
-            <div class="form-group">
-              <label for="headingPrefix">Heading Prefix</label>
-              <input type="text" id="headingPrefix" name="headingPrefix" class="form-control" placeholder="e.g. Towards Unity, Dignity &" value="<%= slide ? slide.headingPrefix : '' %>" />
-            </div>
-
-            <div class="form-group">
-              <label for="highlightText">Highlighted Text (Accent Color)</label>
-              <input type="text" id="highlightText" name="highlightText" class="form-control" placeholder="e.g. A Brighter Future" value="<%= slide ? slide.highlightText : '' %>" />
-            </div>
-
-            <div class="form-group">
-              <label for="headingSuffix">Heading Suffix</label>
-              <input type="text" id="headingSuffix" name="headingSuffix" class="form-control" placeholder="e.g. A Strong Step Forward" value="<%= slide ? slide.headingSuffix : '' %>" />
-            </div>
-          </div>
-
-          <!-- 4. Description -->
-          <div class="form-group">
-            <label for="description">Detailed Description *</label>
-            <textarea id="description" name="description" class="form-control" rows="3" placeholder="Write the main message for this slide..." required><%= slide ? slide.description : '' %></textarea>
-          </div>
-
-          <!-- 5. Primary CTA Button -->
-          <div class="form-grid-3" style="background: #faf6f3; padding: 14px; border-radius: 9px; margin-bottom: 18px; border: 1px solid var(--admin-border-subtle);">
-            <div class="form-group" style="margin-bottom: 0;">
-              <label for="primaryBtnText">Primary Button Label</label>
-              <input type="text" id="primaryBtnText" name="primaryBtnText" class="form-control" placeholder="e.g. Join the Movement" value="<%= slide ? slide.primaryBtnText : 'Join the Movement' %>" />
-            </div>
-            <div class="form-group" style="margin-bottom: 0;">
-              <label for="primaryBtnLink">Primary Button Link (URL)</label>
-              <input type="text" id="primaryBtnLink" name="primaryBtnLink" class="form-control" placeholder="#quickActionSidebar" value="<%= slide ? slide.primaryBtnLink : '#quickActionSidebar' %>" />
-            </div>
-            <div class="form-group" style="margin-bottom: 0;">
-              <label for="primaryBtnInitiative">Modal Key (Optional)</label>
-              <input type="text" id="primaryBtnInitiative" name="primaryBtnInitiative" class="form-control" placeholder="e.g. river-rights" value="<%= slide ? slide.primaryBtnInitiative : '' %>" />
-            </div>
-          </div>
-
-          <!-- 6. Secondary CTA Button -->
-          <div class="form-grid-3" style="background: #faf6f3; padding: 14px; border-radius: 9px; margin-bottom: 18px; border: 1px solid var(--admin-border-subtle);">
-            <div class="form-group" style="margin-bottom: 0;">
-              <label for="secondaryBtnText">Secondary Button Label</label>
-              <input type="text" id="secondaryBtnText" name="secondaryBtnText" class="form-control" placeholder="e.g. Our Key Initiatives" value="<%= slide ? slide.secondaryBtnText : 'Our Key Initiatives' %>" />
-            </div>
-            <div class="form-group" style="margin-bottom: 0;">
-              <label for="secondaryBtnLink">Secondary Button Link (URL)</label>
-              <input type="text" id="secondaryBtnLink" name="secondaryBtnLink" class="form-control" placeholder="#what-we-do" value="<%= slide ? slide.secondaryBtnLink : '#what-we-do' %>" />
-            </div>
-            <div class="form-group" style="margin-bottom: 0;">
-              <label for="secondaryBtnInitiative">Modal Key (Optional)</label>
-              <input type="text" id="secondaryBtnInitiative" name="secondaryBtnInitiative" class="form-control" placeholder="e.g. youth-wing" value="<%= slide ? slide.secondaryBtnInitiative : '' %>" />
-            </div>
-          </div>
-
-          <!-- 7. Order & Status -->
-          <div class="form-grid-2">
-            <div class="form-group">
-              <label for="order">Display Order</label>
-              <input type="number" id="order" name="order" class="form-control" value="<%= slide ? slide.order : 0 %>" min="0" />
-              <div class="form-hint">Lower numbers display first (1, 2, 3...).</div>
-            </div>
-
-            <div class="form-group" style="display: flex; align-items: center; gap: 12px; margin-top: 26px;">
-              <input type="checkbox" id="isActive" name="isActive" value="true" <%= !slide || slide.isActive ? 'checked' : '' %> style="width: 18px; height: 18px; accent-color: var(--admin-primary); cursor: pointer;" />
-              <label for="isActive" style="margin-bottom: 0; cursor: pointer; font-size: 14px;">Keep this slide active and visible on website</label>
-            </div>
-          </div>
-
-          <!-- Actions -->
-          <div style="display: flex; gap: 12px; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--admin-border-subtle);">
-            <button type="submit" class="btn-admin btn-admin-primary">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-              <span><%= isEdit ? 'Save Changes' : 'Save Slide' %></span>
-            </button>
-            <a href="/admin/home/hero" class="btn-admin btn-admin-outline">Cancel</a>
-          </div>
-
-        </form>
+        </div>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+  (function() {
+    const fileInput = document.getElementById('imageFileInput');
+    const dropzone = document.getElementById('dropzone');
+    const dropzoneLabel = document.getElementById('dropzoneLabel');
+    const urlInput = document.getElementById('imageUrl');
+    const simBgImg = document.getElementById('simBgImg');
+
+    // Live preview elements
+    const tagInput = document.getElementById('tag');
+    const badgeTextInput = document.getElementById('badgeText');
+    const headPrefixInput = document.getElementById('headingPrefix');
+    const highlightTextInput = document.getElementById('highlightText');
+    const headSuffixInput = document.getElementById('headingSuffix');
+    const descInput = document.getElementById('description');
+    const btn1TextInput = document.getElementById('primaryBtnText');
+    const btn2TextInput = document.getElementById('secondaryBtnText');
+
+    const simPillTag = document.getElementById('simPillTag');
+    const simPillText = document.getElementById('simPillText');
+    const simHeadPrefix = document.getElementById('simHeadPrefix');
+    const simHeadHighlight = document.getElementById('simHeadHighlight');
+    const simHeadSuffix = document.getElementById('simHeadSuffix');
+    const simDesc = document.getElementById('simDesc');
+    const simBtnPrimaryText = document.getElementById('simBtnPrimaryText');
+    const simBtnSecondaryText = document.getElementById('simBtnSecondaryText');
+
+    // Real-time text binding
+    function bindText(input, target, fallback) {
+      if (!input || !target) return;
+      input.addEventListener('input', function() {
+        target.textContent = this.value.trim() || fallback;
+      });
+    }
+
+    bindText(tagInput, simPillTag, 'Pill Tag');
+    bindText(badgeTextInput, simPillText, '');
+    bindText(headPrefixInput, simHeadPrefix, '');
+    bindText(highlightTextInput, simHeadHighlight, '');
+    bindText(headSuffixInput, simHeadSuffix, '');
+    bindText(descInput, simDesc, 'Slide description will appear here...');
+    bindText(btn1TextInput, simBtnPrimaryText, 'Primary Button');
+    bindText(btn2TextInput, simBtnSecondaryText, 'Secondary Button');
+
+    // URL input image preview
+    if (urlInput) {
+      urlInput.addEventListener('input', function() {
+        if (this.value.trim()) {
+          simBgImg.src = this.value.trim();
+        }
+      });
+    }
+
+    // File input image preview
+    if (fileInput) {
+      fileInput.addEventListener('change', function(e) {
+        if (this.files && this.files[0]) {
+          const file = this.files[0];
+          dropzoneLabel.textContent = 'Selected: ' + file.name + ' (' + (file.size / 1024).toFixed(0) + ' KB)';
+          const reader = new FileReader();
+          reader.onload = function(evt) {
+            simBgImg.src = evt.target.result;
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+
+    // Drag and drop highlight
+    if (dropzone) {
+      ['dragenter', 'dragover'].forEach(name => {
+        dropzone.addEventListener(name, (e) => {
+          e.preventDefault();
+          dropzone.classList.add('dragover');
+        });
+      });
+      ['dragleave', 'drop'].forEach(name => {
+        dropzone.addEventListener(name, (e) => {
+          e.preventDefault();
+          dropzone.classList.remove('dragover');
+        });
+      });
+      dropzone.addEventListener('drop', (e) => {
+        if (e.dataTransfer && e.dataTransfer.files.length) {
+          fileInput.files = e.dataTransfer.files;
+          const evt = new Event('change');
+          fileInput.dispatchEvent(evt);
+        }
+      });
+    }
+  })();
+</script>
 
 <%- include("../common/footer") %>
