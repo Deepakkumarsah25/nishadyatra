@@ -6,6 +6,7 @@ const HomeQuickInfo = require("../models/HomeQuickInfo");
 const InitiativeInquiry = require("../models/InitiativeInquiry");
 const SankalpPhoto = require("../models/SankalpPhoto");
 const KalashYatra = require("../models/KalashYatra");
+const VideoNews = require("../models/news/VideoNews");
 const {
   defaultHeroSlides,
   defaultInitiatives,
@@ -18,7 +19,7 @@ const { defaultGalleryPhotos } = require("../scripts/seedGalleryData");
 // Public Home Page
 exports.getHomePage = async (req, res) => {
   try {
-    const [heroSlides, initiatives, whyChooseDoc, notices, quickInfoDoc, galleryPhotos, kalashDoc] =
+    const [heroSlides, initiatives, whyChooseDoc, notices, quickInfoDoc, galleryPhotos, kalashDoc, newsDocs] =
       await Promise.all([
         HeroSlide.find({ isActive: true }).sort({ order: 1, createdAt: 1 }),
         Initiative.find({ isActive: true }).sort({ order: 1, createdAt: 1 }),
@@ -27,6 +28,11 @@ exports.getHomePage = async (req, res) => {
         HomeQuickInfo.findOne(),
         SankalpPhoto.find({ isPublished: true }).sort({ order: 1, date: -1 }).limit(6),
         KalashYatra.getOrSeed().catch(() => KalashYatra.defaultData),
+        VideoNews.find({ published: true })
+          .sort({ publicationDate: -1, publishedAt: -1, createdAt: -1 })
+          .limit(8)
+          .lean()
+          .catch(() => []),
       ]);
 
     // Fallbacks if database is completely empty or just initialized
@@ -48,6 +54,18 @@ exports.getHomePage = async (req, res) => {
     const latestVideos = (kalash && kalash.videos && kalash.videos.length > 0)
       ? kalash.videos.slice(0, 4)
       : (kalash && kalash.milestonesSection && kalash.milestonesSection.items ? kalash.milestonesSection.items.slice(0, 4) : []);
+
+    // News Highlights & Recent Stories for Home Page
+    let highlightNews = null;
+    let homeNewsList = [];
+
+    if (newsDocs && newsDocs.length > 0) {
+      // Find item with isHighlighted or featured = true
+      highlightNews = newsDocs.find((n) => n.isHighlighted || n.featured) || newsDocs[0];
+      homeNewsList = newsDocs.filter(
+        (n) => String(n._id) !== String(highlightNews._id)
+      ).slice(0, 4);
+    }
 
     // Convert initiatives to client-side modal dictionary
     const initiativesModalMap = {};
@@ -79,6 +97,8 @@ exports.getHomePage = async (req, res) => {
       kalash,
       highlightVideo,
       latestVideos,
+      highlightNews,
+      homeNewsList,
     });
   } catch (error) {
     console.error("Home page render error:", error);
@@ -96,6 +116,8 @@ exports.getHomePage = async (req, res) => {
       kalash: kalashFallback,
       highlightVideo: kalashFallback?.hero?.featuredVideo || null,
       latestVideos: (kalashFallback?.videos || []).slice(0, 4),
+      highlightNews: null,
+      homeNewsList: [],
     });
   }
 };
