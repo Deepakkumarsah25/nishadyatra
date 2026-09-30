@@ -8,11 +8,11 @@
     </a>
 
     <ul class="nav-links" id="navLinks">
-      <li><a href="/">Home</a></li>
-      <li><a href="/#about">About</a></li>
-      <li><a href="/video">Video</a></li>
-      <li><a href="/gallery">Gallery</a></li>
-      <li><a href="/news">News</a></li>
+      <li><a href="/" class="<%= typeof currentUrl !== 'undefined' && currentUrl === '/' ? 'active' : '' %>">Home</a></li>
+      <li><a href="/about" class="<%= typeof currentUrl !== 'undefined' && currentUrl === '/about' ? 'active' : '' %>">About</a></li>
+      <li><a href="/video" class="<%= typeof currentUrl !== 'undefined' && currentUrl === '/video' ? 'active' : '' %>">Video</a></li>
+      <li><a href="/gallery" class="<%= typeof currentUrl !== 'undefined' && currentUrl === '/gallery' ? 'active' : '' %>">Gallery</a></li>
+      <li><a href="/news" class="<%= typeof currentUrl !== 'undefined' && currentUrl === '/news' ? 'active' : '' %>">News</a></li>
       <li><a href="/#contact">Contact</a></li>
     </ul>
 
