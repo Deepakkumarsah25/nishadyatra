@@ -1,10 +1,9 @@
 <link rel="stylesheet" href="/css/common/footer.css" />
 
 <footer class="site-footer" id="contact">
-
   <div class="footer-main">
 
-    <!-- Brand -->
+    <!-- Brand & Mission -->
     <div class="footer-brand">
       <a href="/" class="footer-logo">
         <span class="footer-logo-mark">N</span>
@@ -12,51 +11,57 @@
       </a>
 
       <p>
-        An initiative to give a new direction to society with the pledge of unity, awareness, and progress.
+        An initiative to give a new direction to society with the sacred pledge of unity, rights awareness, education, and social progress.
       </p>
     </div>
 
-    <!-- Links -->
+    <!-- Quick Links: 3 on left, 3 on right -->
     <div class="footer-links">
       <h3>Quick Links</h3>
 
-      <a href="/">Home</a>
-      <a href="/#about">About</a>
-      <a href="/video">Video</a>
-      <a href="/gallery">Gallery</a>
-      <a href="/news">News</a>
-      <a href="/#contact">Contact</a>
+      <div class="footer-links-grid">
+        <div class="footer-links-col">
+          <a href="/">Home</a>
+          <a href="/about">About</a>
+          <a href="/video">Video</a>
+        </div>
+        <div class="footer-links-col">
+          <a href="/gallery">Gallery</a>
+          <a href="/news">News</a>
+          <a href="/#contact">Contact</a>
+        </div>
+      </div>
     </div>
 
-    <!-- Contact -->
+    <!-- Contact Details -->
     <div class="footer-contact">
       <h3>Contact Us</h3>
 
-      <a href="mailto:info@example.com">
-        ✉ info@example.com
+      <a href="mailto:info@nishadsankalp.org">
+        ✉ info@nishadsankalp.org
       </a>
 
       <a href="tel:+919999999999">
         ☎ +91 99999 99999
       </a>
 
-      <span>📍 India</span>
+      <span>📍 India • राष्ट्रीय महा-अभियान</span>
     </div>
 
   </div>
 
   <div class="footer-bottom">
     <span>
-      © <span id="footerYear"></span>
-      Nishad Sankalp Campaign
+      © <span id="footerYear"></span> Nishad Sankalp Campaign. All Rights Reserved.
     </span>
 
-    <span>All Rights Reserved</span>
+    <span>United for Rights &amp; Social Awakening</span>
   </div>
-
 </footer>
 
 <script>
-  document.getElementById("footerYear").textContent =
-    new Date().getFullYear();
+  (function () {
+    const yr = document.getElementById("footerYear");
+    if (yr) yr.textContent = new Date().getFullYear();
+  })();
 </script>

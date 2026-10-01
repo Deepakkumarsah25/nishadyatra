@@ -31,8 +31,8 @@
   --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-  --font-main: 'Mukta', 'Noto Sans Devanagari', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-serif: 'Rozha One', Georgia, serif;
+  --font-main: 'Noto Sans Devanagari', sans-serif;
+  --font-serif: 'Noto Sans Devanagari', sans-serif;
 }
 
 /* Base resets & typography */

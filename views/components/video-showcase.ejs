@@ -23,6 +23,17 @@
     }
     return url;
   }
+
+  function getThumb(url, explicitThumb, fallback) {
+    if (explicitThumb && explicitThumb.trim() && !explicitThumb.includes('/images/kalash-yatra-hero.jpg')) {
+      return explicitThumb.trim();
+    }
+    const match = (url || '').match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/|v\/))([\w-]{11})/);
+    if (match && match[1]) {
+      return 'https://img.youtube.com/vi/' + match[1] + '/hqdefault.jpg';
+    }
+    return explicitThumb || fallback;
+  }
 %>
 
 <section class="video-showcase-section" id="videos">
@@ -38,11 +49,8 @@
           <span>वीडियो संकलन • Video Highlights</span>
         </div>
         <h2 class="section-title">
-          लोकतांत्रिक संकल्प — <span class="text-highlight">मुख्य वीडियो संकलन</span>
+          <span class="text-highlight">Video Highlights</span>
         </h2>
-        <p class="section-subtitle">
-          विभिन्न जिलों से जन-जागरण, स्वतंत्र मतदान और सामाजिक एकता के प्रमुख व हालिया वीडियो।
-        </p>
       </div>
 
       <div class="video-header-cta">
@@ -62,7 +70,7 @@
       <article class="highlight-video-card" data-video-url="<%= toEmbedUrl(featVid.videoUrl) %>" data-video-title="<%= featVid.title %>">
         <div class="highlight-video-stage">
           <img
-            src="<%= featVid.posterImage || '/images/kalash-yatra-hero.jpg' %>"
+            src="<%= getThumb(featVid.videoUrl, featVid.posterImage, '/images/kalash-yatra-hero.jpg') %>"
             alt="<%= featVid.title %>"
             class="highlight-poster"
             loading="lazy"
@@ -126,7 +134,7 @@
               >
                 <div class="latest-thumb-wrap">
                   <img
-                    src="<%= vid.thumbnail || vid.image || '/images/kalash-yatra-featured.jpg' %>"
+                    src="<%= getThumb(vid.videoUrl, vid.thumbnail || vid.image, '/images/kalash-yatra-featured.jpg') %>"
                     alt="<%= vid.title %>"
                     loading="lazy"
                     onerror="this.src='/images/sacred-kalash-ritual.jpg'"
@@ -163,20 +171,6 @@
 
     </div>
 
-    <!-- Bottom Connective Banner to Video Page -->
-    <div class="video-bottom-banner">
-      <div class="video-bottom-content">
-        <div class="video-bottom-icon">🪔</div>
-        <div>
-          <h4>क्या आप सभी जनसभाओं व जिलों के संपूर्ण संकल्प वीडियो देखना चाहते हैं?</h4>
-          <p>राज्य, ज़िला और श्रेणी के अनुसार फ़िल्टर करके 50+ से अधिक वीडियो देखने के लिए हमारे मुख्य वीडियो पेज पर जाएं।</p>
-        </div>
-      </div>
-      <a href="/video" class="ny-btn ny-btn-outline video-bottom-btn">
-        <span>संपूर्ण वीडियो लाइब्रेरी खोलें (Video Page)</span>
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
 
   </div>
 </section>

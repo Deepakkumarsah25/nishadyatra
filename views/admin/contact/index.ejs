@@ -1,0 +1,1169 @@
+<%- include("../common/header") %>
+<%- include("../common/sidebar") %>
+
+<div class="admin-main">
+  <!-- Topbar -->
+  <header class="admin-topbar">
+    <div class="topbar-left">
+      <button type="button" class="mobile-menu-trigger" id="adminMobileMenuBtn" aria-label="Menu">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="page-heading">
+        <h1>
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--admin-primary)" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          Contact Us Management Hub
+        </h1>
+        <p>Live messages inbox, public inquiries, office addresses, and helpline configuration</p>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <a href="/contact" target="_blank" class="view-site-btn">
+        <span>View Live Contact Page</span>
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/></svg>
+      </a>
+      <div class="admin-user-pill">
+        <div class="admin-user-avatar"><%= (admin && admin.name ? admin.name.charAt(0) : 'A').toUpperCase() %></div>
+        <div class="admin-user-info">
+          <strong><%= admin && admin.name ? admin.name : 'Admin' %></strong>
+          <small><%= admin && admin.role ? admin.role : 'Superadmin' %></small>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Body -->
+  <div class="admin-body">
+
+    <!-- Flash Alerts -->
+    <% if (message) { %>
+      <div class="admin-alert admin-alert-success">✓ <%= message %></div>
+    <% } %>
+    <% if (error) { %>
+      <div class="admin-alert admin-alert-error">⚠ <%= error %></div>
+    <% } %>
+
+    <!-- Statistics Overview Grid -->
+    <div class="contact-stats-grid">
+      <div class="contact-stat-box">
+        <div class="stat-box-icon" style="background: #f1f5f9; color: #475569;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div class="stat-box-content">
+          <strong><%= stats.total %></strong>
+          <span>Total Messages</span>
+        </div>
+      </div>
+
+      <div class="contact-stat-box">
+        <div class="stat-box-icon" style="background: #fef3c7; color: #b45309;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div class="stat-box-content">
+          <strong style="color: #b45309;"><%= stats.new %></strong>
+          <span>New / Unread</span>
+        </div>
+      </div>
+
+      <div class="contact-stat-box">
+        <div class="stat-box-icon" style="background: #e0f2fe; color: #0284c7;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </div>
+        <div class="stat-box-content">
+          <strong style="color: #0284c7;"><%= stats.contacted %></strong>
+          <span>In Progress / Contacted</span>
+        </div>
+      </div>
+
+      <div class="contact-stat-box">
+        <div class="stat-box-icon" style="background: #ecfdf5; color: #059669;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <div class="stat-box-content">
+          <strong style="color: #059669;"><%= stats.resolved %></strong>
+          <span>Resolved / Completed</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="contact-tab-nav">
+      <a href="/admin/contact?tab=messages" class="contact-tab-btn <%= activeTab === 'messages' ? 'active' : '' %>">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <span>Received Messages</span>
+        <% if (stats.new > 0) { %>
+          <span class="tab-badge-count"><%= stats.new %></span>
+        <% } %>
+      </a>
+
+      <a href="/admin/contact?tab=settings" class="contact-tab-btn <%= activeTab === 'settings' ? 'active' : '' %>">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span>Page &amp; Office Settings</span>
+      </a>
+    </div>
+
+    <!-- =====================================================================
+         TAB 1: RECEIVED MESSAGES INBOX
+         ====================================================================== -->
+    <% if (activeTab === 'messages') { %>
+      <div class="admin-card">
+        <div class="admin-card-header" style="flex-wrap: wrap; gap: 14px;">
+          <div>
+            <h3>
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              Inbox Messages (<%= messages.length %>)
+            </h3>
+            <span style="font-size: 12px; color: var(--admin-text-muted);">Real-time queries sent from public contact form</span>
+          </div>
+
+          <!-- Filters & Search -->
+          <div class="inbox-actions-row">
+            <!-- Filter Pills -->
+            <div class="filter-pills-wrap">
+              <a href="/admin/contact?tab=messages&status=all<%= filters.search ? '&search=' + encodeURIComponent(filters.search) : '' %>"
+                class="filter-pill <%= filters.status === 'all' ? 'active' : '' %>">
+                All (<%= stats.total %>)
+              </a>
+              <a href="/admin/contact?tab=messages&status=new<%= filters.search ? '&search=' + encodeURIComponent(filters.search) : '' %>"
+                class="filter-pill pill-new <%= filters.status === 'new' ? 'active' : '' %>">
+                🟡 New (<%= stats.new %>)
+              </a>
+              <a href="/admin/contact?tab=messages&status=contacted<%= filters.search ? '&search=' + encodeURIComponent(filters.search) : '' %>"
+                class="filter-pill pill-contacted <%= filters.status === 'contacted' ? 'active' : '' %>">
+                🔵 In Progress (<%= stats.contacted %>)
+              </a>
+              <a href="/admin/contact?tab=messages&status=resolved<%= filters.search ? '&search=' + encodeURIComponent(filters.search) : '' %>"
+                class="filter-pill pill-resolved <%= filters.status === 'resolved' ? 'active' : '' %>">
+                🟢 Resolved (<%= stats.resolved %>)
+              </a>
+            </div>
+
+            <!-- Search Bar -->
+            <form action="/admin/contact" method="GET" class="search-form-wrap">
+              <input type="hidden" name="tab" value="messages" />
+              <% if (filters.status && filters.status !== 'all') { %>
+                <input type="hidden" name="status" value="<%= filters.status %>" />
+              <% } %>
+              <div class="search-input-box">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" name="search" class="search-field" placeholder="Search by name, phone, city..." value="<%= filters.search || '' %>" />
+                <% if (filters.search) { %>
+                  <a href="/admin/contact?tab=messages&status=<%= filters.status %>" class="clear-search-btn" title="Clear Search">×</a>
+                <% } %>
+              </div>
+              <button type="submit" class="btn-admin btn-admin-sm btn-admin-primary">Search</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Table Wrapper -->
+        <div class="admin-table-wrapper">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th style="width: 120px;">Date &amp; Time</th>
+                <th style="width: 180px;">Sender</th>
+                <th style="width: 180px;">Communication</th>
+                <th>Message Content</th>
+                <th style="width: 130px;">Status</th>
+                <th style="width: 80px; text-align: right;">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (messages && messages.length > 0) { %>
+                <% messages.forEach(function(msg) { %>
+                  <tr class="message-row <%= msg.status === 'new' ? 'row-unread' : '' %>" id="msg-row-<%= msg._id %>">
+                    <!-- Date -->
+                    <td>
+                      <div class="msg-date-main">
+                        <%= new Date(msg.createdAt).toLocaleDateString('hi-IN', { day: '2-digit', month: 'short', year: 'numeric' }) %>
+                      </div>
+                      <div class="msg-date-time">
+                        <%= new Date(msg.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) %>
+                      </div>
+                    </td>
+
+                    <!-- Sender -->
+                    <td>
+                      <div class="msg-sender-name"><%= msg.name %></div>
+                      <% if (msg.district) { %>
+                        <div class="msg-sender-district">
+                          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                          <span><%= msg.district %></span>
+                        </div>
+                      <% } %>
+                    </td>
+
+                    <!-- Channels / Communication -->
+                    <td>
+                      <div class="comm-channel-stack">
+                        <!-- Call Link -->
+                        <a href="tel:<%= msg.phone %>" class="comm-btn comm-phone" title="कॉल करें">
+                          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                          <span><%= msg.phone %></span>
+                        </a>
+
+                        <!-- WhatsApp Direct Link -->
+                        <% const waTarget = msg.phone.replace(/[^0-9]/g, ''); %>
+                        <a href="https://wa.me/91<%= waTarget %>?text=<%= encodeURIComponent('नमस्ते ' + msg.name + ' जी, निषाद संकल्प अभियान कार्यालय से संपर्क कर रहे हैं।') %>"
+                           target="_blank" rel="noopener noreferrer" class="comm-btn comm-wa" title="WhatsApp चैट शुरू करें">
+                          <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm5.79 14.12c-.24.68-1.39 1.3-1.93 1.38-.49.07-1.13.1-3.28-.79-2.58-1.07-4.22-3.69-4.35-3.86-.13-.17-1.05-1.4-1.05-2.67 0-1.27.67-1.89.91-2.14.24-.25.53-.31.71-.31.18 0 .36 0 .52.01.17.01.4.06.6.53.22.52.74 1.82.81 1.95.07.13.11.29.02.47-.09.18-.14.29-.27.45-.13.16-.28.36-.4.48-.13.13-.27.27-.12.53.15.26.68 1.12 1.46 1.81 1 .89 1.84 1.17 2.1 1.3.26.13.41.11.56-.06.15-.17.65-.76.82-1.02.17-.26.35-.22.59-.13.24.09 1.52.72 1.78.85.26.13.43.2.49.31.06.11.06.66-.18 1.34z"/></svg>
+                          <span>WhatsApp</span>
+                        </a>
+
+                        <!-- Email Link -->
+                        <a href="mailto:<%= msg.email %>" class="comm-btn comm-email" title="<%= msg.email %>">
+                          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                          <span style="max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><%= msg.email %></span>
+                        </a>
+                      </div>
+                    </td>
+
+                    <!-- Message Body -->
+                    <td>
+                      <div class="msg-snippet">
+                        <%= msg.message %>
+                      </div>
+                      <button type="button" class="view-msg-btn"
+                        data-name="<%= msg.name %>"
+                        data-phone="<%= msg.phone %>"
+                        data-email="<%= msg.email %>"
+                        data-district="<%= msg.district || 'उल्लेखित नहीं' %>"
+                        data-date="<%= new Date(msg.createdAt).toLocaleString('hi-IN') %>"
+                        data-status="<%= msg.status %>"
+                        data-id="<%= msg._id %>"
+                        data-message="<%= encodeURIComponent(msg.message) %>"
+                        onclick="openMessageModal(this)">
+                        पूरा संदेश देखें &raquo;
+                      </button>
+                    </td>
+
+                    <!-- Status Selector -->
+                    <td>
+                      <form action="/admin/contact/messages/status/<%= msg._id %>" method="POST" class="status-change-form">
+                        <select name="status" class="status-dropdown status-<%= msg.status %>" onchange="this.form.submit()">
+                          <option value="new" <%= msg.status === 'new' ? 'selected' : '' %>>🟡 New</option>
+                          <option value="contacted" <%= msg.status === 'contacted' ? 'selected' : '' %>>🔵 In Progress</option>
+                          <option value="resolved" <%= msg.status === 'resolved' ? 'selected' : '' %>>🟢 Resolved</option>
+                        </select>
+                      </form>
+                    </td>
+
+                    <!-- Actions -->
+                    <td style="text-align: right;">
+                      <form action="/admin/contact/messages/delete/<%= msg._id %>" method="POST" onsubmit="return confirm('क्या आप इस संदेश को स्थायी रूप से हटाना चाहते हैं?');" style="display:inline;">
+                        <button type="submit" class="btn-delete-icon" title="हटाएं">
+                          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                        </button>
+                      </form>
+                    </td>
+                  </tr>
+                <% }); %>
+              <% } else { %>
+                <tr>
+                  <td colspan="6">
+                    <div class="empty-state-box">
+                      <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#cbd5e1" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                      <h4>कोई संदेश नहीं मिला</h4>
+                      <p>वर्तमान फ़िल्टर या खोज मानदंड के अनुसार कोई संदेश उपलब्ध नहीं है।</p>
+                    </div>
+                  </td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% } %>
+
+    <!-- =====================================================================
+         TAB 2: PAGE INFORMATION & SETTINGS
+         ====================================================================== -->
+    <% if (activeTab === 'settings') { %>
+      <form action="/admin/contact/settings" method="POST" enctype="multipart/form-data">
+        <div class="settings-form-layout">
+
+          <!-- Card 1: Top Banner Settings -->
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                1. Top Banner Settings
+              </h3>
+              <span style="font-size: 12px; color: var(--admin-text-muted);">शीर्ष बैनर शीर्षक एवं पृष्ठभूमि छवि (Clean Photo Upload &amp; URL)</span>
+            </div>
+
+            <div class="settings-grid">
+              <div class="form-group-full">
+                <label class="admin-form-label" for="pageHeading">Banner Title (बैनर शीर्षक)</label>
+                <input type="text" id="pageHeading" name="pageHeading" class="form-control" value="<%= contact.pageHeading || 'Contact Us' %>" required oninput="updateBannerHeadingPreview(this.value)" />
+                <span class="field-hint">बैनर के केंद्र में प्रदर्शित मुख्य शीर्षक (उदा. Contact Us या हमसे संपर्क करें)</span>
+              </div>
+
+              <div>
+                <label class="admin-form-label" for="bannerImageFile">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  Upload New Banner Photo (नई फोटो अपलोड करें)
+                </label>
+                <input type="file" id="bannerImageFile" name="bannerImageFile" class="form-control" accept="image/*" onchange="previewBannerUpload(this)" />
+                <span class="field-hint">कंप्यूटर या फोन से नई फोटो चुनें (JPG, PNG, WebP)</span>
+              </div>
+
+              <div>
+                <label class="admin-form-label" for="bannerImage">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px;"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                  Or Banner Image URL / Path (या इमेज का लिंक/पाथ)
+                </label>
+                <input type="text" id="bannerImage" name="bannerImage" class="form-control" value="<%= contact.bannerImage || '/images/contact-banner.jpg' %>" placeholder="/images/contact-banner.jpg" oninput="previewBannerUrl(this.value)" />
+                <span class="field-hint">यदि नई फाइल अपलोड नहीं कर रहे हैं, तो यहाँ पाथ/URL दर्ज कर सकते हैं।</span>
+              </div>
+
+              <!-- Banner Preview Box -->
+              <div class="form-group-full" style="margin-top: 4px;">
+                <label class="admin-form-label">Banner Image Live Preview (लाइव पूर्वावलोकन):</label>
+                <div id="bannerLivePreview" style="height: 120px; border-radius: 10px; overflow: hidden; background-image: linear-gradient(rgba(15,23,42,0.65), rgba(15,23,42,0.8)), url('<%= contact.bannerImage || '/images/contact-banner.jpg' %>'); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; border: 1px solid var(--admin-border); position: relative;">
+                  <span id="previewHeadingText" style="color: #fff; font-family: 'Rozha One', serif; font-size: 24px; font-weight: 800; text-shadow: 0 2px 8px rgba(0,0,0,0.8);"><%= contact.pageHeading || 'Contact Us' %></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Central Office Details & Map Link -->
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                2. Office Address &amp; Google Maps Link
+              </h3>
+              <span style="font-size: 12px; color: var(--admin-text-muted);">मुख्यालय का पता एवं सीधे गूगल मैप पर जाने का लिंक</span>
+            </div>
+
+            <div class="settings-grid">
+              <div>
+                <label class="admin-form-label" for="officeTitle">Office Section Title</label>
+                <input type="text" id="officeTitle" name="officeTitle" class="form-control" value="<%= contact.officeTitle || 'कार्यालय का पता' %>" required />
+              </div>
+
+              <div>
+                <label class="admin-form-label" for="officeTiming">Working Hours / Timings</label>
+                <input type="text" id="officeTiming" name="officeTiming" class="form-control" value="<%= contact.officeTiming || '' %>" placeholder="उदा. सोमवार से शनिवार: प्रातः 10:00 से सायं 06:00" />
+              </div>
+
+              <div class="form-group-full">
+                <label class="admin-form-label" for="officeAddress">Full Office Address</label>
+                <textarea id="officeAddress" name="officeAddress" class="form-control" rows="2" required><%= contact.officeAddress || '' %></textarea>
+              </div>
+
+              <div class="form-group-full">
+                <label class="admin-form-label" for="mapDirectionsUrl">Google Maps Location Link (सीधा मैप लिंक)</label>
+                <div style="display: flex; gap: 8px;">
+                  <input type="url" id="mapDirectionsUrl" name="mapDirectionsUrl" class="form-control" value="<%= contact.mapDirectionsUrl || '' %>" placeholder="https://maps.google.com/?q=..." style="flex:1;" />
+                  <% if (contact.mapDirectionsUrl) { %>
+                    <a href="<%= contact.mapDirectionsUrl %>" target="_blank" rel="noopener noreferrer" class="btn-admin btn-admin-outline btn-admin-sm" style="display:inline-flex; align-items:center; gap:4px; white-space:nowrap;">
+                      <span>मैप खोलें ↗</span>
+                    </a>
+                  <% } %>
+                </div>
+                <span class="field-hint">पब्लिक पेज पर पते के साथ "गूगल मैप्स पर देखें" बटन इसी लिंक को खोलेगा।</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Phone & Email Channels -->
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                3. Phones &amp; Emails
+              </h3>
+              <span style="font-size: 12px; color: var(--admin-text-muted);">कॉल हेल्पलाइन एवं ईमेल आईडी</span>
+            </div>
+
+            <div class="settings-grid">
+              <div>
+                <label class="admin-form-label" for="primaryPhone">Primary Phone (मुख्य हेल्पलाइन)</label>
+                <input type="text" id="primaryPhone" name="primaryPhone" class="form-control" value="<%= contact.primaryPhone || '' %>" placeholder="+91 98765 43210" required />
+              </div>
+
+              <div>
+                <label class="admin-form-label" for="secondaryPhone">Secondary Phone (वैकल्पिक नंबर)</label>
+                <input type="text" id="secondaryPhone" name="secondaryPhone" class="form-control" value="<%= contact.secondaryPhone || '' %>" placeholder="+91 87654 32109" />
+              </div>
+
+              <div>
+                <label class="admin-form-label" for="primaryEmail">Primary Email (मुख्य ईमेल)</label>
+                <input type="email" id="primaryEmail" name="primaryEmail" class="form-control" value="<%= contact.primaryEmail || '' %>" placeholder="contact@nishadsankalp.org" required />
+              </div>
+
+              <div>
+                <label class="admin-form-label" for="secondaryEmail">Secondary Email (सहायक ईमेल)</label>
+                <input type="email" id="secondaryEmail" name="secondaryEmail" class="form-control" value="<%= contact.secondaryEmail || '' %>" placeholder="info@nishadsankalp.org" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4: WhatsApp Direct Connect -->
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#059669" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                4. WhatsApp Quick Chat Configuration
+              </h3>
+              <span style="font-size: 12px; color: var(--admin-text-muted);">सीधे व्हाट्सएप पर चैट लिंक</span>
+            </div>
+
+            <div class="settings-grid">
+              <div>
+                <label class="admin-form-label" for="whatsappNumber">WhatsApp Mobile Number</label>
+                <input type="text" id="whatsappNumber" name="whatsappNumber" class="form-control" value="<%= contact.whatsappNumber || '' %>" placeholder="उदा. +919876543210" />
+                <span class="field-hint">कंट्री कोड के साथ (उदा. +91...)</span>
+              </div>
+
+              <div>
+                <label class="admin-form-label" for="whatsappMessage">Pre-filled Greeting Message</label>
+                <input type="text" id="whatsappMessage" name="whatsappMessage" class="form-control" value="<%= contact.whatsappMessage || '' %>" placeholder="उदा. नमस्ते, मैं निषाद संकल्प अभियान से संपर्क करना चाहता हूँ।" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 5: Social Media Links -->
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                5. Social Media Handles
+              </h3>
+              <span style="font-size: 12px; color: var(--admin-text-muted);">आधिकारिक सोशल नेटवर्क प्रोफाइल्स</span>
+            </div>
+
+            <div class="settings-grid">
+              <div>
+                <label class="admin-form-label" for="facebookUrl">Facebook URL</label>
+                <input type="url" id="facebookUrl" name="facebookUrl" class="form-control" value="<%= contact.facebookUrl || '' %>" placeholder="https://facebook.com/..." />
+              </div>
+
+              <div>
+                <label class="admin-form-label" for="twitterUrl">X (Twitter) URL</label>
+                <input type="url" id="twitterUrl" name="twitterUrl" class="form-control" value="<%= contact.twitterUrl || '' %>" placeholder="https://x.com/..." />
+              </div>
+
+              <div>
+                <label class="admin-form-label" for="instagramUrl">Instagram URL</label>
+                <input type="url" id="instagramUrl" name="instagramUrl" class="form-control" value="<%= contact.instagramUrl || '' %>" placeholder="https://instagram.com/..." />
+              </div>
+
+              <div>
+                <label class="admin-form-label" for="youtubeUrl">YouTube Channel URL</label>
+                <input type="url" id="youtubeUrl" name="youtubeUrl" class="form-control" value="<%= contact.youtubeUrl || '' %>" placeholder="https://youtube.com/@..." />
+              </div>
+
+              <div class="form-group-full">
+                <label class="admin-form-label" for="telegramUrl">Telegram Channel / Group URL</label>
+                <input type="url" id="telegramUrl" name="telegramUrl" class="form-control" value="<%= contact.telegramUrl || '' %>" placeholder="https://t.me/..." />
+              </div>
+            </div>
+          </div>
+
+
+
+          <!-- Sticky Save Bar -->
+          <div class="settings-save-bar">
+            <div>
+              <strong>परिवर्तन सहेजें</strong>
+              <p>सभी फ़ील्ड्स को वेबसाइट पर तुरंत अपडेट करने के लिए सहेजें पर क्लिक करें।</p>
+            </div>
+            <button type="submit" class="btn-admin btn-admin-primary btn-save-action">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>सेटिंग्स सहेजें (Save Changes)</span>
+            </button>
+          </div>
+
+        </div>
+      </form>
+    <% } %>
+
+  </div>
+</div>
+
+<!-- =========================================================================
+     VIEW MESSAGE MODAL
+     ========================================================================= -->
+<div class="modal-backdrop" id="msgModalBackdrop" style="display:none;" onclick="closeMessageModal()"></div>
+<div class="admin-modal" id="msgModal" style="display:none;" role="dialog" aria-modal="true">
+  <div class="admin-modal-header">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <div style="width: 38px; height: 38px; border-radius: 10px; background: #fff0ec; color: var(--admin-primary); display: flex; align-items: center; justify-content: center;">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </div>
+      <div>
+        <h3 id="modalSenderName" style="margin: 0; font-size: 17px; font-weight: 800; color: var(--admin-text-dark);">Sender Details</h3>
+        <span id="modalDate" style="font-size: 11px; color: var(--admin-text-muted);">Timestamp</span>
+      </div>
+    </div>
+    <button type="button" class="modal-close-btn" onclick="closeMessageModal()" aria-label="Close modal">&times;</button>
+  </div>
+
+  <div class="admin-modal-body">
+    <!-- Sender Metadata Grid -->
+    <div class="modal-meta-grid">
+      <div class="modal-meta-item">
+        <label>मोबाइल नंबर</label>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <a id="modalPhoneLink" href="#" style="font-weight: 700; color: var(--admin-primary); font-size: 14px;">-</a>
+          <a id="modalWaLink" href="#" target="_blank" rel="noopener noreferrer" class="comm-btn comm-wa" style="padding: 2px 8px; font-size: 11px;">
+            <span>WhatsApp</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="modal-meta-item">
+        <label>ईमेल आईडी</label>
+        <a id="modalEmailLink" href="#" style="font-weight: 700; color: var(--admin-text-dark); font-size: 13px;">-</a>
+      </div>
+
+      <div class="modal-meta-item">
+        <label>जिला / क्षेत्र</label>
+        <div id="modalDistrict" style="font-weight: 600; color: var(--admin-text-dark); font-size: 13px;">-</div>
+      </div>
+
+      <div class="modal-meta-item">
+        <label>वर्तमान स्थिति</label>
+        <div id="modalStatusBadge">-</div>
+      </div>
+    </div>
+
+    <!-- Full Message Body -->
+    <div style="margin-top: 18px;">
+      <label style="display:block; font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 6px;">पूरा संदेश (Complete Message):</label>
+      <div id="modalMessageContent" class="modal-message-box"></div>
+    </div>
+
+    <!-- Quick Status Update inside Modal -->
+    <form id="modalStatusForm" action="" method="POST" style="margin-top: 20px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; background: #f8fafc; padding: 12px 16px; border-radius: 10px; border: 1px solid var(--admin-border);">
+        <label style="font-size: 13px; font-weight: 700; color: var(--admin-text-dark);">स्थिति बदलें (Change Status):</label>
+        <div style="display: flex; gap: 8px;">
+          <select name="status" id="modalStatusSelect" class="form-control" style="height: 34px; font-size: 12px; padding: 0 10px; font-weight: 700;">
+            <option value="new">🟡 New</option>
+            <option value="contacted">🔵 In Progress</option>
+            <option value="resolved">🟢 Resolved</option>
+          </select>
+          <button type="submit" class="btn-admin btn-admin-sm btn-admin-primary">Update</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="admin-modal-footer">
+    <button type="button" class="btn-admin btn-admin-outline" onclick="closeMessageModal()">Close</button>
+  </div>
+</div>
+
+<%- include("../common/footer") %>
+
+<!-- Admin Contact Page Specific Styles -->
+<style>
+  /* Statistics Grid */
+  .contact-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .contact-stat-box {
+    background: #ffffff;
+    border: 1px solid var(--admin-border);
+    border-radius: 14px;
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.02);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .contact-stat-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  .stat-box-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .stat-box-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .stat-box-content strong {
+    display: block;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--admin-text-dark);
+    line-height: 1.1;
+  }
+
+  .stat-box-content span {
+    font-size: 12px;
+    color: var(--admin-text-muted);
+    font-weight: 600;
+  }
+
+  /* Tab Navigation */
+  .contact-tab-nav {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 22px;
+    border-bottom: 2px solid var(--admin-border);
+    padding-bottom: 2px;
+    overflow-x: auto;
+  }
+
+  .contact-tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 10px 10px 0 0;
+    color: var(--admin-text-muted);
+    font-weight: 700;
+    font-size: 13.5px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -4px;
+    white-space: nowrap;
+  }
+
+  .contact-tab-btn:hover {
+    color: var(--admin-primary);
+    background: #fff5f2;
+  }
+
+  .contact-tab-btn.active {
+    color: var(--admin-primary);
+    border-bottom-color: var(--admin-primary);
+    background: #ffffff;
+    box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.02);
+  }
+
+  .tab-badge-count {
+    background: var(--admin-primary);
+    color: #ffffff;
+    font-size: 10px;
+    padding: 1px 7px;
+    border-radius: 99px;
+    font-weight: 800;
+  }
+
+  /* Inbox Actions Row */
+  .inbox-actions-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .filter-pills-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .filter-pill {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #64748b;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .filter-pill:hover {
+    border-color: #cbd5e1;
+    color: var(--admin-text-dark);
+  }
+
+  .filter-pill.active {
+    background: var(--admin-primary);
+    color: #ffffff;
+    border-color: var(--admin-primary);
+  }
+
+  .search-form-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .search-input-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .search-input-box svg {
+    position: absolute;
+    left: 10px;
+    color: #94a3b8;
+    pointer-events: none;
+  }
+
+  .search-field {
+    height: 34px;
+    padding: 0 28px 0 32px;
+    font-size: 12px;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: #ffffff;
+    outline: none;
+    min-width: 220px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .search-field:focus {
+    border-color: var(--admin-primary);
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+  }
+
+  .clear-search-btn {
+    position: absolute;
+    right: 8px;
+    color: #94a3b8;
+    font-size: 16px;
+    text-decoration: none;
+    font-weight: 700;
+  }
+
+  /* Table message row styling */
+  .message-row.row-unread {
+    background: #fffcfb;
+  }
+
+  .msg-date-main {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--admin-text-dark);
+  }
+
+  .msg-date-time {
+    font-size: 10px;
+    color: var(--admin-text-muted);
+  }
+
+  .msg-sender-name {
+    font-size: 13.5px;
+    font-weight: 800;
+    color: var(--admin-text-dark);
+  }
+
+  .msg-sender-district {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: #713f12;
+    margin-top: 3px;
+  }
+
+  .comm-channel-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .comm-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 6px;
+    text-decoration: none;
+    width: fit-content;
+    transition: transform 0.15s ease;
+  }
+
+  .comm-btn:hover {
+    transform: translateX(2px);
+  }
+
+  .comm-phone {
+    background: #fee2e2;
+    color: #991b1b;
+  }
+
+  .comm-wa {
+    background: #dcfce7;
+    color: #166534;
+  }
+
+  .comm-email {
+    background: #f1f5f9;
+    color: #334155;
+  }
+
+  .msg-snippet {
+    font-size: 12px;
+    color: #334155;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    max-width: 340px;
+  }
+
+  .view-msg-btn {
+    background: none;
+    border: none;
+    color: var(--admin-primary);
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 0;
+    margin-top: 3px;
+  }
+
+  .view-msg-btn:hover {
+    text-decoration: underline;
+  }
+
+  /* Status Dropdown */
+  .status-dropdown {
+    height: 30px;
+    font-size: 11.5px;
+    font-weight: 800;
+    padding: 0 8px;
+    border-radius: 6px;
+    border: 1px solid var(--admin-border);
+    cursor: pointer;
+    outline: none;
+  }
+
+  .status-dropdown.status-new {
+    background: #fef3c7;
+    color: #b45309;
+    border-color: #fde68a;
+  }
+
+  .status-dropdown.status-contacted {
+    background: #e0f2fe;
+    color: #0369a1;
+    border-color: #bae6fd;
+  }
+
+  .status-dropdown.status-resolved {
+    background: #ecfdf5;
+    color: #047857;
+    border-color: #a7f3d0;
+  }
+
+  .btn-delete-icon {
+    background: transparent;
+    border: none;
+    color: #ef4444;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+
+  .btn-delete-icon:hover {
+    background: #fee2e2;
+    color: #b91c1c;
+  }
+
+  .empty-state-box {
+    text-align: center;
+    padding: 48px 20px;
+    color: var(--admin-text-muted);
+  }
+
+  .empty-state-box h4 {
+    font-size: 16px;
+    color: var(--admin-text-dark);
+    margin: 12px 0 6px 0;
+  }
+
+  /* Settings Form Layout */
+  .settings-form-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .settings-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .settings-grid .form-group-full {
+    grid-column: 1 / -1;
+  }
+
+  .admin-form-label {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--admin-text-dark);
+    margin-bottom: 6px;
+  }
+
+  .field-hint {
+    display: block;
+    font-size: 11px;
+    color: var(--admin-text-muted);
+    margin-top: 4px;
+  }
+
+  .settings-save-bar {
+    position: sticky;
+    bottom: 20px;
+    background: #ffffff;
+    border: 1px solid var(--admin-border);
+    border-radius: 14px;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    z-index: 50;
+  }
+
+  .settings-save-bar strong {
+    font-size: 14px;
+    color: var(--admin-text-dark);
+    display: block;
+  }
+
+  .settings-save-bar p {
+    font-size: 11.5px;
+    color: var(--admin-text-muted);
+    margin: 0;
+  }
+
+  .btn-save-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    font-size: 13.5px;
+    font-weight: 800;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  /* Modal */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.6);
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+  }
+
+  .admin-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 580px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .admin-modal-header {
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--admin-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .modal-close-btn {
+    background: transparent;
+    border: none;
+    font-size: 26px;
+    color: #94a3b8;
+    cursor: pointer;
+    line-height: 1;
+  }
+
+  .modal-close-btn:hover {
+    color: var(--admin-text-dark);
+  }
+
+  .admin-modal-body {
+    padding: 24px;
+  }
+
+  .modal-meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    background: #f8fafc;
+    border: 1px solid var(--admin-border);
+    padding: 14px 18px;
+    border-radius: 12px;
+  }
+
+  .modal-meta-item label {
+    display: block;
+    font-size: 11px;
+    color: var(--admin-text-muted);
+    font-weight: 700;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+  }
+
+  .modal-message-box {
+    background: #fdfaf6;
+    border: 1px solid #ebd8c5;
+    padding: 16px;
+    border-radius: 12px;
+    font-size: 13.5px;
+    color: #2a1b1b;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    max-height: 220px;
+    overflow-y: auto;
+  }
+
+  .admin-modal-footer {
+    padding: 14px 24px;
+    border-top: 1px solid var(--admin-border);
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  @media (max-width: 768px) {
+    .settings-grid {
+      grid-template-columns: 1fr;
+    }
+    .modal-meta-grid {
+      grid-template-columns: 1fr;
+    }
+    .settings-save-bar {
+      flex-direction: column;
+      gap: 12px;
+      align-items: stretch;
+    }
+    .btn-save-action {
+      justify-content: center;
+    }
+    .search-field {
+      min-width: 150px;
+    }
+  }
+</style>
+
+<!-- Modal JavaScript -->
+<script>
+  function openMessageModal(btn) {
+    const name = btn.getAttribute("data-name");
+    const phone = btn.getAttribute("data-phone");
+    const email = btn.getAttribute("data-email");
+    const district = btn.getAttribute("data-district");
+    const date = btn.getAttribute("data-date");
+    const status = btn.getAttribute("data-status");
+    const id = btn.getAttribute("data-id");
+    const rawMsg = decodeURIComponent(btn.getAttribute("data-message"));
+
+    document.getElementById("modalSenderName").textContent = name;
+    document.getElementById("modalDate").textContent = "Received: " + date;
+
+    const phoneLink = document.getElementById("modalPhoneLink");
+    phoneLink.textContent = phone;
+    phoneLink.href = "tel:" + phone;
+
+    const waLink = document.getElementById("modalWaLink");
+    const waClean = phone.replace(/[^0-9]/g, "");
+    waLink.href = "https://wa.me/91" + waClean + "?text=" + encodeURIComponent("नमस्ते " + name + " जी, निषाद संकल्प अभियान कार्यालय से संपर्क कर रहे हैं।");
+
+    const emailLink = document.getElementById("modalEmailLink");
+    emailLink.textContent = email;
+    emailLink.href = "mailto:" + email;
+
+    document.getElementById("modalDistrict").textContent = district;
+    document.getElementById("modalMessageContent").textContent = rawMsg;
+
+    const statusBadge = document.getElementById("modalStatusBadge");
+    if (status === "new") {
+      statusBadge.innerHTML = '<span style="display:inline-block; font-size:11px; font-weight:800; padding:2px 8px; border-radius:4px; background:#fef3c7; color:#b45309;">🟡 New</span>';
+    } else if (status === "contacted") {
+      statusBadge.innerHTML = '<span style="display:inline-block; font-size:11px; font-weight:800; padding:2px 8px; border-radius:4px; background:#e0f2fe; color:#0369a1;">🔵 In Progress</span>';
+    } else {
+      statusBadge.innerHTML = '<span style="display:inline-block; font-size:11px; font-weight:800; padding:2px 8px; border-radius:4px; background:#ecfdf5; color:#047857;">🟢 Resolved</span>';
+    }
+
+    const modalForm = document.getElementById("modalStatusForm");
+    modalForm.action = "/admin/contact/messages/status/" + id;
+    document.getElementById("modalStatusSelect").value = status;
+
+    document.getElementById("msgModalBackdrop").style.display = "block";
+    document.getElementById("msgModal").style.display = "flex";
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeMessageModal() {
+    document.getElementById("msgModalBackdrop").style.display = "none";
+    document.getElementById("msgModal").style.display = "none";
+    document.body.style.overflow = "";
+  }
+
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "Escape") {
+      closeMessageModal();
+    }
+  });
+
+  // Banner Live Preview Handlers
+  function updateBannerHeadingPreview(val) {
+    const el = document.getElementById("previewHeadingText");
+    if (el) el.textContent = val.trim() || "Contact Us";
+  }
+
+  function previewBannerUrl(url) {
+    const previewBox = document.getElementById("bannerLivePreview");
+    if (!previewBox) return;
+    const cleanUrl = (url || "").trim() || "/images/contact-banner.jpg";
+    previewBox.style.backgroundImage = `linear-gradient(rgba(15,23,42,0.65), rgba(15,23,42,0.8)), url('${cleanUrl}')`;
+  }
+
+  function previewBannerUpload(input) {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const previewBox = document.getElementById("bannerLivePreview");
+        if (previewBox) {
+          previewBox.style.backgroundImage = `linear-gradient(rgba(15,23,42,0.65), rgba(15,23,42,0.8)), url('${e.target.result}')`;
+        }
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+</script>

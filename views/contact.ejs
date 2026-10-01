@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= typeof title !== 'undefined' ? title : 'संपर्क करें | निषाद संकल्प अभियान' %></title>
+  <meta name="description" content="निषाद संकल्प अभियान के केंद्रीय कार्यालय, हेल्पलाइन नंबर, ईमेल और संपर्क फॉर्म के माध्यम से सीधे जुड़ें। एकता, शिक्षा और सशक्तिकरण का महाअभियान।" />
+
+  <!-- Google Fonts: Mukta, Rozha One, Noto Sans Devanagari -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Global & Component CSS -->
+  <link rel="stylesheet" href="/css/index.css" />
+  <link rel="stylesheet" href="/css/common/navbar.css" />
+  <link rel="stylesheet" href="/css/contact.css" />
+</head>
+<body class="contact-page-body">
+
+  <!-- 1. HEADER / NAVBAR -->
+  <%- include("common/navbar") %>
+
+  <% const c = typeof contact !== 'undefined' && contact ? contact : {}; %>
+
+  <!-- 2. SMOOTH TOP BANNER (CLEAN & MINIMAL, NO CLUTTER) -->
+  <section class="contact-top-banner" style="background-image: linear-gradient(rgba(24, 7, 7, 0.58), rgba(24, 7, 7, 0.76)), url('<%= c.bannerImage || '/images/contact-banner.jpg' %>');">
+    <div class="contact-banner-inner">
+      <h1 class="contact-banner-title"><%= c.pageHeading || "Contact Us" %></h1>
+    </div>
+  </section>
+
+  <!-- 3. MAIN CONTACT CONTENT (CLEAN 2-COLUMN LAYOUT) -->
+  <main class="contact-main-wrapper">
+    <div class="ny-container">
+
+      <div class="contact-two-col">
+
+        <!-- ==============================================
+             LEFT COLUMN: WRITE TO US / संदेश भेजें (FORM)
+             ============================================== -->
+        <div class="contact-left-col">
+          <div class="contact-form-box">
+            <div class="contact-box-header">
+              <h2 class="contact-box-title">
+                <span class="title-gradient">संदेश भेजें</span>
+                <span class="title-sub-badge">/ Write to Us</span>
+              </h2>
+              <div class="contact-colorful-bar"></div>
+              <p>अभियान से जुड़ने, सुझाव देने या किसी भी सहयोग हेतु अपना संदेश यहाँ लिखें।</p>
+            </div>
+
+            <!-- Server Flash / Query Messages -->
+            <% if (typeof message !== 'undefined' && message) { %>
+              <div class="contact-alert contact-alert-success">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                <div><%= message %></div>
+              </div>
+            <% } %>
+
+            <% if (typeof error !== 'undefined' && error) { %>
+              <div class="contact-alert contact-alert-error">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <div><%= error %></div>
+              </div>
+            <% } %>
+
+            <!-- Dynamic AJAX Alert Box -->
+            <div id="contactFormAlert" style="display: none;"></div>
+
+            <!-- FORM -->
+            <form id="publicContactForm" action="/contact/submit" method="POST" novalidate>
+              <div class="form-fields-grid">
+
+                <!-- 1. Full Name -->
+                <div class="form-field-group">
+                  <label class="form-label" for="contactName">
+                    पूरा नाम (Full Name) <span class="req">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="contactName"
+                    name="name"
+                    class="form-control-input"
+                    placeholder="उदा. राहुल निषाद"
+                    required
+                    autocomplete="name"
+                  />
+                </div>
+
+                <!-- 2. Mobile Number -->
+                <div class="form-field-group">
+                  <label class="form-label" for="contactPhone">
+                    मोबाइल नंबर (Mobile) <span class="req">*</span>
+                  </label>
+                  <input
+                    type="tel"
+                    id="contactPhone"
+                    name="phone"
+                    class="form-control-input"
+                    placeholder="10 अंकों का मोबाइल नंबर"
+                    maxlength="10"
+                    pattern="[0-9]{10}"
+                    required
+                    autocomplete="tel"
+                  />
+                </div>
+
+                <!-- 3. Email ID -->
+                <div class="form-field-group">
+                  <label class="form-label" for="contactEmail">
+                    ईमेल पता (Email ID) <span class="req">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    id="contactEmail"
+                    name="email"
+                    class="form-control-input"
+                    placeholder="name@example.com"
+                    required
+                    autocomplete="email"
+                  />
+                </div>
+
+                <!-- 4. District / City -->
+                <div class="form-field-group">
+                  <label class="form-label" for="contactDistrict">
+                    जिला / क्षेत्र (District / City)
+                  </label>
+                  <input
+                    type="text"
+                    id="contactDistrict"
+                    name="district"
+                    class="form-control-input"
+                    placeholder="उदा. अयोध्या, लखनऊ, गोरखपुर..."
+                  />
+                </div>
+
+                <!-- 5. Message Textarea -->
+                <div class="form-field-group form-field-full">
+                  <label class="form-label" for="contactMessage">
+                    संदेश अथवा सुझाव (Your Message) <span class="req">*</span>
+                  </label>
+                  <textarea
+                    id="contactMessage"
+                    name="message"
+                    class="form-control-textarea"
+                    rows="4"
+                    placeholder="अपना संदेश यहाँ लिखें..."
+                    required
+                  ></textarea>
+                  <div class="form-char-indicator">
+                    अक्षर: <span id="charCount">0</span>
+                  </div>
+                </div>
+
+                <!-- 6. Submit Button -->
+                <div class="form-field-full">
+                  <button type="submit" id="contactSubmitBtn" class="form-submit-btn">
+                    <span id="contactSubmitSpinner" style="display:none;">
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3" style="animation: spin 1s linear infinite;"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10"/></svg>
+                    </span>
+                    <span id="contactSubmitText">संदेश भेजें (Submit)</span>
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                  </button>
+                </div>
+
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- ==============================================
+             RIGHT COLUMN: CONTACT US (INFO & SOCIALS)
+             ============================================== -->
+        <div class="contact-right-col">
+          <div class="contact-connect-box">
+            <div class="contact-box-header">
+              <h2 class="contact-box-title">
+                <span class="title-gradient">Contact Us</span>
+              </h2>
+              <div class="contact-colorful-bar"></div>
+              <p>निषाद संकल्प अभियान के केंद्रीय कार्यालय अथवा हेल्पलाइन से सीधे संवाद स्थापित करें।</p>
+            </div>
+
+            <ul class="connect-list">
+
+              <!-- 1. Central Office Address with Direct Google Maps Link -->
+              <li class="connect-item">
+                <div class="connect-icon-circle">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                  </svg>
+                </div>
+                <div class="connect-text-group">
+                  <span class="connect-label"><%= c.officeTitle || "कार्यालय का पता" %></span>
+                  <p class="connect-address-text"><%= c.officeAddress || "निषाद संकल्प अभियान, केंद्रीय कार्यालय, अयोध्या / लखनऊ, उत्तर प्रदेश" %></p>
+
+                  <!-- Clean & Smooth Google Maps Action Link -->
+                  <% 
+                    const defaultQuery = encodeURIComponent((c.officeAddress || "Nishad Sankalp Abhiyan Ayodhya").replace(/[\r\n]+/g, ' '));
+                    const mapUrl = (c.mapDirectionsUrl && c.mapDirectionsUrl.trim()) ? c.mapDirectionsUrl.trim() : `https://www.google.com/maps/search/?api=1&query=${defaultQuery}`;
+                  %>
+                  <div class="connect-map-wrap">
+                    <a href="<%= mapUrl %>" target="_blank" rel="noopener noreferrer" class="connect-map-link">
+                      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                      <span>Google Maps पर देखें</span>
+                      <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                    </a>
+                  </div>
+                </div>
+              </li>
+
+              <!-- 2. Phone Numbers -->
+              <% if (c.primaryPhone || c.secondaryPhone) { %>
+                <li class="connect-item">
+                  <div class="connect-icon-circle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                    </svg>
+                  </div>
+                  <div class="connect-text-group">
+                    <span class="connect-label">फोन एवं हेल्पलाइन</span>
+                    <div class="connect-links-stack">
+                      <% if (c.primaryPhone) { %>
+                        <div class="connect-value-row">
+                          <a href="tel:<%= c.primaryPhone.replace(/[^0-9+]/g, '') %>" class="connect-direct-link">
+                            <%= c.primaryPhone %>
+                          </a>
+                          <button type="button" class="contact-copy-btn" data-copy="<%= c.primaryPhone %>" title="नंबर कॉपी करें">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                          </button>
+                        </div>
+                      <% } %>
+                      <% if (c.secondaryPhone) { %>
+                        <div class="connect-value-row">
+                          <a href="tel:<%= c.secondaryPhone.replace(/[^0-9+]/g, '') %>" class="connect-direct-link">
+                            <%= c.secondaryPhone %>
+                          </a>
+                          <button type="button" class="contact-copy-btn" data-copy="<%= c.secondaryPhone %>" title="नंबर कॉपी करें">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                          </button>
+                        </div>
+                      <% } %>
+                    </div>
+                  </div>
+                </li>
+              <% } %>
+
+              <!-- 3. Emails -->
+              <% if (c.primaryEmail || c.secondaryEmail) { %>
+                <li class="connect-item">
+                  <div class="connect-icon-circle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                      <polyline points="22,6 12,13 2,6"/>
+                    </svg>
+                  </div>
+                  <div class="connect-text-group">
+                    <span class="connect-label">ईमेल संपर्क</span>
+                    <div class="connect-links-stack">
+                      <% if (c.primaryEmail) { %>
+                        <div class="connect-value-row">
+                          <a href="mailto:<%= c.primaryEmail %>" class="connect-direct-link">
+                            <%= c.primaryEmail %>
+                          </a>
+                          <button type="button" class="contact-copy-btn" data-copy="<%= c.primaryEmail %>" title="ईमेल कॉपी करें">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                          </button>
+                        </div>
+                      <% } %>
+                      <% if (c.secondaryEmail) { %>
+                        <div class="connect-value-row">
+                          <a href="mailto:<%= c.secondaryEmail %>" class="connect-direct-link">
+                            <%= c.secondaryEmail %>
+                          </a>
+                          <button type="button" class="contact-copy-btn" data-copy="<%= c.secondaryEmail %>" title="ईमेल कॉपी करें">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                          </button>
+                        </div>
+                      <% } %>
+                    </div>
+                  </div>
+                </li>
+              <% } %>
+
+              <!-- 4. WhatsApp Quick Chat (Clean & Integrated) -->
+              <% if (c.whatsappNumber) { %>
+                <% 
+                  const waClean = c.whatsappNumber.replace(/[^0-9]/g, '');
+                  const waMsg = encodeURIComponent(c.whatsappMessage || "नमस्ते, मैं निषाद संकल्प अभियान से संपर्क करना चाहता हूँ।");
+                  const waLink = `https://wa.me/${waClean}?text=${waMsg}`;
+                %>
+                <li class="connect-item">
+                  <div class="connect-icon-circle">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm5.79 14.12c-.24.68-1.39 1.3-1.93 1.38-.49.07-1.13.1-3.28-.79-2.58-1.07-4.22-3.69-4.35-3.86-.13-.17-1.05-1.4-1.05-2.67 0-1.27.67-1.89.91-2.14.24-.25.53-.31.71-.31.18 0 .36 0 .52.01.17.01.4.06.6.53.22.52.74 1.82.81 1.95.07.13.11.29.02.47-.09.18-.14.29-.27.45-.13.16-.28.36-.4.48-.13.13-.27.27-.12.53.15.26.68 1.12 1.46 1.81 1 .89 1.84 1.17 2.1 1.3.26.13.41.11.56-.06.15-.17.65-.76.82-1.02.17-.26.35-.22.59-.13.24.09 1.52.72 1.78.85.26.13.43.2.49.31.06.11.06.66-.18 1.34z"/>
+                    </svg>
+                  </div>
+                  <div class="connect-text-group">
+                    <span class="connect-label">व्हाट्सएप (WhatsApp)</span>
+                    <div class="connect-value-row">
+                      <a href="<%= waLink %>" target="_blank" rel="noopener noreferrer" class="connect-direct-link">
+                        <%= c.whatsappNumber %>
+                      </a>
+                      <a href="<%= waLink %>" target="_blank" rel="noopener noreferrer" class="connect-wa-btn" title="सीधे WhatsApp पर चैट करें">
+                        <span>चैट करें ↗</span>
+                      </a>
+                    </div>
+                  </div>
+                </li>
+              <% } %>
+
+            </ul>
+
+            <!-- 5. Sleek Social Media Icons (Simple, Smooth, Inline) -->
+            <% if (c.facebookUrl || c.twitterUrl || c.instagramUrl || c.youtubeUrl || c.telegramUrl) { %>
+              <div class="connect-social-block">
+                <span class="connect-social-title">सोशल मीडिया पर जुड़े रहें:</span>
+                <div class="connect-social-icons">
+                  <% if (c.facebookUrl) { %>
+                    <a href="<%= c.facebookUrl %>" target="_blank" rel="noopener noreferrer" class="social-ico-btn facebook" title="Facebook" aria-label="Facebook">
+                      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                    </a>
+                  <% } %>
+                  <% if (c.twitterUrl) { %>
+                    <a href="<%= c.twitterUrl %>" target="_blank" rel="noopener noreferrer" class="social-ico-btn twitter" title="X (Twitter)" aria-label="Twitter">
+                      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </a>
+                  <% } %>
+                  <% if (c.instagramUrl) { %>
+                    <a href="<%= c.instagramUrl %>" target="_blank" rel="noopener noreferrer" class="social-ico-btn instagram" title="Instagram" aria-label="Instagram">
+                      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    </a>
+                  <% } %>
+                  <% if (c.youtubeUrl) { %>
+                    <a href="<%= c.youtubeUrl %>" target="_blank" rel="noopener noreferrer" class="social-ico-btn youtube" title="YouTube" aria-label="YouTube">
+                      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    </a>
+                  <% } %>
+                  <% if (c.telegramUrl) { %>
+                    <a href="<%= c.telegramUrl %>" target="_blank" rel="noopener noreferrer" class="social-ico-btn telegram" title="Telegram" aria-label="Telegram">
+                      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.121l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.458c.538-.196 1.006.128.832.943z"/></svg>
+                    </a>
+                  <% } %>
+                </div>
+              </div>
+            <% } %>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- 4. FOOTER -->
+  <%- include("common/footer") %>
+
+  <!-- Scripts -->
+  <script src="/js/common/navbar.js"></script>
+  <script src="/js/contact.js"></script>
+
+  <style>
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</body>
+</html>

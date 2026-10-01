@@ -1,62 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%= typeof title !== 'undefined' ? title : 'Nishad Sankalp Campaign' %> - Unity, Education & Empowerment</title>
 
-    <!-- Google Fonts for authentic Devanagari typography -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800;900&family=Rozha+One&display=swap" rel="stylesheet" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>
+    <%= typeof title !=='undefined' ? title : 'Nishad Sankalp Campaign' %> - Unity, Education & Empowerment
+  </title>
 
-    <!-- Core Global CSS -->
-    <link rel="stylesheet" href="/css/index.css" />
+  <!-- Google Fonts for authentic Devanagari typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
 
-    <!-- Modular Component CSS -->
-    <link rel="stylesheet" href="/css/hero.css" />
-    <link rel="stylesheet" href="/css/sidebar.css" />
-    <link rel="stylesheet" href="/css/video-showcase.css" />
-    <link rel="stylesheet" href="/css/why-choose.css" />
-    <link rel="stylesheet" href="/css/initiative-modal.css" />
-  </head>
-  <body>
-    <!-- Top Navigation Bar -->
-    <%- include("common/navbar") %>
+  <!-- Core Global CSS -->
+  <link rel="stylesheet" href="/css/index.css" />
+
+  <!-- Modular Component CSS -->
+  <link rel="stylesheet" href="/css/hero.css" />
+  <link rel="stylesheet" href="/css/sidebar.css" />
+  <link rel="stylesheet" href="/css/video-showcase.css" />
+  <link rel="stylesheet" href="/css/home-news.css" />
+  <link rel="stylesheet" href="/css/why-choose.css" />
+  <link rel="stylesheet" href="/css/initiative-modal.css" />
+</head>
+
+<body>
+  <!-- Top Navigation Bar -->
+  <%- include("common/navbar") %>
 
     <!-- Quick Action / Helpline Sidebar Drawer -->
     <%- include("components/sidebar") %>
 
-    <!-- Dynamic Initiative Action Modal -->
-    <%- include("components/initiative-modal") %>
+      <!-- Dynamic Initiative Action Modal -->
+      <%- include("components/initiative-modal") %>
 
-    <!-- Main Content Area -->
-    <main id="main-content">
-      <!-- 1. Hero Section -->
-      <%- include("components/hero") %>
+        <!-- Main Content Area -->
+        <main id="main-content">
+          <!-- 1. Hero Section -->
+          <%- include("components/hero") %>
 
-      <!-- 2. Video Showcase Section (Highlight & Latest Videos) -->
-      <%- include("components/video-showcase") %>
+            <!-- 2. Video Showcase Section (Highlight & Latest Videos) -->
+            <%- include("components/video-showcase") %>
 
-      <!-- 3. Sankalp Photo Gallery Preview -->
-      <%- include("components/gallery-preview") %>
+              <!-- 3. Latest News & Press Coverage Section -->
+              <%- include("components/home-news") %>
 
-      <!-- 4. Why Choose Us Section -->
-      <%- include("components/why-choose") %>
-    </main>
+                <!-- 4. Sankalp Photo Gallery Preview -->
+                <%- include("components/gallery-preview") %>
 
-    <!-- Footer -->
-    <%- include("common/footer") %>
+                  <!-- 4. Why Choose Us Section -->
+                  <%- include("components/why-choose") %>
+        </main>
 
-    <!-- Dynamic Data for Client-Side Modal -->
-    <script>
-      window.INITIATIVES_DATA = <%- JSON.stringify(typeof initiativesModalMap !== 'undefined' ? initiativesModalMap : {}) %>;
-    </script>
+        <!-- Footer -->
+        <%- include("common/footer") %>
 
-    <!-- Modular Component JavaScript -->
-    <script src="/js/hero.js"></script>
-    <script src="/js/sidebar.js"></script>
-    <script src="/js/initiative-modal.js"></script>
-    <script src="/js/index.js"></script>
-  </body>
+          <!-- Dynamic Data for Client-Side Modal -->
+
+
+          <!-- Modular Component JavaScript -->
+          <script src="/js/hero.js"></script>
+          <script src="/js/sidebar.js"></script>
+          <script src="/js/initiative-modal.js"></script>
+          <script src="/js/index.js"></script>
+</body>
+
 </html>

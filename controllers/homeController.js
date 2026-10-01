@@ -6,6 +6,7 @@ const HomeQuickInfo = require("../models/HomeQuickInfo");
 const InitiativeInquiry = require("../models/InitiativeInquiry");
 const SankalpPhoto = require("../models/SankalpPhoto");
 const KalashYatra = require("../models/KalashYatra");
+const VideoNews = require("../models/news/VideoNews");
 const {
   defaultHeroSlides,
   defaultInitiatives,
@@ -18,7 +19,7 @@ const { defaultGalleryPhotos } = require("../scripts/seedGalleryData");
 // Public Home Page
 exports.getHomePage = async (req, res) => {
   try {
-    const [heroSlides, initiatives, whyChooseDoc, notices, quickInfoDoc, galleryPhotos, kalashDoc] =
+    const [heroSlides, initiatives, whyChooseDoc, notices, quickInfoDoc, galleryPhotos, kalashDoc, newsDocs] =
       await Promise.all([
         HeroSlide.find({ isActive: true }).sort({ order: 1, createdAt: 1 }),
         Initiative.find({ isActive: true }).sort({ order: 1, createdAt: 1 }),
@@ -27,6 +28,11 @@ exports.getHomePage = async (req, res) => {
         HomeQuickInfo.findOne(),
         SankalpPhoto.find({ isPublished: true }).sort({ order: 1, date: -1 }).limit(6),
         KalashYatra.getOrSeed().catch(() => KalashYatra.defaultData),
+        VideoNews.find({ published: true })
+          .sort({ publicationDate: -1, publishedAt: -1, createdAt: -1 })
+          .limit(8)
+          .lean()
+          .catch(() => []),
       ]);
 
     // Fallbacks if database is completely empty or just initialized
@@ -42,12 +48,90 @@ exports.getHomePage = async (req, res) => {
       galleryPhotos && galleryPhotos.length > 0 ? galleryPhotos : defaultGalleryPhotos.slice(0, 4);
 
     const kalash = kalashDoc || KalashYatra.defaultData;
-    const highlightVideo = (kalash && kalash.hero && kalash.hero.featuredVideo)
-      ? kalash.hero.featuredVideo
-      : null;
-    const latestVideos = (kalash && kalash.videos && kalash.videos.length > 0)
-      ? kalash.videos.slice(0, 4)
-      : (kalash && kalash.milestonesSection && kalash.milestonesSection.items ? kalash.milestonesSection.items.slice(0, 4) : []);
+
+    // Helper to extract YouTube video ID
+    function getYouTubeId(url) {
+      if (!url || typeof url !== "string") return "";
+      const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/|v\/))([\w-]{11})/);
+      return match ? match[1] : "";
+    }
+
+    // Helper to resolve an effective thumbnail URL
+    function resolveThumb(thumb, videoUrl, fallback = "/images/kalash-yatra-hero.jpg") {
+      if (thumb && thumb.trim() && !thumb.includes("/images/kalash-yatra-hero.jpg")) {
+        return thumb.trim();
+      }
+      const ytId = getYouTubeId(videoUrl);
+      if (ytId) {
+        return `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
+      }
+      return thumb && thumb.trim() ? thumb.trim() : fallback;
+    }
+
+    // Dynamic Highlight Video: check if any video in kalash.videos is marked as isHighlighted
+    let highlightVideo = null;
+    let highlightedVidId = null;
+
+    if (kalash && kalash.videos && kalash.videos.length > 0) {
+      const foundHighlight = kalash.videos.find((v) => v.isHighlighted);
+      if (foundHighlight) {
+        highlightedVidId = String(foundHighlight._id);
+        const resolvedPoster = resolveThumb(foundHighlight.thumbnail, foundHighlight.videoUrl);
+        highlightVideo = {
+          _id: foundHighlight._id,
+          title: foundHighlight.title,
+          videoUrl: foundHighlight.videoUrl,
+          posterImage: resolvedPoster,
+          duration: foundHighlight.duration || "12:45 Min",
+          badge: "★ मुख्य संकल्प वीडियो",
+          tag: foundHighlight.tag || "मुख्य वीडियो",
+          district: foundHighlight.district,
+          state: foundHighlight.state,
+          description: foundHighlight.description || "",
+        };
+      }
+    }
+
+    // Fallback to hero.featuredVideo if no video is explicitly marked isHighlighted
+    if (!highlightVideo && kalash && kalash.hero && kalash.hero.featuredVideo) {
+      const fv = kalash.hero.featuredVideo;
+      highlightVideo = {
+        title: fv.title,
+        duration: fv.duration || "12:00 Min",
+        videoUrl: fv.videoUrl,
+        posterImage: resolveThumb(fv.posterImage, fv.videoUrl),
+        badge: fv.badge || "★ मुख्य संकल्प वीडियो",
+      };
+    }
+
+    // Latest videos: other videos excluding the highlighted one
+    let latestVideos = [];
+    if (kalash && kalash.videos && kalash.videos.length > 0) {
+      latestVideos = kalash.videos
+        .filter((v) => !highlightedVidId || String(v._id) !== highlightedVidId)
+        .slice(0, 4)
+        .map((v) => {
+          const raw = v.toObject ? v.toObject() : { ...v };
+          return {
+            ...raw,
+            thumbnail: resolveThumb(raw.thumbnail, raw.videoUrl, "/images/kalash-yatra-featured.jpg"),
+          };
+        });
+    } else if (kalash && kalash.milestonesSection && kalash.milestonesSection.items) {
+      latestVideos = kalash.milestonesSection.items.slice(0, 4);
+    }
+
+    // News Highlights & Recent Stories for Home Page
+    let highlightNews = null;
+    let homeNewsList = [];
+
+    if (newsDocs && newsDocs.length > 0) {
+      // Find item with isHighlighted or featured = true
+      highlightNews = newsDocs.find((n) => n.isHighlighted || n.featured) || newsDocs[0];
+      homeNewsList = newsDocs.filter(
+        (n) => String(n._id) !== String(highlightNews._id)
+      ).slice(0, 4);
+    }
 
     // Convert initiatives to client-side modal dictionary
     const initiativesModalMap = {};
@@ -79,6 +163,8 @@ exports.getHomePage = async (req, res) => {
       kalash,
       highlightVideo,
       latestVideos,
+      highlightNews,
+      homeNewsList,
     });
   } catch (error) {
     console.error("Home page render error:", error);
@@ -96,6 +182,8 @@ exports.getHomePage = async (req, res) => {
       kalash: kalashFallback,
       highlightVideo: kalashFallback?.hero?.featuredVideo || null,
       latestVideos: (kalashFallback?.videos || []).slice(0, 4),
+      highlightNews: null,
+      homeNewsList: [],
     });
   }
 };

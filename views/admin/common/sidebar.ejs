@@ -1,9 +1,9 @@
 <!-- =====================================
-     REUSABLE ADMIN SIDEBAR
+     REUSABLE ADMIN SIDEBAR (COLLAPSIBLE ACCORDION & SUB-MENUS)
 ====================================== -->
 <style>
   .admin-sidebar {
-    width: var(--admin-sidebar-w);
+    width: var(--admin-sidebar-w, 260px);
     height: 100vh;
     position: fixed;
     left: 0;
@@ -11,62 +11,88 @@
     display: flex;
     flex-direction: column;
     background: #ffffff;
-    border-right: 1px solid var(--admin-border);
+    border-right: 1px solid var(--admin-border, #e2e8f0);
     z-index: 100;
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 2px 0 16px rgba(15, 23, 42, 0.03);
   }
 
+  /* Logo Branding */
   .admin-sidebar-logo {
-    height: 72px;
+    height: 68px;
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 0 20px;
-    border-bottom: 1px solid var(--admin-border);
+    padding: 0 18px;
+    border-bottom: 1px solid var(--admin-border, #e2e8f0);
+    flex-shrink: 0;
+    background: #ffffff;
   }
 
   .admin-logo-mark {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 10px;
-    background: linear-gradient(135deg, var(--admin-primary), var(--admin-primary-dark));
+    border-radius: 9px;
+    background: linear-gradient(135deg, var(--admin-primary, #dc2626), var(--admin-primary-dark, #b91c1c));
     color: #ffffff;
-    font-size: 19px;
+    font-size: 18px;
     font-weight: 800;
-    box-shadow: 0 5px 14px rgba(215, 42, 42, 0.25);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
   }
 
   .admin-logo-text strong {
     display: block;
-    font-size: 15px;
-    color: var(--admin-text-dark);
+    font-size: 14.5px;
+    color: var(--admin-text-dark, #0f172a);
     font-weight: 800;
     line-height: 1.2;
+    letter-spacing: -0.2px;
   }
 
   .admin-logo-text small {
     display: block;
     font-size: 11px;
-    color: var(--admin-text-muted);
+    color: var(--admin-text-muted, #64748b);
+    font-weight: 600;
   }
 
+  /* Navigation Container & Scrollbar */
   .admin-sidebar-nav {
     flex: 1;
-    padding: 20px 14px;
+    padding: 16px 12px;
     overflow-y: auto;
+    overflow-x: hidden;
   }
 
+  .admin-sidebar-nav::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  .admin-sidebar-nav::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .admin-sidebar-nav::-webkit-scrollbar-thumb {
+    background: #e2e8f0;
+    border-radius: 99px;
+  }
+
+  .admin-sidebar-nav::-webkit-scrollbar-thumb:hover {
+    background: #cbd5e1;
+  }
+
+  /* Section Titles */
   .nav-group-title {
-    padding: 0 12px;
-    margin: 16px 0 8px;
+    padding: 0 10px;
+    margin: 16px 0 6px;
     font-size: 10px;
     font-weight: 800;
-    letter-spacing: 1.2px;
-    color: #b09e96;
+    letter-spacing: 1.1px;
+    color: #94a3b8;
     text-transform: uppercase;
   }
 
@@ -74,29 +100,38 @@
     margin-top: 0;
   }
 
+  /* Base Nav Item (Both Links & Buttons) */
   .admin-nav-item {
     position: relative;
     display: flex;
     align-items: center;
-    gap: 12px;
-    min-height: 42px;
+    gap: 11px;
+    min-height: 40px;
     padding: 0 12px;
-    margin-bottom: 4px;
-    border-radius: 9px;
-    color: #63534d;
+    margin-bottom: 3px;
+    border-radius: 8px;
+    color: #475569;
     font-size: 13px;
     font-weight: 600;
-    transition: 0.2s ease;
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: left;
+    user-select: none;
   }
 
   .admin-nav-item:hover {
-    background: var(--admin-primary-light);
-    color: var(--admin-primary);
+    background: #f8fafc;
+    color: var(--admin-primary, #dc2626);
   }
 
   .admin-nav-item.active {
-    background: linear-gradient(135deg, #fff0ec, #ffe8e2);
-    color: var(--admin-primary-dark);
+    background: #fef2f2;
+    color: var(--admin-primary-dark, #b91c1c);
     font-weight: 700;
   }
 
@@ -106,18 +141,12 @@
     left: 0;
     top: 6px;
     bottom: 6px;
-    width: 3.5px;
-    background: var(--admin-primary);
+    width: 3px;
+    background: var(--admin-primary, #dc2626);
     border-radius: 0 4px 4px 0;
   }
 
-  .nav-item-sub {
-    padding-left: 36px;
-    font-size: 12px;
-    min-height: 36px;
-    color: #7a6760;
-  }
-
+  /* Main Nav Icon */
   .nav-item-icon {
     width: 20px;
     height: 20px;
@@ -125,26 +154,157 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    color: currentColor;
   }
 
   .nav-item-icon svg {
     width: 17px;
     height: 17px;
+    stroke-width: 2;
   }
 
+  .nav-item-label {
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Chevron Arrow for Collapsible Items */
+  .nav-item-chevron {
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #94a3b8;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s ease;
+  }
+
+  .nav-item-chevron svg {
+    width: 13px;
+    height: 13px;
+    stroke-width: 2.4;
+  }
+
+  .admin-nav-group.open .nav-item-chevron {
+    transform: rotate(180deg);
+    color: var(--admin-primary, #dc2626);
+  }
+
+  /* Group Container */
+  .admin-nav-group {
+    margin-bottom: 4px;
+  }
+
+  .admin-nav-group.active-group>.admin-nav-toggle {
+    color: var(--admin-primary-dark, #b91c1c);
+    font-weight: 700;
+    background: #fef2f2;
+  }
+
+  .admin-nav-group.active-group>.admin-nav-toggle::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 6px;
+    bottom: 6px;
+    width: 3px;
+    background: var(--admin-primary, #dc2626);
+    border-radius: 0 4px 4px 0;
+  }
+
+  /* Collapsible Sub-menu (CSS Grid Animation) */
+  .admin-sub-menu {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .admin-nav-group.open .admin-sub-menu {
+    grid-template-rows: 1fr;
+  }
+
+  .admin-sub-menu-inner {
+    overflow: hidden;
+    margin-left: 21px;
+    padding-left: 12px;
+    border-left: 1.5px solid #f1f5f9;
+    padding-top: 2px;
+    padding-bottom: 4px;
+  }
+
+  /* Sub Item */
+  .admin-sub-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-height: 32px;
+    padding: 5px 10px;
+    margin: 2px 0;
+    border-radius: 6px;
+    color: #64748b;
+    font-size: 12.5px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.18s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .admin-sub-item:hover {
+    color: var(--admin-primary, #dc2626);
+    background: #f8fafc;
+    padding-left: 13px;
+  }
+
+  .admin-sub-item.active {
+    color: var(--admin-primary-dark, #b91c1c);
+    background: #fff5f5;
+    font-weight: 700;
+  }
+
+  /* Sub Bullet Dot */
+  .sub-bullet {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #cbd5e1;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+  }
+
+  .admin-sub-item:hover .sub-bullet {
+    background: var(--admin-primary, #dc2626);
+    transform: scale(1.25);
+  }
+
+  .admin-sub-item.active .sub-bullet {
+    background: var(--admin-primary, #dc2626);
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.18);
+  }
+
+  /* Badges */
   .nav-badge {
     margin-left: auto;
     padding: 2px 7px;
     border-radius: 12px;
     font-size: 10px;
     font-weight: 800;
-    background: var(--admin-primary);
-    color: #fff;
+    background: var(--admin-primary, #dc2626);
+    color: #ffffff;
+    line-height: 1.3;
   }
 
+  /* Sidebar Bottom & Logout */
   .admin-sidebar-bottom {
-    padding: 14px;
-    border-top: 1px solid var(--admin-border);
+    padding: 12px;
+    border-top: 1px solid var(--admin-border, #e2e8f0);
+    flex-shrink: 0;
+    background: #ffffff;
   }
 
   .admin-logout-btn {
@@ -152,35 +312,43 @@
     align-items: center;
     gap: 10px;
     width: 100%;
-    padding: 10px 14px;
-    border-radius: 9px;
-    color: #8c2626;
-    background: #fff4f4;
+    padding: 9px 12px;
+    border-radius: 8px;
+    color: #991b1b;
+    background: #fef2f2;
+    border: 1px solid #fee2e2;
     font-size: 13px;
     font-weight: 700;
-    transition: 0.2s;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
   }
 
   .admin-logout-btn:hover {
     background: #fee2e2;
+    border-color: #fca5a5;
+    color: #7f1d1d;
   }
 
+  /* Backdrop for Mobile */
   .admin-sidebar-backdrop {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(30, 15, 15, 0.45);
+    background: rgba(15, 23, 42, 0.5);
     z-index: 95;
     backdrop-filter: blur(2px);
   }
 
-  @media (max-width: 900px) {
+  @media (max-width: 1024px) {
     .admin-sidebar {
       transform: translateX(-100%);
     }
+
     .admin-sidebar.open {
       transform: translateX(0);
     }
+
     .admin-sidebar-backdrop.open {
       display: block;
     }
@@ -190,150 +358,262 @@
 <div class="admin-sidebar-backdrop" id="adminSidebarBackdrop"></div>
 
 <aside class="admin-sidebar" id="adminSidebar">
-  <!-- LOGO -->
+  <!-- 1. BRAND LOGO -->
   <div class="admin-sidebar-logo">
     <div class="admin-logo-mark">N</div>
     <div class="admin-logo-text">
       <strong>Nishad Sankalp</strong>
-      <small>Admin Console</small>
+      <small>Admin Management Hub</small>
     </div>
   </div>
 
-  <!-- NAVIGATION -->
-  <nav class="admin-sidebar-nav">
-    <div class="nav-group-title">MAIN</div>
+  <% const path=typeof currentPath !=='undefined' ? currentPath : '' ; const tab=typeof activeTab !=='undefined' ?
+    activeTab : '' ; // Group active checks (auto-open active module on page load) const
+    isHomeActive=path==='/admin/home' || path.startsWith('/admin/home/'); const
+    isKalashActive=path.startsWith('/admin/kalash-yatra'); const isContactActive=path.startsWith('/admin/contact');
+    const isGalleryActive=path.startsWith('/admin/gallery'); const isNewsActive=path.startsWith('/admin/video_news');
+    const isAboutActive=path.startsWith('/admin/about'); %>
 
-    <!-- Dashboard -->
-    <a href="/admin/dashboard" class="admin-nav-item <%= typeof currentPath !== 'undefined' && currentPath === '/admin/dashboard' ? 'active' : '' %>">
-      <span class="nav-item-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-      </span>
-      <span>Dashboard</span>
-    </a>
+    <!-- 2. NAVIGATION MENU -->
+    <nav class="admin-sidebar-nav">
 
-    <div class="nav-group-title" style="margin-top: 20px;">NEWSROOM</div>
-    <a href="/admin/video_news" class="admin-nav-item <%= typeof currentPath !== 'undefined' && currentPath.startsWith('/admin/video_news') ? 'active' : '' %>">
-      <span class="nav-item-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h8M8 17h5"/><path d="m4 5 3 3"/></svg>
-      </span>
-      <span>News &amp; Press</span>
-    </a>
+      <!-- ==================== CORE ==================== -->
+      <div class="nav-group-title">CORE</div>
 
-    <!-- HOME PAGE MANAGER HUB -->
-    <div class="nav-group-title" style="margin-top: 20px;">HOME PAGE MANAGEMENT</div>
+      <!-- Dashboard (Direct Link) -->
+      <a href="/admin/dashboard" class="admin-nav-item <%= path === '/admin/dashboard' ? 'active' : '' %>">
+        <span class="nav-item-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <rect x="3" y="3" width="7" height="7" rx="1" />
+            <rect x="14" y="3" width="7" height="7" rx="1" />
+            <rect x="3" y="14" width="7" height="7" rx="1" />
+            <rect x="14" y="14" width="7" height="7" rx="1" />
+          </svg>
+        </span>
+        <span class="nav-item-label">Dashboard</span>
+      </a>
 
-    <a href="/admin/home" class="admin-nav-item <%= typeof currentPath !== 'undefined' && currentPath === '/admin/home' ? 'active' : '' %>">
-      <span class="nav-item-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      </span>
-      <span>Home Page Hub</span>
-    </a>
+      <!-- News & Press (Direct Link) -->
+      <a href="/admin/video_news" class="admin-nav-item <%= isNewsActive ? 'active' : '' %>">
+        <span class="nav-item-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M4 5h16v14H4z" />
+            <path d="M8 9h8M8 13h8M8 17h5" />
+            <path d="m4 5 3 3" />
+          </svg>
+        </span>
+        <span class="nav-item-label">News &amp; Press</span>
+      </a>
 
-    <a href="/admin/home/hero" class="admin-nav-item nav-item-sub <%= typeof currentPath !== 'undefined' && currentPath.startsWith('/admin/home/hero') ? 'active' : '' %>">
-      <span class="nav-item-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-      </span>
-      <span>1. Hero Slider</span>
-    </a>
+      <!-- ==================== MODULES ==================== -->
+      <div class="nav-group-title" style="margin-top: 18px;">PAGE MODULES</div>
 
-    <a href="/admin/home/initiatives" class="admin-nav-item nav-item-sub <%= typeof currentPath !== 'undefined' && currentPath.startsWith('/admin/home/initiatives') ? 'active' : '' %>">
-      <span class="nav-item-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-      </span>
-      <span>2. Work & Initiatives</span>
-    </a>
+      <!-- 1. HOME PAGE MANAGEMENT (Collapsible Accordion) -->
+      <div class="admin-nav-group <%= isHomeActive ? 'open active-group' : '' %>" id="group-home">
+        <button type="button" class="admin-nav-item admin-nav-toggle" onclick="toggleNavGroup(this)"
+          aria-expanded="<%= isHomeActive ? 'true' : 'false' %>">
+          <span class="nav-item-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+          </span>
+          <span class="nav-item-label">Home Page</span>
+          <span class="nav-item-chevron">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </span>
+        </button>
 
-    <a href="/admin/home/why-choose" class="admin-nav-item nav-item-sub <%= typeof currentPath !== 'undefined' && currentPath.startsWith('/admin/home/why-choose') ? 'active' : '' %>">
-      <span class="nav-item-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      </span>
-      <span>3. Pillars & Commitments</span>
-    </a>
+        <div class="admin-sub-menu">
+          <div class="admin-sub-menu-inner">
+            <a href="/admin/home" class="admin-sub-item <%= path === '/admin/home' ? 'active' : '' %>">
+              <span class="sub-bullet"></span>
+              <span>Home Page Hub</span>
+            </a>
+            <a href="/admin/home/hero"
+              class="admin-sub-item <%= path.startsWith('/admin/home/hero') ? 'active' : '' %>">
+              <span class="sub-bullet"></span>
+              <span>1. Hero Slider</span>
+            </a>
+            <a href="/admin/home/initiatives"
+              class="admin-sub-item <%= path.startsWith('/admin/home/initiatives') ? 'active' : '' %>">
+              <span class="sub-bullet"></span>
+              <span>2. Work &amp; Initiatives</span>
+            </a>
+            <a href="/admin/home/why-choose"
+              class="admin-sub-item <%= path.startsWith('/admin/home/why-choose') ? 'active' : '' %>">
+              <span class="sub-bullet"></span>
+              <span>3. Pillars &amp; Commitments</span>
+            </a>
+            <a href="/admin/home/notices"
+              class="admin-sub-item <%= path.startsWith('/admin/home/notices') ? 'active' : '' %>">
+              <span class="sub-bullet"></span>
+              <span>4. Notices &amp; Sidebar</span>
+            </a>
+            <a href="/admin/home/inquiries"
+              class="admin-sub-item <%= path.startsWith('/admin/home/inquiries') ? 'active' : '' %>">
+              <span class="sub-bullet"></span>
+              <span>5. Pledges &amp; Inquiries</span>
+            </a>
+          </div>
+        </div>
+      </div>
 
-    <a href="/admin/home/notices" class="admin-nav-item nav-item-sub <%= typeof currentPath !== 'undefined' && currentPath.startsWith('/admin/home/notices') ? 'active' : '' %>">
-      <span class="nav-item-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-      </span>
-      <span>4. Notices & Sidebar</span>
-    </a>
+      <!-- 2. KALASH YATRA MANAGEMENT (Collapsible Accordion) -->
+      <div class="admin-nav-group <%= isKalashActive ? 'open active-group' : '' %>" id="group-kalash">
+        <button type="button" class="admin-nav-item admin-nav-toggle" onclick="toggleNavGroup(this)"
+          aria-expanded="<%= isKalashActive ? 'true' : 'false' %>">
+          <span class="nav-item-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+            </svg>
+          </span>
+          <span class="nav-item-label">Sankalp Yatra</span>
+          <span class="nav-item-chevron">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </span>
+        </button>
 
-    <a href="/admin/home/inquiries" class="admin-nav-item nav-item-sub <%= typeof currentPath !== 'undefined' && currentPath.startsWith('/admin/home/inquiries') ? 'active' : '' %>">
-      <span class="nav-item-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      </span>
-      <span>5. Pledges & Inquiries</span>
-    </a>
+        <div class="admin-sub-menu">
+          <div class="admin-sub-menu-inner">
+            <a href="/admin/kalash-yatra"
+              class="admin-sub-item <%= path.startsWith('/admin/kalash-yatra') ? 'active' : '' %>">
+              <span class="sub-bullet"></span>
+              <span>📹 Video Gallery</span>
+            </a>
+          </div>
+        </div>
+      </div>
 
-    <!-- KALASH YATRA MANAGER -->
-    <div class="nav-group-title" style="margin-top: 20px;">KALASH YATRA MANAGEMENT</div>
+      <!-- 3. CONTACT US MANAGEMENT (Collapsible Accordion) -->
+      <div class="admin-nav-group <%= isContactActive ? 'open active-group' : '' %>" id="group-contact">
+        <button type="button" class="admin-nav-item admin-nav-toggle" onclick="toggleNavGroup(this)"
+          aria-expanded="<%= isContactActive ? 'true' : 'false' %>">
+          <span class="nav-item-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path
+                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+            </svg>
+          </span>
+          <span class="nav-item-label">Contact Us</span>
+          <span class="nav-item-chevron">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </span>
+        </button>
 
-    <a href="/admin/kalash-yatra" class="admin-nav-item <%= typeof currentPath !== 'undefined' && currentPath.startsWith('/admin/kalash-yatra') ? 'active' : '' %>">
-      <span class="nav-item-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-      </span>
-      <span>Kalash Yatra Hub</span>
-    </a>
+        <div class="admin-sub-menu">
+          <div class="admin-sub-menu-inner">
+            <a href="/admin/contact?tab=messages"
+              class="admin-sub-item <%= isContactActive && (tab === 'messages' || !tab) ? 'active' : '' %>">
+              <span class="sub-bullet"></span>
+              <span>1. Received Messages</span>
+            </a>
+            <a href="/admin/contact?tab=settings"
+              class="admin-sub-item <%= isContactActive && tab === 'settings' ? 'active' : '' %>">
+              <span class="sub-bullet"></span>
+              <span>2. Page &amp; Office Info</span>
+            </a>
+          </div>
+        </div>
+      </div>
 
-    <a href="/admin/kalash-yatra?tab=hero" class="admin-nav-item nav-item-sub <%= typeof currentPath !== 'undefined' && currentPath.startsWith('/admin/kalash-yatra') && typeof activeTab !== 'undefined' && activeTab === 'hero' ? 'active' : '' %>">
-      <span class="nav-item-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
-      </span>
-      <span>1. Hero & Stats</span>
-    </a>
+      <!-- 4. SANKALP GALLERY (Collapsible Accordion) -->
+      <div class="admin-nav-group <%= isGalleryActive ? 'open active-group' : '' %>" id="group-gallery">
+        <button type="button" class="admin-nav-item admin-nav-toggle" onclick="toggleNavGroup(this)"
+          aria-expanded="<%= isGalleryActive ? 'true' : 'false' %>">
+          <span class="nav-item-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <rect x="3" y="3" width="18" height="18" rx="2" />
+              <circle cx="8.5" cy="8.5" r="1.5" />
+              <polyline points="21 15 16 10 5 21" />
+            </svg>
+          </span>
+          <span class="nav-item-label">Sankalp Gallery</span>
+          <span class="nav-item-chevron">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </span>
+        </button>
 
-    <a href="/admin/kalash-yatra?tab=milestones" class="admin-nav-item nav-item-sub <%= typeof currentPath !== 'undefined' && currentPath.startsWith('/admin/kalash-yatra') && typeof activeTab !== 'undefined' && activeTab === 'milestones' ? 'active' : '' %>">
-      <span class="nav-item-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-      </span>
-      <span>2. Yatra Milestones</span>
-    </a>
+        <div class="admin-sub-menu">
+          <div class="admin-sub-menu-inner">
+            <a href="/admin/gallery" class="admin-sub-item <%= path === '/admin/gallery' ? 'active' : '' %>">
+              <span class="sub-bullet"></span>
+              <span>Photo Gallery Hub</span>
+            </a>
+            <a href="/admin/gallery/bulk" class="admin-sub-item <%= path === '/admin/gallery/bulk' ? 'active' : '' %>">
+              <span class="sub-bullet"></span>
+              <span>+ Bulk Photo Upload</span>
+            </a>
+          </div>
+        </div>
+      </div>
 
-    <a href="/admin/kalash-yatra?tab=videos" class="admin-nav-item nav-item-sub <%= typeof currentPath !== 'undefined' && currentPath.startsWith('/admin/kalash-yatra') && typeof activeTab !== 'undefined' && activeTab === 'videos' ? 'active' : '' %>">
-      <span class="nav-item-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
-      </span>
-      <span>3. Video Gallery</span>
-    </a>
+      <!-- 5. ABOUT US (Direct Link) -->
+      <a href="/admin/about" class="admin-nav-item <%= isAboutActive ? 'active' : '' %>">
+        <span class="nav-item-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="16" y1="13" x2="8" y2="13" />
+            <line x1="16" y1="17" x2="8" y2="17" />
+          </svg>
+        </span>
+        <span class="nav-item-label">About Page Hub</span>
+      </a>
 
-    <a href="/admin/kalash-yatra?tab=pillars" class="admin-nav-item nav-item-sub <%= typeof currentPath !== 'undefined' && currentPath.startsWith('/admin/kalash-yatra') && typeof activeTab !== 'undefined' && activeTab === 'pillars' ? 'active' : '' %>">
-      <span class="nav-item-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      </span>
-      <span>4. Four Great Pledges</span>
-    </a>
+      <!-- ==================== SYSTEM ==================== -->
+      <div class="nav-group-title" style="margin-top: 18px;">QUICK LINKS</div>
 
-    <!-- GALLERY MANAGEMENT -->
-    <div class="nav-group-title" style="margin-top: 20px;">SANKALP GALLERY</div>
+      <!-- Live Website Link -->
+      <a href="/" target="_blank" rel="noopener noreferrer" class="admin-nav-item">
+        <span class="nav-item-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+            <polyline points="15 3 21 3 21 9" />
+            <line x1="10" y1="14" x2="21" y2="3" />
+          </svg>
+        </span>
+        <span class="nav-item-label">View Live Website ↗</span>
+      </a>
 
-    <a href="/admin/gallery" class="admin-nav-item <%= typeof currentPath !== 'undefined' && currentPath.startsWith('/admin/gallery') ? 'active' : '' %>">
-      <span class="nav-item-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-      </span>
-      <span>Photo Gallery</span>
-    </a>
+    </nav>
 
-    <a href="/admin/gallery/bulk" class="admin-nav-item nav-item-sub <%= typeof currentPath !== 'undefined' && currentPath === '/admin/gallery/bulk' ? 'active' : '' %>">
-      <span class="nav-item-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-      </span>
-      <span>+ Bulk Photo Upload</span>
-    </a>
-
-    <!-- SYSTEM -->
-    <div class="nav-group-title" style="margin-top: 20px;">WEBSITE LINKS</div>
-    <a href="/" target="_blank" class="admin-nav-item">
-      <span class="nav-item-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-      </span>
-      <span>View Live Website</span>
-    </a>
-  </nav>
-
-  <!-- LOGOUT -->
-  <div class="admin-sidebar-bottom">
-    <a href="/admin/logout" class="admin-logout-btn">
-      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-      <span>Logout</span>
-    </a>
-  </div>
+    <!-- 3. LOGOUT BUTTON -->
+    <div class="admin-sidebar-bottom">
+      <a href="/admin/logout" class="admin-logout-btn">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+          <polyline points="16 17 21 12 16 7" />
+          <line x1="21" y1="12" x2="9" y2="12" />
+        </svg>
+        <span>Logout</span>
+      </a>
+    </div>
 </aside>
+
+<!-- Sidebar Accordion Script -->
+<script>
+  function toggleNavGroup(btn) {
+    const group = btn.closest('.admin-nav-group');
+    if (!group) return;
+
+    const isOpen = group.classList.contains('open');
+
+    // Toggle this group smoothly
+    if (isOpen) {
+      group.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+    } else {
+      group.classList.add('open');
+      btn.setAttribute('aria-expanded', 'true');
+    }
+  }
+</script>

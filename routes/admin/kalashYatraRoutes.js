@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const authMiddleware = require("../../middleware/admin/authMiddleware");
 const kalashYatraController = require("../../controllers/admin/kalashYatraController");
+const { kalashVideoUpload } = require("../../middleware/kalashVideoUpload");
 
 // Require authentication for all admin kalash-yatra routes
 router.use(authMiddleware);
@@ -12,9 +13,10 @@ router.get("/", kalashYatraController.getKalashYatraManager);
 // Section update routes
 router.post("/hero", kalashYatraController.postUpdateHero);
 router.post("/milestones", kalashYatraController.postUpdateMilestones);
-router.post("/videos/add", kalashYatraController.postAddVideo);
-router.post("/videos/update/:videoId", kalashYatraController.postUpdateVideo);
+router.post("/videos/add", kalashVideoUpload, kalashYatraController.postAddVideo);
+router.post("/videos/update/:videoId", kalashVideoUpload, kalashYatraController.postUpdateVideo);
 router.post("/videos/delete/:videoId", kalashYatraController.postDeleteVideo);
+router.post("/videos/highlight/:videoId", kalashYatraController.postHighlightVideo);
 router.post("/pillars", kalashYatraController.postUpdatePillars);
 router.post("/pledge", kalashYatraController.postUpdatePledge);
 

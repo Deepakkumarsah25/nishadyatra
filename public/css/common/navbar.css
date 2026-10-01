@@ -93,7 +93,7 @@ body.drawer-open {
   overflow: visible;
 
   isolation: isolate;
-  font-family: "Mukta", "Noto Sans Devanagari", sans-serif;
+  font-family: "Noto Sans Devanagari", sans-serif;
   line-height: 1.4;
 }
 
@@ -139,7 +139,7 @@ body.drawer-open {
   justify-content: flex-start;
   gap: 10px;
   color: var(--dark-red);
-  font-family: "Noto Serif Devanagari", serif;
+  font-family: "Noto Sans Devanagari", sans-serif;
   font-weight: 700;
   line-height: 1.35;
   text-decoration: none;
@@ -192,9 +192,7 @@ body.drawer-open {
 
   color: #fff;
 
-  font-family:
-    "Noto Serif Devanagari",
-    serif;
+  font-family: "Noto Sans Devanagari", sans-serif;
 
   font-size: 0.95rem;
 

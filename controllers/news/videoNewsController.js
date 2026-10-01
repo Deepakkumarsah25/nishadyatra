@@ -212,6 +212,11 @@ exports.create = async (req, res, next) => {
     const doc = existing || new VideoNews();
     const previousThumbnail = existing?.thumbnailPath;
 
+    const isHighlighted =
+      req.body.isHighlighted === "on" ||
+      req.body.isHighlighted === "true" ||
+      req.body.featured === "on";
+
     Object.assign(doc, {
       title,
       content,
@@ -307,6 +312,22 @@ exports.togglePublish = async (req, res, next) => {
   }
 };
 
+exports.toggleHighlight = async (req, res, next) => {
+  try {
+    const item = await VideoNews.findById(req.params.id);
+    if (!item) return res.redirect("/admin/video_news");
+
+    const currentStatus = Boolean(item.isHighlighted || item.featured);
+    item.isHighlighted = !currentStatus;
+    item.featured = !currentStatus;
+
+    await item.save();
+    res.redirect("/admin/video_news");
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.frontend = async (req, res, next) => {
   try {
     const filter = { published: true };
@@ -326,19 +347,13 @@ exports.frontend = async (req, res, next) => {
     const pageSize = 9;
     const requestedPage = Number.parseInt(req.query.page, 10) || 1;
     const page = Math.max(1, requestedPage);
-    const featuredFilter = { published: true, featured: true };
-    const [total, locations, featured, videoCount, stateCount, newsCount, newsPageSetting] = await Promise.all([
+    const [total, locations, stateCount, newsCount, newsPageSetting] = await Promise.all([
       VideoNews.countDocuments(filter),
       VideoNews.aggregate([
         { $match: { published: true, state: { $nin: [null, ""] }, district: { $nin: [null, ""] } } },
         { $group: { _id: { state: "$state", district: "$district" } } },
         { $sort: { "_id.state": 1, "_id.district": 1 } },
       ]),
-      VideoNews.find(featuredFilter)
-        .sort({ publicationDate: -1, publishedAt: -1, createdAt: -1 })
-        .limit(5)
-        .lean(),
-      VideoNews.countDocuments({ published: true, mediaType: { $in: ["youtube", "upload"] } }),
       VideoNews.distinct("state", { published: true, state: { $nin: [null, ""] } }).then((values) => values.length),
       VideoNews.countDocuments({ published: true }),
       NewsPageSetting.findOne({ key: "news-page" }).lean(),
@@ -357,12 +372,11 @@ exports.frontend = async (req, res, next) => {
     res.render("news/video_news", {
       title: "न्यूज़ / प्रेस",
       news,
-      featured,
       remaining: news,
       page,
       pageSize,
       total,
-      stats: { news: newsCount, videos: videoCount, districts: locations.length, states: stateCount },
+      stats: { news: newsCount, districts: locations.length, states: stateCount },
       totalPages: Math.max(1, Math.ceil(total / pageSize)),
       locations,
       query: req.query,

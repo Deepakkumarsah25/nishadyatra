@@ -37,7 +37,7 @@
     <style>
       .home-stats-grid {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         gap: 16px;
         margin-bottom: 28px;
       }
@@ -140,12 +140,31 @@
         border-top: 1px solid var(--admin-border-subtle);
       }
 
-      @media (max-width: 900px) {
+      @media (max-width: 1150px) {
         .home-stats-grid {
           grid-template-columns: repeat(2, 1fr);
         }
+      }
+      @media (max-width: 1024px) {
         .modules-grid {
           grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 600px) {
+        .home-stats-grid {
+          grid-template-columns: 1fr;
+          gap: 12px;
+        }
+        .module-card {
+          padding: 18px;
+        }
+        .module-actions {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .module-actions a {
+          text-align: center;
+          justify-content: center;
         }
       }
     </style>
@@ -188,6 +207,16 @@
         <div class="stat-box-content">
           <strong><%= stats.noticesCount %></strong>
           <span>Active Notices</span>
+        </div>
+      </div>
+
+      <div class="home-stat-box">
+        <div class="stat-box-icon" style="background: #fff8e6; color: #b45309;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10l5 5v11a2 2 0 0 1-2 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <div class="stat-box-content">
+          <strong><%= typeof stats.newsCount !== 'undefined' ? stats.newsCount : 0 %></strong>
+          <span>News (<%= typeof stats.newsHighlightCount !== 'undefined' ? stats.newsHighlightCount : 0 %> Highlight)</span>
         </div>
       </div>
     </div>
@@ -320,6 +349,28 @@
             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
           <a href="/admin/gallery/bulk" class="btn-admin btn-admin-outline">Bulk Upload</a>
+        </div>
+      </div>
+
+      <!-- 7. News & Media Coverage Manager -->
+      <div class="module-card">
+        <div>
+          <div class="module-header">
+            <div class="module-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10l5 5v11a2 2 0 0 1-2 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </div>
+            <div class="module-title">
+              <h3>7. News & Media Coverage (समाचार एवं प्रेस)</h3>
+              <p>Manage home page news, edit press releases, mark Highlight News (मुख्य समाचार), and manage digital/print coverage.</p>
+            </div>
+          </div>
+        </div>
+        <div class="module-actions">
+          <a href="/admin/video_news" class="btn-admin btn-admin-primary" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+            <span>Manage News &amp; Highlights (<%= typeof stats.newsCount !== 'undefined' ? stats.newsCount : 0 %>)</span>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="/admin/video_news/add" class="btn-admin btn-admin-outline">Add Article</a>
         </div>
       </div>
     </div>

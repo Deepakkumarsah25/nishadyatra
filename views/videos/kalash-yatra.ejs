@@ -11,7 +11,7 @@
   <!-- Google Fonts: Rozha One, Noto Serif Devanagari, Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Noto+Serif+Devanagari:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Rozha+One&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
   <!-- Common Navbar CSS -->
   <link rel="stylesheet" href="/css/common/navbar.css" />
@@ -88,7 +88,7 @@
     }
 
     body {
-      font-family: "Noto Sans Devanagari", "Plus Jakarta Sans", sans-serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       background-color: var(--canvas);
       background-image: 
         radial-gradient(circle at 10% 20%, rgba(217, 119, 6, 0.035) 0%, transparent 40%),
@@ -239,7 +239,7 @@
     }
 
     .hero-heading {
-      font-family: "Noto Serif Devanagari", "Rozha One", serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: clamp(38px, 4.8vw, 62px);
       line-height: 1.15;
       font-weight: 900;
@@ -353,7 +353,7 @@
     }
 
     .hero-stat-number {
-      font-family: "Plus Jakarta Sans", sans-serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: 24px;
       font-weight: 800;
       color: var(--crimson-deep);
@@ -498,7 +498,7 @@
     }
 
     .hero-stage-caption h3 {
-      font-family: "Noto Serif Devanagari", serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: 20px;
       font-weight: 800;
       line-height: 1.3;
@@ -676,7 +676,7 @@
     }
 
     .storycase-title {
-      font-family: "Noto Serif Devanagari", "Rozha One", serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: clamp(26px, 3.2vw, 38px);
       font-weight: 900;
       color: var(--text-main);
@@ -777,7 +777,7 @@
     }
 
     .storycase-featured-caption h4 {
-      font-family: "Noto Serif Devanagari", serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: 20px;
       font-weight: 800;
       color: #ffffff;
@@ -838,7 +838,7 @@
     }
 
     .storycase-featured-content h3 {
-      font-family: "Noto Serif Devanagari", serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: 23px;
       font-weight: 900;
       color: var(--text-main);
@@ -1002,7 +1002,7 @@
     }
 
     .storycase-card-body h4 {
-      font-family: "Noto Serif Devanagari", serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: 16.5px;
       font-weight: 800;
       color: var(--text-main);
@@ -1325,7 +1325,180 @@
        FILTER CONSOLE (SEARCH & CATEGORIES)
     ===================================================== */
     .filter-console-section {
-      padding: 40px 0 20px;
+      padding: 20px 0 16px;
+    }
+
+    .filter-normal-card {
+      background: #ffffff;
+      border: 1.5px solid #ebdcd3;
+      border-radius: 14px;
+      padding: 14px 18px;
+      box-shadow: 0 4px 18px rgba(45, 15, 10, 0.05);
+      margin-bottom: 0;
+    }
+
+    .filter-normal-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .filter-gallery-toolbar-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: min(1600px, 94%);
+      margin: 0 auto 8px;
+    }
+
+    .filter-gallery-toolbar-row .filter-console-section {
+      flex: 1 1 auto;
+      min-width: 0;
+      padding: 0;
+    }
+
+    .filter-gallery-toolbar-row .filter-console-section > .container {
+      width: 100%;
+      max-width: none;
+    }
+
+    .filter-col-search {
+      flex: 1.6;
+      min-width: 240px;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .filter-col-icon {
+      position: absolute;
+      left: 14px;
+      color: #9c2727;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+
+    .filter-normal-input {
+      width: 100%;
+      height: 44px;
+      padding: 0 34px 0 40px;
+      border: 1.5px solid #e7ded7;
+      border-radius: 9px;
+      font-size: 14px;
+      color: #2c1e1e;
+      background: #fdfcfb;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .filter-normal-input:focus {
+      border-color: #c92a2a;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(201, 42, 42, 0.1);
+    }
+
+    .filter-col-select {
+      flex: 1;
+      min-width: 170px;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .filter-normal-select {
+      width: 100%;
+      height: 44px;
+      padding: 0 32px 0 38px;
+      border: 1.5px solid #e7ded7;
+      border-radius: 9px;
+      font-size: 14px;
+      color: #2c1e1e;
+      background: #fdfcfb;
+      outline: none;
+      cursor: pointer;
+      appearance: none;
+      transition: all 0.2s ease;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='%2378665f'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+    }
+
+    .filter-normal-select:focus {
+      border-color: #c92a2a;
+      background-color: #ffffff;
+      box-shadow: 0 0 0 3px rgba(201, 42, 42, 0.1);
+    }
+
+    .filter-col-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .btn-filter-reset {
+      height: 44px;
+      padding: 0 16px;
+      border-radius: 9px;
+      border: 1.5px solid #e7ded7;
+      background: #ffffff;
+      color: #8b2020;
+      font-size: 13.5px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-filter-reset:hover {
+      background: #fff0ec;
+      border-color: #f5b8a8;
+      color: #c92a2a;
+    }
+
+    .filter-count-badge {
+      height: 44px;
+      padding: 0 14px;
+      border-radius: 9px;
+      background: #fbf5f1;
+      border: 1px solid #ebdcd3;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #6d5b54;
+      white-space: nowrap;
+    }
+
+    .filter-count-badge strong {
+      color: #c92a2a;
+      font-weight: 800;
+      font-size: 15px;
+    }
+
+    @media (max-width: 768px) {
+      .filter-normal-bar {
+        padding: 12px;
+      }
+      .filter-col-search, .filter-col-select {
+        flex: 1 1 100%;
+        min-width: 100%;
+      }
+      .filter-col-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+      .btn-filter-reset {
+        flex: 1;
+        justify-content: center;
+      }
     }
 
     .filter-card {
@@ -1372,7 +1545,7 @@
     }
 
     .filter-heading-text h3 {
-      font-family: "Noto Serif Devanagari", serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: 20px;
       font-weight: 800;
       color: var(--crimson-ultra);
@@ -1682,7 +1855,18 @@
        VIDEO GALLERY SECTION & VIEW FORMATS
     ===================================================== */
     .gallery-section {
-      padding: 40px 0 80px;
+      padding: 0 0 80px;
+    }
+
+    .gallery-view-toolbar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 0;
+      padding: 6px;
+      background: #fff;
+      border: 1.5px solid var(--border-warm);
+      border-radius: 16px;
+      box-shadow: var(--shadow-sm);
     }
 
     .gallery-header-row {
@@ -1695,7 +1879,7 @@
     }
 
     .gallery-section-title {
-      font-family: "Noto Serif Devanagari", serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: clamp(26px, 3.2vw, 36px);
       font-weight: 900;
       color: var(--crimson-ultra);
@@ -1932,7 +2116,8 @@
       border-color: rgba(185, 28, 28, 0.35);
     }
 
-    .video-card-item.hidden {
+    .video-card-item.hidden,
+    .video-card-item.paged-out {
       display: none !important;
     }
 
@@ -2060,15 +2245,25 @@
     }
 
     .card-category-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       color: var(--primary-crimson);
-      font-size: 11px;
+      font-size: 11.5px;
       font-weight: 800;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
+      letter-spacing: 0.3px;
       background: var(--crimson-soft);
       padding: 3px 10px;
       border-radius: var(--radius-full);
-      border: 1px solid rgba(185, 28, 28, 0.15);
+      border: 1px solid rgba(185, 28, 28, 0.18);
+      white-space: nowrap;
+    }
+
+    .card-category-tag svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+      flex-shrink: 0;
     }
 
     .card-district-pill {
@@ -2091,7 +2286,7 @@
     }
 
     .card-title-text {
-      font-family: "Noto Serif Devanagari", serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: 18px;
       font-weight: 800;
       color: var(--crimson-ultra);
@@ -2104,7 +2299,7 @@
       color: var(--primary-crimson);
     }
 
-    /* Person / Place Row (व्यक्ति / स्थान का नाम) */
+    /* People Count Row (उपस्थित जनसमूह / संख्या) */
     .card-meta-line {
       display: flex;
       align-items: center;
@@ -2114,14 +2309,27 @@
       color: var(--text-body);
     }
 
+    .card-people-line,
     .card-person-line {
-      background: var(--canvas-alt);
-      border: 1px solid var(--border-light);
-      padding: 6px 12px;
+      background: linear-gradient(135deg, #fffaf5 0%, #fdf3eb 100%);
+      border: 1px solid #fed7aa;
+      padding: 7px 12px;
       border-radius: var(--radius-sm);
       margin-bottom: 12px;
+      box-shadow: 0 2px 8px rgba(185, 28, 28, 0.04);
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
+    .video-card-item:hover .card-people-line,
+    .video-card-item:hover .card-person-line {
+      border-color: #fdba74;
+      background: #fff5eb;
+    }
+
+    .card-people-line .meta-icon,
     .card-person-line .meta-icon {
       display: inline-flex;
       align-items: center;
@@ -2129,23 +2337,25 @@
       flex-shrink: 0;
     }
 
+    .card-people-line .meta-icon svg,
     .card-person-line .meta-icon svg {
-      width: 15px;
-      height: 15px;
+      width: 17px;
+      height: 17px;
       fill: currentColor;
     }
 
+    .card-people-line .meta-label,
     .card-person-line .meta-label {
-      font-size: 11px;
-      color: var(--text-muted);
+      font-size: 11.5px;
+      color: var(--gold-dark);
       font-weight: 700;
-      text-transform: uppercase;
       letter-spacing: 0.3px;
       white-space: nowrap;
     }
 
+    .card-people-line .meta-val,
     .card-person-line .meta-val {
-      font-size: 13px;
+      font-size: 13.5px;
       font-weight: 800;
       color: var(--crimson-deep);
       overflow: hidden;
@@ -2248,7 +2458,7 @@
     }
 
     .empty-state-card h3 {
-      font-family: "Noto Serif Devanagari", serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: 22px;
       font-weight: 800;
       color: var(--crimson-ultra);
@@ -2312,62 +2522,45 @@
       display: inline-block;
     }
 
-    /* Simple video pagination */
+    /* Video pagination styled to match the news pages */
     .gallery-pagination-container {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 16px;
-      margin-top: 28px;
-      padding: 0;
-      background: transparent;
-      border: 0;
-      border-radius: 0;
-      box-shadow: none;
+      margin-top: 24px;
     }
 
     .pagination-actions-right {
       display: flex;
       align-items: center;
-      gap: 18px;
-      margin: 0 auto;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 4px;
     }
 
     .btn-pagination-nav {
       display: inline-flex;
+      min-width: 50px;
+      min-height: 56px;
       align-items: center;
-      gap: 8px;
-      padding: 9px 16px;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 700;
+      justify-content: center;
+      gap: 6px;
+      padding: 0 18px;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 500;
       cursor: pointer;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      border: 1.5px solid #d99595;
+      transition: color 0.2s, background 0.2s, border-color 0.2s;
+      border: 1px solid #dedede;
+      background: #fff;
+      color: var(--primary-crimson);
       font-family: inherit;
       user-select: none;
     }
 
-    .btn-pagination-prev {
-      background: transparent;
-      color: var(--text-main);
-    }
-
-    .btn-pagination-prev:hover:not(:disabled) {
+    .btn-pagination-nav:hover:not(:disabled) {
       border-color: var(--primary-crimson);
       color: var(--primary-crimson);
-      background: var(--canvas-alt);
-      transform: translateX(-2px);
-    }
-
-    .btn-pagination-next {
-      background: transparent;
-      color: var(--primary-crimson);
-      border-color: #d99595;
-      box-shadow: none;
-    }
-
-    .btn-pagination-next:hover:not(:disabled) {
       background: rgba(185, 28, 28, 0.06);
     }
 
@@ -2378,24 +2571,48 @@
       box-shadow: none;
     }
 
-    .pagination-current-page {
-      min-width: 36px;
-      color: var(--primary-crimson);
-      font-size: 18px;
-      font-weight: 800;
+    .gallery-pagination-container .pagination-pages {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .gallery-pagination-container .pagination-number {
+      display: inline-flex;
+      min-width: 50px;
+      height: 56px;
+      align-items: center;
+      justify-content: center;
+      padding: 0 14px;
+      border: 1px solid var(--border-warm);
+      border-radius: 0;
+      background: #fff;
+      color: var(--crimson-dark);
+      font: 400 23px "Noto Sans Devanagari", sans-serif;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .gallery-pagination-container .pagination-number.is-current,
+    .gallery-pagination-container .pagination-number:hover {
+      border-color: var(--primary-crimson);
+      background: var(--primary-crimson);
+      color: #fff;
+    }
+
+    .gallery-pagination-container .pagination-ellipsis {
+      min-width: 50px;
+      color: var(--text-body);
+      font-size: 20px;
       text-align: center;
     }
 
     @media (max-width: 640px) {
-      .pagination-actions-right {
-        justify-content: center;
-        width: 100%;
-      }
       .btn-pagination-nav {
-        flex: 1;
-        justify-content: center;
-        padding: 10px 14px;
-        font-size: 13px;
+        padding: 0 12px;
+        font-size: 14px;
       }
     }
 
@@ -2436,7 +2653,7 @@
     }
 
     .pillars-main-title {
-      font-family: "Noto Serif Devanagari", "Rozha One", serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: clamp(28px, 3.8vw, 44px);
       line-height: 1.25;
       font-weight: 900;
@@ -2538,7 +2755,7 @@
     }
 
     .story-caption-block h4 {
-      font-family: "Noto Serif Devanagari", serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: 21px;
       font-weight: 800;
       line-height: 1.3;
@@ -2609,7 +2826,7 @@
     }
 
     .story-sub-caption h5 {
-      font-family: "Noto Serif Devanagari", serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: 15px;
       font-weight: 800;
       line-height: 1.3;
@@ -2679,7 +2896,7 @@
       border-radius: 50%;
       background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
       color: #ffffff;
-      font-family: "Plus Jakarta Sans", sans-serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: 13px;
       font-weight: 800;
       display: flex;
@@ -2708,7 +2925,7 @@
     }
 
     .pillar-card-head h4 {
-      font-family: "Noto Serif Devanagari", serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: 17px;
       font-weight: 800;
       color: var(--crimson-ultra);
@@ -2780,7 +2997,7 @@
     }
 
     .modal-title-wrap h4 {
-      font-family: "Noto Serif Devanagari", serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: 17px;
       font-weight: 800;
       white-space: nowrap;
@@ -3366,121 +3583,6 @@
   ===================================================== -->
   <main class="kalash-page">
 
-    <!-- ===================================================
-         YATRA VISUAL STORYCASE: IMAGES & TEXT SHOWCASE
-    ==================================================== -->
-    <section class="yatra-storycase-section" id="featuredShowcase">
-
-      <!-- Section Header -->
-      <div class="yatra-storycase-header">
-        <div class="storycase-kicker">
-          <span>★</span>
-          <span><%= (kalash && kalash.milestonesSection && kalash.milestonesSection.kicker) || 'ऐतिहासिक जन-संकल्प • लोकतांत्रिक अधिकार चेतना अभियान' %></span>
-          <span class="storycase-kicker-sep">•</span>
-          <span class="storycase-kicker-sub">ऐतिहासिक महासंगम</span>
-        </div>
-
-        <h2 class="storycase-title">
-          <%= (kalash && kalash.milestonesSection && kalash.milestonesSection.title) || 'लोकतांत्रिक महा-संकल्प यात्रा — ' %><span class="highlight"><%= (kalash && kalash.milestonesSection && kalash.milestonesSection.titleHighlight) || 'जनमत जागरण और स्वतंत्र मताधिकार का उद्घोष' %></span>
-        </h2>
-
-        <p class="storycase-sub">
-          <%= (kalash && kalash.milestonesSection && kalash.milestonesSection.subtitle) || 'आज हम लोकतांत्रिक संकल्प लेते हैं कि आगामी चुनाव में भाजपा के पक्ष में मतदान नहीं करेंगे तथा अपने विवेक और विचार के आधार पर अपने मताधिकार का प्रयोग करेंगे।' %>
-        </p>
-      </div>
-
-      <div class="storycase-container">
-
-        <% const featMilestone = (typeof kalash !== 'undefined' && kalash.milestonesSection && kalash.milestonesSection.items && kalash.milestonesSection.items.length > 0) ? kalash.milestonesSection.items[0] : null; %>
-        <% if (featMilestone) { %>
-        <!-- 1. Featured Big Story Card -->
-        <article class="storycase-featured-card">
-          <div class="storycase-featured-media">
-            <img
-              src="<%= featMilestone.image %>"
-              alt="<%= featMilestone.title %>"
-              class="storycase-featured-img"
-              loading="lazy"
-            />
-            <div class="storycase-featured-overlay"></div>
-            <div class="storycase-featured-badge">
-              <span><%= featMilestone.tag || '★ प्रमुख केंद्र • ऐतिहासिक महा-संकल्प' %></span>
-            </div>
-            <div class="storycase-featured-caption">
-              <h4><%= featMilestone.title %></h4>
-              <p>
-                <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
-                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/>
-                </svg>
-                <span><%= featMilestone.district %>, <%= featMilestone.stateName %> • जन-जागरण अभियान</span>
-              </p>
-            </div>
-          </div>
-
-          <div class="storycase-featured-content">
-            <div>
-              <div class="storycase-meta-tag-row">
-                <span class="storycase-tag-pill crimson"><%= featMilestone.stateName %> • <%= featMilestone.district %></span>
-                <span class="storycase-tag-pill gold"><%= featMilestone.tag || 'विशेष संकल्प' %></span>
-              </div>
-
-              <h3><%= featMilestone.title %></h3>
-
-              <p><%= featMilestone.description %></p>
-            </div>
-
-            <div class="storycase-actions-row">
-              <button type="button" class="btn-storycase-primary btn-jump-filter-state" data-state="<%= featMilestone.stateKey %>">
-                <span><%= featMilestone.stateName %> के संकल्प वीडियो ↓</span>
-              </button>
-              <button type="button" class="btn-storycase-outline btn-watch-featured" data-video="<%= featMilestone.videoUrl %>" data-title="<%= featMilestone.title %>">
-                <span>संकल्प झलकियां देखें ▶</span>
-              </button>
-            </div>
-          </div>
-        </article>
-        <% } %>
-
-        <!-- 2. Four Complementary Visual Story Cards -->
-        <div class="storycase-grid-4">
-          <% const subMilestones = (typeof kalash !== 'undefined' && kalash.milestonesSection && kalash.milestonesSection.items && kalash.milestonesSection.items.length > 1) ? kalash.milestonesSection.items.slice(1) : []; %>
-          <% subMilestones.forEach((item) => { %>
-            <article class="storycase-card">
-              <div class="storycase-card-thumb">
-                <img src="<%= item.image %>" alt="<%= item.title %>" loading="lazy" />
-                <span class="storycase-card-tag"><%= item.stateName %> • <%= item.district %></span>
-              </div>
-              <div class="storycase-card-body">
-                <div>
-                  <h4><%= item.title %></h4>
-                  <p><%= item.description %></p>
-                </div>
-                <div class="storycase-card-footer">
-                  <span class="storycase-location-text"><%= item.district %>, <%= item.stateName %></span>
-                  <span class="btn-card-filter-link btn-jump-filter-state" data-state="<%= item.stateKey %>">संकल्प वीडियो देखें →</span>
-                </div>
-              </div>
-            </article>
-          <% }) %>
-        </div>
-
-        <!-- 3. Seamless Transition Ribbon connecting into Filter Console (NO GAP) -->
-        <div class="storycase-transition-bar">
-          <div class="transition-text-group">
-            <div class="transition-icon-circle">📜</div>
-            <div>
-              <h5>लोकतांत्रिक महा-संकल्प यात्रा वीडियो एवं संबोधन नीचे उपलब्ध हैं</h5>
-              <p>राज्य, ज़िला अथवा श्रेणी का चयन कर जन-जागरण व मताधिकार संकल्प वीडियो तुरंत देखें</p>
-            </div>
-          </div>
-          <button type="button" class="btn-jump-filter" id="btnJumpToFilter">
-            <span>संकल्प वीडियो एवं संकलन देखें ↓</span>
-          </button>
-        </div>
-
-      </div>
-
-    </section>
 
     <!-- ===================================================
          MOBILE FLOATING FILTER TAB & DRAWER OVERLAY
@@ -3502,124 +3604,86 @@
     ==================================================== -->
 
 
+    <div class="filter-gallery-toolbar-row">
     <section class="filter-console-section" id="filterConsole">
       <div class="container">
-        <div class="filter-card">
-
-          <!-- Filter Top Bar -->
-          <div class="filter-header-bar">
-            <div class="filter-title-group">
-              <div class="filter-icon-box">
-                <svg viewBox="0 0 24 24">
-                  <path d="M3 4h18v2H3V4zm3 7h12v2H6v-2zm4 7h4v2h-4v-2z"/>
+        <div class="filter-normal-card">
+          
+          <div class="filter-normal-row">
+            <!-- 1. Search Box -->
+            <div class="filter-col-search">
+              <span class="filter-col-icon">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <circle cx="11" cy="11" r="8"/>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"/>
                 </svg>
-              </div>
-              <div class="filter-heading-text">
-                <h3>लोकतांत्रिक संकल्प वीडियो एवं खोज केंद्र</h3>
-                <p>राज्य, ज़िला अथवा नाम/कीवर्ड के अनुसार लोकतांत्रिक संकल्प व जन-जागरण वीडियो तुरंत खोजें</p>
-              </div>
+              </span>
+              <input
+                type="search"
+                id="searchFilter"
+                class="filter-normal-input"
+                placeholder="वीडियो खोजें (Search title, district, topic)..."
+                autocomplete="off"
+              />
+              <button type="button" class="search-clear-btn" id="searchClearBtn" aria-label="खोज साफ़ करें">✕</button>
             </div>
 
-            <div class="filter-top-actions">
-              <div class="count-indicator">
-                <span>उपलब्ध:</span>
-                <strong id="resultCount">20</strong>
-                <span>वीडियो</span>
-              </div>
+            <!-- 2. State Select -->
+            <div class="filter-col-select">
+              <span class="filter-col-icon">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/>
+                </svg>
+              </span>
+              <select id="stateFilter" class="filter-normal-select">
+                <option value="all">सभी राज्य (All States)</option>
+                <option value="bihar">बिहार (Bihar)</option>
+                <option value="madhya-pradesh">मध्य प्रदेश (Madhya Pradesh)</option>
+                <option value="uttar-pradesh">उत्तर प्रदेश (Uttar Pradesh)</option>
+                <option value="jharkhand">झारखंड (Jharkhand)</option>
+                <option value="rajasthan">राजस्थान (Rajasthan)</option>
+              </select>
+            </div>
 
-              <button type="button" class="btn-reset-filters" id="clearFilters">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+            <!-- 3. District Select -->
+            <div class="filter-col-select">
+              <span class="filter-col-icon">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
+                  <path d="M15 11V5l-3-3-3 3v2H3v14h18V11h-6zm-8 7H5v-2h2v2zm0-4H5v-2h2v2zm0-4H5V8h2v2zm6 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V8h2v2zm0-4h-2V4h2v2zm6 12h-2v-2h2v2zm0-4h-2v-2h2v2z"/>
+                </svg>
+              </span>
+              <span id="districtLabel" style="display:none;">ज़िला चुनें (Select District)</span>
+              <select id="districtFilter" class="filter-normal-select">
+                <option value="all">सभी ज़िले (All Districts)</option>
+              </select>
+            </div>
+
+            <!-- 4. Reset & Video Count Badge -->
+            <div class="filter-col-actions">
+              <button type="button" class="btn-filter-reset" id="clearFilters" title="फ़िल्टर रीसेट करें">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2">
                   <path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
                 </svg>
                 <span>रीसेट (Reset)</span>
               </button>
 
-              <!-- Drawer Close Button for Mobile Screens -->
-              <button type="button" class="drawer-mobile-close" id="mobileFilterClose" aria-label="फ़िल्टर बंद करें">
-                ✕
-              </button>
-            </div>
-          </div>
-
-          <!-- Inputs Grid: State, District, Search -->
-          <div class="filter-input-grid">
-
-            <!-- State -->
-            <div class="form-group-custom">
-              <label for="stateFilter">
-                <svg viewBox="0 0 24 24">
-                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/>
-                </svg>
-                <span>राज्य चुनें (Select State)</span>
-              </label>
-              <div class="custom-select-wrapper">
-                <select id="stateFilter" class="styled-select">
-                  <option value="all">सभी राज्य (Pan India)</option>
-                  <option value="bihar">बिहार (Bihar)</option>
-                  <option value="madhya-pradesh">मध्य प्रदेश (Madhya Pradesh)</option>
-                  <option value="uttar-pradesh">उत्तर प्रदेश (Uttar Pradesh)</option>
-                  <option value="jharkhand">झारखंड (Jharkhand)</option>
-                  <option value="rajasthan">राजस्थान (Rajasthan)</option>
-                </select>
-                <span class="select-arrow">
-                  <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-                </span>
+              <div class="filter-count-badge">
+                <strong id="resultCount">20</strong>
+                <span>वीडियो</span>
               </div>
             </div>
 
-            <!-- District -->
-            <div class="form-group-custom">
-              <label for="districtFilter">
-                <svg viewBox="0 0 24 24">
-                  <path d="M15 11V5l-3-3-3 3v2H3v14h18V11h-6zm-8 7H5v-2h2v2zm0-4H5v-2h2v2zm0-4H5V8h2v2zm6 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V8h2v2zm0-4h-2V4h2v2zm6 12h-2v-2h2v2zm0-4h-2v-2h2v2z"/>
-                </svg>
-                <span id="districtLabel">ज़िला चुनें (Select District)</span>
-              </label>
-              <div class="custom-select-wrapper">
-                <select id="districtFilter" class="styled-select">
-                  <option value="all">सभी ज़िले (All Districts)</option>
-                </select>
-                <span class="select-arrow">
-                  <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-                </span>
-              </div>
-            </div>
-
-            <!-- Search -->
-            <div class="form-group-custom">
-              <label for="searchFilter">
-                <svg viewBox="0 0 24 24">
-                  <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-                </svg>
-                <span>नाम अथवा कीवर्ड से खोजें (Search)</span>
-              </label>
-              <div class="custom-input-wrapper">
-                <span class="search-icon-inside">
-                  <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-                </span>
-                <input
-                  type="search"
-                  id="searchFilter"
-                  class="styled-input with-icon"
-                  placeholder="उदा. गोपालगंज, पटना, संकल्प, जन-जागरण, भाषण..."
-                  autocomplete="off"
-                />
-                <button type="button" class="search-clear-btn" id="searchClearBtn" aria-label="खोज साफ़ करें">×</button>
-              </div>
-            </div>
-
+            <!-- Drawer close button (hidden) -->
+            <button type="button" class="drawer-mobile-close" id="mobileFilterClose" style="display: none;" aria-label="Close">✕</button>
           </div>
 
           <!-- Active Filter Chips Tray -->
           <div class="active-chips-tray" id="activeFilters"></div>
 
-          <!-- Mobile Drawer Footer Apply Button -->
-          <div class="drawer-apply-footer">
+          <!-- Mobile Drawer Apply (hidden on desktop) -->
+          <div class="drawer-apply-footer" style="display: none;">
             <button type="button" class="btn-apply-drawer" id="btnApplyDrawer">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>
-              </svg>
-              <span>वीडियो देखें (<span id="drawerResultCount">20</span> परिणाम)</span>
+              <span>वीडियो देखें (<span id="drawerResultCount">20</span>)</span>
             </button>
           </div>
 
@@ -3627,44 +3691,30 @@
       </div>
     </section>
 
+    <div class="gallery-view-toolbar">
+      <div class="gallery-view-controls">
+        <div class="view-mode-toggle" id="viewModeToggle" role="group" aria-label="प्रदर्शन प्रारूप (View Format)">
+          <button type="button" class="btn-view-toggle active" id="btnViewGrid" data-view="grid" title="ग्रिड प्रारूप में देखें">
+            <svg viewBox="0 0 24 24"><path d="M3 3v8h8V3H3zm2 2h4v4H5V5zm8-2v8h8V3h-8zm2 2h4v4h-4V5zM3 13v8h8v-8H3zm2 2h4v4H5v-4zm8-2v8h8v-8h-8zm2 2h4v4h-4v-4z"/></svg>
+            <span>ग्रिड (Grid)</span>
+          </button>
+          <button type="button" class="btn-view-toggle" id="btnViewList" data-view="list" title="सूची प्रारूप में देखें">
+            <svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
+            <span>सूची (List)</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    </div>
+
     <!-- ===================================================
          VIDEO GALLERY CARDS
     ==================================================== -->
     <section class="gallery-section" id="videoGallery">
       <div class="container">
-
-        <div class="gallery-header-row">
-          <div>
-            <div class="gallery-section-badge">
-              <span class="badge-dot"></span>
-              <span><%= (kalash && kalash.hero && kalash.hero.liveBadgeText) || 'लोकतांत्रिक महा-संकल्प • वीडियो संकलन' %></span>
-            </div>
-            <h2 class="gallery-section-title">
-              <%= (kalash && kalash.hero && kalash.hero.headingMain) || 'जन-जन का संकल्प — लोकतंत्र को मजबूत बनाने का संकल्प ' %><span class="highlight"><%= (kalash && kalash.hero && kalash.hero.headingHighlight) || 'स्वतंत्र मतदान, स्वाभिमान और सामाजिक चेतना' %></span>
-            </h2>
-            <p class="gallery-section-subtitle">
-              <%= (kalash && kalash.hero && kalash.hero.subheading) || 'आज हम लोकतांत्रिक संकल्प लेते हैं कि आगामी चुनाव में भाजपा के पक्ष में मतदान नहीं करेंगे तथा अपने विवेक और विचार के आधार पर अपने मताधिकार का प्रयोग करेंगे।' %>
-            </p>
-          </div>
-
-          <!-- View Mode Toggle (Grid / List format) -->
-          <div class="gallery-view-controls">
-            <div class="view-mode-toggle" id="viewModeToggle" role="group" aria-label="प्रदर्शन प्रारूप (View Format)">
-              <button type="button" class="btn-view-toggle active" id="btnViewGrid" data-view="grid" title="ग्रिड प्रारूप में देखें">
-                <svg viewBox="0 0 24 24"><path d="M3 3v8h8V3H3zm2 2h4v4H5V5zm8-2v8h8V3h-8zm2 2h4v4h-4V5zM3 13v8h8v-8H3zm2 2h4v4H5v-4zm8-2v8h8v-8h-8zm2 2h4v4h-4v-4z"/></svg>
-                <span>ग्रिड (Grid)</span>
-              </button>
-              <button type="button" class="btn-view-toggle" id="btnViewList" data-view="list" title="सूची प्रारूप में देखें">
-                <svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
-                <span>सूची (List)</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
         <div class="video-cards-grid view-grid" id="videoGrid">
           <% const videoList = (typeof kalash !== 'undefined' && kalash.videos && kalash.videos.length > 0) ? kalash.videos : []; %>
-          <% videoList.forEach((vid) => { %>
+          <% videoList.forEach((vid, index) => { %>
             <% 
               let ytId = '';
               if (vid.videoUrl) {
@@ -3681,11 +3731,13 @@
               const thumbImg = vid.thumbnail || (ytId ? ('https://img.youtube.com/vi/' + ytId + '/hqdefault.jpg') : '/images/kalash-yatra-hero.jpg');
             %>
             <article
-              class="video-card-item"
+              class="video-card-item<%= index >= 9 ? ' paged-out hidden' : '' %>"
+              <%= index >= 9 ? 'style="display: none;"' : '' %>
               data-category="<%= vid.category || 'yatra' %>"
               data-state="<%= vid.state || 'bihar' %>"
               data-district="<%= (vid.district || '').trim() %>"
               data-person="<%= (vid.personOrPlace || '').trim() %>"
+              data-people="<%= (vid.peopleCount || (vid.personOrPlace || '')).trim() %>"
               data-date="<%= vid.date || '' %>"
               data-video="<%= vid.videoUrl %>"
               data-title="<%= vid.title %>"
@@ -3718,7 +3770,10 @@
 
               <div class="card-info-box">
                 <div class="card-tags-row">
-                  <span class="card-category-tag"><%= vid.tag || (vid.category === 'sankalp' ? 'संकल्प यात्रा' : vid.category === 'speech' ? 'संबोधन' : vid.category === 'program' ? 'जन-जागरण' : 'लोकतांत्रिक संकल्प') %></span>
+                  <span class="card-category-tag card-people-badge" title="उपस्थित जनसमूह">
+                    <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                    <span><%= vid.peopleCount || (vid.personOrPlace || (vid.viewsCount ? (vid.viewsCount + '+ लोग') : '5,000+ लोग')) %></span>
+                  </span>
                   <span class="card-district-pill">
                     <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
                     ज़िला: <strong><%= vid.district || '—' %></strong>
@@ -3726,15 +3781,6 @@
                 </div>
 
                 <h3 class="card-title-text"><%= vid.title %></h3>
-
-                <!-- व्यक्ति / स्थान का नाम (Person / Place Name) -->
-                <div class="card-meta-line card-person-line">
-                  <span class="meta-icon">
-                    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                  </span>
-                  <span class="meta-label">व्यक्ति / स्थान:</span>
-                  <span class="meta-val"><%= vid.personOrPlace || (vid.district ? (vid.district + ' (संकल्प सभा स्थल)') : 'संकल्प स्थल') %></span>
-                </div>
 
                 <p class="card-description-text">
                   <%= vid.description || '' %>
@@ -3777,7 +3823,7 @@
               <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
               <span>Previous</span>
             </button>
-            <span class="pagination-current-page" id="paginationCurrentPage" aria-live="polite">1</span>
+            <div class="pagination-pages" aria-label="Video pages"></div>
             <button type="button" class="btn-pagination-nav btn-pagination-next" id="btnPaginationNext" aria-label="Next page">
               <span>Next</span>
               <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
@@ -3795,8 +3841,8 @@
     <div class="modal-content-shell">
       <div class="modal-top-bar">
         <div class="modal-title-wrap">
-          <span class="meta-tag-pill" id="modalCategoryBadge">लोकतांत्रिक संकल्प</span>
-          <h4 id="modalVideoTitle">लोकतांत्रिक संकल्प वीडियो प्लेयर</h4>
+          <span class="meta-tag-pill" id="modalCategoryBadge">संकल्प यात्रा</span>
+          <h4 id="modalVideoTitle">संकल्प यात्रा वीडियो प्लेयर</h4>
         </div>
         <div class="modal-actions-right">
           <button type="button" class="modal-share-btn" id="modalShareBtn" title="Copy video link">
@@ -3813,7 +3859,7 @@
         <iframe
           id="modalVideoIframe"
           src=""
-          title="लोकतांत्रिक महा-संकल्प यात्रा वीडियो प्लेयर"
+          title="संकल्प यात्रा वीडियो प्लेयर"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowfullscreen
         ></iframe>
@@ -3823,9 +3869,9 @@
       <div class="modal-meta-strip">
         <div class="modal-meta-col">
           <div class="modal-meta-item">
-            <span class="m-icon">👤</span>
-            <span class="m-label">व्यक्ति / स्थान:</span>
-            <strong class="m-val" id="modalVideoPerson">—</strong>
+            <span class="m-icon">👥</span>
+            <span class="m-label">उपस्थित जनसमूह:</span>
+            <strong class="m-val" id="modalVideoPeople">—</strong>
           </div>
           <div class="modal-meta-item">
             <span class="m-icon">📍</span>
@@ -3896,7 +3942,6 @@
       const galleryPagination = document.getElementById("galleryPagination");
       const btnPaginationPrev = document.getElementById("btnPaginationPrev");
       const btnPaginationNext = document.getElementById("btnPaginationNext");
-      const paginationCurrentPage = document.getElementById("paginationCurrentPage");
 
       // Modal Elements
       const videoModal = document.getElementById("videoModal");
@@ -4308,8 +4353,17 @@
           btnPaginationNext.disabled = currentPaginationPage >= totalPages;
         }
 
-        if (paginationCurrentPage) {
-          paginationCurrentPage.textContent = currentPaginationPage;
+        const pageNumbers = galleryPagination.querySelector(".pagination-pages");
+        if (pageNumbers) {
+          const lastVisiblePage = Math.min(totalPages, currentPaginationPage <= 4 ? 4 : currentPaginationPage + 1);
+          let pagesMarkup = Array.from({ length: lastVisiblePage }, (_, index) => index + 1)
+            .map((page) => `<button type="button" class="pagination-number${page === currentPaginationPage ? " is-current" : ""}" data-page="${page}"${page === currentPaginationPage ? ' aria-current="page"' : ""}>${page}</button>`)
+            .join("");
+          if (lastVisiblePage < totalPages) {
+            if (lastVisiblePage < totalPages - 1) pagesMarkup += '<span class="pagination-ellipsis" aria-hidden="true">…</span>';
+            pagesMarkup += `<button type="button" class="pagination-number${totalPages === currentPaginationPage ? " is-current" : ""}" data-page="${totalPages}"${totalPages === currentPaginationPage ? ' aria-current="page"' : ""}>${totalPages}</button>`;
+          }
+          pageNumbers.innerHTML = pagesMarkup;
         }
       }
 
@@ -4335,6 +4389,15 @@
           const totalPages = Math.ceil(currentFilteredCards.length / VIDEOS_PER_PAGE) || 1;
           if (currentPaginationPage < totalPages) {
             goToPage(currentPaginationPage + 1);
+          }
+        });
+      }
+
+      if (galleryPagination) {
+        galleryPagination.addEventListener("click", function (event) {
+          const pageButton = event.target.closest("button[data-page]");
+          if (pageButton) {
+            goToPage(Number(pageButton.dataset.page));
           }
         });
       }
@@ -4442,16 +4505,17 @@
         return url;
       }
 
-      function openModalVideo(url, title, category, personOrPlace, district, date) {
+      function openModalVideo(url, title, category, peopleCount, district, date) {
         if (!url) return;
 
-        const embedUrl = parseYouTubeUrl(url);
+        const isDirectVideo = url.startsWith("/uploads/") || /\.(mp4|webm|ogg|mov|mkv)(\?.*)?$/i.test(url);
+        const embedUrl = isDirectVideo ? url : parseYouTubeUrl(url);
 
         // Update Frame Content
         if (modalVideoFrameWrap) {
-          if (embedUrl.endsWith(".mp4") || embedUrl.endsWith(".webm")) {
+          if (isDirectVideo || embedUrl.endsWith(".mp4") || embedUrl.endsWith(".webm")) {
             modalVideoFrameWrap.innerHTML = `
-              <video src="${embedUrl}" controls autoplay style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;">
+              <video src="${embedUrl}" controls autoplay playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;">
                 आपका ब्राउज़र यह वीडियो चलाने में असमर्थ है।
               </video>
             `;
@@ -4462,7 +4526,7 @@
               <iframe
                 id="modalVideoIframe"
                 src="${finalSrc}"
-                title="${title || 'लोकतांत्रिक महा-संकल्प यात्रा वीडियो'}"
+                title="${title || 'संकल्प यात्रा विशेष वीडियो'}"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowfullscreen
                 style="position:absolute;inset:0;width:100%;height:100%;border:none;"
@@ -4473,8 +4537,13 @@
 
         // Update Metadata
         if (modalVideoTitle) modalVideoTitle.textContent = title || "लोकतांत्रिक संकल्प विशेष वीडियो";
-        if (modalCategoryBadge) modalCategoryBadge.textContent = category || "लोकतांत्रिक संकल्प";
-        if (modalVideoPerson) modalVideoPerson.textContent = personOrPlace || "संकल्प सभा स्थल";
+        if (modalCategoryBadge) {
+          let catText = category || "संकल्प यात्रा";
+          if (/kalash|कलश/i.test(catText)) catText = "संकल्प यात्रा";
+          modalCategoryBadge.textContent = catText;
+        }
+        const modalVideoPeople = document.getElementById("modalVideoPeople");
+        if (modalVideoPeople) modalVideoPeople.textContent = peopleCount || "5,000+ लोग";
         if (modalVideoDistrict) modalVideoDistrict.textContent = district || "प्रमुख केंद्र";
         if (modalVideoDate) modalVideoDate.textContent = date || "विशेष जन-सभा";
         activeVideoShareUrl = url;
@@ -4496,12 +4565,12 @@
         card.addEventListener("click", function () {
           const videoUrl = card.dataset.video;
           const videoTitle = card.dataset.title || card.querySelector("h3")?.textContent?.trim();
-          const categoryTag = card.querySelector(".card-category-tag")?.textContent?.trim() || "लोकतांत्रिक संकल्प";
-          const person = card.dataset.person || "";
+          let categoryTag = "संकल्प यात्रा";
+          const people = card.dataset.people || card.querySelector(".card-category-tag span")?.textContent?.trim() || "5,000+ लोग";
           const district = card.dataset.district || "";
           const date = card.dataset.date || "";
 
-          openModalVideo(videoUrl, videoTitle, categoryTag, person, district, date);
+          openModalVideo(videoUrl, videoTitle, categoryTag, people, district, date);
         });
       });
 

@@ -47,9 +47,14 @@ const adminDashboardRoutes = require("./routes/admin/dashboardRoutes");
 const adminGalleryRoutes = require("./routes/admin/galleryRoutes");
 const adminHomeRoutes = require("./routes/admin/homeRoutes");
 const adminKalashYatraRoutes = require("./routes/admin/kalashYatraRoutes");
+const adminAboutRoutes = require("./routes/admin/aboutRoutes");
+const adminContactRoutes = require("./routes/admin/contactRoutes");
+const aboutController = require("./controllers/aboutController");
 const KalashYatra = require("./models/KalashYatra");
+const ContactInfo = require("./models/ContactInfo");
 const homeRoutes = require("./routes/homeRoutes");
 const galleryRoutes = require("./routes/galleryRoutes");
+const contactRoutes = require("./routes/contactRoutes");
 
 // ========================================
 // View Engine
@@ -105,6 +110,8 @@ app.use("/admin", adminDashboardRoutes);
 app.use("/admin/gallery", adminGalleryRoutes);
 app.use("/admin/home", adminHomeRoutes);
 app.use("/admin/kalash-yatra", adminKalashYatraRoutes);
+app.use("/admin/about", adminAboutRoutes);
+app.use("/admin/contact", adminContactRoutes);
 
 // ========================================
 // Test API
@@ -118,7 +125,14 @@ app.get("/api/test", (req, res) => {
 });
 
 // ========================================
+// Public About Page
+// ========================================
+
+app.get("/about", aboutController.getAboutPage);
+
+// ========================================
 // Public Video Page (Kalash Yatra)
+// IMPORTANT: This must be BEFORE 404 Handler
 // ========================================
 
 app.get("/video", async (req, res) => {
@@ -141,6 +155,7 @@ app.get("/video", async (req, res) => {
 // Public Gallery & Home Routes
 // ========================================
 
+app.use("/contact", contactRoutes);
 app.use("/gallery", galleryRoutes);
 app.use("/sankalp-photos", (req, res) => res.redirect("/gallery"));
 app.use("/", homeRoutes);
@@ -187,6 +202,9 @@ const startServer = async () => {
 
     // Automatically seed default gallery photos if empty
     await seedGalleryData();
+
+    // Automatically seed default contact page data if empty
+    await ContactInfo.getOrSeed();
 
     app.listen(PORT, "0.0.0.0", () => {
       console.log(`Server running at http://localhost:${PORT}`);
