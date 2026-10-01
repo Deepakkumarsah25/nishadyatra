@@ -4,12 +4,10 @@
 ========================================================================== */
 
 .video-showcase-section {
-  padding: 85px 0 95px 0;
-  background: radial-gradient(circle at top right, rgba(215, 42, 42, 0.06) 0%, transparent 55%),
-              radial-gradient(circle at bottom left, rgba(201, 125, 16, 0.05) 0%, transparent 50%),
-              #ffffff;
-  border-top: 1px solid #ebdccf;
-  border-bottom: 1px solid #ebdccf;
+  padding: 38px 0 36px 0;
+  background: transparent;
+  border-top: none;
+  border-bottom: none;
   position: relative;
   overflow: hidden;
 }
