@@ -507,41 +507,17 @@
               </div>
             </div>
 
-                <!-- Navigation Tabs -->
+            <!-- Navigation Tabs -->
                 <div class="ky-nav-tabs">
-                  <a href="/admin/kalash-yatra?tab=hero" class="ky-tab-btn <%= activeTab === 'hero' ? 'active' : '' %>">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <rect x="3" y="3" width="18" height="18" rx="2" />
-                      <line x1="3" y1="9" x2="21" y2="9" />
-                      <line x1="9" y1="21" x2="9" y2="9" />
-                    </svg>
-                    <span>1. Hero & Statistics</span>
-                  </a>
-                  <a href="/admin/kalash-yatra?tab=milestones"
-                    class="ky-tab-btn <%= activeTab === 'milestones' ? 'active' : '' %>">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <polygon points="12 2 2 7 12 12 22 7 12 2" />
-                      <polyline points="2 17 12 22 22 17" />
-                      <polyline points="2 12 12 17 22 12" />
-                    </svg>
-                    <span>2. Yatra Milestones (5 Stops)</span>
-                  </a>
                   <a href="/admin/kalash-yatra?tab=videos"
-                    class="ky-tab-btn <%= activeTab === 'videos' ? 'active' : '' %>">
+                    class="ky-tab-btn <%= (activeTab === 'videos' || !activeTab || activeTab !== 'history') ? 'active' : '' %>">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <rect x="2" y="2" width="20" height="20" rx="2.18" />
                       <line x1="7" y1="2" x2="7" y2="22" />
                       <line x1="17" y1="2" x2="17" y2="22" />
                       <line x1="2" y1="12" x2="22" y2="12" />
                     </svg>
-                    <span>3. Video Gallery (<%= kalash.videos ? kalash.videos.length : 0 %>)</span>
-                  </a>
-                  <a href="/admin/kalash-yatra?tab=pledge"
-                    class="ky-tab-btn <%= activeTab === 'pledge' ? 'active' : '' %>">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                    </svg>
-                    <span>4. लोकतांत्रिक महा-संकल्प (Pledge)</span>
+                    <span>📹 वीडियो गैलरी प्रबंधन (Video Gallery - <%= kalash.videos ? kalash.videos.length : 0 %>)</span>
                   </a>
                   <a href="/admin/kalash-yatra?tab=history"
                     class="ky-tab-btn <%= activeTab === 'history' ? 'active' : '' %>"
@@ -550,270 +526,14 @@
                       <circle cx="12" cy="12" r="10" />
                       <polyline points="12 6 12 12 16 14" />
                     </svg>
-                    <span>5. 📋 गतिविधि इतिहास (Activity Log)</span>
+                    <span>📋 गतिविधि इतिहास (Activity Log)</span>
                   </a>
                 </div>
 
                 <!-- ====================================================
-         TAB 1: HERO & STATS
-    ===================================================== -->
-                <% if (activeTab==='hero' ) { %>
-                  <div class="admin-card">
-                    <div class="admin-card-header">
-                      <h3>
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
-                          stroke-width="2">
-                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                        </svg>
-                        Hero Section Titles, Statistics & Featured Video
-                      </h3>
-                    </div>
-
-                    <div class="admin-card-body">
-                      <form action="/admin/kalash-yatra/hero" method="POST">
-
-                        <div class="form-section-title">🚩 Main Title & Badge</div>
-                        <div class="form-grid-2">
-                          <div class="form-group">
-                            <label for="liveBadgeText">Live Badge Text</label>
-                            <input type="text" id="liveBadgeText" name="liveBadgeText" class="form-control"
-                              value="<%= kalash.hero.liveBadgeText %>" required />
-                            <span class="help-hint">e.g. Sacred Pledge Campaign • National Mega Event</span>
-                          </div>
-                          <div class="form-group">
-                            <label for="headingMain">Main Heading (Primary)</label>
-                            <input type="text" id="headingMain" name="headingMain" class="form-control"
-                              value="<%= kalash.hero.headingMain %>" required />
-                          </div>
-                        </div>
-
-                        <div class="form-group">
-                          <label for="headingHighlight">Highlight Heading (Accent)</label>
-                          <input type="text" id="headingHighlight" name="headingHighlight" class="form-control"
-                            value="<%= kalash.hero.headingHighlight %>" required />
-                        </div>
-
-                        <div class="form-group">
-                          <label for="subheading">Subheading</label>
-                          <textarea id="subheading" name="subheading" rows="3" class="form-control"
-                            required><%= kalash.hero.subheading %></textarea>
-                        </div>
-
-                        <div class="form-group">
-                          <label for="highlights">Key Highlights (One point per line)</label>
-                          <textarea id="highlights" name="highlights" rows="3"
-                            class="form-control"><%= (kalash.hero.highlights || []).join('\n') %></textarea>
-                          <span class="help-hint">Each line will create a checkmark bullet point.</span>
-                        </div>
-
-                        <div class="form-section-title">📊 4 Key Numerical Statistics (Stats Strip)</div>
-                        <div
-                          style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
-                          <% (kalash.hero.stats || []).forEach((st, idx)=> { %>
-                            <div
-                              style="background: #faf7f5; padding: 14px; border-radius: 10px; border: 1px solid var(--admin-border);">
-                              <strong style="color: var(--admin-primary-dark); font-size: 12px;">Stat <%= idx + 1 %>
-                                  </strong>
-                              <div class="form-group" style="margin-top: 8px;">
-                                <label>Number / Value</label>
-                                <input type="text" name="stat<%= idx %>_num" class="form-control"
-                                  value="<%= st.number %>" required />
-                              </div>
-                              <div class="form-group">
-                                <label>Title / Label</label>
-                                <input type="text" name="stat<%= idx %>_label" class="form-control"
-                                  value="<%= st.label %>" required />
-                              </div>
-                              <div class="form-group">
-                                <label>Sub-label</label>
-                                <input type="text" name="stat<%= idx %>_sub" class="form-control"
-                                  value="<%= st.sub %>" />
-                              </div>
-                            </div>
-                            <% }) %>
-                        </div>
-
-                        <div class="form-section-title">🎥 Featured Video Player</div>
-                        <div class="form-grid-2">
-                          <div class="form-group">
-                            <label for="featVideo_title">Video Title</label>
-                            <input type="text" id="featVideo_title" name="featVideo_title" class="form-control"
-                              value="<%= kalash.hero.featuredVideo.title %>" required />
-                          </div>
-                          <div class="form-group">
-                            <label for="featVideo_duration">Duration</label>
-                            <input type="text" id="featVideo_duration" name="featVideo_duration" class="form-control"
-                              value="<%= kalash.hero.featuredVideo.duration %>" />
-                          </div>
-                        </div>
-
-                        <div class="form-grid-2">
-                          <div class="form-group">
-                            <label for="featVideo_videoUrl">YouTube Embed URL</label>
-                            <input type="url" id="featVideo_videoUrl" name="featVideo_videoUrl" class="form-control"
-                              value="<%= kalash.hero.featuredVideo.videoUrl %>" required />
-                            <span class="help-hint">e.g. https://www.youtube.com/embed/dQw4w9WgXcQ</span>
-                          </div>
-                          <div class="form-group">
-                            <label for="featVideo_posterImage">Poster Image Path</label>
-                            <input type="text" id="featVideo_posterImage" name="featVideo_posterImage"
-                              class="form-control" value="<%= kalash.hero.featuredVideo.posterImage %>" />
-                          </div>
-                        </div>
-
-                        <div style="margin-top: 24px;">
-                          <button type="submit" class="admin-btn admin-btn-primary">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
-                              stroke-width="2">
-                              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
-                              <polyline points="17 21 17 13 7 13 7 21" />
-                              <polyline points="7 3 7 8 15 8" />
-                            </svg>
-                            <span>Save Hero Section</span>
-                          </button>
-                        </div>
-                      </form>
-                    </div>
-                  </div>
-                  <% } %>
-
-                    <!-- ====================================================
-         TAB 2: MILESTONES SHOWCASE (5 ITEMS)
-    ===================================================== -->
-                    <% if (activeTab==='milestones' ) { %>
-                      <div class="admin-card">
-                        <div class="admin-card-header">
-                          <h3>
-                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
-                              stroke-width="2">
-                              <polygon points="12 2 2 7 12 12 22 7 12 2" />
-                              <polyline points="2 17 12 22 22 17" />
-                              <polyline points="2 12 12 17 22 12" />
-                            </svg>
-                            Yatra Milestones (5 Milestone Cards)
-                          </h3>
-                        </div>
-
-                        <div class="admin-card-body">
-                          <form action="/admin/kalash-yatra/milestones" method="POST">
-
-                            <div class="form-section-title">🚩 Section Header</div>
-                            <div class="form-grid-2">
-                              <div class="form-group">
-                                <label for="kicker">Kicker Tag</label>
-                                <input type="text" id="kicker" name="kicker" class="form-control"
-                                  value="<%= kalash.milestonesSection.kicker %>" required />
-                              </div>
-                              <div class="form-group">
-                                <label for="title">Main Title (Initial Part)</label>
-                                <input type="text" id="title" name="title" class="form-control"
-                                  value="<%= kalash.milestonesSection.title %>" required />
-                              </div>
-                            </div>
-
-                            <div class="form-grid-2">
-                              <div class="form-group">
-                                <label for="titleHighlight">Highlight Title (Accent Part)</label>
-                                <input type="text" id="titleHighlight" name="titleHighlight" class="form-control"
-                                  value="<%= kalash.milestonesSection.titleHighlight %>" required />
-                              </div>
-                              <div class="form-group">
-                                <label for="subtitle">Subtitle</label>
-                                <input type="text" id="subtitle" name="subtitle" class="form-control"
-                                  value="<%= kalash.milestonesSection.subtitle %>" required />
-                              </div>
-                            </div>
-
-                            <div class="form-section-title">📍 5 Milestone Cards Details</div>
-
-                            <% (kalash.milestonesSection.items || []).forEach((item, idx)=> { %>
-                              <div class="milestone-editor-card">
-                                <span class="milestone-badge-pill">Stop #<%= idx + 1 %>: <%= item.title || item.district
-                                      %></span>
-
-                                <div class="form-grid-3">
-                                  <div class="form-group">
-                                    <label>State Filter (Key)</label>
-                                    <select name="milestones[<%= idx %>][stateKey]" class="form-control">
-                                      <option value="bihar" <%=item.stateKey==='bihar' ? 'selected' : '' %>>Bihar
-                                        (bihar)</option>
-                                      <option value="uttar-pradesh" <%=item.stateKey==='uttar-pradesh' ? 'selected' : ''
-                                        %>>Uttar Pradesh (uttar-pradesh)</option>
-                                      <option value="madhya-pradesh" <%=item.stateKey==='madhya-pradesh' ? 'selected'
-                                        : '' %>>Madhya Pradesh (madhya-pradesh)</option>
-                                      <option value="jharkhand" <%=item.stateKey==='jharkhand' ? 'selected' : '' %>
-                                        >Jharkhand (jharkhand)</option>
-                                      <option value="rajasthan" <%=item.stateKey==='rajasthan' ? 'selected' : '' %>
-                                        >Rajasthan (rajasthan)</option>
-                                    </select>
-                                  </div>
-                                  <div class="form-group">
-                                    <label>State Name</label>
-                                    <input type="text" name="milestones[<%= idx %>][stateName]" class="form-control"
-                                      value="<%= item.stateName %>" required />
-                                  </div>
-                                  <div class="form-group">
-                                    <label>District / Location</label>
-                                    <input type="text" name="milestones[<%= idx %>][district]" class="form-control"
-                                      value="<%= item.district %>" required />
-                                  </div>
-                                </div>
-
-                                <div class="form-grid-2">
-                                  <div class="form-group">
-                                    <label>Card Title</label>
-                                    <input type="text" name="milestones[<%= idx %>][title]" class="form-control"
-                                      value="<%= item.title %>" required />
-                                  </div>
-                                  <div class="form-group">
-                                    <label>Tag (e.g. 🚩 Milestone 1)</label>
-                                    <input type="text" name="milestones[<%= idx %>][tag]" class="form-control"
-                                      value="<%= item.tag %>" />
-                                  </div>
-                                </div>
-
-                                <div class="form-grid-2">
-                                  <div class="form-group">
-                                    <label>Image Path</label>
-                                    <input type="text" name="milestones[<%= idx %>][image]" class="form-control"
-                                      value="<%= item.image %>" required />
-                                  </div>
-                                  <div class="form-group">
-                                    <label>YouTube Embed Video URL</label>
-                                    <input type="url" name="milestones[<%= idx %>][videoUrl]" class="form-control"
-                                      value="<%= item.videoUrl %>" />
-                                  </div>
-                                </div>
-
-                                <div class="form-group" style="margin-bottom: 0;">
-                                  <label>Brief Description</label>
-                                  <textarea name="milestones[<%= idx %>][description]" rows="2" class="form-control"
-                                    required><%= item.description %></textarea>
-                                </div>
-                              </div>
-                              <% }) %>
-
-                                <div style="margin-top: 24px;">
-                                  <button type="submit" class="admin-btn admin-btn-primary">
-                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
-                                      stroke-width="2">
-                                      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
-                                      <polyline points="17 21 17 13 7 13 7 21" />
-                                      <polyline points="7 3 7 8 15 8" />
-                                    </svg>
-                                    <span>Save Milestones</span>
-                                  </button>
-                                </div>
-                          </form>
-                        </div>
-                      </div>
-                      <% } %>
-
-                        <!-- ====================================================
-         TAB 3: VIDEO GALLERY
-    ===================================================== -->
-                        <% if (activeTab==='videos' ) { %>
+                     TAB: VIDEO GALLERY (VIDEO MANAGEMENT)
+                ===================================================== -->
+                <% if (activeTab === 'videos' || !activeTab || activeTab !== 'history') { %>
                           <!-- Add New Video Card -->
                           <div class="admin-card" style="margin-bottom: 24px;">
                             <div class="admin-card-header">
@@ -1085,112 +805,6 @@
                           </div>
                           <% } %>
 
-                <!-- ====================================================
-                     TAB 4: DEMOCRATIC PLEDGE (लोकतांत्रिक महा-संकल्प)
-                ===================================================== -->
-                <% if (activeTab === 'pledge') { %>
-                  <div class="admin-card">
-                    <div class="admin-card-header">
-                      <h3>
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                        </svg>
-                        लोकतांत्रिक महा-संकल्प पत्र (Democratic Pledge Showcase)
-                      </h3>
-                      <span style="font-size: 12px; color: var(--admin-text-muted);">
-                        यह संकल्प पत्र सार्वजनिक पृष्ठ (kalash-yatra.ejs) पर सुनहरे बैनर में प्रदर्शित होगा
-                      </span>
-                    </div>
-
-                    <div class="admin-card-body">
-                      <form action="/admin/kalash-yatra/pledge" method="POST">
-                        <div style="background: #fff8f5; border: 1.5px solid #ffcaa5; border-radius: 12px; padding: 16px 20px; margin-bottom: 22px; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
-                          <div>
-                            <strong style="color: #9a2c0c; font-size: 14px; display: block; margin-bottom: 3px;">
-                              🚩 सार्वजनिक पृष्ठ पर संकल्प पत्र प्रदर्शित करें
-                            </strong>
-                            <span style="color: #6c584c; font-size: 12.5px;">
-                              सक्षम करने पर kalash-yatra पृष्ठ पर यह महा-संकल्प लाइव दिखेगा।
-                            </span>
-                          </div>
-                          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 700;">
-                            <input type="checkbox" name="enabled" value="true" <%= (kalash.democraticPledge && kalash.democraticPledge.enabled !== false) ? 'checked' : '' %> style="width: 20px; height: 20px; accent-color: var(--admin-primary);" />
-                            <span>सक्रिय (Active)</span>
-                          </label>
-                        </div>
-
-                        <div class="form-grid-2">
-                          <div class="form-group">
-                            <label for="pledgeBadge">बैज / टैग (Badge Text)</label>
-                            <input type="text" id="pledgeBadge" name="badge" class="form-control"
-                              value="<%= (kalash.democraticPledge && kalash.democraticPledge.badge) || '🇮🇳 ऐतिहासिक लोकतांत्रिक महा-संकल्प' %>" required />
-                          </div>
-                          <div class="form-group">
-                            <label for="pledgeTitle">मुख्य शीर्षक (Pledge Title)</label>
-                            <input type="text" id="pledgeTitle" name="title" class="form-control"
-                              value="<%= (kalash.democraticPledge && kalash.democraticPledge.title) || 'लोकतांत्रिक संकल्प पत्र' %>" required />
-                          </div>
-                        </div>
-
-                        <div class="form-group">
-                          <label for="pledgeSubtitle">उप-शीर्षक (Pledge Subtitle)</label>
-                          <input type="text" id="pledgeSubtitle" name="subtitle" class="form-control"
-                            value="<%= (kalash.democraticPledge && kalash.democraticPledge.subtitle) || 'स्वतंत्र विचार, स्वाभिमान एवं जनमत का संवैधानिक अधिकार' %>" />
-                        </div>
-
-                        <div class="form-group" style="background: #faf7f5; padding: 18px; border-radius: 12px; border: 1.5px dashed #e2cfc4;">
-                          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                            <label for="pledgeText" style="font-weight: 800; color: #881337; font-size: 14px; margin-bottom: 0;">
-                              ⭐ मुख्य संकल्प वाक्य (Pledge Statement) *
-                            </label>
-                            <button type="button" id="btnResetDefaultPledge" class="btn-sm-action" style="background: #ffe4e6; color: #9f1239; border: 1px solid #fecdd3; padding: 4px 10px; font-size: 11.5px; border-radius: 6px; cursor: pointer; font-weight: 700;">
-                              ↺ डिफ़ॉल्ट संकल्प वाक्य लोड करें
-                            </button>
-                          </div>
-                          <textarea id="pledgeText" name="pledgeText" rows="3" class="form-control" style="font-size: 14.5px; font-weight: 600; line-height: 1.6; color: #431407;" required><%= (kalash.democraticPledge && kalash.democraticPledge.pledgeText) || 'आज हम लोकतांत्रिक संकल्प लेते हैं कि आगामी चुनाव में भाजपा के पक्ष में मतदान नहीं करेंगे तथा अपने विवेक और विचार के आधार पर अपने मताधिकार का प्रयोग करेंगे।' %></textarea>
-                          <span class="help-hint">
-                            यह वाक्य सार्वजनिक पृष्ठ पर उद्धरण (Quote) के रूप में विशाल अक्षरों में प्रदर्शित होगा।
-                          </span>
-                        </div>
-
-                        <div class="form-grid-2">
-                          <div class="form-group">
-                            <label for="pledgeSignOff">हस्ताक्षर / समर्पण पंक्ति (Sign-off Text)</label>
-                            <input type="text" id="pledgeSignOff" name="signOff" class="form-control"
-                              value="<%= (kalash.democraticPledge && kalash.democraticPledge.signOff) || '— समस्त समाज, युवा एवं मातृशक्ति का सामूहिक संकल्प' %>" />
-                          </div>
-                          <div class="form-group">
-                            <label for="pledgeVideo">संकल्प का संबंधित वीडियो URL (Optional YouTube Embed)</label>
-                            <input type="url" id="pledgeVideo" name="videoUrl" class="form-control"
-                              placeholder="https://www.youtube.com/embed/..."
-                              value="<%= (kalash.democraticPledge && kalash.democraticPledge.videoUrl) || '' %>" />
-                          </div>
-                        </div>
-
-                        <div class="form-group">
-                          <label for="pledgePoints">संकल्प के मुख्य बिंदु (प्रति पंक्ति 1 बिंदु)</label>
-                          <textarea id="pledgePoints" name="points" rows="3" class="form-control"><%= ((kalash.democraticPledge && kalash.democraticPledge.keyPoints) || [
-                            'मतदान हमारा संवैधानिक अधिकार और स्वाभिमान का प्रतीक है',
-                            'समाज के समग्र हितों, विकास और मान-सम्मान को ध्यान में रखकर ही वोट देंगे',
-                            'किसी भी अनुचित दबाव या बहकावे में न आकर स्वतंत्र विवेक से निर्णय लेंगे'
-                          ]).join('\n') %></textarea>
-                          <span class="help-hint">प्रत्येक नई पंक्ति एक चेकपॉइंट बैज बनाएगी।</span>
-                        </div>
-
-                        <div style="margin-top: 24px;">
-                          <button type="submit" class="admin-btn admin-btn-primary">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
-                              <polyline points="17 21 17 13 7 13 7 21" />
-                              <polyline points="7 3 7 8 15 8" />
-                            </svg>
-                            <span>Save Democratic Pledge</span>
-                          </button>
-                        </div>
-                      </form>
-                    </div>
-                  </div>
-                <% } %>
 
               </div>
             </div>
@@ -1680,15 +1294,6 @@
                   });
                 }
 
-                // 3. Reset Default Pledge button in Tab 4
-                const btnResetDefaultPledge = document.getElementById("btnResetDefaultPledge");
-                const pledgeText = document.getElementById("pledgeText");
-                if (btnResetDefaultPledge && pledgeText) {
-                  btnResetDefaultPledge.addEventListener("click", function () {
-                    pledgeText.value = DEFAULT_PLEDGE_TEXT;
-                    pledgeText.focus();
-                  });
-                }
               });
             </script>
 

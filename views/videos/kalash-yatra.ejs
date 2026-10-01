@@ -2215,15 +2215,25 @@
     }
 
     .card-category-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       color: var(--primary-crimson);
-      font-size: 11px;
+      font-size: 11.5px;
       font-weight: 800;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
+      letter-spacing: 0.3px;
       background: var(--crimson-soft);
       padding: 3px 10px;
       border-radius: var(--radius-full);
-      border: 1px solid rgba(185, 28, 28, 0.15);
+      border: 1px solid rgba(185, 28, 28, 0.18);
+      white-space: nowrap;
+    }
+
+    .card-category-tag svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+      flex-shrink: 0;
     }
 
     .card-district-pill {
@@ -3609,154 +3619,6 @@
   ===================================================== -->
   <main class="kalash-page">
 
-    <!-- ===================================================
-         YATRA VISUAL STORYCASE: IMAGES & TEXT SHOWCASE
-    ==================================================== -->
-    <section class="yatra-storycase-section" id="featuredShowcase">
-
-      <!-- Section Header -->
-      <div class="yatra-storycase-header">
-        <div class="storycase-kicker">
-          <span>★</span>
-          <span><%= (kalash && kalash.milestonesSection && kalash.milestonesSection.kicker) || 'ऐतिहासिक जन-संकल्प • लोकतांत्रिक अधिकार चेतना अभियान' %></span>
-          <span class="storycase-kicker-sep">•</span>
-          <span class="storycase-kicker-sub">ऐतिहासिक महासंगम</span>
-        </div>
-
-        <h2 class="storycase-title">
-          <%= (kalash && kalash.milestonesSection && kalash.milestonesSection.title) || 'लोकतांत्रिक महा-संकल्प यात्रा — ' %><span class="highlight"><%= (kalash && kalash.milestonesSection && kalash.milestonesSection.titleHighlight) || 'जनमत जागरण और स्वतंत्र मताधिकार का उद्घोष' %></span>
-        </h2>
-
-        <p class="storycase-sub">
-          <%= (kalash && kalash.milestonesSection && kalash.milestonesSection.subtitle) || 'आज हम लोकतांत्रिक संकल्प लेते हैं कि आगामी चुनाव में भाजपा के पक्ष में मतदान नहीं करेंगे तथा अपने विवेक और विचार के आधार पर अपने मताधिकार का प्रयोग करेंगे।' %>
-        </p>
-      </div>
-
-      <div class="storycase-container">
-
-        <%
-          const stateNamesMap = {
-            'bihar': 'बिहार',
-            'uttar-pradesh': 'उत्तर प्रदेश',
-            'madhya-pradesh': 'मध्य प्रदेश',
-            'jharkhand': 'झारखंड',
-            'rajasthan': 'राजस्थान'
-          };
-
-          function resolveHighlightThumb(thumb, vUrl) {
-            if (thumb && thumb.trim() && !thumb.includes('kalash-yatra-hero.jpg')) {
-              return thumb.trim();
-            }
-            const m = (vUrl || '').match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/|v\/))([\w-]{11})/);
-            if (m && m[1]) {
-              return 'https://img.youtube.com/vi/' + m[1] + '/hqdefault.jpg';
-            }
-            return thumb && thumb.trim() ? thumb.trim() : '/images/democratic-pledge-featured.jpg';
-          }
-
-          let featMilestone = null;
-
-          // 1. Priority: Whichever video is highlighted in admin (isHighlighted === true)
-          const highlightedVid = (typeof kalash !== 'undefined' && kalash.videos && kalash.videos.length > 0)
-            ? kalash.videos.find(v => v.isHighlighted)
-            : null;
-
-          if (highlightedVid) {
-            const sKey = highlightedVid.state || 'bihar';
-            const sName = stateNamesMap[sKey] || highlightedVid.stateName || 'बिहार';
-            const resolvedThumb = resolveHighlightThumb(highlightedVid.thumbnail, highlightedVid.videoUrl);
-            featMilestone = {
-              stateKey: sKey,
-              stateName: sName,
-              district: highlightedVid.district || 'गोपालगंज',
-              title: highlightedVid.title,
-              image: resolvedThumb,
-              description: highlightedVid.description && highlightedVid.description.trim()
-                ? highlightedVid.description.trim()
-                : 'हजारों नागरिकों और मातृशक्तियों ने शपथ ली: आगामी चुनाव में भाजपा के पक्ष में मतदान नहीं करेंगे तथा अपने विवेक और विचार के आधार पर अपने मताधिकार का प्रयोग करेंगे।',
-              tag: highlightedVid.tag || '🚩 मुख्य संकल्प वीडियो',
-              videoUrl: highlightedVid.videoUrl,
-              duration: highlightedVid.duration || 'Video',
-            };
-          } else if (typeof kalash !== 'undefined' && kalash.hero && kalash.hero.featuredVideo && kalash.hero.featuredVideo.title) {
-            // 2. Fallback: kalash.hero.featuredVideo
-            const fv = kalash.hero.featuredVideo;
-            featMilestone = {
-              stateKey: 'bihar',
-              stateName: 'बिहार',
-              district: 'मुख्य संकल्प',
-              title: fv.title,
-              image: resolveHighlightThumb(fv.posterImage, fv.videoUrl),
-              description: 'हजारों नागरिकों और मातृशक्तियों ने शपथ ली: आगामी चुनाव में भाजपा के पक्ष में मतदान नहीं करेंगे तथा अपने विवेक और विचार के आधार पर अपने मताधिकार का प्रयोग करेंगे।',
-              tag: fv.badge || '🚩 मुख्य संकल्प वीडियो',
-              videoUrl: fv.videoUrl,
-              duration: fv.duration || 'Video',
-            };
-          } else if (typeof kalash !== 'undefined' && kalash.milestonesSection && kalash.milestonesSection.items && kalash.milestonesSection.items.length > 0) {
-            // 3. Fallback: milestonesSection item 0
-            featMilestone = kalash.milestonesSection.items[0];
-          }
-        %>
-        <% if (featMilestone) { %>
-        <!-- 1. Featured Big Story Card -->
-        <article class="storycase-featured-card">
-          <div class="storycase-featured-media btn-watch-featured" data-video="<%= featMilestone.videoUrl %>" data-title="<%= featMilestone.title %>" style="cursor: pointer;" title="वीडियो देखने के लिए क्लिक करें">
-            <img
-              src="<%= featMilestone.image %>"
-              alt="<%= featMilestone.title %>"
-              class="storycase-featured-img"
-              loading="lazy"
-              onerror="this.src='/images/democratic-pledge-featured.jpg'"
-            />
-            <div class="storycase-featured-overlay"></div>
-            <!-- Center Animated Play Button on Thumbnail -->
-            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 68px; height: 68px; border-radius: 50%; background: rgba(215, 42, 42, 0.92); color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 8px rgba(255,255,255,0.22), 0 8px 25px rgba(0,0,0,0.4); transition: transform 0.25s ease; z-index: 3;" onmouseover="this.style.transform='translate(-50%, -50%) scale(1.1)';" onmouseout="this.style.transform='translate(-50%, -50%) scale(1)';">
-              <svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor" style="margin-left: 3px;"><path d="M8 5v14l11-7z"/></svg>
-            </div>
-            <div class="storycase-featured-badge">
-              <span><%= featMilestone.tag || '★ मुख्य संकल्प वीडियो' %></span>
-            </div>
-            <div class="storycase-featured-caption">
-              <h4><%= featMilestone.title %></h4>
-              <p>
-                <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
-                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/>
-                </svg>
-                <span><%= featMilestone.district %>, <%= featMilestone.stateName %> • जन-जागरण अभियान</span>
-              </p>
-            </div>
-          </div>
-
-          <div class="storycase-featured-content">
-            <div>
-              <div class="storycase-meta-tag-row">
-                <span class="storycase-tag-pill crimson"><%= featMilestone.stateName %> • <%= featMilestone.district %></span>
-                <span class="storycase-tag-pill gold"><%= featMilestone.tag || 'मुख्य संकल्प वीडियो' %></span>
-              </div>
-
-              <h3><%= featMilestone.title %></h3>
-
-              <p><%= featMilestone.description %></p>
-            </div>
-
-            <div class="storycase-actions-row">
-              <button type="button" class="btn-storycase-primary btn-jump-filter-state" data-state="<%= featMilestone.stateKey %>">
-                <span><%= featMilestone.stateName %> के संकल्प वीडियो ↓</span>
-              </button>
-              <button type="button" class="btn-storycase-outline btn-watch-featured" data-video="<%= featMilestone.videoUrl %>" data-title="<%= featMilestone.title %>">
-                <span>संकल्प वीडियो देखें ▶</span>
-              </button>
-            </div>
-          </div>
-        </article>
-        <% } %>
-
-
-
-
-      </div>
-
-    </section>
 
     <!-- ===================================================
          MOBILE FLOATING FILTER TAB & DRAWER OVERLAY
@@ -3870,19 +3732,7 @@
     <section class="gallery-section" id="videoGallery">
       <div class="container">
 
-        <div class="gallery-header-row">
-          <div>
-            <div class="gallery-section-badge">
-              <span class="badge-dot"></span>
-              <span><%= (kalash && kalash.hero && kalash.hero.liveBadgeText) || 'लोकतांत्रिक महा-संकल्प • वीडियो संकलन' %></span>
-            </div>
-            <h2 class="gallery-section-title">
-              <%= (kalash && kalash.hero && kalash.hero.headingMain) || 'जन-जन का संकल्प — लोकतंत्र को मजबूत बनाने का संकल्प ' %><span class="highlight"><%= (kalash && kalash.hero && kalash.hero.headingHighlight) || 'स्वतंत्र मतदान, स्वाभिमान और सामाजिक चेतना' %></span>
-            </h2>
-            <p class="gallery-section-subtitle">
-              <%= (kalash && kalash.hero && kalash.hero.subheading) || 'आज हम लोकतांत्रिक संकल्प लेते हैं कि आगामी चुनाव में भाजपा के पक्ष में मतदान नहीं करेंगे तथा अपने विवेक और विचार के आधार पर अपने मताधिकार का प्रयोग करेंगे।' %>
-            </p>
-          </div>
+        <div class="gallery-header-row" style="justify-content: flex-end; margin-bottom: 16px;">
 
           <!-- View Mode Toggle (Grid / List format) -->
           <div class="gallery-view-controls">
@@ -3957,7 +3807,10 @@
 
               <div class="card-info-box">
                 <div class="card-tags-row">
-                  <span class="card-category-tag"><%= (vid.tag && /kalash|कलश/i.test(vid.tag)) ? 'संकल्प यात्रा' : (vid.tag || (vid.category === 'sankalp' || vid.category === 'yatra' ? 'संकल्प यात्रा' : vid.category === 'speech' ? 'संबोधन' : vid.category === 'program' ? 'जन-जागरण' : 'संकल्प यात्रा')) %></span>
+                  <span class="card-category-tag card-people-badge" title="उपस्थित जनसमूह">
+                    <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                    <span><%= vid.peopleCount || (vid.personOrPlace || (vid.viewsCount ? (vid.viewsCount + '+ लोग') : '5,000+ लोग')) %></span>
+                  </span>
                   <span class="card-district-pill">
                     <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
                     ज़िला: <strong><%= vid.district || '—' %></strong>
@@ -3965,15 +3818,6 @@
                 </div>
 
                 <h3 class="card-title-text"><%= vid.title %></h3>
-
-                <!-- उपस्थित जनसमूह / संख्या (People Count) -->
-                <div class="card-meta-line card-people-line">
-                  <span class="meta-icon">
-                    <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-                  </span>
-                  <span class="meta-label">उपस्थित जनसमूह:</span>
-                  <span class="meta-val"><%= vid.peopleCount || (vid.personOrPlace || (vid.viewsCount ? (vid.viewsCount + '+ लोग') : '5,000+ लोग')) %></span>
-                </div>
 
                 <p class="card-description-text">
                   <%= vid.description || '' %>
@@ -4779,9 +4623,8 @@
         card.addEventListener("click", function () {
           const videoUrl = card.dataset.video;
           const videoTitle = card.dataset.title || card.querySelector("h3")?.textContent?.trim();
-          let categoryTag = card.querySelector(".card-category-tag")?.textContent?.trim() || "संकल्प यात्रा";
-          if (/kalash|कलश/i.test(categoryTag)) categoryTag = "संकल्प यात्रा";
-          const people = card.dataset.people || card.querySelector(".card-people-line .meta-val")?.textContent?.trim() || "5,000+ लोग";
+          let categoryTag = "संकल्प यात्रा";
+          const people = card.dataset.people || card.querySelector(".card-category-tag span")?.textContent?.trim() || "5,000+ लोग";
           const district = card.dataset.district || "";
           const date = card.dataset.date || "";
 

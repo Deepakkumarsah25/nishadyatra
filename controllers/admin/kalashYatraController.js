@@ -5,7 +5,7 @@ const KalashYatra = require("../../models/KalashYatra");
 exports.getKalashYatraManager = async (req, res) => {
   try {
     const kalash = await KalashYatra.getOrSeed();
-    const activeTab = req.query.tab || "hero";
+    const activeTab = req.query.tab || "videos";
 
     // Auto-seed initial 2 logs if collection is empty
     const count = await AdminActivityLog.countDocuments({ module: "kalash-yatra" });
