@@ -7,6 +7,7 @@ const InitiativeInquiry = require("../models/InitiativeInquiry");
 const SankalpPhoto = require("../models/SankalpPhoto");
 const KalashYatra = require("../models/KalashYatra");
 const VideoNews = require("../models/news/VideoNews");
+const HomeAbout = require("../models/HomeAbout");
 const {
   defaultHeroSlides,
   defaultInitiatives,
@@ -19,20 +20,21 @@ const { defaultGalleryPhotos } = require("../scripts/seedGalleryData");
 // Public Home Page
 exports.getHomePage = async (req, res) => {
   try {
-    const [heroSlides, initiatives, whyChooseDoc, notices, quickInfoDoc, galleryPhotos, kalashDoc, newsDocs] =
+    const [heroSlides, initiatives, whyChooseDoc, notices, quickInfoDoc, galleryPhotos, kalashDoc, newsDocs, homeAboutDoc] =
       await Promise.all([
         HeroSlide.find({ isActive: true }).sort({ order: 1, createdAt: 1 }),
         Initiative.find({ isActive: true }).sort({ order: 1, createdAt: 1 }),
         WhyChoose.findOne(),
         SiteNotice.find({ isActive: true }).sort({ order: 1, createdAt: 1 }),
         HomeQuickInfo.findOne(),
-        SankalpPhoto.find({ isPublished: true }).sort({ order: 1, date: -1 }).limit(6),
+        SankalpPhoto.find({ isPublished: true }).sort({ order: 1, date: -1 }).limit(16),
         KalashYatra.getOrSeed().catch(() => KalashYatra.defaultData),
         VideoNews.find({ published: true })
           .sort({ publicationDate: -1, publishedAt: -1, createdAt: -1 })
           .limit(8)
           .lean()
           .catch(() => []),
+        HomeAbout.getOrSeed().catch(() => HomeAbout.defaultData),
       ]);
 
     // Fallbacks if database is completely empty or just initialized
@@ -45,7 +47,8 @@ exports.getHomePage = async (req, res) => {
       notices && notices.length > 0 ? notices : defaultNotices;
     const finalQuickInfo = quickInfoDoc || defaultQuickInfo;
     const finalGalleryPhotos =
-      galleryPhotos && galleryPhotos.length > 0 ? galleryPhotos : defaultGalleryPhotos.slice(0, 4);
+      galleryPhotos && galleryPhotos.length > 0 ? galleryPhotos : defaultGalleryPhotos;
+    const finalHomeAbout = homeAboutDoc || HomeAbout.defaultData;
 
     const kalash = kalashDoc || KalashYatra.defaultData;
 
@@ -165,6 +168,7 @@ exports.getHomePage = async (req, res) => {
       latestVideos,
       highlightNews,
       homeNewsList,
+      homeAbout: finalHomeAbout,
     });
   } catch (error) {
     console.error("Home page render error:", error);
@@ -178,12 +182,13 @@ exports.getHomePage = async (req, res) => {
       whyChoose: defaultWhyChoose,
       notices: defaultNotices,
       quickInfo: defaultQuickInfo,
-      galleryPhotos: defaultGalleryPhotos.slice(0, 4),
+      galleryPhotos: defaultGalleryPhotos,
       kalash: kalashFallback,
       highlightVideo: kalashFallback?.hero?.featuredVideo || null,
       latestVideos: (kalashFallback?.videos || []).slice(0, 4),
       highlightNews: null,
       homeNewsList: [],
+      homeAbout: HomeAbout.defaultData,
     });
   }
 };

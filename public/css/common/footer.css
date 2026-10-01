@@ -14,7 +14,7 @@
 /* Base Footer Shell */
 .site-footer {
   width: 100%;
-  margin-top: 60px;
+  margin-top: 0;
   background: var(--footer-bg);
   border-top: 1px solid var(--footer-border);
   color: var(--footer-text);
@@ -44,7 +44,7 @@
 .footer-main {
   width: min(1140px, calc(100% - 48px));
   margin: 0 auto;
-  padding: 45px 0 35px;
+  padding: 36px 0 28px;
   display: grid;
   grid-template-columns: 1.4fr 1.3fr 1fr;
   gap: 48px;
@@ -200,7 +200,7 @@
    ========================================= */
 @media (max-width: 860px) {
   .site-footer {
-    margin-top: 40px;
+    margin-top: 0;
     padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
   }
 
@@ -240,7 +240,7 @@
    ========================================= */
 @media (max-width: 560px) {
   .site-footer {
-    margin-top: 30px;
+    margin-top: 0;
   }
 
   .footer-main {

@@ -346,6 +346,10 @@ const seedHomeData = async () => {
     if (quickInfoCount === 0) {
       await HomeQuickInfo.create(defaultQuickInfo);
     }
+
+    // 6. Home About Highlight
+    const HomeAbout = require("../models/HomeAbout");
+    await HomeAbout.getOrSeed();
   } catch (err) {
     console.error("Home data seed error:", err.message);
   }

@@ -1,54 +1,71 @@
 <!-- =========================================
-     SANKALP PHOTO GALLERY — PREVIEW SECTION
+     SANKALP PHOTO GALLERY — SCROLLING PREVIEW SECTION
 ========================================= -->
-<section class="gallery-preview-section" id="gallery-preview" style="padding: 90px 24px; background: #ffffff; position: relative;">
-  <div style="max-width: 1240px; margin: 0 auto;">
+<section class="gallery-preview-section" id="gallery-preview" aria-label="Image Gallery Preview">
+  <div class="gallery-preview-wrapper">
+    
     <!-- Section Header -->
-    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 40px;">
-      <div>
-        <h2 style="font-family: 'Noto Sans Devanagari', sans-serif; font-size: clamp(28px, 4vw, 42px); color: #2c1e1e; line-height: 1.2; font-weight: 800;">
+    <div class="gallery-header-row">
+      <div class="gallery-title-wrap">
+        <h2>
           <span style="color: #d72a2a;">Image Gallery</span>
         </h2>
-      </div>
-
-      <div>
-        <a href="/gallery" class="btn-primary" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 10px; background: linear-gradient(135deg, #d72a2a, #a91c1c); color: #fff; font-weight: 800; font-size: 14px; text-decoration: none; box-shadow: 0 4px 15px rgba(215, 42, 42, 0.25);">
-          <span>View Full Gallery</span>
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
+        <p class="gallery-subtitle">संकल्प पत्र, चौपाल एवं सामाजिक अभियानों की ऐतिहासिक झलकियां</p>
       </div>
     </div>
 
-    <!-- Preview Grid (4-6 photos) -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px;">
-      <% if (typeof galleryPhotos !== 'undefined' && galleryPhotos && galleryPhotos.length > 0) { %>
-        <% galleryPhotos.slice(0, 4).forEach(function(photo) { %>
-          <a href="/gallery" style="text-decoration: none; color: inherit; display: block; background: #fff; border-radius: 16px; overflow: hidden; border: 1px solid #ebdcd3; box-shadow: 0 8px 24px rgba(40, 20, 15, 0.05); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;" onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 16px 35px rgba(215,42,42,0.14)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 24px rgba(40, 20, 15, 0.05)';">
-            <div style="position: relative; width: 100%; aspect-ratio: 4 / 3; overflow: hidden; background: #eee;">
-              <img
-                src="<%= photo.imageUrl %>"
-                alt="<%= photo.name %>"
-                style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;"
-                onmouseover="this.style.transform='scale(1.07)'"
-                onmouseout="this.style.transform='scale(1)'"
-                onerror="this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80'"
-              />
-              <span style="position: absolute; top: 12px; left: 12px; background: rgba(255,255,255,0.92); color: #a91c1c; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
-                📍 <%= photo.district %>
-              </span>
-              <span style="position: absolute; bottom: 12px; right: 12px; background: rgba(0,0,0,0.65); color: #fff; font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 20px;">
-                📅 <%= photo.formattedDate || (photo.date ? new Date(photo.date).toLocaleDateString('en-US') : '') %>
-              </span>
-            </div>
-            <div style="padding: 16px 18px;">
-              <strong style="display: block; font-size: 16px; color: #2c1e1e; font-weight: 800; margin-bottom: 4px;"><%= photo.name %></strong>
-              <p style="font-size: 12px; color: #806e67; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-                <%= photo.caption || 'A solemn pledge taken in dedication to the Nishad Sankalp Campaign.' %>
-              </p>
-            </div>
-          </a>
-        <% }); %>
-      <% } %>
+    <!-- Scrolling Cards Container (आगे-पीछे स्क्रोल करने वाला ट्रैक) -->
+    <div class="gallery-scroll-container" id="galleryScrollContainer">
+      <div class="gallery-scroll-track" id="galleryScrollTrack">
+        <% if (typeof galleryPhotos !== 'undefined' && galleryPhotos && galleryPhotos.length > 0) { %>
+          <% galleryPhotos.forEach(function(photo, idx) { %>
+            <a href="/gallery" class="gallery-card-item" data-index="<%= idx %>">
+              <div class="gallery-card-thumb">
+                <img
+                  src="<%= photo.imageUrl %>"
+                  alt="<%= photo.name %>"
+                  class="gallery-card-img"
+                  loading="lazy"
+                  onerror="this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80'"
+                />
+                <% if (photo.district) { %>
+                  <span class="gallery-card-location">
+                    📍 <%= photo.district %>
+                  </span>
+                <% } %>
+                <span class="gallery-card-date">
+                  📅 <%= photo.dateString || photo.formattedDate || (photo.date ? new Date(photo.date).toLocaleDateString('hi-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '2026') %>
+                </span>
+              </div>
+              <div class="gallery-card-body">
+                <strong class="gallery-card-title"><%= photo.name %></strong>
+                <p class="gallery-card-caption">
+                  <%= photo.caption || 'अखंड निषाद संकल्प अभियान के अंतर्गत लिया गया पावन संकल्प।' %>
+                </p>
+              </div>
+            </a>
+          <% }); %>
+        <% } %>
+      </div>
     </div>
+
+    <!-- Scroll Progress Dots Indicators -->
+    <% if (typeof galleryPhotos !== 'undefined' && galleryPhotos && galleryPhotos.length > 4) { %>
+      <% const dotCount = Math.min(6, Math.ceil(galleryPhotos.length / 2)); %>
+      <div class="gallery-scroll-dots" id="galleryScrollDots" aria-hidden="true">
+        <% for (let i = 0; i < dotCount; i++) { %>
+          <button type="button" class="gallery-scroll-dot <%= i === 0 ? 'active' : '' %>" data-dot="<%= i %>" aria-label="Go to gallery slide <%= i + 1 %>"></button>
+        <% } %>
+      </div>
+    <% } %>
+
+    <!-- Bottom Action: View Full Gallery Button Below Images -->
+    <div class="gallery-bottom-action">
+      <a href="/gallery" class="gallery-view-all-btn">
+        <span>View Full Gallery</span>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+
   </div>
 </section>
