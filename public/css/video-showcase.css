@@ -188,7 +188,7 @@
 }
 
 .highlight-title {
-  font-family: 'Rozha One', 'Mukta', serif;
+  font-family: 'Noto Sans Devanagari', sans-serif;
   font-size: clamp(20px, 2.5vw, 24px);
   color: #2b1818;
   font-weight: 800;
@@ -271,7 +271,7 @@
 }
 
 .latest-videos-head h4 {
-  font-family: 'Rozha One', 'Mukta', serif;
+  font-family: 'Noto Sans Devanagari', sans-serif;
   font-size: 18px;
   font-weight: 800;
   color: #2b1818;
@@ -465,7 +465,7 @@
 }
 
 .video-bottom-content h4 {
-  font-family: 'Rozha One', 'Mukta', serif;
+  font-family: 'Noto Sans Devanagari', sans-serif;
   font-size: 18px;
   font-weight: 800;
   color: #ffffff;

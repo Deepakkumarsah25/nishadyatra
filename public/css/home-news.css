@@ -63,7 +63,7 @@
 }
 
 .home-news-title {
-  font-family: 'Rozha One', 'Mukta', serif;
+  font-family: 'Noto Sans Devanagari', sans-serif;
   font-size: clamp(26px, 3.8vw, 38px);
   color: #2c1e1e;
   line-height: 1.25;

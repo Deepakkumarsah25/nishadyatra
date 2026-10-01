@@ -43,16 +43,19 @@
         <div class="hero-poster-copy">
           <span class="eyebrow">PUBLIC NEWS PAGE</span>
           <h2>News Hero Poster</h2>
-          <p>Upload a wide banner for the full-width news hero. Recommended size: 1920 × 840 px (16:7), maximum file size 8 MB.</p>
+          <p>Use a hosted image URL or upload a wide banner for the full-width news hero. Recommended size: 1920 x 840 px (16:7).</p>
           <% if (posterError) { %><p class="poster-message is-error" role="alert"><%= posterError %></p><% } %>
           <% if (typeof query !== 'undefined' && query.posterSaved) { %><p class="poster-message" role="status">Hero poster updated.</p><% } %>
           <% if (typeof query !== 'undefined' && query.posterRemoved) { %><p class="poster-message" role="status">Hero poster removed.</p><% } %>
           <form class="poster-upload-form" action="/admin/video_news/hero-poster" method="post" enctype="multipart/form-data">
-            <label class="field">Choose poster image
-              <input type="file" name="heroPoster" accept="image/jpeg,image/png,image/webp,image/avif" required>
+            <label class="field">Hosted poster image URL
+              <input type="url" name="heroPosterUrl" placeholder="https://example.com/banner.jpg">
+            </label>
+            <label class="field">Or upload a poster image
+              <input type="file" name="heroPoster" accept="image/jpeg,image/png,image/webp,image/avif">
               <small>JPG, PNG, WebP, or AVIF · Maximum 8 MB. Uploading a new image replaces the current poster.</small>
             </label>
-            <button class="primary" type="submit"><%= newsPageSetting?.heroPosterPath ? 'Replace Hero Poster' : 'Upload Hero Poster' %></button>
+            <button class="primary" type="submit">Save Hero Poster</button>
           </form>
         </div>
         <div class="hero-poster-preview-wrap">

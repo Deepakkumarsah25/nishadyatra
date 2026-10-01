@@ -11,7 +11,7 @@
   <!-- Google Fonts: Rozha One, Noto Serif Devanagari, Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Noto+Serif+Devanagari:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Rozha+One&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
   <!-- Common Navbar CSS -->
   <link rel="stylesheet" href="/css/common/navbar.css" />
@@ -88,7 +88,7 @@
     }
 
     body {
-      font-family: "Noto Sans Devanagari", "Plus Jakarta Sans", sans-serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       background-color: var(--canvas);
       background-image: 
         radial-gradient(circle at 10% 20%, rgba(217, 119, 6, 0.035) 0%, transparent 40%),
@@ -239,7 +239,7 @@
     }
 
     .hero-heading {
-      font-family: "Noto Serif Devanagari", "Rozha One", serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: clamp(38px, 4.8vw, 62px);
       line-height: 1.15;
       font-weight: 900;
@@ -353,7 +353,7 @@
     }
 
     .hero-stat-number {
-      font-family: "Plus Jakarta Sans", sans-serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: 24px;
       font-weight: 800;
       color: var(--crimson-deep);
@@ -498,7 +498,7 @@
     }
 
     .hero-stage-caption h3 {
-      font-family: "Noto Serif Devanagari", serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: 20px;
       font-weight: 800;
       line-height: 1.3;
@@ -676,7 +676,7 @@
     }
 
     .storycase-title {
-      font-family: "Noto Serif Devanagari", "Rozha One", serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: clamp(26px, 3.2vw, 38px);
       font-weight: 900;
       color: var(--text-main);
@@ -777,7 +777,7 @@
     }
 
     .storycase-featured-caption h4 {
-      font-family: "Noto Serif Devanagari", serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: 20px;
       font-weight: 800;
       color: #ffffff;
@@ -838,7 +838,7 @@
     }
 
     .storycase-featured-content h3 {
-      font-family: "Noto Serif Devanagari", serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: 23px;
       font-weight: 900;
       color: var(--text-main);
@@ -1002,7 +1002,7 @@
     }
 
     .storycase-card-body h4 {
-      font-family: "Noto Serif Devanagari", serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: 16.5px;
       font-weight: 800;
       color: var(--text-main);
@@ -1334,7 +1334,7 @@
       border-radius: 14px;
       padding: 14px 18px;
       box-shadow: 0 4px 18px rgba(45, 15, 10, 0.05);
-      margin-bottom: 24px;
+      margin-bottom: 0;
     }
 
     .filter-normal-row {
@@ -1342,6 +1342,25 @@
       align-items: center;
       gap: 12px;
       flex-wrap: wrap;
+    }
+
+    .filter-gallery-toolbar-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: min(1600px, 94%);
+      margin: 0 auto 8px;
+    }
+
+    .filter-gallery-toolbar-row .filter-console-section {
+      flex: 1 1 auto;
+      min-width: 0;
+      padding: 0;
+    }
+
+    .filter-gallery-toolbar-row .filter-console-section > .container {
+      width: 100%;
+      max-width: none;
     }
 
     .filter-col-search {
@@ -1526,7 +1545,7 @@
     }
 
     .filter-heading-text h3 {
-      font-family: "Noto Serif Devanagari", serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: 20px;
       font-weight: 800;
       color: var(--crimson-ultra);
@@ -1836,7 +1855,18 @@
        VIDEO GALLERY SECTION & VIEW FORMATS
     ===================================================== */
     .gallery-section {
-      padding: 40px 0 80px;
+      padding: 0 0 80px;
+    }
+
+    .gallery-view-toolbar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 0;
+      padding: 6px;
+      background: #fff;
+      border: 1.5px solid var(--border-warm);
+      border-radius: 16px;
+      box-shadow: var(--shadow-sm);
     }
 
     .gallery-header-row {
@@ -1849,7 +1879,7 @@
     }
 
     .gallery-section-title {
-      font-family: "Noto Serif Devanagari", serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: clamp(26px, 3.2vw, 36px);
       font-weight: 900;
       color: var(--crimson-ultra);
@@ -2256,7 +2286,7 @@
     }
 
     .card-title-text {
-      font-family: "Noto Serif Devanagari", serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: 18px;
       font-weight: 800;
       color: var(--crimson-ultra);
@@ -2428,7 +2458,7 @@
     }
 
     .empty-state-card h3 {
-      font-family: "Noto Serif Devanagari", serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: 22px;
       font-weight: 800;
       color: var(--crimson-ultra);
@@ -2492,96 +2522,46 @@
       display: inline-block;
     }
 
-    /* =====================================================
-       GALLERY PAGINATION: 9 VIDEOS PER PAGE (RIGHT-ALIGNED)
-    ===================================================== */
+    /* Video pagination styled to match the news pages */
     .gallery-pagination-container {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin-top: 36px;
-      padding: 16px 24px;
-      background: #ffffff;
-      border: 1.5px solid var(--border-warm);
-      border-radius: var(--radius-lg);
-      box-shadow: 0 4px 18px rgba(69, 10, 10, 0.05);
-    }
-
-    .pagination-info-box {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 14px;
-      color: var(--text-body);
-      font-weight: 600;
-    }
-
-    .pagination-range-text {
-      font-weight: 800;
-      color: var(--primary-crimson);
-      background: var(--crimson-soft);
-      padding: 3px 10px;
-      border-radius: var(--radius-sm);
-      border: 1px solid rgba(185, 28, 28, 0.15);
-    }
-
-    .pagination-divider {
-      color: var(--text-muted);
-      opacity: 0.5;
-    }
-
-    .pagination-total-text strong {
-      color: var(--crimson-ultra);
-      font-weight: 800;
+      justify-content: center;
+      margin-top: 24px;
     }
 
     .pagination-actions-right {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-left: auto;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 4px;
     }
 
     .btn-pagination-nav {
       display: inline-flex;
+      min-width: 50px;
+      min-height: 56px;
       align-items: center;
-      gap: 8px;
-      padding: 10px 22px;
-      border-radius: var(--radius-md);
-      font-size: 14px;
-      font-weight: 700;
+      justify-content: center;
+      gap: 6px;
+      padding: 0 18px;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 500;
       cursor: pointer;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      border: 1.5px solid var(--border-warm);
+      transition: color 0.2s, background 0.2s, border-color 0.2s;
+      border: 1px solid #dedede;
+      background: #fff;
+      color: var(--primary-crimson);
       font-family: inherit;
       user-select: none;
     }
 
-    .btn-pagination-prev {
-      background: #ffffff;
-      color: var(--text-main);
-    }
-
-    .btn-pagination-prev:hover:not(:disabled) {
+    .btn-pagination-nav:hover:not(:disabled) {
       border-color: var(--primary-crimson);
       color: var(--primary-crimson);
-      background: var(--canvas-alt);
-      transform: translateX(-2px);
-    }
-
-    .btn-pagination-next {
-      background: linear-gradient(135deg, var(--primary-crimson) 0%, var(--crimson-dark) 100%);
-      color: #ffffff;
-      border-color: var(--primary-crimson);
-      box-shadow: 0 4px 14px rgba(185, 28, 28, 0.3);
-    }
-
-    .btn-pagination-next:hover:not(:disabled) {
-      background: linear-gradient(135deg, #c72424 0%, #7f1d1d 100%);
-      transform: translateX(2px);
-      box-shadow: 0 6px 20px rgba(185, 28, 28, 0.4);
+      background: rgba(185, 28, 28, 0.06);
     }
 
     .btn-pagination-nav:disabled {
@@ -2591,64 +2571,48 @@
       box-shadow: none;
     }
 
-    .pagination-numbers-list {
+    .gallery-pagination-container .pagination-pages {
       display: flex;
       align-items: center;
-      gap: 6px;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 4px;
     }
 
-    .pagination-page-btn {
-      width: 40px;
-      height: 40px;
-      border-radius: var(--radius-md);
+    .gallery-pagination-container .pagination-number {
       display: inline-flex;
+      min-width: 50px;
+      height: 56px;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--text-main);
-      background: #ffffff;
-      border: 1.5px solid var(--border-warm);
+      padding: 0 14px;
+      border: 1px solid var(--border-warm);
+      border-radius: 0;
+      background: #fff;
+      color: var(--crimson-dark);
+      font: 400 23px "Noto Sans Devanagari", sans-serif;
+      text-align: center;
       cursor: pointer;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .pagination-page-btn:hover {
+    .gallery-pagination-container .pagination-number.is-current,
+    .gallery-pagination-container .pagination-number:hover {
       border-color: var(--primary-crimson);
-      color: var(--primary-crimson);
-      background: var(--canvas-alt);
-      transform: translateY(-2px);
+      background: var(--primary-crimson);
+      color: #fff;
     }
 
-    .pagination-page-btn.active {
-      background: linear-gradient(135deg, var(--primary-crimson) 0%, var(--crimson-dark) 100%);
-      color: #ffffff;
-      border-color: var(--primary-crimson);
-      box-shadow: 0 4px 12px rgba(185, 28, 28, 0.28);
+    .gallery-pagination-container .pagination-ellipsis {
+      min-width: 50px;
+      color: var(--text-body);
+      font-size: 20px;
+      text-align: center;
     }
 
     @media (max-width: 640px) {
-      .gallery-pagination-container {
-        flex-direction: column;
-        align-items: stretch;
-        padding: 16px;
-      }
-      .pagination-info-box {
-        justify-content: center;
-      }
-      .pagination-actions-right {
-        margin-left: 0;
-        justify-content: space-between;
-        width: 100%;
-      }
       .btn-pagination-nav {
-        flex: 1;
-        justify-content: center;
-        padding: 10px 14px;
-        font-size: 13px;
-      }
-      .pagination-numbers-list {
-        display: none;
+        padding: 0 12px;
+        font-size: 14px;
       }
     }
 
@@ -2689,7 +2653,7 @@
     }
 
     .pillars-main-title {
-      font-family: "Noto Serif Devanagari", "Rozha One", serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: clamp(28px, 3.8vw, 44px);
       line-height: 1.25;
       font-weight: 900;
@@ -2791,7 +2755,7 @@
     }
 
     .story-caption-block h4 {
-      font-family: "Noto Serif Devanagari", serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: 21px;
       font-weight: 800;
       line-height: 1.3;
@@ -2862,7 +2826,7 @@
     }
 
     .story-sub-caption h5 {
-      font-family: "Noto Serif Devanagari", serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: 15px;
       font-weight: 800;
       line-height: 1.3;
@@ -2932,7 +2896,7 @@
       border-radius: 50%;
       background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
       color: #ffffff;
-      font-family: "Plus Jakarta Sans", sans-serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: 13px;
       font-weight: 800;
       display: flex;
@@ -2961,7 +2925,7 @@
     }
 
     .pillar-card-head h4 {
-      font-family: "Noto Serif Devanagari", serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: 17px;
       font-weight: 800;
       color: var(--crimson-ultra);
@@ -3033,7 +2997,7 @@
     }
 
     .modal-title-wrap h4 {
-      font-family: "Noto Serif Devanagari", serif;
+      font-family: "Noto Sans Devanagari", sans-serif;
       font-size: 17px;
       font-weight: 800;
       white-space: nowrap;
@@ -3640,6 +3604,7 @@
     ==================================================== -->
 
 
+    <div class="filter-gallery-toolbar-row">
     <section class="filter-console-section" id="filterConsole">
       <div class="container">
         <div class="filter-normal-card">
@@ -3726,29 +3691,27 @@
       </div>
     </section>
 
+    <div class="gallery-view-toolbar">
+      <div class="gallery-view-controls">
+        <div class="view-mode-toggle" id="viewModeToggle" role="group" aria-label="प्रदर्शन प्रारूप (View Format)">
+          <button type="button" class="btn-view-toggle active" id="btnViewGrid" data-view="grid" title="ग्रिड प्रारूप में देखें">
+            <svg viewBox="0 0 24 24"><path d="M3 3v8h8V3H3zm2 2h4v4H5V5zm8-2v8h8V3h-8zm2 2h4v4h-4V5zM3 13v8h8v-8H3zm2 2h4v4H5v-4zm8-2v8h8v-8h-8zm2 2h4v4h-4v-4z"/></svg>
+            <span>ग्रिड (Grid)</span>
+          </button>
+          <button type="button" class="btn-view-toggle" id="btnViewList" data-view="list" title="सूची प्रारूप में देखें">
+            <svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
+            <span>सूची (List)</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    </div>
+
     <!-- ===================================================
          VIDEO GALLERY CARDS
     ==================================================== -->
     <section class="gallery-section" id="videoGallery">
       <div class="container">
-
-        <div class="gallery-header-row" style="justify-content: flex-end; margin-bottom: 16px;">
-
-          <!-- View Mode Toggle (Grid / List format) -->
-          <div class="gallery-view-controls">
-            <div class="view-mode-toggle" id="viewModeToggle" role="group" aria-label="प्रदर्शन प्रारूप (View Format)">
-              <button type="button" class="btn-view-toggle active" id="btnViewGrid" data-view="grid" title="ग्रिड प्रारूप में देखें">
-                <svg viewBox="0 0 24 24"><path d="M3 3v8h8V3H3zm2 2h4v4H5V5zm8-2v8h8V3h-8zm2 2h4v4h-4V5zM3 13v8h8v-8H3zm2 2h4v4H5v-4zm8-2v8h8v-8h-8zm2 2h4v4h-4v-4z"/></svg>
-                <span>ग्रिड (Grid)</span>
-              </button>
-              <button type="button" class="btn-view-toggle" id="btnViewList" data-view="list" title="सूची प्रारूप में देखें">
-                <svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
-                <span>सूची (List)</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
         <div class="video-cards-grid view-grid" id="videoGrid">
           <% const videoList = (typeof kalash !== 'undefined' && kalash.videos && kalash.videos.length > 0) ? kalash.videos : []; %>
           <% videoList.forEach((vid, index) => { %>
@@ -3855,36 +3818,19 @@
              PAGINATION: 9 VIDEOS PER PAGE (RIGHT-ALIGNED NEXT/PREV)
         ==================================================== -->
         <div class="gallery-pagination-container" id="galleryPagination">
-          <div class="pagination-info-box">
-            <span class="pagination-info-label">दिखाए जा रहे हैं:</span>
-            <span class="pagination-range-text" id="paginationShowingText">1 - 9</span>
-            <span class="pagination-divider">/</span>
-            <span class="pagination-total-text">कुल <strong id="paginationTotalCount">0</strong> वीडियो</span>
-          </div>
-
           <div class="pagination-actions-right">
-            <button type="button" class="btn-pagination-nav btn-pagination-prev" id="btnPaginationPrev" disabled aria-label="पिछला पृष्ठ">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
-              </svg>
-              <span>पिछला (Prev)</span>
+            <button type="button" class="btn-pagination-nav btn-pagination-prev" id="btnPaginationPrev" disabled aria-label="Previous page">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+              <span>Previous</span>
             </button>
-
-            <div class="pagination-numbers-list" id="paginationNumbersList">
-              <!-- Dynamically populated page buttons -->
-            </div>
-
-            <button type="button" class="btn-pagination-nav btn-pagination-next" id="btnPaginationNext" aria-label="अगला पृष्ठ">
-              <span>अगला (Next)</span>
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
-              </svg>
+            <div class="pagination-pages" aria-label="Video pages"></div>
+            <button type="button" class="btn-pagination-nav btn-pagination-next" id="btnPaginationNext" aria-label="Next page">
+              <span>Next</span>
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
             </button>
           </div>
         </div>
-
-      </div>
-    </section>
+      </section>
 
   </main>
 
@@ -3994,11 +3940,8 @@
       let currentFilteredCards = videoCards;
 
       const galleryPagination = document.getElementById("galleryPagination");
-      const paginationShowingText = document.getElementById("paginationShowingText");
-      const paginationTotalCount = document.getElementById("paginationTotalCount");
       const btnPaginationPrev = document.getElementById("btnPaginationPrev");
       const btnPaginationNext = document.getElementById("btnPaginationNext");
-      const paginationNumbersList = document.getElementById("paginationNumbersList");
 
       // Modal Elements
       const videoModal = document.getElementById("videoModal");
@@ -4403,13 +4346,6 @@
 
         galleryPagination.style.display = "flex";
 
-        if (paginationShowingText) {
-          paginationShowingText.textContent = total > 0 ? (startIndex + 1) + " - " + endIndex : "0";
-        }
-        if (paginationTotalCount) {
-          paginationTotalCount.textContent = total;
-        }
-
         if (btnPaginationPrev) {
           btnPaginationPrev.disabled = currentPaginationPage <= 1;
         }
@@ -4417,20 +4353,17 @@
           btnPaginationNext.disabled = currentPaginationPage >= totalPages;
         }
 
-        // Render Page Number Buttons
-        if (paginationNumbersList) {
-          paginationNumbersList.innerHTML = "";
-          for (let p = 1; p <= totalPages; p++) {
-            const pageBtn = document.createElement("button");
-            pageBtn.type = "button";
-            pageBtn.className = "pagination-page-btn" + (p === currentPaginationPage ? " active" : "");
-            pageBtn.textContent = p;
-            pageBtn.setAttribute("aria-label", "पृष्ठ " + p);
-            pageBtn.addEventListener("click", function () {
-              goToPage(p);
-            });
-            paginationNumbersList.appendChild(pageBtn);
+        const pageNumbers = galleryPagination.querySelector(".pagination-pages");
+        if (pageNumbers) {
+          const lastVisiblePage = Math.min(totalPages, currentPaginationPage <= 4 ? 4 : currentPaginationPage + 1);
+          let pagesMarkup = Array.from({ length: lastVisiblePage }, (_, index) => index + 1)
+            .map((page) => `<button type="button" class="pagination-number${page === currentPaginationPage ? " is-current" : ""}" data-page="${page}"${page === currentPaginationPage ? ' aria-current="page"' : ""}>${page}</button>`)
+            .join("");
+          if (lastVisiblePage < totalPages) {
+            if (lastVisiblePage < totalPages - 1) pagesMarkup += '<span class="pagination-ellipsis" aria-hidden="true">…</span>';
+            pagesMarkup += `<button type="button" class="pagination-number${totalPages === currentPaginationPage ? " is-current" : ""}" data-page="${totalPages}"${totalPages === currentPaginationPage ? ' aria-current="page"' : ""}>${totalPages}</button>`;
           }
+          pageNumbers.innerHTML = pagesMarkup;
         }
       }
 
@@ -4456,6 +4389,15 @@
           const totalPages = Math.ceil(currentFilteredCards.length / VIDEOS_PER_PAGE) || 1;
           if (currentPaginationPage < totalPages) {
             goToPage(currentPaginationPage + 1);
+          }
+        });
+      }
+
+      if (galleryPagination) {
+        galleryPagination.addEventListener("click", function (event) {
+          const pageButton = event.target.closest("button[data-page]");
+          if (pageButton) {
+            goToPage(Number(pageButton.dataset.page));
           }
         });
       }

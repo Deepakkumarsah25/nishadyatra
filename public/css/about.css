@@ -25,7 +25,7 @@
 body.about-page-body {
   background-color: var(--about-bg-page);
   color: var(--about-text-dark);
-  font-family: 'Mukta', 'Noto Sans Devanagari', sans-serif;
+  font-family: 'Noto Sans Devanagari', sans-serif;
   line-height: 1.65;
   padding-top: 64px; /* fixed navbar offset */
 }
@@ -48,7 +48,8 @@ body.about-page-body {
 }
 
 .about-hero-compact h1 {
-  font-family: 'Rozha One', 'Mukta', serif;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+  font-weight: 800;
   font-size: clamp(1.3rem, 2.5vw, 1.8rem);
   line-height: 1.25;
   margin: 0 0 4px;
@@ -174,7 +175,8 @@ body.about-page-body {
 }
 
 .about-sec-header h2 {
-  font-family: 'Rozha One', 'Mukta', serif;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+  font-weight: 800;
   font-size: clamp(1.35rem, 2.4vw, 1.85rem);
   color: var(--about-text-dark);
   margin: 0 0 6px;
@@ -587,7 +589,8 @@ body.about-page-body {
 }
 
 .reservation-hero-card h3 {
-  font-family: 'Rozha One', 'Mukta', serif;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+  font-weight: 800;
   font-size: 1.25rem;
   color: #fde68a;
   margin: 0 0 8px;
@@ -748,7 +751,8 @@ body.about-page-body {
 }
 
 .act-showcase-detail h3 {
-  font-family: 'Rozha One', 'Mukta', serif;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+  font-weight: 800;
   font-size: 1.25rem;
   color: var(--about-primary-dark);
   margin: 0 0 6px;
