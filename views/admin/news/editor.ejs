@@ -127,6 +127,16 @@
         <aside>
           <section class="panel form-panel">
             <h2>Featured image</h2>
+            <p class="help">Use a hosted image URL to make the image available across deployments, or upload an image file.</p>
+            <label class="field">
+              Hosted image URL
+              <input
+                name="thumbnailUrl"
+                type="url"
+                value="<%= item?.thumbnailPath && /^https?:\/\//i.test(item.thumbnailPath) ? item.thumbnailPath : '' %>"
+                placeholder="https://example.com/image.jpg"
+              >
+            </label>
             <p class="help">JPG, PNG, WebP, or AVIF · Maximum 8 MB</p>
             <label class="field">
               Article Image

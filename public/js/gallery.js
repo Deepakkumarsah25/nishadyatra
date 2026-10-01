@@ -7,8 +7,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const cards = Array.from(document.querySelectorAll(".gallery-card"));
   const emptyState = document.getElementById("galleryEmptyState");
   const searchInput = document.getElementById("gallerySearchInput");
-  const districtChips = Array.from(document.querySelectorAll(".district-chip"));
+  const districtFilter = document.getElementById("galleryDistrictFilter");
   const visibleCountBadge = document.getElementById("visibleCountBadge");
+  const pagination = document.getElementById("galleryPagination");
+  const pageSize = 12;
 
   // Lightbox Elements
   const lightbox = document.getElementById("galleryLightbox");
@@ -26,13 +28,13 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentSearchQuery = "";
   let currentVisibleCards = [...cards];
   let activeIndex = 0;
+  let currentPage = 1;
 
   // ==========================================
   // FILTERING LOGIC
   // ==========================================
 
   function applyFilters() {
-    let matchCount = 0;
     currentVisibleCards = [];
 
     cards.forEach((card) => {
@@ -51,39 +53,67 @@ document.addEventListener("DOMContentLoaded", () => {
         cardCaption.includes(currentSearchQuery);
 
       if (matchesDistrict && matchesSearch) {
-        card.style.display = "";
-        card.style.animation = "fadeInCard 0.35s ease forwards";
-        matchCount++;
         currentVisibleCards.push(card);
       } else {
         card.style.display = "none";
       }
     });
 
+    const pageCount = Math.ceil(currentVisibleCards.length / pageSize);
+    currentPage = Math.min(currentPage, Math.max(pageCount, 1));
+    const start = (currentPage - 1) * pageSize;
+    currentVisibleCards.forEach((card, index) => {
+      const visible = index >= start && index < start + pageSize;
+      card.style.display = visible ? "" : "none";
+      if (visible) card.style.animation = "fadeInCard 0.35s ease forwards";
+    });
+
     if (emptyState) {
-      emptyState.style.display = matchCount === 0 ? "block" : "none";
+      emptyState.style.display = currentVisibleCards.length === 0 ? "block" : "none";
     }
 
     if (visibleCountBadge) {
-      visibleCountBadge.textContent = `${matchCount} photos displayed`;
+      visibleCountBadge.textContent = `${currentVisibleCards.length} फ़ोटो दिखाई गईं`;
+    }
+
+    if (pagination) {
+      const lastVisiblePage = Math.min(pageCount, currentPage <= 4 ? 4 : currentPage + 1);
+      let pageNumbers = Array.from({ length: lastVisiblePage }, (_, index) => index + 1)
+        .map((page) => `<button type="button" class="pagination-number${page === currentPage ? " is-current" : ""}" data-page="${page}"${page === currentPage ? ' aria-current="page"' : ""}>${page}</button>`)
+        .join("");
+      if (lastVisiblePage < pageCount) {
+        if (lastVisiblePage < pageCount - 1) pageNumbers += '<span class="pagination-ellipsis" aria-hidden="true">…</span>';
+        pageNumbers += `<button type="button" class="pagination-number" data-page="${pageCount}">${pageCount}</button>`;
+      }
+      pagination.innerHTML = `<div class="gallery-pagination-controls"><button type="button" class="pagination-direction" data-page="${currentPage - 1}"${currentPage === 1 ? " disabled" : ""}><span aria-hidden="true">‹</span> Previous</button><div class="pagination-pages">${pageNumbers}</div><button type="button" class="pagination-direction" data-page="${currentPage + 1}"${currentPage >= pageCount ? " disabled" : ""}>Next <span aria-hidden="true">›</span></button></div>`;
     }
   }
 
   // District Chip Click
-  districtChips.forEach((chip) => {
-    chip.addEventListener("click", () => {
-      districtChips.forEach((c) => c.classList.remove("active"));
-      chip.classList.add("active");
-      currentDistrict = chip.getAttribute("data-district") || "all";
+  if (districtFilter) {
+    districtFilter.addEventListener("change", () => {
+      currentDistrict = districtFilter.value || "all";
+      currentPage = 1;
       applyFilters();
     });
-  });
+  }
 
   // Search Input
   if (searchInput) {
     searchInput.addEventListener("input", (e) => {
       currentSearchQuery = e.target.value.toLowerCase().trim();
+      currentPage = 1;
       applyFilters();
+    });
+  }
+
+  if (pagination) {
+    pagination.addEventListener("click", (event) => {
+      const button = event.target.closest("button[data-page]");
+      if (!button || button.disabled) return;
+      currentPage = Number(button.dataset.page);
+      applyFilters();
+      pagination.scrollIntoView({ behavior: "smooth", block: "nearest" });
     });
   }
 
@@ -99,7 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!card) return;
 
     const imgUrl = card.getAttribute("data-image");
-    const name = card.getAttribute("data-name") || "Campaign Member";
+    const name = card.getAttribute("data-name") || "अभियान के सदस्य";
     const district = card.getAttribute("data-district") || "";
     const date = card.getAttribute("data-date") || "";
     const caption = card.getAttribute("data-caption") || "";
@@ -109,7 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
     lightboxName.textContent = name;
     lightboxDistrict.textContent = district ? `📍 ${district}` : "";
     lightboxDate.textContent = date ? `📅 ${date}` : "";
-    lightboxCaption.textContent = caption || "A solemn pledge taken in dedication to the Nishad Sankalp Campaign.";
+    lightboxCaption.textContent = caption || "निषाद संकल्प अभियान के प्रति समर्पण में लिया गया संकल्प।";
 
     if (lightboxDownloadBtn) {
       lightboxDownloadBtn.href = imgUrl;

@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 const path = require("path");
 const sankalpRoutes = require("./routes/sankalpRoutes");
 const videoNewsRoutes = require("./routes/news/videoNewsRoutes");
-dotenv.config();
+dotenv.config({ path: path.join(__dirname, ".env") });
 
 const app = express();
 

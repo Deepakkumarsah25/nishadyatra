@@ -26,6 +26,7 @@ const newsSchema = new mongoose.Schema(
     youtubeUrl: { type: String, trim: true, default: "" },
     videoPath: { type: String, default: "" },
     thumbnailPath: { type: String, default: "" },
+    thumbnailPublicId: { type: String, default: "" },
     published: { type: Boolean, default: false },
     publishedAt: { type: Date, default: null },
     author: { type: String, default: "Admin" },

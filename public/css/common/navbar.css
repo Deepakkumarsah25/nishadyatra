@@ -93,6 +93,8 @@ body.drawer-open {
   overflow: visible;
 
   isolation: isolate;
+  font-family: "Mukta", "Noto Sans Devanagari", sans-serif;
+  line-height: 1.4;
 }
 
 /* =========================================================

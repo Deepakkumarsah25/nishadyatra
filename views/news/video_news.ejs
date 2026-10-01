@@ -1,6 +1,5 @@
 <%
 const articles = Array.isArray(remaining) ? remaining : [];
-const featuredItems = Array.isArray(featured) ? featured : (featured ? [featured] : []);
 const fmtDate = (value) => value ? new Date(value).toLocaleDateString('hi-IN', { day:'numeric', month:'long', year:'numeric' }) : '';
 const catClass = (cat) => (cat || 'Digital Media') === 'Print Media' ? 'press-category--print' : 'press-category--digital';
 const pageUrl = (number) => {
@@ -33,33 +32,11 @@ const pageUrl = (number) => {
     </div>
   </div></div></section>
   <section class="press-container press-content">
-    <% if (featuredItems.length) { %>
-      <section class="press-featured-section" aria-label="मुख्य खबरें">
-        <div class="press-featured-track" id="featuredTrack">
-          <% featuredItems.forEach((item) => { %>
-            <article class="press-featured-slide">
-              <a class="press-feature-image" href="<%= item.externalUrl || '/news/' + item._id %>" <%= item.externalUrl ? 'target="_blank" rel="noopener noreferrer"' : '' %>>
-                <% if (item.thumbnailPath) { %><img src="<%= item.thumbnailPath %>" alt="<%= item.title %>" fetchpriority="high"><% } else { %><span class="press-image-fallback">प्रेस कवरेज</span><% } %>
-                <span class="press-feature-label">मुख्य खबर</span>
-              </a>
-              <div class="press-feature-body"><div class="press-meta"><span class="press-category <%= catClass(item.category) %>"><%= item.category || 'Digital Media' %></span><time><%= fmtDate(item.publicationDate || item.publishedAt) %></time></div>
-                <h2><%= item.title %></h2><p class="press-source">स्रोत: <strong><%= item.source || 'मीडिया' %></strong></p>
-                <% if (item.state || item.district) { %><p class="press-location"><%= [item.district, item.state].filter(Boolean).join(', ') %></p><% } %>
-                <% if (item.summary) { %><p class="press-summary"><%= item.summary %></p><% } %>
-                <div class="press-card-actions"><a class="press-read" href="<%= item.externalUrl || '/news/' + item._id %>" <%= item.externalUrl ? 'target="_blank" rel="noopener noreferrer"' : '' %>>पूरी खबर पढ़ें <span aria-hidden="true">↗</span></a></div>
-              </div>
-            </article>
-          <% }) %>
-        </div>
-        <% if (featuredItems.length > 1) { %><div class="press-carousel-controls"><button type="button" id="featuredPrev" aria-label="Previous featured story">‹</button><span id="featuredPosition">1 / <%= featuredItems.length %></span><button type="button" id="featuredNext" aria-label="Next featured story">›</button></div><% } %>
-      </section>
-    <% } %>
-
     <div class="press-list-heading"><div><h2>सभी समाचार</h2><span class="press-result-count"></span></div><label class="press-search" for="newsSearch"><span aria-hidden="true">⌕</span><input id="newsSearch" name="q" type="search" form="newsFilters" value="<%= query.q || '' %>" placeholder="Search.." aria-label="खबर या स्रोत खोजें"></label></div>
     <form class="press-filters" method="get" action="/news" id="newsFilters">
-      <label class="press-select-label">राज्य<select name="state" id="stateFilter" data-auto-submit><option value="">सभी राज्य</option><% [...new Set(locations.map((location) => location._id.state))].forEach((stateName) => { %><option value="<%= stateName %>" <%= query.state === stateName ? 'selected' : '' %>><%= stateName %></option><% }) %></select></label>
-      <label class="press-select-label">ज़िला<select name="district" id="districtFilter" data-auto-submit><option value="">सभी ज़िले</option><% locations.forEach((location) => { %><option value="<%= location._id.district %>" data-state="<%= location._id.state %>" <%= query.district === location._id.district && (!query.state || query.state === location._id.state) ? 'selected' : '' %>><%= location._id.district %><%= !query.state ? ' · ' + location._id.state : '' %></option><% }) %></select></label>
-      <label class="press-select-label">मीडिया प्रकार<select name="category" data-auto-submit><option value="">सभी प्रकार</option><option value="Digital Media" <%= query.category === 'Digital Media' ? 'selected' : '' %>>डिजिटल मीडिया</option><option value="Print Media" <%= query.category === 'Print Media' ? 'selected' : '' %>>प्रिंट मीडिया</option></select></label>
+      <label class="press-select-label"><select name="state" id="stateFilter" data-auto-submit><option value="">सभी राज्य</option><% [...new Set(locations.map((location) => location._id.state))].forEach((stateName) => { %><option value="<%= stateName %>" <%= query.state === stateName ? 'selected' : '' %>><%= stateName %></option><% }) %></select></label>
+      <label class="press-select-label"><select name="district" id="districtFilter" data-auto-submit><option value="">सभी ज़िले</option><% locations.forEach((location) => { %><option value="<%= location._id.district %>" data-state="<%= location._id.state %>" <%= query.district === location._id.district && (!query.state || query.state === location._id.state) ? 'selected' : '' %>><%= location._id.district %><%= !query.state ? ' · ' + location._id.state : '' %></option><% }) %></select></label>
+      <label class="press-select-label"><select name="category" data-auto-submit><option value="">सभी प्रकार</option><option value="Digital Media" <%= query.category === 'Digital Media' ? 'selected' : '' %>>डिजिटल मीडिया</option><option value="Print Media" <%= query.category === 'Print Media' ? 'selected' : '' %>>प्रिंट मीडिया</option></select></label>
     </form>
     <div class="press-results" id="pressResults" aria-live="polite" aria-busy="false">
     <% if (articles.length) { %>
@@ -80,24 +57,28 @@ const pageUrl = (number) => {
           </div>
         </article><% }) %>
       </div>
-      <nav class="press-pagination" aria-label="समाचार पेज"><% if (page > 1) { %><a href="<%= pageUrl(page - 1) %>">← पिछला पेज</a><% } else { %><span></span><% } %><span>पेज <%= page %> / <%= totalPages %></span><% if (page < totalPages) { %><a href="<%= pageUrl(page + 1) %>">अगला पेज →</a><% } else { %><span></span><% } %></nav>
+      <nav class="press-pagination" aria-label="News pages">
+        <div class="press-pagination-controls">
+          <% if (page > 1) { %><a class="pagination-direction" href="<%= pageUrl(page - 1) %>"><span aria-hidden="true">‹</span> Previous</a><% } else { %><span class="pagination-direction is-disabled"><span aria-hidden="true">‹</span> Previous</span><% } %>
+          <div class="pagination-pages">
+            <% const lastVisiblePage = Math.min(totalPages, page <= 4 ? 4 : page + 1); %>
+            <% for (let number = 1; number <= lastVisiblePage; number++) { %>
+              <a class="pagination-number <%= number === page ? 'is-current' : '' %>" href="<%= pageUrl(number) %>" <%= number === page ? 'aria-current="page"' : '' %>><%= number %></a>
+            <% } %>
+            <% if (lastVisiblePage < totalPages) { %>
+              <% if (lastVisiblePage < totalPages - 1) { %><span class="pagination-ellipsis" aria-hidden="true">…</span><% } %>
+              <a class="pagination-number" href="<%= pageUrl(totalPages) %>"><%= totalPages %></a>
+            <% } %>
+          </div>
+          <% if (page < totalPages) { %><a class="pagination-direction" href="<%= pageUrl(page + 1) %>">Next <span aria-hidden="true">›</span></a><% } else { %><span class="pagination-direction is-disabled">Next <span aria-hidden="true">›</span></span><% } %>
+        </div>
+      </nav>
     <% } else { %><div class="press-empty"><h3>कोई खबर नहीं मिली</h3><p>दूसरे फ़िल्टर से खोजकर देखें।</p></div><% } %>
     </div>
   </section>
 </main><%- include('../common/footer') %>
 <script>
 (() => {
-  const track = document.getElementById('featuredTrack');
-  if (track) {
-    const slides = [...track.children]; let index = 0; let timer;
-    const show = (next) => { index = (next + slides.length) % slides.length; track.style.transform = `translateX(-${index * 100}%)`; const pos = document.getElementById('featuredPosition'); if (pos) pos.textContent = `${index + 1} / ${slides.length}`; };
-    const start = () => { if (slides.length > 1) timer = setInterval(() => show(index + 1), 5000); };
-    const restart = () => { clearInterval(timer); start(); };
-    document.getElementById('featuredPrev')?.addEventListener('click', () => { show(index - 1); restart(); });
-    document.getElementById('featuredNext')?.addEventListener('click', () => { show(index + 1); restart(); });
-    track.parentElement.addEventListener('mouseenter', () => clearInterval(timer));
-    track.parentElement.addEventListener('mouseleave', start); start();
-  }
   const state = document.getElementById('stateFilter'); const district = document.getElementById('districtFilter');
   const filterDistricts = () => { [...district.options].forEach((option) => { if (!option.value) return; option.hidden = !!state.value && option.dataset.state !== state.value; }); if (district.selectedOptions[0]?.hidden) district.value = ''; };
   const form = document.getElementById('newsFilters');
