@@ -2313,6 +2313,12 @@
       pointer-events: none;
       box-shadow: none;
     }
+    .btn-pagination-nav.is-disabled {
+      opacity: 0.4;
+      cursor: default;
+      pointer-events: none;
+      box-shadow: none;
+    }
 
     .gallery-pagination-container .pagination-pages {
       display: flex;
@@ -3279,15 +3285,15 @@
         <div class="video-toolbar-row">
           <div class="video-filter-controls" aria-label="Filter videos">
             <div class="filter-col-select">
-              <select id="stateFilter" name="state" class="filter-normal-select" aria-label="Filter by state">
-  <option value="all">All states</option>
+              <select id="stateFilter" name="state" class="filter-normal-select" aria-label="राज्य चुनें">
+  <option value="all">सभी राज्य</option>
   <% const stateOptions = [...new Set((videoLocations || []).map((location) => location._id?.state).filter(Boolean))]; %>
   <% stateOptions.forEach((stateOption) => { %><option value="<%= stateOption %>" <%= selectedVideoState === stateOption ? 'selected' : '' %>><%= stateOption %></option><% }); %>
 </select>
             </div>
             <div class="filter-col-select">
-              <select id="districtFilter" name="district" class="filter-normal-select" aria-label="Filter by district">
-  <option value="all">All districts</option>
+              <select id="districtFilter" name="district" class="filter-normal-select" aria-label="ज़िला चुनें">
+  <option value="all">सभी ज़िले</option>
   <% const districtOptions = [...new Set((videoLocations || []).map((location) => location._id?.district).filter(Boolean))]; %>
   <% districtOptions.forEach((districtOption) => { %><option value="<%= districtOption %>" <%= selectedVideoDistrict === districtOption ? 'selected' : '' %>><%= districtOption %></option><% }); %>
 </select>
@@ -3395,13 +3401,24 @@
         </div>
 
         <% const videoPageUrl = (targetPage) => { const params = new URLSearchParams(); if (videoSearch) params.set('search', videoSearch); if (selectedVideoState !== 'all') params.set('state', selectedVideoState); if (selectedVideoDistrict !== 'all') params.set('district', selectedVideoDistrict); params.set('page', String(targetPage)); return '/video?' + params.toString() + '#videoGallery'; }; %>
-        <% if (videoPagination && videoPagination.totalPages > 1) { %>
+      <div id="videoPaginationHost">
+      <% if (videoPagination && videoPagination.total > 0) { %>
           <div class="gallery-pagination-container" id="galleryPagination"><div class="pagination-actions-right">
-            <% if (videoPagination.page > 1) { %><a class="btn-pagination-nav btn-pagination-prev" href="<%= videoPageUrl(videoPagination.page - 1) %>">Previous</a><% } %>
-            <span class="pagination-number is-current"><%= videoPagination.page %> / <%= videoPagination.totalPages %></span>
-            <% if (videoPagination.page < videoPagination.totalPages) { %><a class="btn-pagination-nav btn-pagination-next" href="<%= videoPageUrl(videoPagination.page + 1) %>">Next</a><% } %>
+            <% if (videoPagination.page > 1) { %><a class="btn-pagination-nav btn-pagination-prev" href="<%= videoPageUrl(videoPagination.page - 1) %>"><span aria-hidden="true">‹</span> Previous</a><% } else { %><span class="btn-pagination-nav btn-pagination-prev is-disabled"><span aria-hidden="true">‹</span> Previous</span><% } %>
+            <div class="pagination-pages">
+              <% const videoPageNumbers = [...new Set([1, 2, 3, 4, videoPagination.page - 1, videoPagination.page, videoPagination.page + 1, videoPagination.totalPages].filter((number) => number >= 1 && number <= videoPagination.totalPages))].sort((a, b) => a - b); let previousVideoPage = 0; %>
+              <% videoPageNumbers.forEach((number) => { %>
+                <% if (previousVideoPage && number > previousVideoPage + 1) { %><span class="pagination-ellipsis" aria-hidden="true">…</span><% } %>
+                <a class="pagination-number <%= number === videoPagination.page ? 'is-current' : '' %>" href="<%= videoPageUrl(number) %>" <%= number === videoPagination.page ? 'aria-current="page"' : '' %>><%= number %></a>
+                <% previousVideoPage = number; %>
+              <% }); %>
+            </div>
+            <% if (videoPagination.page < videoPagination.totalPages) { %><a class="btn-pagination-nav btn-pagination-next" href="<%= videoPageUrl(videoPagination.page + 1) %>">Next <span aria-hidden="true">›</span></a><% } else { %><span class="btn-pagination-nav btn-pagination-next is-disabled">Next <span aria-hidden="true">›</span></span><% } %>
           </div></div>
-        <% } %>      </section>
+        <% } %>
+      </div>
+      </div>
+    </section>
 
   </main>
 
@@ -3482,7 +3499,7 @@
          DOM ELEMENTS
       ==================================================== */
       const videoGrid = document.getElementById("videoGrid");
-      const videoCards = Array.from(document.querySelectorAll(".video-card-item"));
+      let videoCards = Array.from(document.querySelectorAll(".video-card-item"));
 
       // Filter Console Elements
       const stateFilter = document.getElementById("stateFilter");
@@ -3491,16 +3508,8 @@
       const searchFilter = document.getElementById("searchFilter");
       const searchClearBtn = document.getElementById("searchClearBtn");
       const resultCount = document.getElementById("resultCount");
-      const emptyState = document.getElementById("emptyState");
-
-      // Gallery Pagination Elements & State (9 videos per page)
-      const VIDEOS_PER_PAGE = 9;
-      let currentPaginationPage = 1;
-      let currentFilteredCards = videoCards;
-
-      const galleryPagination = document.getElementById("galleryPagination");
-      const btnPaginationPrev = document.getElementById("btnPaginationPrev");
-      const btnPaginationNext = document.getElementById("btnPaginationNext");
+      let emptyState = document.getElementById("emptyState");
+      const videoPaginationHost = document.getElementById("videoPaginationHost");
 
       // Modal Elements
       const videoModal = document.getElementById("videoModal");
@@ -3519,14 +3528,84 @@
 
       let activeVideoShareUrl = window.location.href;
 
-            const videoFilterForm = document.getElementById("videoFilters");
-      if (searchClearBtn) searchClearBtn.addEventListener("click", () => { searchFilter.value = ""; videoFilterForm.requestSubmit(); });
-      if (stateFilter) stateFilter.addEventListener("change", () => videoFilterForm.requestSubmit());
-      if (districtFilter) districtFilter.addEventListener("change", () => videoFilterForm.requestSubmit());
+      const videoFilterForm = document.getElementById("videoFilters");
+      let videoFilterTimer;
+      let activeVideoFilterRequest;
+      const buildVideoFilterUrl = () => {
+        const url = new URL(videoFilterForm.action, window.location.origin);
+        const params = new URLSearchParams(new FormData(videoFilterForm));
+        params.delete("page");
+        url.search = params.toString();
+        return url;
+      };
+      const loadVideoResults = async (url, historyMode = "replace") => {
+        activeVideoFilterRequest?.abort();
+        activeVideoFilterRequest = new AbortController();
+        videoGrid.setAttribute("aria-busy", "true");
+        try {
+          const response = await fetch(url.pathname + url.search, {
+            signal: activeVideoFilterRequest.signal,
+            headers: { "X-Requested-With": "XMLHttpRequest", Accept: "text/html" },
+          });
+          if (!response.ok) throw new Error(`Video request failed (${response.status})`);
+          const html = await response.text();
+          const nextDocument = new DOMParser().parseFromString(html, "text/html");
+          const nextGrid = nextDocument.getElementById("videoGrid");
+          const nextPagination = nextDocument.getElementById("videoPaginationHost");
+          const nextCount = nextDocument.getElementById("resultCount");
+          if (!nextGrid || !nextPagination || !nextCount) throw new Error("Video results were not found in the response.");
+
+          videoGrid.innerHTML = nextGrid.innerHTML;
+          videoPaginationHost.innerHTML = nextPagination.innerHTML;
+          videoCards = Array.from(videoGrid.querySelectorAll(".video-card-item"));
+          emptyState = videoGrid.querySelector("#emptyState");
+          resultCount.textContent = nextCount.textContent;
+          if (emptyState) emptyState.classList.toggle("show", videoCards.length === 0);
+          videoGrid.setAttribute("aria-busy", "false");
+          if (historyMode === "push") history.pushState({}, "", url.pathname + url.search + url.hash);
+          else if (historyMode === "replace") history.replaceState({}, "", url.pathname + url.search + url.hash);
+        } catch (error) {
+          if (error.name !== "AbortError") {
+            videoGrid.setAttribute("aria-busy", "false");
+            console.error(error);
+          }
+        }
+      };
+      const scheduleVideoFilter = (delay = 350) => {
+        clearTimeout(videoFilterTimer);
+        videoFilterTimer = setTimeout(() => loadVideoResults(buildVideoFilterUrl()), delay);
+      };
+
+      videoFilterForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        scheduleVideoFilter(0);
+      });
+      if (searchClearBtn) searchClearBtn.addEventListener("click", () => { searchFilter.value = ""; scheduleVideoFilter(0); });
+      if (searchFilter) searchFilter.addEventListener("input", () => scheduleVideoFilter(450));
+      if (stateFilter) stateFilter.addEventListener("change", () => {
+        if (districtFilter) districtFilter.value = "all";
+        scheduleVideoFilter(0);
+      });
+      if (districtFilter) districtFilter.addEventListener("change", () => scheduleVideoFilter(0));
+      videoPaginationHost.addEventListener("click", (event) => {
+        const link = event.target.closest(".gallery-pagination-container a");
+        if (!link) return;
+        const target = new URL(link.href, window.location.origin);
+        if (target.origin !== window.location.origin) return;
+        event.preventDefault();
+        clearTimeout(videoFilterTimer);
+        loadVideoResults(target, "push");
+      });
+      window.addEventListener("popstate", () => {
+        clearTimeout(videoFilterTimer);
+        const params = new URLSearchParams(window.location.search);
+        searchFilter.value = params.get("search") || "";
+        stateFilter.value = params.get("state") || "all";
+        districtFilter.value = params.get("district") || "all";
+        loadVideoResults(new URL(window.location.href), "none");
+      });
       if (resultCount) resultCount.textContent = "<%= videoPagination.total %>";
       if (emptyState) emptyState.classList.toggle("show", videoCards.length === 0);
-      function applyFilters() { if (videoFilterForm) videoFilterForm.requestSubmit(); }
-      function updateDistricts() {}
       /* ===================================================
          INTERACTIVE NAVIGATION & SMOOTH SCROLL
       ==================================================== */
@@ -3536,7 +3615,7 @@
           const targetState = trigger.dataset.state;
           if (targetState && stateFilter) {
             stateFilter.value = targetState;
-            applyFilters();
+            if (videoFilterForm) videoFilterForm.requestSubmit();
           }
           const gallery = document.getElementById("videoGallery");
           if (gallery) {
@@ -3633,18 +3712,18 @@
         document.body.classList.remove("modal-open");
       }
 
-      // Card Click Listeners
-      videoCards.forEach(function (card) {
-        card.addEventListener("click", function () {
-          const videoUrl = card.dataset.video;
-          const videoTitle = card.dataset.title || card.querySelector("h3")?.textContent?.trim();
-          let categoryTag = "संकल्प यात्रा";
-          const people = card.dataset.people || card.querySelector(".card-category-tag span")?.textContent?.trim() || "5,000+ लोग";
-          const district = card.dataset.district || "";
-          const date = card.dataset.date || "";
+      // Delegation keeps video cards interactive after search and pagination updates.
+      videoGrid.addEventListener("click", function (event) {
+        const card = event.target.closest(".video-card-item");
+        if (!card || !videoGrid.contains(card)) return;
+        const videoUrl = card.dataset.video;
+        const videoTitle = card.dataset.title || card.querySelector("h3")?.textContent?.trim();
+        const categoryTag = "संकल्प यात्रा";
+        const people = card.dataset.people || card.querySelector(".card-category-tag span")?.textContent?.trim() || "5,000+ लोग";
+        const district = card.dataset.district || "";
+        const date = card.dataset.date || "";
 
-          openModalVideo(videoUrl, videoTitle, categoryTag, people, district, date);
-        });
+        openModalVideo(videoUrl, videoTitle, categoryTag, people, district, date);
       });
 
       // Featured Video Trigger

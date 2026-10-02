@@ -365,6 +365,7 @@
   font-size: 16px;
   font-weight: 500;
 }
+.gallery-pagination .pagination-direction.is-disabled { opacity: .45; cursor: default; pointer-events: none; }
 .gallery-pagination .pagination-number:hover:not(:disabled) { background:var(--gallery-primary); border-color:var(--gallery-primary); color:#fff; }
 .gallery-pagination button:disabled { opacity: .45; cursor: default; }
 .gallery-pagination button:hover:not(:disabled) { color: var(--gallery-primary-dark); }

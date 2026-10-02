@@ -78,7 +78,6 @@
               <% } %>
             </select>
           </label>
-          <button type="submit" class="pagination-direction">Apply filters</button>
         </div>
         </form>
       </section>
@@ -153,16 +152,25 @@
         </div>
       </section>
 
-      <% if (pagination && pagination.totalPages > 1) { %>
+      <div id="galleryPaginationHost">
+      <% if (pagination && pagination.total > 0) { %>
         <% const galleryPageUrl = (pageNumber) => { const params = new URLSearchParams(); if (selectedDistrict !== 'all') params.set('district', selectedDistrict); if (search) params.set('search', search); params.set('page', String(pageNumber)); return '/gallery?' + params.toString(); }; %>
         <nav class="gallery-pagination" id="galleryPagination" aria-label="Gallery pages">
           <div class="gallery-pagination-controls">
-            <% if (pagination.page > 1) { %><a class="pagination-direction" href="<%= galleryPageUrl(pagination.page - 1) %>">Previous</a><% } %>
-            <span class="pagination-number is-current" aria-current="page"><%= pagination.page %> / <%= pagination.totalPages %></span>
-            <% if (pagination.page < pagination.totalPages) { %><a class="pagination-direction" href="<%= galleryPageUrl(pagination.page + 1) %>">Next</a><% } %>
+            <% if (pagination.page > 1) { %><a class="pagination-direction" href="<%= galleryPageUrl(pagination.page - 1) %>"><span aria-hidden="true">‹</span> Previous</a><% } else { %><span class="pagination-direction is-disabled"><span aria-hidden="true">‹</span> Previous</span><% } %>
+            <div class="pagination-pages">
+              <% const galleryPageNumbers = [...new Set([1, 2, 3, 4, pagination.page - 1, pagination.page, pagination.page + 1, pagination.totalPages].filter((number) => number >= 1 && number <= pagination.totalPages))].sort((a, b) => a - b); let previousGalleryPage = 0; %>
+              <% galleryPageNumbers.forEach((number) => { %>
+                <% if (previousGalleryPage && number > previousGalleryPage + 1) { %><span class="pagination-ellipsis" aria-hidden="true">…</span><% } %>
+                <a class="pagination-number <%= number === pagination.page ? 'is-current' : '' %>" href="<%= galleryPageUrl(number) %>" <%= number === pagination.page ? 'aria-current="page"' : '' %>><%= number %></a>
+                <% previousGalleryPage = number; %>
+              <% }); %>
+            </div>
+            <% if (pagination.page < pagination.totalPages) { %><a class="pagination-direction" href="<%= galleryPageUrl(pagination.page + 1) %>">Next <span aria-hidden="true">›</span></a><% } else { %><span class="pagination-direction is-disabled">Next <span aria-hidden="true">›</span></span><% } %>
           </div>
         </nav>
       <% } %>
+      </div>
 
 
     </main>
