@@ -887,7 +887,37 @@
 
 @media (max-width: 640px) {
   .gallery-hero {
-    padding: 78px 16px 38px;
+    padding: 58px 16px 24px;
+  }
+
+  .gallery-hero h1 {
+    margin-bottom: 10px;
+    font-size: clamp(29px, 8vw, 38px);
+  }
+
+  .gallery-hero p {
+    margin-bottom: 14px;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .gallery-stats-pills {
+    flex-wrap: nowrap;
+    gap: 8px;
+  }
+
+  .gallery-stat-pill {
+    flex: 1 1 0;
+    justify-content: center;
+    gap: 5px;
+    min-width: 0;
+    padding: 7px 9px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .gallery-stat-pill strong {
+    font-size: 16px;
   }
 
   .gallery-container {
