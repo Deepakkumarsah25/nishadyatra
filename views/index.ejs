@@ -19,9 +19,11 @@
 
   <!-- Modular Component CSS -->
   <link rel="stylesheet" href="/css/hero.css" />
+  <link rel="stylesheet" href="/css/what-we-do.css" />
   <link rel="stylesheet" href="/css/sidebar.css" />
   <link rel="stylesheet" href="/css/video-showcase.css" />
   <link rel="stylesheet" href="/css/home-news.css" />
+  <link rel="stylesheet" href="/css/home-media-rail.css" />
   <link rel="stylesheet" href="/css/why-choose.css" />
   <link rel="stylesheet" href="/css/initiative-modal.css" />
 </head>
@@ -41,17 +43,20 @@
           <!-- 1. Hero Section -->
           <%- include("components/hero") %>
 
-            <!-- 2. Video Showcase Section (Highlight & Latest Videos) -->
-            <%- include("components/video-showcase") %>
+          <!-- 2. Campaign quick details -->
+          <%- include("components/what-we-do") %>
 
-              <!-- 3. Latest News & Press Coverage Section -->
-              <%- include("components/home-news") %>
+          <!-- 3. Latest videos -->
+          <%- include("components/video-showcase") %>
 
-                <!-- 4. Sankalp Photo Gallery Preview -->
-                <%- include("components/gallery-preview") %>
+          <!-- 4. Sankalp Photo Gallery Preview -->
+          <%- include("components/gallery-preview") %>
 
-                  <!-- 4. Why Choose Us Section -->
-                  <%- include("components/why-choose") %>
+          <!-- 5. Latest News & Press Coverage Section -->
+          <%- include("components/home-news") %>
+
+          <!-- 6. Why Choose Us Section -->
+          <%- include("components/why-choose") %>
         </main>
 
         <!-- Footer -->

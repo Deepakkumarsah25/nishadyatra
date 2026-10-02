@@ -1,201 +1,70 @@
-<!-- ==========================================================================
-     VIDEO SHOWCASE COMPONENT - Highlight Video & Latest Videos on Home Page
-     Dynamically managed from Admin Panel (/admin/kalash-yatra)
-========================================================================== -->
-
 <%
-  const featVid = (typeof highlightVideo !== 'undefined' && highlightVideo) ? highlightVideo : {
-    title: "ऐतिहासिक लोकतांत्रिक महा-संकल्प यात्रा — भव्य जनमत उद्घोष",
-    duration: "12:45 Min",
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    posterImage: "/images/kalash-yatra-hero.jpg",
-    badge: "★ मुख्य संकल्प वीडियो"
-  };
-
-  const vList = (typeof latestVideos !== 'undefined' && latestVideos && latestVideos.length > 0) ? latestVideos : [];
+  const vList = (typeof latestVideos !== 'undefined' && Array.isArray(latestVideos)) ? latestVideos.slice(0, 10) : [];
 
   function toEmbedUrl(url) {
-    if (!url) return "https://www.youtube.com/embed/dQw4w9WgXcQ";
+    if (!url) return "";
     if (url.includes("embed/")) return url;
     const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{11})/);
-    if (match && match[1]) {
-      return "https://www.youtube.com/embed/" + match[1];
-    }
-    return url;
+    return match && match[1] ? "https://www.youtube-nocookie.com/embed/" + match[1] : url;
   }
 
-  function getThumb(url, explicitThumb, fallback) {
-    if (explicitThumb && explicitThumb.trim() && !explicitThumb.includes('/images/kalash-yatra-hero.jpg')) {
-      return explicitThumb.trim();
-    }
+  function getThumb(url, explicitThumb) {
+    if (explicitThumb && explicitThumb.trim()) return explicitThumb.trim();
     const match = (url || '').match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/|v\/))([\w-]{11})/);
-    if (match && match[1]) {
-      return 'https://img.youtube.com/vi/' + match[1] + '/hqdefault.jpg';
-    }
-    return explicitThumb || fallback;
+    return match && match[1] ? 'https://img.youtube.com/vi/' + match[1] + '/hqdefault.jpg' : '/images/kalash-yatra-featured.jpg';
   }
 %>
 
-<section class="video-showcase-section" id="videos">
+<section class="video-showcase-section home-media-section" id="videos">
   <div class="ny-container">
-
-    <!-- Section Header with Direct Link to Video Page -->
-    <div class="video-section-header">
-      <div class="video-header-text">
-        <div class="section-tag">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
-          </svg>
-          <span>वीडियो संकलन • Video Highlights</span>
-        </div>
-        <h2 class="section-title">
-          <span class="text-highlight">Video Highlights</span>
-        </h2>
+    <header class="home-media-header">
+      <div>
+        <span class="home-media-eyebrow">Campaign videos</span>
+        <h2 class="section-title">Latest <span class="text-highlight">Videos</span></h2>
       </div>
+    </header>
 
-      <div class="video-header-cta">
-        <a href="/video" class="ny-btn ny-btn-primary" title="सभी वीडियो देखने के लिए वीडियो पेज पर जाएं">
-          <span>सभी वीडियो देखें (View All)</span>
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </a>
-      </div>
-    </div>
-
-    <!-- Main Showcase Layout: Big Highlight Video + Latest Grid -->
-    <div class="video-showcase-grid">
-
-      <!-- LEFT: Big Highlight Featured Video -->
-      <article class="highlight-video-card" data-video-url="<%= toEmbedUrl(featVid.videoUrl) %>" data-video-title="<%= featVid.title %>">
-        <div class="highlight-video-stage">
-          <img
-            src="<%= getThumb(featVid.videoUrl, featVid.posterImage, '/images/kalash-yatra-hero.jpg') %>"
-            alt="<%= featVid.title %>"
-            class="highlight-poster"
-            loading="lazy"
-            onerror="this.src='/images/kalash-yatra-featured.jpg'"
-          />
-          <div class="highlight-overlay"></div>
-
-          <!-- Top Badges -->
-          <div class="highlight-top-badges">
-            <span class="video-pill-badge"><%= featVid.badge || '★ मुख्य संकल्प वीडियो' %></span>
-            <span class="video-duration-badge">
-              <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14h-2V7h2v9z"/></svg>
-              <%= featVid.duration || '12:45 Min' %>
-            </span>
-          </div>
-
-          <!-- Center Animated Play Button -->
-          <button type="button" class="highlight-play-btn" aria-label="Play highlight video">
-            <span class="play-ripple"></span>
-            <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
-              <path d="M8 5v14l11-7z"/>
-            </svg>
-          </button>
-        </div>
-
-        <!-- Highlight Meta Details -->
-        <div class="highlight-info-body">
-          <span class="highlight-kicker">प्रमुख प्रस्तुति • Featured Highlight</span>
-          <h3 class="highlight-title"><%= featVid.title %></h3>
-          <p class="highlight-desc">
-            पवित्र संकल्प यात्रा और जन-जागरण अभियान की ऐतिहासिक वीडियो झलकियां।
-          </p>
-
-          <div class="highlight-actions-bar">
-            <button type="button" class="btn-highlight-play js-open-video" data-video-url="<%= toEmbedUrl(featVid.videoUrl) %>" data-video-title="<%= featVid.title %>">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-              <span>वीडियो देखें</span>
-            </button>
-            <a href="/video" class="btn-highlight-redirect">
-              <span>वीडियो पेज पर जाएं ↗</span>
-            </a>
-          </div>
-        </div>
-      </article>
-
-      <!-- RIGHT: Latest Videos Grid (3-4 Videos) -->
-      <div class="latest-videos-column">
-        <div class="latest-videos-head">
-          <h4>हालिया वीडियो (Latest Videos)</h4>
-          <a href="/video" class="link-more-videos">सभी देखें →</a>
-        </div>
-
-        <div class="latest-videos-list">
-          <% if (vList && vList.length > 0) { %>
-            <% vList.forEach(function(vid, index) { %>
-              <div
-                class="latest-video-item js-open-video"
-                data-video-url="<%= toEmbedUrl(vid.videoUrl) %>"
-                data-video-title="<%= vid.title %>"
-                title="वीडियो देखने के लिए क्लिक करें"
-              >
-                <div class="latest-thumb-wrap">
-                  <img
-                    src="<%= getThumb(vid.videoUrl, vid.thumbnail || vid.image, '/images/kalash-yatra-featured.jpg') %>"
-                    alt="<%= vid.title %>"
-                    loading="lazy"
-                    onerror="this.src='/images/sacred-kalash-ritual.jpg'"
-                  />
-                  <span class="latest-thumb-play">
-                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                  </span>
-                  <span class="latest-duration-tag"><%= vid.duration || 'Video' %></span>
-                </div>
-
-                <div class="latest-item-content">
-                  <div class="latest-item-tag">
-                    <span><%= vid.tag || vid.category || 'संकल्प' %></span>
-                    <% if (vid.district || vid.stateName) { %>
-                      <span class="location-dot">•</span>
-                      <span class="location-name">📍 <%= vid.district || vid.stateName %></span>
-                    <% } %>
-                  </div>
-                  <h5 class="latest-item-title"><%= vid.title %></h5>
-                  <div class="latest-item-footer">
-                    <span class="latest-watch-now">चलाएं ▶</span>
-                    <a href="/video" class="latest-page-redirect" onclick="event.stopPropagation();" title="वीडियो पेज पर खोलें">वीडियो पेज ↗</a>
-                  </div>
-                </div>
-              </div>
-            <% }); %>
-          <% } else { %>
-            <div class="no-videos-hint">
-              <p>अधिक वीडियो देखने के लिए <a href="/video">वीडियो संकलन पेज</a> पर जाएं।</p>
+    <% if (vList.length) { %>
+      <div class="home-media-rail" aria-label="Latest campaign videos">
+        <% vList.forEach(function(vid) { %>
+          <article class="home-video-card latest-video-item js-open-video"
+            data-video-url="<%= toEmbedUrl(vid.videoUrl) %>"
+            data-video-title="<%= vid.title %>"
+            tabindex="0" role="button" aria-label="Play <%= vid.title %>">
+            <div class="home-media-thumb latest-thumb-wrap">
+              <img src="<%= getThumb(vid.videoUrl, vid.thumbnail || vid.image) %>" alt="<%= vid.title %>" loading="lazy"
+                onerror="this.onerror=null; this.src='/images/kalash-yatra-featured.jpg';" />
+              <span class="latest-thumb-play" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+              <% if (vid.duration) { %><span class="latest-duration-tag"><%= vid.duration %></span><% } %>
             </div>
-          <% } %>
-        </div>
+            <div class="home-media-card-copy">
+              <span class="home-media-card-meta"><%= vid.tag || vid.category || 'Campaign' %><% if (vid.district || vid.stateName) { %> · <%= vid.district || vid.stateName %><% } %></span>
+              <h3><%= vid.title %></h3>
+            </div>
+          </article>
+        <% }); %>
       </div>
+    <% } else { %>
+      <p class="home-media-empty">Campaign videos will appear here soon.</p>
+    <% } %>
 
+    <div class="home-media-cta">
+      <a href="/video" class="ny-btn ny-btn-primary">View More Videos <span aria-hidden="true">→</span></a>
     </div>
-
-
   </div>
 </section>
 
-<!-- Universal Video Modal for Home Page -->
 <div class="home-video-modal-backdrop" id="homeVideoModal" aria-hidden="true">
-  <div class="home-video-modal-dialog">
+  <div class="home-video-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="homeVideoModalTitle">
     <div class="home-video-modal-head">
-      <h4 id="homeVideoModalTitle">संकल्प वीडियो</h4>
+      <h4 id="homeVideoModalTitle">Campaign video</h4>
       <div class="modal-head-actions">
-        <a href="/video" class="modal-redirect-link" title="वीडियो पेज पर जाएं">वीडियो पेज खोलें ↗</a>
-        <button type="button" class="home-video-modal-close" id="homeVideoModalClose" aria-label="Close video">✕</button>
+        <a href="/video" class="modal-redirect-link">Open video page ↗</a>
+        <button type="button" class="home-video-modal-close" id="homeVideoModalClose" aria-label="Close video">×</button>
       </div>
     </div>
     <div class="home-video-modal-body">
-      <div class="home-video-iframe-wrap">
-        <iframe
-          id="homeVideoIframe"
-          src=""
-          title="Video player"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen
-        ></iframe>
-      </div>
+      <div class="home-video-iframe-wrap"><iframe id="homeVideoIframe" src="" title="Video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
     </div>
   </div>
 </div>
@@ -208,14 +77,11 @@
     const closeBtn = document.getElementById("homeVideoModalClose");
 
     function openModal(url, title) {
-      if (!modal || !iframe) return;
-      let finalUrl = url;
-      if (finalUrl && !finalUrl.includes("autoplay=1")) {
-        finalUrl += (finalUrl.includes("?") ? "&" : "?") + "autoplay=1";
-      }
-      iframe.src = finalUrl;
-      if (titleEl && title) titleEl.textContent = title;
+      if (!modal || !iframe || !url) return;
+      iframe.src = url + (url.includes("?") ? "&" : "?") + "autoplay=1";
+      if (titleEl) titleEl.textContent = title || "Campaign video";
       modal.classList.add("active");
+      modal.setAttribute("aria-hidden", "false");
       document.body.style.overflow = "hidden";
     }
 
@@ -223,34 +89,23 @@
       if (!modal || !iframe) return;
       iframe.src = "";
       modal.classList.remove("active");
+      modal.setAttribute("aria-hidden", "true");
       document.body.style.overflow = "";
     }
 
-    // Bind all play triggers
-    document.querySelectorAll(".js-open-video, .highlight-video-card").forEach(function (el) {
-      el.addEventListener("click", function (e) {
-        if (e.target.closest("a") && !e.target.closest(".js-open-video")) return;
-        const videoUrl = this.getAttribute("data-video-url");
-        const videoTitle = this.getAttribute("data-video-title") || "संकल्प वीडियो";
-        if (videoUrl) {
-          e.preventDefault();
-          openModal(videoUrl, videoTitle);
+    document.querySelectorAll(".js-open-video").forEach(function (card) {
+      card.addEventListener("click", function () {
+        openModal(card.dataset.videoUrl, card.dataset.videoTitle);
+      });
+      card.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          openModal(card.dataset.videoUrl, card.dataset.videoTitle);
         }
       });
     });
-
     if (closeBtn) closeBtn.addEventListener("click", closeModal);
-
-    if (modal) {
-      modal.addEventListener("click", function (e) {
-        if (e.target === modal) closeModal();
-      });
-    }
-
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && modal && modal.classList.contains("active")) {
-        closeModal();
-      }
-    });
+    if (modal) modal.addEventListener("click", function (event) { if (event.target === modal) closeModal(); });
+    document.addEventListener("keydown", function (event) { if (event.key === "Escape") closeModal(); });
   })();
 </script>

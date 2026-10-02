@@ -1,25 +1,10 @@
-<!-- ==========================================================================
-     HOME PAGE NEWS & PRESS SECTION
-     Features Highlighted Story + Recent News Cards with Direct Redirects
-========================================================================== -->
-
 <%
-  const mainStory = (typeof highlightNews !== 'undefined' && highlightNews) ? highlightNews : null;
-  const otherStories = (typeof homeNewsList !== 'undefined' && homeNewsList && homeNewsList.length > 0) ? homeNewsList : [];
+  const newsItems = (typeof homeNewsList !== 'undefined' && Array.isArray(homeNewsList)) ? homeNewsList.slice(0, 10) : [];
 
   function formatNewsDate(d) {
     if (!d) return "";
-    try {
-      const dateObj = new Date(d);
-      if (isNaN(dateObj.getTime())) return "";
-      return dateObj.toLocaleDateString("hi-IN", {
-        day: "numeric",
-        month: "short",
-        year: "numeric"
-      });
-    } catch (_) {
-      return "";
-    }
+    const dateObj = new Date(d);
+    return Number.isNaN(dateObj.getTime()) ? "" : dateObj.toLocaleDateString("hi-IN", { day: "numeric", month: "short", year: "numeric" });
   }
 
   function getFallbackImg(index) {
@@ -33,193 +18,41 @@
   }
 %>
 
-<section class="home-news-section" id="news-section">
+<section class="home-news-section home-media-section" id="news-section">
   <div class="home-news-container">
-    
-    <!-- Section Header -->
-    <div class="home-news-header">
-      <div class="home-news-header-info">
-        <h2 class="home-news-title">
-          <span class="text-highlight">Latest News</span>
-        </h2>
+    <header class="home-media-header">
+      <div>
+        <span class="home-media-eyebrow">Updates & coverage</span>
+        <h2 class="section-title">Latest <span class="text-highlight">News</span></h2>
       </div>
+    </header>
 
-      <div class="home-news-header-cta">
-        <a href="/news" class="btn-view-all-news" title="सभी समाचार देखने के लिए न्यूज़ पेज पर जाएं">
-          <span>सभी समाचार देखें (View All)</span>
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </a>
-      </div>
-    </div>
-
-    <!-- Main Showcase Layout -->
-    <% if (mainStory) { %>
-      <div class="home-news-layout">
-        
-        <!-- Left / Featured Highlight News Card -->
-        <article class="highlight-news-card">
-          <a href="/news/<%= mainStory._id %>" class="highlight-news-link" title="<%= mainStory.title %>">
-            <div class="highlight-image-wrap">
-              <img
-                src="<%= mainStory.thumbnailPath || getFallbackImg(0) %>"
-                alt="<%= mainStory.title %>"
-                class="highlight-img"
-                loading="lazy"
-                onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80';"
-              />
-              <div class="highlight-badges">
-                <span class="badge-featured-glow">
-                  <span class="glow-dot"></span>
-                  ⭐ मुख्य समाचार (Highlight News)
-                </span>
-                <span class="badge-category">
-                  <%= mainStory.category || 'Digital Media' %>
-                </span>
+    <% if (newsItems.length) { %>
+      <div class="home-media-rail home-news-rail" aria-label="Latest campaign news">
+        <% newsItems.forEach(function(item, idx) { %>
+          <article class="home-news-card">
+            <a href="/news/<%= item._id %>" class="home-news-card-link" title="<%= item.title %>">
+              <div class="home-news-thumb">
+                <img src="<%= item.thumbnailPath || getFallbackImg(idx) %>" alt="<%= item.title %>" loading="lazy"
+                  onerror="this.onerror=null; this.src='<%= getFallbackImg(idx) %>'" />
+                <% if (item.category) { %><span><%= item.category %></span><% } %>
               </div>
-            </div>
-
-            <div class="highlight-content">
-              <div class="news-meta-bar">
-                <% if (mainStory.source) { %>
-                  <span class="meta-source">
-                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10l5 5v11a2 2 0 0 1-2 2z"/>
-                      <polyline points="14 2 14 8 20 8"/>
-                    </svg>
-                    <strong><%= mainStory.source %></strong>
-                  </span>
-                <% } %>
-                <% const dStr = formatNewsDate(mainStory.publicationDate || mainStory.publishedAt || mainStory.createdAt); %>
-                <% if (dStr) { %>
-                  <span class="meta-date">
-                    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2">
-                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                      <line x1="16" y1="2" x2="16" y2="6"/>
-                      <line x1="8" y1="2" x2="8" y2="6"/>
-                      <line x1="3" y1="10" x2="21" y2="10"/>
-                    </svg>
-                    <%= dStr %>
-                  </span>
-                <% } %>
-                <% if (mainStory.district || mainStory.state) { %>
-                  <span class="meta-location">
-                    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"/>
-                      <circle cx="12" cy="10" r="3"/>
-                    </svg>
-                    <%= [mainStory.district, mainStory.state].filter(Boolean).join(", ") %>
-                  </span>
-                <% } %>
+              <div class="home-media-card-copy">
+                <div class="home-media-card-meta"><% if (item.source) { %><%= item.source %><% } %><% if (formatNewsDate(item.publicationDate || item.publishedAt || item.createdAt)) { %> · <%= formatNewsDate(item.publicationDate || item.publishedAt || item.createdAt) %><% } %></div>
+                <h3><%= item.title %></h3>
+                <% if (item.summary) { %><p><%= item.summary %></p><% } %>
+                <span class="home-news-read-more">Read story →</span>
               </div>
-
-              <h3 class="highlight-title">
-                <%= mainStory.title %>
-              </h3>
-
-              <% if (mainStory.summary) { %>
-                <p class="highlight-summary">
-                  <%= mainStory.summary %>
-                </p>
-              <% } else if (mainStory.content) { %>
-                <p class="highlight-summary">
-                  <%= mainStory.content.length > 180 ? mainStory.content.slice(0, 180) + '...' : mainStory.content %>
-                </p>
-              <% } %>
-
-              <div class="highlight-action">
-                <span class="btn-read-cta">
-                  <span>पूरी खबर पढ़ें (Read Full Story)</span>
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2">
-                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                  </svg>
-                </span>
-              </div>
-            </div>
-          </a>
-        </article>
-
-        <!-- Right / Recent News Column -->
-        <div class="recent-news-column">
-          <div class="recent-column-header">
-            <h4>अन्य ताज़ा ख़बरें (Latest Stories)</h4>
-            <span class="recent-count"><%= otherStories.length %> समाचार</span>
-          </div>
-
-          <div class="recent-news-list">
-            <% if (otherStories.length > 0) { %>
-              <% otherStories.forEach(function(item, idx) { %>
-                <article class="recent-news-item">
-                  <a href="/news/<%= item._id %>" class="recent-news-link" title="<%= item.title %>">
-                    <div class="recent-thumb-wrap">
-                      <img
-                        src="<%= item.thumbnailPath || getFallbackImg(idx + 1) %>"
-                        alt="<%= item.title %>"
-                        class="recent-thumb"
-                        loading="lazy"
-                        onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=400&q=80';"
-                      />
-                      <span class="recent-badge-category"><%= item.category || 'Digital Media' %></span>
-                    </div>
-
-                    <div class="recent-content">
-                      <div class="recent-meta">
-                        <% if (item.source) { %>
-                          <span class="recent-source"><%= item.source %></span>
-                        <% } %>
-                        <% const itemDate = formatNewsDate(item.publicationDate || item.publishedAt || item.createdAt); %>
-                        <% if (itemDate) { %>
-                          <span class="recent-date">• <%= itemDate %></span>
-                        <% } %>
-                      </div>
-
-                      <h4 class="recent-title">
-                        <%= item.title %>
-                      </h4>
-
-                      <% if (item.summary) { %>
-                        <p class="recent-summary"><%= item.summary %></p>
-                      <% } %>
-
-                      <div class="recent-read-more">
-                        <span>पढ़ें (Read Story) →</span>
-                      </div>
-                    </div>
-                  </a>
-                </article>
-              <% }); %>
-            <% } else { %>
-              <div class="recent-empty">
-                <p>और ख़बरें जल्द प्रकाशित की जाएंगी।</p>
-                <a href="/news" class="btn-outline-small">न्यूज़ आर्काइव देखें →</a>
-              </div>
-            <% } %>
-          </div>
-        </div>
-
+            </a>
+          </article>
+        <% }); %>
       </div>
     <% } else { %>
-      <!-- Fallback when no news published yet -->
-      <div class="home-news-empty-state">
-        <div class="empty-icon">📰</div>
-        <h3>प्रेस एवं समाचार कवरेज</h3>
-        <p>निषाद आरक्षण संकल्प अभियान से जुड़ी ताज़ा ख़बरें और प्रेस विज्ञप्तियां जल्द ही यहां उपलब्ध होंगी।</p>
-        <a href="/news" class="btn-view-all-news" style="margin-top: 14px;">
-          <span>न्यूज़ सेक्शन पर जाएं</span>
-        </a>
-      </div>
+      <p class="home-media-empty">Campaign news will appear here soon.</p>
     <% } %>
 
-    <!-- Mobile View All Button -->
-    <div class="home-news-mobile-cta">
-      <a href="/news" class="btn-view-all-news full-width">
-        <span>सभी समाचार देखें (View All News)</span>
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
-        </svg>
-      </a>
+    <div class="home-media-cta">
+      <a href="/news" class="ny-btn ny-btn-primary">View More News <span aria-hidden="true">→</span></a>
     </div>
-
   </div>
 </section>
