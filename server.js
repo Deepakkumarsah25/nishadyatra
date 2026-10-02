@@ -34,6 +34,7 @@ if (!process.env.SESSION_SECRET) {
 // ========================================
 
 const sessionConfig = require("./config/session");
+const csrfProtection = require("./middleware/csrfProtection");
 const createDefaultAdmin = require("./config/createAdmin");
 const { seedHomeData } = require("./scripts/seedHomeData");
 const { seedGalleryData } = require("./scripts/seedGalleryData");
@@ -52,6 +53,12 @@ const adminContactRoutes = require("./routes/admin/contactRoutes");
 const aboutController = require("./controllers/aboutController");
 const KalashYatra = require("./models/KalashYatra");
 const ContactInfo = require("./models/ContactInfo");
+const { getPagination } = require("./utils/pagination");
+const publicVideoRateLimit = require("./middleware/rateLimit")({
+  windowMs: 60 * 1000,
+  max: 120,
+  message: "Too many video page requests. Please try again shortly.",
+});
 const homeRoutes = require("./routes/homeRoutes");
 const galleryRoutes = require("./routes/galleryRoutes");
 const contactRoutes = require("./routes/contactRoutes");
@@ -68,6 +75,12 @@ app.set("views", path.join(__dirname, "views"));
 // ========================================
 
 app.disable("x-powered-by");
+app.use((req, res, next) => {
+  res.set("X-Content-Type-Options", "nosniff");
+  res.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  res.set("X-Frame-Options", "SAMEORIGIN");
+  next();
+});
 
 // ========================================
 // Body Parser
@@ -99,6 +112,7 @@ app.use(
 
 // ================================
 app.use(sessionConfig);
+app.use("/admin", csrfProtection);
 app.use(videoNewsRoutes);
 
 // ========================================
@@ -135,18 +149,68 @@ app.get("/about", aboutController.getAboutPage);
 // IMPORTANT: This must be BEFORE 404 Handler
 // ========================================
 
-app.get("/video", async (req, res) => {
+app.get("/video", publicVideoRateLimit, async (req, res) => {
   try {
-    const kalash = await KalashYatra.getOrSeed();
+    let kalash = await KalashYatra.findOne().select("-videos").lean();
+    if (!kalash) {
+      await KalashYatra.create(KalashYatra.defaultData);
+      kalash = await KalashYatra.findOne().select("-videos").lean();
+    }
+
+    const search = typeof req.query.search === "string" ? req.query.search.trim().slice(0, 100) : "";
+    const state = typeof req.query.state === "string" && /^[a-z0-9-]{1,40}$/i.test(req.query.state) ? req.query.state : "";
+    const district = typeof req.query.district === "string" ? req.query.district.trim().slice(0, 100) : "";
+    const match = {};
+    if (state && state !== "all") match["videos.state"] = state;
+    if (district && district !== "all") match["videos.district"] = district;
+    if (search) {
+      const safeSearch = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const searchRegex = new RegExp(safeSearch, "i");
+      match.$or = ["title", "personOrPlace", "district", "state", "description", "tag"].map((field) => ({ [`videos.${field}`]: searchRegex }));
+    }
+
+    const countResult = await KalashYatra.aggregate([
+      { $unwind: "$videos" },
+      { $match: match },
+      { $count: "total" },
+    ]);
+    const pagination = getPagination(req.query.page, countResult[0]?.total || 0, 9);
+    const [videos, locations] = await Promise.all([
+      KalashYatra.aggregate([
+        { $unwind: "$videos" },
+        { $match: match },
+        { $sort: { "videos.order": 1, "videos._id": 1 } },
+        { $skip: pagination.skip },
+        { $limit: pagination.pageSize },
+        { $replaceRoot: { newRoot: "$videos" } },
+      ]),
+      KalashYatra.aggregate([
+        { $unwind: "$videos" },
+        { $group: { _id: { state: "$videos.state", district: "$videos.district" } } },
+        { $sort: { "_id.state": 1, "_id.district": 1 } },
+        { $limit: 300 },
+      ]),
+    ]);
+    kalash = { ...(kalash || KalashYatra.defaultData), videos };
     res.render("videos/kalash-yatra", {
       kalash,
       currentUrl: "/video",
+      videoSearch: search,
+      selectedVideoState: state || "all",
+      selectedVideoDistrict: district || "all",
+      videoLocations: locations,
+      videoPagination: pagination,
     });
   } catch (error) {
     console.error("Fetch kalash yatra error:", error);
     res.render("videos/kalash-yatra", {
       kalash: KalashYatra.defaultData,
       currentUrl: "/video",
+      videoSearch: "",
+      selectedVideoState: "all",
+      selectedVideoDistrict: "all",
+      videoLocations: [],
+      videoPagination: getPagination("1", KalashYatra.defaultData.videos.length, 9),
     });
   }
 });
@@ -181,7 +245,6 @@ app.use((err, req, res, next) => {
   res.status(500).json({
     success: false,
     message: "Internal Server Error",
-    error: err.message,
   });
 });
 

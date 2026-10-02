@@ -11,6 +11,12 @@ const {
 const guestMiddleware = require("../../middleware/admin/guestMiddleware");
 
 const authMiddleware = require("../../middleware/admin/authMiddleware");
+const rateLimit = require("../../middleware/rateLimit");
+const loginRateLimit = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  message: "Too many login attempts. Please try again later.",
+});
 
 // ========================================
 // Admin Login Page
@@ -29,6 +35,7 @@ router.get(
 router.post(
   "/login",
   guestMiddleware,
+  loginRateLimit,
   login
 );
 

@@ -1,11 +1,17 @@
 const SiteNotice = require("../../models/SiteNotice");
 const HomeQuickInfo = require("../../models/HomeQuickInfo");
 const { defaultQuickInfo } = require("../../scripts/seedHomeData");
+const { getPagination } = require("../../utils/pagination");
 
 // View all notices and sidebar quick info
 exports.getNotices = async (req, res) => {
   try {
-    const notices = await SiteNotice.find().sort({ order: 1, createdAt: -1 });
+    const total = await SiteNotice.countDocuments();
+    const pagination = getPagination(req.query.page, total, 50);
+    const notices = await SiteNotice.find()
+      .sort({ order: 1, createdAt: -1 })
+      .skip(pagination.skip)
+      .limit(pagination.pageSize);
     let quickInfo = await HomeQuickInfo.findOne();
     if (!quickInfo) {
       quickInfo = await HomeQuickInfo.create(defaultQuickInfo);
@@ -15,6 +21,9 @@ exports.getNotices = async (req, res) => {
       title: "Latest Notices & Sidebar Helpline Management",
       admin: req.session.admin,
       notices,
+      pagination,
+      paginationPath: "/admin/home/notices",
+      paginationQuery: {},
       quickInfo,
       currentPath: "/admin/home/notices",
       message: req.query.msg || null,

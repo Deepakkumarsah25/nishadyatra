@@ -1,0 +1,11 @@
+<% if (pagination && pagination.totalPages > 1) { %>
+  <% const pageParams = new URLSearchParams(); Object.entries(paginationQuery || {}).forEach(([key, value]) => { if (typeof value === 'string' && value) pageParams.set(key, value); }); %>
+  <% const pageHref = (number) => { const params = new URLSearchParams(pageParams); params.set('page', String(number)); return `${paginationPath}?${params.toString()}`; }; %>
+  <nav aria-label="Pagination" style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; padding:16px 18px;">
+    <span style="font-size:12px; color:var(--admin-text-muted);">Page <%= pagination.page %> of <%= pagination.totalPages %> · <%= pagination.total %> records</span>
+    <div style="display:flex; gap:8px;">
+      <% if (pagination.page > 1) { %><a class="btn-admin btn-admin-outline btn-admin-sm" href="<%= pageHref(pagination.page - 1) %>">Previous</a><% } %>
+      <% if (pagination.page < pagination.totalPages) { %><a class="btn-admin btn-admin-primary btn-admin-sm" href="<%= pageHref(pagination.page + 1) %>">Next</a><% } %>
+    </div>
+  </nav>
+<% } %>

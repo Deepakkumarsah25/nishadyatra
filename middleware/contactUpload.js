@@ -1,6 +1,7 @@
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const { validatedUpload } = require("./validateUpload");
 
 const uploadDir = path.join(process.cwd(), "uploads", "contact");
 fs.mkdirSync(uploadDir, { recursive: true });
@@ -14,14 +15,23 @@ const storage = multer.diskStorage({
   },
 });
 
-module.exports = multer({
+const upload = multer({
   storage,
-  limits: { fileSize: 15 * 1024 * 1024 }, // 15MB
+  limits: { fileSize: 8 * 1024 * 1024, files: 1 },
   fileFilter: (_req, file, cb) => {
-    const allowed = ["image/jpeg", "image/png", "image/webp", "image/avif", "image/jpg"];
-    if (!allowed.includes(file.mimetype)) {
+    const allowedTypes = {
+      ".jpg": ["image/jpeg", "image/jpg"],
+      ".jpeg": ["image/jpeg", "image/jpg"],
+      ".png": ["image/png"],
+      ".webp": ["image/webp"],
+      ".avif": ["image/avif"],
+    };
+    const extension = path.extname(file.originalname).toLowerCase();
+    if (!allowedTypes[extension]?.includes(file.mimetype)) {
       return cb(new Error("केवल इमेज फाइलें (JPG, PNG, WebP, AVIF) ही स्वीकार्य हैं।"));
     }
     cb(null, true);
   },
 });
+
+module.exports = validatedUpload(upload.single("bannerImageFile"));

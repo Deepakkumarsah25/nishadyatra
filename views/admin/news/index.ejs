@@ -20,18 +20,18 @@
       </div>
 
       <section class="stats">
-        <article><span>Total Articles</span><strong><%= news.length %></strong></article>
+        <article><span>Total Articles</span><strong><%= stats.total %></strong></article>
         <article>
           <span>Published</span>
-          <strong><%= news.filter((item) => item.published).length %></strong>
+          <strong><%= stats.published %></strong>
         </article>
         <article>
           <span>Drafts</span>
-          <strong><%= news.filter((item) => !item.published).length %></strong>
+          <strong><%= stats.drafts %></strong>
         </article>
         <article>
           <span>Featured</span>
-          <strong><%= news.filter((item) => item.featured).length %></strong>
+          <strong><%= stats.featured %></strong>
         </article>
         <article>
           <span>Highlight (होमपेज)</span>
@@ -195,6 +195,7 @@
                 <% }) %>
               </tbody>
             </table>
+            <%- include("../common/pagination", { pagination, paginationPath, paginationQuery }) %>
           </div>
         <% } %>
       </section>

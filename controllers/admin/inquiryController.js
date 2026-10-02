@@ -1,19 +1,29 @@
 const InitiativeInquiry = require("../../models/InitiativeInquiry");
+const { getPagination } = require("../../utils/pagination");
 
 // List inquiries & pledges
 exports.getInquiries = async (req, res) => {
   try {
-    const { status, type } = req.query;
+    const status = ["new", "contacted", "completed"].includes(req.query.status) ? req.query.status : "";
+    const type = ["pledge", "initiative"].includes(req.query.type) ? req.query.type : "";
     const filter = {};
     if (status) filter.status = status;
     if (type) filter.type = type;
 
-    const inquiries = await InitiativeInquiry.find(filter).sort({ createdAt: -1 });
+    const total = await InitiativeInquiry.countDocuments(filter);
+    const pagination = getPagination(req.query.page, total, 50);
+    const inquiries = await InitiativeInquiry.find(filter)
+      .sort({ createdAt: -1 })
+      .skip(pagination.skip)
+      .limit(pagination.pageSize);
 
     res.render("admin/home/inquiries", {
       title: "Received Pledges & Support Inquiries",
       admin: req.session.admin,
       inquiries,
+      pagination,
+      paginationPath: "/admin/home/inquiries",
+      paginationQuery: { status, type },
       currentFilter: { status, type },
       currentPath: "/admin/home/inquiries",
       message: req.query.msg || null,

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -53,29 +53,34 @@
     <main class="gallery-container">
       <!-- GALLERY HEADING AND FILTERS -->
       <section class="gallery-controls" aria-label="Photo filters">
+        <form id="galleryFilters" action="/gallery" method="get">
         <div class="gallery-list-heading">
           <div><h2>सभी फ़ोटो</h2></div>
           <label class="gallery-search" for="gallerySearchInput"><span aria-hidden="true">⌕</span>
             <input
               type="text"
+              name="search"
               id="gallerySearchInput"
               placeholder="Search.."
+              value="<%= search || '' %>"
               aria-label="फोटो खोजें"
             />
           </label>
         </div>
         <div class="gallery-filters">
           <label class="gallery-select-label" for="galleryDistrictFilter">
-            <select id="galleryDistrictFilter" aria-label="ज़िले के अनुसार फ़िल्टर करें">
-              <option value="all">सभी ज़िले</option>
+            <select id="galleryDistrictFilter" name="district" aria-label="ज़िले के अनुसार फ़िल्टर करें">
+              <option value="all" <%= selectedDistrict === 'all' ? 'selected' : '' %>>सभी ज़िले</option>
               <% if (districtsWithCount && districtsWithCount.length > 0) { %>
                 <% districtsWithCount.forEach(function(item) { %>
-                  <option value="<%= item._id %>"><%= item._id %> (<%= item.count %>)</option>
+                  <option value="<%= item._id %>" <%= selectedDistrict === item._id ? 'selected' : '' %>><%= item._id %> (<%= item.count %>)</option>
                 <% }); %>
               <% } %>
             </select>
           </label>
+          <button type="submit" class="pagination-direction">Apply filters</button>
         </div>
+        </form>
       </section>
 
       <!-- PHOTOS GRID -->
@@ -148,7 +153,16 @@
         </div>
       </section>
 
-      <nav class="gallery-pagination" id="galleryPagination" aria-label="Gallery pages"></nav>
+      <% if (pagination && pagination.totalPages > 1) { %>
+        <% const galleryPageUrl = (pageNumber) => { const params = new URLSearchParams(); if (selectedDistrict !== 'all') params.set('district', selectedDistrict); if (search) params.set('search', search); params.set('page', String(pageNumber)); return '/gallery?' + params.toString(); }; %>
+        <nav class="gallery-pagination" id="galleryPagination" aria-label="Gallery pages">
+          <div class="gallery-pagination-controls">
+            <% if (pagination.page > 1) { %><a class="pagination-direction" href="<%= galleryPageUrl(pagination.page - 1) %>">Previous</a><% } %>
+            <span class="pagination-number is-current" aria-current="page"><%= pagination.page %> / <%= pagination.totalPages %></span>
+            <% if (pagination.page < pagination.totalPages) { %><a class="pagination-direction" href="<%= galleryPageUrl(pagination.page + 1) %>">Next</a><% } %>
+          </div>
+        </nav>
+      <% } %>
 
 
     </main>

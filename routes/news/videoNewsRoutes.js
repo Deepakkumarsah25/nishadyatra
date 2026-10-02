@@ -3,6 +3,13 @@ const express = require("express");
 const router = express.Router();
 const newsUpload = require("../../middleware/news/videoNewsUpload");
 const authMiddleware = require("../../middleware/admin/authMiddleware");
+const { validateUploads } = require("../../middleware/validateUpload");
+const rateLimit = require("../../middleware/rateLimit");
+const publicNewsRateLimit = rateLimit({
+  windowMs: 60 * 1000,
+  max: 120,
+  message: "Too many news requests. Please try again shortly.",
+});
 
 const {
   adminList,
@@ -19,14 +26,15 @@ const {
 
 function uploadThumbnail(req, res, next) {
   newsUpload.single("thumbnail")(req, res, (error) => {
-    if (!error) return next();
-
-    res.status(400).render("admin/news/editor", {
-      title: req.params.id ? "Edit News" : "Create News",
-      item: { ...req.body, _id: req.params.id },
-      error: error.message,
-      currentPath: "/admin/video_news",
-    });
+    if (error) {
+      return res.status(400).render("admin/news/editor", {
+        title: req.params.id ? "Edit News" : "Create News",
+        item: { ...req.body, _id: req.params.id },
+        error: "Upload failed. Choose an allowed image under 8 MB.",
+        currentPath: "/admin/video_news",
+      });
+    }
+    validateUploads(req, res, next);
   });
 }
 
@@ -36,13 +44,13 @@ function uploadHeroPoster(req, res, next) {
       const params = new URLSearchParams({ posterError: error.message });
       return res.redirect(`/admin/video_news?${params.toString()}`);
     }
-    next();
+    validateUploads(req, res, next);
   });
 }
 
 // Public News & Press pages.
-router.get("/news", frontend);
-router.get("/news/:id", detail);
+router.get("/news", publicNewsRateLimit, frontend);
+router.get("/news/:id", publicNewsRateLimit, detail);
 
 // Protected news management pages.
 router.get("/admin/video_news", authMiddleware, adminList);

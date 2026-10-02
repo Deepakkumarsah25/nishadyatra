@@ -43,4 +43,8 @@ const initiativeInquirySchema = new mongoose.Schema(
   }
 );
 
+initiativeInquirySchema.index({ createdAt: -1 });
+initiativeInquirySchema.index({ type: 1, createdAt: -1 });
+initiativeInquirySchema.index({ status: 1, createdAt: -1 });
+
 module.exports = mongoose.model("InitiativeInquiry", initiativeInquirySchema);

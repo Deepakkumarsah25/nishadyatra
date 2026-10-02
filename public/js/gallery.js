@@ -1,4 +1,4 @@
-/**
+﻿/**
  * SANKALP PHOTO GALLERY — JAVASCRIPT
  * District Filter, Real-time Search, and Lightbox Viewer
  */
@@ -35,89 +35,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // ==========================================
 
   function applyFilters() {
-    currentVisibleCards = [];
-
-    cards.forEach((card) => {
-      const cardDistrict = (card.getAttribute("data-district") || "").toLowerCase().trim();
-      const cardName = (card.getAttribute("data-name") || "").toLowerCase();
-      const cardCaption = (card.getAttribute("data-caption") || "").toLowerCase();
-
-      const matchesDistrict =
-        currentDistrict === "all" ||
-        cardDistrict === currentDistrict.toLowerCase().trim();
-
-      const matchesSearch =
-        !currentSearchQuery ||
-        cardName.includes(currentSearchQuery) ||
-        cardDistrict.includes(currentSearchQuery) ||
-        cardCaption.includes(currentSearchQuery);
-
-      if (matchesDistrict && matchesSearch) {
-        currentVisibleCards.push(card);
-      } else {
-        card.style.display = "none";
-      }
-    });
-
-    const pageCount = Math.ceil(currentVisibleCards.length / pageSize);
-    currentPage = Math.min(currentPage, Math.max(pageCount, 1));
-    const start = (currentPage - 1) * pageSize;
-    currentVisibleCards.forEach((card, index) => {
-      const visible = index >= start && index < start + pageSize;
-      card.style.display = visible ? "" : "none";
-      if (visible) card.style.animation = "fadeInCard 0.35s ease forwards";
-    });
-
-    if (emptyState) {
-      emptyState.style.display = currentVisibleCards.length === 0 ? "block" : "none";
-    }
-
-    if (visibleCountBadge) {
-      visibleCountBadge.textContent = `${currentVisibleCards.length} फ़ोटो दिखाई गईं`;
-    }
-
-    if (pagination) {
-      const lastVisiblePage = Math.min(pageCount, currentPage <= 4 ? 4 : currentPage + 1);
-      let pageNumbers = Array.from({ length: lastVisiblePage }, (_, index) => index + 1)
-        .map((page) => `<button type="button" class="pagination-number${page === currentPage ? " is-current" : ""}" data-page="${page}"${page === currentPage ? ' aria-current="page"' : ""}>${page}</button>`)
-        .join("");
-      if (lastVisiblePage < pageCount) {
-        if (lastVisiblePage < pageCount - 1) pageNumbers += '<span class="pagination-ellipsis" aria-hidden="true">…</span>';
-        pageNumbers += `<button type="button" class="pagination-number" data-page="${pageCount}">${pageCount}</button>`;
-      }
-      pagination.innerHTML = `<div class="gallery-pagination-controls"><button type="button" class="pagination-direction" data-page="${currentPage - 1}"${currentPage === 1 ? " disabled" : ""}><span aria-hidden="true">‹</span> Previous</button><div class="pagination-pages">${pageNumbers}</div><button type="button" class="pagination-direction" data-page="${currentPage + 1}"${currentPage >= pageCount ? " disabled" : ""}>Next <span aria-hidden="true">›</span></button></div>`;
-    }
+    currentVisibleCards = [...cards];
+    cards.forEach((card) => { card.style.display = ""; });
+    if (emptyState) emptyState.style.display = cards.length ? "none" : "block";
+    if (visibleCountBadge) visibleCountBadge.textContent = `${cards.length} photos on this page`;
   }
-
-  // District Chip Click
-  if (districtFilter) {
-    districtFilter.addEventListener("change", () => {
-      currentDistrict = districtFilter.value || "all";
-      currentPage = 1;
-      applyFilters();
-    });
-  }
-
-  // Search Input
-  if (searchInput) {
-    searchInput.addEventListener("input", (e) => {
-      currentSearchQuery = e.target.value.toLowerCase().trim();
-      currentPage = 1;
-      applyFilters();
-    });
-  }
-
-  if (pagination) {
-    pagination.addEventListener("click", (event) => {
-      const button = event.target.closest("button[data-page]");
-      if (!button || button.disabled) return;
-      currentPage = Number(button.dataset.page);
-      applyFilters();
-      pagination.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    });
-  }
-
-  // ==========================================
   // LIGHTBOX LOGIC
   // ==========================================
 

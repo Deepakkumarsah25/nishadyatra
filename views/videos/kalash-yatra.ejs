@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -3267,34 +3267,35 @@
     <section class="gallery-section" id="videoGallery">
       <div class="container">
         <% const videoList = (typeof kalash !== 'undefined' && kalash.videos && kalash.videos.length > 0) ? kalash.videos : []; %>
-        <div class="video-list-heading">
+        <form id="videoFilters" action="/video" method="get">
+      <div class="video-list-heading">
           <h2>सभी वीडियो</h2>
           <div class="filter-col-search">
             <span class="filter-col-icon" aria-hidden="true">⌕</span>
-            <input type="search" id="searchFilter" class="filter-normal-input" placeholder="Search.." autocomplete="off" aria-label="Search videos in Hindi or English" />
+            <input type="search" id="searchFilter" name="search" value="<%= videoSearch || '' %>" class="filter-normal-input" placeholder="Search.." autocomplete="off" aria-label="Search videos in Hindi or English" />
             <button type="button" class="search-clear-btn" id="searchClearBtn" aria-label="Clear search">×</button>
           </div>
         </div>
         <div class="video-toolbar-row">
           <div class="video-filter-controls" aria-label="Filter videos">
             <div class="filter-col-select">
-              <select id="stateFilter" class="filter-normal-select" aria-label="Filter by state">
-                <option value="all">सभी राज्य</option>
-                <option value="bihar">बिहार (Bihar)</option>
-                <option value="madhya-pradesh">मध्य प्रदेश (Madhya Pradesh)</option>
-                <option value="uttar-pradesh">उत्तर प्रदेश (Uttar Pradesh)</option>
-                <option value="jharkhand">झारखंड (Jharkhand)</option>
-                <option value="rajasthan">राजस्थान (Rajasthan)</option>
-              </select>
+              <select id="stateFilter" name="state" class="filter-normal-select" aria-label="Filter by state">
+  <option value="all">All states</option>
+  <% const stateOptions = [...new Set((videoLocations || []).map((location) => location._id?.state).filter(Boolean))]; %>
+  <% stateOptions.forEach((stateOption) => { %><option value="<%= stateOption %>" <%= selectedVideoState === stateOption ? 'selected' : '' %>><%= stateOption %></option><% }); %>
+</select>
             </div>
             <div class="filter-col-select">
-              <select id="districtFilter" class="filter-normal-select" aria-label="Filter by district">
-                <option value="all">सभी ज़िले</option>
-              </select>
+              <select id="districtFilter" name="district" class="filter-normal-select" aria-label="Filter by district">
+  <option value="all">All districts</option>
+  <% const districtOptions = [...new Set((videoLocations || []).map((location) => location._id?.district).filter(Boolean))]; %>
+  <% districtOptions.forEach((districtOption) => { %><option value="<%= districtOption %>" <%= selectedVideoDistrict === districtOption ? 'selected' : '' %>><%= districtOption %></option><% }); %>
+</select>
             </div>
           </div>
-          <span class="video-filter-count"><span id="resultCount" aria-live="polite"><%= videoList.length %></span> वीडियो</span>
+          <span class="video-filter-count"><span id="resultCount" aria-live="polite"><%= videoPagination.total %></span> वीडियो</span>
         </div>
+        </form>
         <span id="districtLabel" hidden>ज़िला चुनें</span>
         <div class="video-cards-grid" id="videoGrid">
           <% videoList.forEach((vid, index) => { %>
@@ -3393,23 +3394,14 @@
           </div>
         </div>
 
-        <!-- ===================================================
-             PAGINATION: 9 VIDEOS PER PAGE (RIGHT-ALIGNED NEXT/PREV)
-        ==================================================== -->
-        <div class="gallery-pagination-container" id="galleryPagination">
-          <div class="pagination-actions-right">
-            <button type="button" class="btn-pagination-nav btn-pagination-prev" id="btnPaginationPrev" disabled aria-label="Previous page">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
-              <span>Previous</span>
-            </button>
-            <div class="pagination-pages" aria-label="Video pages"></div>
-            <button type="button" class="btn-pagination-nav btn-pagination-next" id="btnPaginationNext" aria-label="Next page">
-              <span>Next</span>
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
-            </button>
-          </div>
-        </div>
-      </section>
+        <% const videoPageUrl = (targetPage) => { const params = new URLSearchParams(); if (videoSearch) params.set('search', videoSearch); if (selectedVideoState !== 'all') params.set('state', selectedVideoState); if (selectedVideoDistrict !== 'all') params.set('district', selectedVideoDistrict); params.set('page', String(targetPage)); return '/video?' + params.toString() + '#videoGallery'; }; %>
+        <% if (videoPagination && videoPagination.totalPages > 1) { %>
+          <div class="gallery-pagination-container" id="galleryPagination"><div class="pagination-actions-right">
+            <% if (videoPagination.page > 1) { %><a class="btn-pagination-nav btn-pagination-prev" href="<%= videoPageUrl(videoPagination.page - 1) %>">Previous</a><% } %>
+            <span class="pagination-number is-current"><%= videoPagination.page %> / <%= videoPagination.totalPages %></span>
+            <% if (videoPagination.page < videoPagination.totalPages) { %><a class="btn-pagination-nav btn-pagination-next" href="<%= videoPageUrl(videoPagination.page + 1) %>">Next</a><% } %>
+          </div></div>
+        <% } %>      </section>
 
   </main>
 
@@ -3527,353 +3519,14 @@
 
       let activeVideoShareUrl = window.location.href;
 
-            /* ===================================================
-         DISTRICT DATA & ALIAS MAPPINGS (ALL 5 STATES FULL LIST)
-      ==================================================== */
-      const stateDistrictList = {
-        "bihar": [
-          "गोपालगंज", "पटना", "मुजफ्फरपुर", "गया", "दरभंगा", "भागलपुर", "सारण", "सीवान", "वैशाली", "समस्तीपुर",
-          "नालंदा", "पूर्णिया", "बेगूसराय", "रोहतास", "भोजपुर", "बक्सर", "कटिहार", "खगड़िया", "किशनगंज", "लखीसराय",
-          "मधेपुरा", "मधुबनी", "मुंगेर", "नवादा", "अररिया", "अरवल", "औरंगाबाद", "बांका", "जमुई", "जहानाबाद",
-          "कैमूर", "सहरसा", "शेखपुरा", "शिवहर", "सीतामढ़ी", "सुपौल", "पश्चिम चंपारण", "पूर्वी चंपारण"
-        ],
-        "uttar-pradesh": [
-          "लखनऊ", "वाराणसी", "प्रयागराज", "अयोध्या", "गोरखपुर", "झांसी", "कानपुर नगर", "कानपुर देहात", "आगरा", "बरेली",
-          "मेरठ", "मिर्जापुर", "गाजीपुर", "बलिया", "बस्ती", "देवरिया", "आजमगढ़", "जौनपुर", "चंदौली", "सोनभद्र",
-          "भदोही", "प्रतापगढ़", "सुलतानपुर", "रायबरेली", "सीतापुर", "हरदोई", "लखीमपुर खीरी", "बहराइच", "गोंडा", "श्रावस्ती",
-          "बलरामपुर", "सिद्धार्थनगर", "संतकबीरनगर", "महाराजगंज", "कुशीनगर", "मऊ", "बांदा", "चित्रकूट", "हमीरपुर", "महोबा",
-          "जालौन", "ललितपुर", "फतेहपुर", "कौशाम्बी", "उन्नाव", "बाराबंकी", "अमेठी", "अंबेडकरनगर", "फर्रुखाबाद", "कन्नौज",
-          "इटावा", "औरैया", "मैनपुरी", "एटा", "कासगंज", "मथुरा", "अलीगढ़", "हाथरस", "फिरोजाबाद", "बदायूं",
-          "शाहजहांपुर", "पीलीभीत", "रामपुर", "मुरादाबाद", "संभल", "अमरोहा", "बिजनौर", "सहारनपुर", "शामली", "मुजफ्फरनगर",
-          "बागपत", "गाजियाबाद", "हापुड़", "गौतमबुद्ध नगर", "बुलंदशहर"
-        ],
-        "madhya-pradesh": [
-          "भोपाल", "इंदौर", "जबलपुर", "ग्वालियर", "उज्जैन", "सागर", "रीवा", "सतना", "छिंदवाड़ा", "विदिशा",
-          "सीहोर", "रायसेन", "राजगढ़", "नर्मदापुरम", "हरदा", "बैतूल", "गुना", "शिवपुरी", "अशोकनगर", "दतिया",
-          "श्योपुर", "मुरैना", "भिंड", "दमोह", "पन्ना", "छतरपुर", "टीकमगढ़", "निवाड़ी", "कटनी", "नरसिंहपुर",
-          "सिवनी", "बालाघाट", "मंडला", "डिंडौरी", "शहडोल", "उमरिया", "अनूपपुर", "सीधी", "सिंगरौली", "खंडवा",
-          "बुरहानपुर", "खरगोन", "बड़वानी", "धार", "अलीराजपुर", "झाबुआ", "रतलाम", "मंदसौर", "नीमच", "शाजापुर",
-          "आगर मालवा", "देवास", "पांढुर्णा", "मैहर"
-        ],
-        "jharkhand": [
-          "रांची", "धनबाद", "जमशेदपुर", "बोकारो", "देवघर", "हजारीबाग", "गिरिडीह", "पलामू", "गढ़वा", "लातेहार",
-          "चतरा", "कोडरमा", "रामगढ़", "दुमका", "जामताड़ा", "गोड्डा", "साहिबगंज", "पाकुड़", "लोहरदगा", "गुमला",
-          "सिमडेगा", "पश्चिमी सिंहभूम", "सरायकेला खरसावां", "खूंटी"
-        ],
-        "rajasthan": [
-          "जयपुर", "जोधपुर", "उदयपुर", "कोटा", "बीकानेर", "अजमेर", "अलवर", "भरतपुर", "भीलवाड़ा", "बाड़मेर",
-          "पाली", "सीकर", "नागौर", "चित्तौड़गढ़", "श्रीगंगानगर", "झुंझुनूं", "चूरू", "दौसा", "धौलपुर", "सवाई माधोपुर",
-          "करौली", "टोंक", "बूंदी", "झालावाड़", "बारां", "बांसवाड़ा", "डूंगरपुर", "प्रतापगढ़", "राजसमंद", "जालोर",
-          "सिरोही", "जैसलमेर", "हनुमानगढ़", "बालोतरा", "ब्यावर", "अनूपगढ़", "डीडवाना-कुचामन", "डीग", "दूदू", "गंगापुर सिटी",
-          "जयपुर ग्रामीण", "जोधपुर ग्रामीण", "केकड़ी", "कोटपूतली-बहरोड़", "खैरथल-तिजारा", "नीम का थाना", "फलौदी", "सलूंबर", "सांचौर", "शाहपुरा"
-        ]
-      };
-
-      const districtAliasMap = {
-        gopalganj: "गोपालगंज",
-        patna: "पटना",
-        varanasi: "वाराणसी",
-        bhopal: "भोपाल",
-        ranchi: "रांची",
-        lucknow: "लखनऊ",
-        ayodhya: "अयोध्या",
-        prayagraj: "प्रयागराज",
-        gaya: "गया",
-        muzaffarpur: "मुजफ्फरपुर",
-        indore: "इंदौर",
-        gwalior: "ग्वालियर",
-        jabalpur: "जबलपुर",
-        dhanbad: "धनबाद",
-        jaipur: "जयपुर",
-        darbhanga: "दरभंगा",
-        saran: "सारण",
-        gorakhpur: "गोरखपुर",
-        jhansi: "झांसी",
-        ujjain: "उज्जैन",
-        jamshedpur: "जमशेदपुर",
-        udaipur: "उदयपुर"
-      };
-
-      const stateSearchAliases = {
-        bihar: ["bihar", "बिहार"],
-        "madhya-pradesh": ["madhya pradesh", "madhya-pradesh", "mp", "मध्य प्रदेश"],
-        "uttar-pradesh": ["uttar pradesh", "uttar-pradesh", "up", "उत्तर प्रदेश"],
-        jharkhand: ["jharkhand", "झारखंड"],
-        rajasthan: ["rajasthan", "राजस्थान"]
-      };
-
-      function normalizeStr(str) {
-        if (!str) return "";
-        return str.trim().toLowerCase();
-      }
-
-      function isDistrictMatch(cardDist, targetDist) {
-        if (!targetDist || targetDist === "all") return true;
-        if (!cardDist) return false;
-
-        const cNorm = normalizeStr(cardDist);
-        const tNorm = normalizeStr(targetDist);
-
-        if (cNorm === tNorm) return true;
-        if (cNorm.includes(tNorm) || tNorm.includes(cNorm)) return true;
-
-        for (const [enKey, hiVal] of Object.entries(districtAliasMap)) {
-          const hiNorm = normalizeStr(hiVal);
-          const enNorm = normalizeStr(enKey);
-
-          const matchesTarget = tNorm === enNorm || tNorm === hiNorm;
-          const matchesCard = cNorm === enNorm || cNorm === hiNorm;
-
-          if (matchesTarget && matchesCard) return true;
-        }
-
-        return false;
-      }
-
-      function updateDistricts() {
-        if (!districtFilter) return;
-        const state = stateFilter ? stateFilter.value : "all";
-        const currentSelected = districtFilter.value;
-        districtFilter.innerHTML = "";
-
-        const stateNameMap = {
-          "bihar": "बिहार",
-          "uttar-pradesh": "उत्तर प्रदेश",
-          "madhya-pradesh": "मध्य प्रदेश",
-          "jharkhand": "झारखंड",
-          "rajasthan": "राजस्थान"
-        };
-
-        const allOpt = document.createElement("option");
-        allOpt.value = "all";
-        allOpt.textContent = state === "all" ? "सभी ज़िले" : ("सभी ज़िले (" + (stateNameMap[state] || state) + ")");
-        districtFilter.appendChild(allOpt);
-
-        if (districtLabel) {
-          districtLabel.textContent = state === "all" ? "ज़िला चुनें (Select District)" : ("ज़िला चुनें (" + (stateNameMap[state] || state) + " के ज़िले)");
-        }
-
-        const districtsSet = new Set();
-
-        // 1. If specific state selected, add all districts of that state
-        if (state !== "all" && stateDistrictList[state]) {
-          stateDistrictList[state].forEach(d => districtsSet.add(d));
-        } else if (state === "all") {
-          // If all states, collect districts from video cards
-          videoCards.forEach(card => {
-            const cardDist = (card.dataset.district || "").trim();
-            if (cardDist) districtsSet.add(cardDist);
-          });
-        }
-
-        Array.from(districtsSet).sort((a, b) => a.localeCompare(b, "hi")).forEach(dist => {
-          const opt = document.createElement("option");
-          opt.value = dist;
-          opt.textContent = dist;
-          districtFilter.appendChild(opt);
-        });
-
-        // Retain selection if valid
-        if (currentSelected && currentSelected !== "all") {
-          let found = false;
-          Array.from(districtFilter.options).forEach(opt => {
-            if (opt.value === currentSelected || isDistrictMatch(opt.value, currentSelected)) {
-              districtFilter.value = opt.value;
-              found = true;
-            }
-          });
-          if (!found) districtFilter.value = "all";
-        } else {
-          districtFilter.value = "all";
-        }
-      }
-
-      /* ===================================================
-         FILTERING & SEARCH LOGIC
-      ==================================================== */
-      function applyFilters() {
-        const state = stateFilter ? stateFilter.value : "all";
-        const district = districtFilter ? districtFilter.value : "all";
-        const search = (searchFilter ? searchFilter.value : "").trim().toLocaleLowerCase();
-        const visibleCards = [];
-
-        if (searchClearBtn) {
-          searchClearBtn.classList.toggle("visible", search.length > 0);
-        }
-
-        videoCards.forEach(card => {
-          const cardState = card.dataset.state || "";
-          const cardDist = card.dataset.district || "";
-
-          const matchesState = state === "all" || cardState === state;
-          const matchesDistrict = district === "all" || isDistrictMatch(cardDist, district);
-
-          let matchesSearch = true;
-          if (search) {
-            const stateAliases = stateSearchAliases[(card.dataset.state || "").toLowerCase()] || [];
-            const districtAliases = Object.entries(districtAliasMap)
-              .filter(([english, hindi]) => normalizeStr(cardDist) === normalizeStr(hindi) || normalizeStr(cardDist) === english)
-              .flatMap(([english, hindi]) => [english, hindi]);
-            const haystack = [
-              card.dataset.title || "",
-              card.dataset.person || "",
-              cardDist,
-              cardState,
-              card.dataset.desc || "",
-              card.dataset.date || "",
-              card.dataset.people || "",
-              card.dataset.duration || "",
-              card.dataset.category || "",
-              card.dataset.location || "",
-              card.textContent || "",
-              ...stateAliases,
-              ...districtAliases
-            ].join(" ").toLocaleLowerCase();
-            matchesSearch = haystack.includes(search);
-          }
-
-          if (matchesState && matchesDistrict && matchesSearch) {
-            visibleCards.push(card);
-          }
-        });
-
-        if (resultCount) resultCount.textContent = visibleCards.length;
-        if (emptyState) emptyState.classList.toggle("show", visibleCards.length === 0);
-
-        currentPaginationPage = 1;
-        renderPagination(visibleCards);
-      }
-
-      if (searchClearBtn) {
-        searchClearBtn.addEventListener("click", function () {
-          if (searchFilter) searchFilter.value = "";
-          applyFilters();
-        });
-      }
-
-      let searchDebounceTimer;
-      if (searchFilter) {
-        searchFilter.addEventListener("input", function () {
-          clearTimeout(searchDebounceTimer);
-          searchDebounceTimer = setTimeout(applyFilters, 350);
-        });
-      }
-
-      if (stateFilter) {
-        stateFilter.addEventListener("change", function () {
-          updateDistricts();
-          applyFilters();
-        });
-      }
-
-      if (districtFilter) {
-        districtFilter.addEventListener("change", function () {
-          applyFilters();
-        });
-      }
-
-      /* ===================================================
-         GALLERY PAGINATION (9 VIDEOS PER PAGE, RIGHT-ALIGNED NEXT)
-      ==================================================== */
-      function renderPagination(cards) {
-        currentFilteredCards = (cards !== undefined) ? cards : videoCards;
-        const total = currentFilteredCards.length;
-        const totalPages = Math.ceil(total / VIDEOS_PER_PAGE) || 1;
-
-        if (currentPaginationPage > totalPages) {
-          currentPaginationPage = totalPages;
-        }
-        if (currentPaginationPage < 1) {
-          currentPaginationPage = 1;
-        }
-
-        const startIndex = (currentPaginationPage - 1) * VIDEOS_PER_PAGE;
-        const endIndex = Math.min(startIndex + VIDEOS_PER_PAGE, total);
-
-        // Show only the 9 cards for current page among filtered cards
-        currentFilteredCards.forEach(function (card, idx) {
-          if (idx >= startIndex && idx < endIndex) {
-            card.classList.remove("paged-out", "hidden");
-            card.style.display = "";
-          } else {
-            card.classList.add("paged-out");
-            card.style.display = "none";
-          }
-        });
-
-        // Hide all cards not in filtered set
-        videoCards.forEach(function (card) {
-          if (!currentFilteredCards.includes(card)) {
-            card.classList.add("hidden");
-            card.style.display = "none";
-          }
-        });
-
-        if (!galleryPagination) return;
-
-        if (total === 0) {
-          galleryPagination.style.display = "none";
-          return;
-        }
-
-        galleryPagination.style.display = "flex";
-
-        if (btnPaginationPrev) {
-          btnPaginationPrev.disabled = currentPaginationPage <= 1;
-        }
-        if (btnPaginationNext) {
-          btnPaginationNext.disabled = currentPaginationPage >= totalPages;
-        }
-
-        const pageNumbers = galleryPagination.querySelector(".pagination-pages");
-        if (pageNumbers) {
-          const lastVisiblePage = Math.min(totalPages, currentPaginationPage <= 4 ? 4 : currentPaginationPage + 1);
-          let pagesMarkup = Array.from({ length: lastVisiblePage }, (_, index) => index + 1)
-            .map((page) => `<button type="button" class="pagination-number${page === currentPaginationPage ? " is-current" : ""}" data-page="${page}"${page === currentPaginationPage ? ' aria-current="page"' : ""}>${page}</button>`)
-            .join("");
-          if (lastVisiblePage < totalPages) {
-            if (lastVisiblePage < totalPages - 1) pagesMarkup += '<span class="pagination-ellipsis" aria-hidden="true">…</span>';
-            pagesMarkup += `<button type="button" class="pagination-number${totalPages === currentPaginationPage ? " is-current" : ""}" data-page="${totalPages}"${totalPages === currentPaginationPage ? ' aria-current="page"' : ""}>${totalPages}</button>`;
-          }
-          pageNumbers.innerHTML = pagesMarkup;
-        }
-      }
-
-      function goToPage(page) {
-        currentPaginationPage = page;
-        renderPagination(currentFilteredCards);
-        const galleryElem = document.getElementById("videoGallery");
-        if (galleryElem) {
-          galleryElem.scrollIntoView({ behavior: "smooth" });
-        }
-      }
-
-      if (btnPaginationPrev) {
-        btnPaginationPrev.addEventListener("click", function () {
-          if (currentPaginationPage > 1) {
-            goToPage(currentPaginationPage - 1);
-          }
-        });
-      }
-
-      if (btnPaginationNext) {
-        btnPaginationNext.addEventListener("click", function () {
-          const totalPages = Math.ceil(currentFilteredCards.length / VIDEOS_PER_PAGE) || 1;
-          if (currentPaginationPage < totalPages) {
-            goToPage(currentPaginationPage + 1);
-          }
-        });
-      }
-
-      if (galleryPagination) {
-        galleryPagination.addEventListener("click", function (event) {
-          const pageButton = event.target.closest("button[data-page]");
-          if (pageButton) {
-            goToPage(Number(pageButton.dataset.page));
-          }
-        });
-      }
-
+            const videoFilterForm = document.getElementById("videoFilters");
+      if (searchClearBtn) searchClearBtn.addEventListener("click", () => { searchFilter.value = ""; videoFilterForm.requestSubmit(); });
+      if (stateFilter) stateFilter.addEventListener("change", () => videoFilterForm.requestSubmit());
+      if (districtFilter) districtFilter.addEventListener("change", () => videoFilterForm.requestSubmit());
+      if (resultCount) resultCount.textContent = "<%= videoPagination.total %>";
+      if (emptyState) emptyState.classList.toggle("show", videoCards.length === 0);
+      function applyFilters() { if (videoFilterForm) videoFilterForm.requestSubmit(); }
+      function updateDistricts() {}
       /* ===================================================
          INTERACTIVE NAVIGATION & SMOOTH SCROLL
       ==================================================== */
@@ -3883,7 +3536,6 @@
           const targetState = trigger.dataset.state;
           if (targetState && stateFilter) {
             stateFilter.value = targetState;
-            updateDistricts();
             applyFilters();
           }
           const gallery = document.getElementById("videoGallery");
@@ -4079,9 +3731,6 @@
       /* ===================================================
          INIT ON LOAD
       ==================================================== */
-      updateDistricts();
-      applyFilters();
-
     });
   </script>
 

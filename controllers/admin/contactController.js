@@ -1,5 +1,6 @@
 const ContactInfo = require("../../models/ContactInfo");
 const ContactMessage = require("../../models/ContactMessage");
+const { getPagination } = require("../../utils/pagination");
 
 /**
  * Display Admin Contact Management Hub
@@ -7,8 +8,8 @@ const ContactMessage = require("../../models/ContactMessage");
 exports.getContactManager = async (req, res) => {
   try {
     const tab = req.query.tab || "messages";
-    const status = req.query.status || "all";
-    const search = (req.query.search || "").trim();
+    const status = ["new", "contacted", "resolved"].includes(req.query.status) ? req.query.status : "all";
+    const search = typeof req.query.search === "string" ? req.query.search.trim().slice(0, 100) : "";
 
     // 1. Fetch Contact Info Configuration
     const contact = await ContactInfo.getOrSeed();
@@ -29,7 +30,7 @@ exports.getContactManager = async (req, res) => {
     }
 
     if (search) {
-      const searchRegex = new RegExp(search, "i");
+      const searchRegex = new RegExp(search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
       filter.$or = [
         { name: searchRegex },
         { phone: searchRegex },
@@ -40,9 +41,12 @@ exports.getContactManager = async (req, res) => {
     }
 
     // 4. Fetch Filtered Messages
+    const totalFiltered = await ContactMessage.countDocuments(filter);
+    const pagination = getPagination(req.query.page, totalFiltered, 50);
     const messages = await ContactMessage.find(filter)
       .sort({ createdAt: -1 })
-      .limit(200);
+      .skip(pagination.skip)
+      .limit(pagination.pageSize);
 
     res.render("admin/contact/index", {
       title: "Contact Management",
@@ -51,6 +55,9 @@ exports.getContactManager = async (req, res) => {
       activeTab: tab,
       contact,
       messages,
+      pagination,
+      paginationPath: "/admin/contact",
+      paginationQuery: { tab: "messages", status, search },
       stats: {
         total: totalMessages,
         new: newMessages,
@@ -73,6 +80,9 @@ exports.getContactManager = async (req, res) => {
       activeTab: "messages",
       contact: ContactInfo.defaultData,
       messages: [],
+      pagination: { page: 1, pageSize: 50, total: 0, totalPages: 1, skip: 0 },
+      paginationPath: "/admin/contact",
+      paginationQuery: { tab: "messages", status: "all", search: "" },
       stats: { total: 0, new: 0, contacted: 0, resolved: 0 },
       filters: { status: "all", search: "" },
       message: null,

@@ -1,4 +1,4 @@
-<%- include("../common/header") %>
+﻿<%- include("../common/header") %>
   <%- include("../common/sidebar") %>
 
 <style>
@@ -517,7 +517,7 @@
                       <line x1="17" y1="2" x2="17" y2="22" />
                       <line x1="2" y1="12" x2="22" y2="12" />
                     </svg>
-                    <span>📹 वीडियो गैलरी प्रबंधन (Video Gallery - <%= kalash.videos ? kalash.videos.length : 0 %>)</span>
+                    <span>📹 वीडियो गैलरी प्रबंधन (Video Gallery - <%= videoPagination.total %>)</span>
                   </a>
                   <a href="/admin/kalash-yatra?tab=history"
                     class="ky-tab-btn <%= activeTab === 'history' ? 'active' : '' %>"
@@ -684,7 +684,7 @@
                                   <line x1="17" y1="2" x2="17" y2="22" />
                                   <line x1="2" y1="12" x2="22" y2="12" />
                                 </svg>
-                                Existing Videos List (<%= (kalash.videos || []).length %> videos)
+                                Existing Videos List (<%= videoPagination.total %> videos)
                               </h3>
                             </div>
 
@@ -703,7 +703,7 @@
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  <% if (!kalash.videos || kalash.videos.length===0) { %>
+                                    <% if (!videoPagination.total) { %>
                                     <tr>
                                       <td colspan="7" style="text-align: center; color: var(--admin-text-muted); padding: 30px;">
                                         वर्तमान में कोई वीडियो उपलब्ध नहीं है। ऊपर दिए गए फॉर्म से वीडियो जोड़ें।
@@ -800,7 +800,8 @@
                 <% }) %>
               <% } %>
             </tbody>
-          </table>
+                                </table>
+                                <%- include("../common/pagination", { pagination, paginationPath, paginationQuery }) %>
                             </div>
                           </div>
                           <% } %>
