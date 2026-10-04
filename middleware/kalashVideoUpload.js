@@ -1,29 +1,6 @@
 const multer = require("multer");
 const path = require("path");
-const fs = require("fs");
 const { validatedUpload } = require("./validateUpload");
-
-// Ensure upload directory exists: uploads/videos
-const uploadDir = path.join(__dirname, "..", "uploads", "videos");
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-// Multer disk storage configuration
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploadDir);
-  },
-  filename: function (req, file, cb) {
-    const ext = path.extname(file.originalname).toLowerCase();
-    const cleanBase = path
-      .basename(file.originalname, ext)
-      .replace(/[^a-zA-Z0-9_-]/g, "_")
-      .substring(0, 35);
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e6);
-    cb(null, `video-${cleanBase}-${uniqueSuffix}${ext || ".mp4"}`);
-  },
-});
 
 const fileFilter = (req, file, cb) => {
   const extension = path.extname(file.originalname).toLowerCase();
@@ -48,7 +25,7 @@ const fileFilter = (req, file, cb) => {
 };
 
 const upload = multer({
-  storage: storage,
+  storage: multer.memoryStorage(),
   limits: {
     fileSize: 100 * 1024 * 1024, // 100 MB limit
     files: 2,
@@ -63,5 +40,4 @@ const kalashVideoUpload = validatedUpload(upload.fields([
 
 module.exports = {
   kalashVideoUpload,
-  uploadDir,
 };

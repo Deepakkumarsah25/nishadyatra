@@ -83,7 +83,7 @@ const pageUrl = (number) => {
           <% if (page < totalPages) { %><a class="pagination-direction" href="<%= pageUrl(page + 1) %>">Next <span aria-hidden="true">›</span></a><% } else { %><span class="pagination-direction is-disabled">Next <span aria-hidden="true">›</span></span><% } %>
         </div>
       </nav>
-    <% } else { %><div class="press-empty"><h3>कोई खबर नहीं मिली</h3><p>दूसरे फ़िल्टर से खोजकर देखें।</p></div><% } %>
+    <% } else { %><div class="press-empty"><h3>कोई खबर नहीं मिली</h3><p>आपकी खोज या चुने गए फ़िल्टर से मेल खाने वाली कोई खबर नहीं मिली। खोज शब्द या फ़िल्टर बदलकर फिर कोशिश करें।</p></div><% } %>
     </div>
   </section>
 </main><%- include('../common/footer') %>

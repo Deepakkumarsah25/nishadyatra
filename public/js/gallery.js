@@ -72,7 +72,10 @@ document.addEventListener("DOMContentLoaded", () => {
       if (historyMode === "push") history.pushState({}, "", url.pathname + url.search);
       else if (historyMode === "replace") history.replaceState({}, "", url.pathname + url.search);
     } catch (error) {
-      if (error.name !== "AbortError") console.error(error);
+      if (error.name !== "AbortError") {
+        console.error(error);
+        window.location.assign(url.pathname + url.search);
+      }
     }
   };
 

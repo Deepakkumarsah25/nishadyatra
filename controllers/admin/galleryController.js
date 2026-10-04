@@ -2,6 +2,7 @@ const SankalpPhoto = require("../../models/SankalpPhoto");
 const fs = require("fs");
 const path = require("path");
 const { getPagination } = require("../../utils/pagination");
+const { uploadBuffer, removeAsset } = require("../../config/cloudinary");
 
 // Format date helper for input type="date"
 const formatDateForInput = (date) => {
@@ -115,16 +116,20 @@ exports.getCreatePhoto = async (req, res) => {
 
 // 3. Process Single Add Form
 exports.postCreatePhoto = async (req, res) => {
+  let uploadedPublicId = "";
   try {
     const { name, district, date, caption, imageUrl, isPublished, order } =
       req.body;
 
     let finalImageUrl = "";
     let imageFilename = "";
+    let imagePublicId = "";
 
     if (req.file) {
-      finalImageUrl = `/uploads/gallery/${req.file.filename}`;
-      imageFilename = req.file.filename;
+      const uploaded = await uploadBuffer(req.file.buffer, "nishad-yatra/gallery");
+      finalImageUrl = uploaded.secure_url;
+      imagePublicId = uploaded.public_id;
+      uploadedPublicId = uploaded.public_id;
     } else if (imageUrl && imageUrl.trim()) {
       finalImageUrl = imageUrl.trim();
     } else {
@@ -142,6 +147,7 @@ exports.postCreatePhoto = async (req, res) => {
     }
 
     if (!district || !district.trim()) {
+      if (uploadedPublicId) await removeAsset(uploadedPublicId).catch(() => {});
       const districtsList = await SankalpPhoto.distinct("district");
       return res.render("admin/gallery/form", {
         title: "Add New Sankalp Photo",
@@ -164,6 +170,7 @@ exports.postCreatePhoto = async (req, res) => {
       caption: caption ? caption.trim() : "",
       imageUrl: finalImageUrl,
       imageFilename,
+      imagePublicId,
       isPublished:
         isPublished === "on" || isPublished === "true" || isPublished === true,
       order: Number(order) || 0,
@@ -171,6 +178,7 @@ exports.postCreatePhoto = async (req, res) => {
 
     res.redirect("/admin/gallery?msg=Sankalp photo successfully added.");
   } catch (error) {
+    if (uploadedPublicId) await removeAsset(uploadedPublicId).catch(() => {});
     console.error("Create photo error:", error);
     const districtsList = await SankalpPhoto.distinct("district").catch(
       () => []
@@ -209,6 +217,7 @@ exports.getBulkUpload = async (req, res) => {
 
 // 5. Process Bulk Upload
 exports.postBulkUpload = async (req, res) => {
+  const uploadedFiles = [];
   try {
     const files = req.files;
     if (!files || files.length === 0) {
@@ -244,26 +253,35 @@ exports.postBulkUpload = async (req, res) => {
     const publishedBool =
       isPublished === "on" || isPublished === "true" || isPublished === true;
 
-    const docsToInsert = files.map((file, idx) => {
+    const docsToInsert = [];
+    for (const [idx, file] of files.entries()) {
+      const uploaded = await uploadBuffer(file.buffer, "nishad-yatra/gallery");
+      uploadedFiles.push(uploaded);
       // Derive name if custom or fallback
       let photoName = defaultName && defaultName.trim() ? defaultName.trim() : "Sanatani Nishad";
       if (files.length > 1 && defaultName && defaultName.trim()) {
         photoName = `${defaultName.trim()} #${idx + 1}`;
       }
 
-      return {
+      docsToInsert.push({
         name: photoName,
         district: defaultDistrict.trim(),
         date: isNaN(photoDate.getTime()) ? new Date() : photoDate,
         caption: defaultCaption ? defaultCaption.trim() : "Mass Pledge Campaign",
-        imageUrl: `/uploads/gallery/${file.filename}`,
-        imageFilename: file.filename,
+        imageUrl: uploaded.secure_url,
+        imageFilename: "",
+        imagePublicId: uploaded.public_id,
         isPublished: publishedBool,
         order: idx,
-      };
-    });
+      });
+    }
 
-    await SankalpPhoto.insertMany(docsToInsert);
+    try {
+      await SankalpPhoto.insertMany(docsToInsert);
+    } catch (error) {
+      await Promise.all(uploadedFiles.map((asset) => removeAsset(asset.public_id)));
+      throw error;
+    }
 
     res.redirect(
       `/admin/gallery?msg=${files.length} photos successfully uploaded together!`
@@ -324,28 +342,17 @@ exports.postEditPhoto = async (req, res) => {
 
     let finalImageUrl = existing.imageUrl;
     let imageFilename = existing.imageFilename;
+    let imagePublicId = existing.imagePublicId || "";
+    const previousImagePublicId = imagePublicId;
 
     if (req.file) {
-      // Clean up previous uploaded image if exists
-      if (existing.imageFilename) {
-        const oldPath = path.join(
-          __dirname,
-          "..",
-          "..",
-          "uploads",
-          "gallery",
-          existing.imageFilename
-        );
-        if (fs.existsSync(oldPath)) {
-          try {
-            fs.unlinkSync(oldPath);
-          } catch (e) {}
-        }
-      }
-      finalImageUrl = `/uploads/gallery/${req.file.filename}`;
-      imageFilename = req.file.filename;
+      const uploaded = await uploadBuffer(req.file.buffer, "nishad-yatra/gallery");
+      finalImageUrl = uploaded.secure_url;
+      imageFilename = "";
+      imagePublicId = uploaded.public_id;
     } else if (imageUrl && imageUrl.trim()) {
       finalImageUrl = imageUrl.trim();
+      imagePublicId = "";
     }
 
     const photoDate = date ? new Date(date) : existing.date;
@@ -356,11 +363,15 @@ exports.postEditPhoto = async (req, res) => {
     existing.caption = typeof caption !== "undefined" ? caption.trim() : existing.caption;
     existing.imageUrl = finalImageUrl;
     existing.imageFilename = imageFilename;
+    existing.imagePublicId = imagePublicId;
     existing.isPublished =
       isPublished === "on" || isPublished === "true" || isPublished === true;
     existing.order = Number(order) || 0;
 
     await existing.save();
+    if (previousImagePublicId && previousImagePublicId !== imagePublicId) {
+      await removeAsset(previousImagePublicId).catch(() => {});
+    }
 
     res.redirect("/admin/gallery?msg=Photo details successfully updated.");
   } catch (error) {
@@ -402,6 +413,7 @@ exports.togglePhotoPublish = async (req, res) => {
 exports.deletePhoto = async (req, res) => {
   try {
     const photo = await SankalpPhoto.findByIdAndDelete(req.params.id);
+    if (photo?.imagePublicId) await removeAsset(photo.imagePublicId);
     if (photo && photo.imageFilename) {
       const filePath = path.join(
         __dirname,

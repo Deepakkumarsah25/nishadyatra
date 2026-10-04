@@ -574,7 +574,9 @@ const kalashYatraSchema = new mongoose.Schema(
       {
         title: { type: String, required: true },
         videoUrl: { type: String, required: true },
+        videoPublicId: { type: String, default: "" },
         thumbnail: { type: String, default: "" },
+        thumbnailPublicId: { type: String, default: "" },
         personOrPlace: { type: String, default: "" },
         peopleCount: { type: String, default: "5,000+" },
         category: {
