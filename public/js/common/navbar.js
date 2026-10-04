@@ -24,6 +24,7 @@ function openDrawer() {
     "aria-expanded",
     "true"
   );
+  burger.setAttribute("aria-label", "Close menu");
 
 
   // Complete page lock
@@ -49,6 +50,7 @@ function openDrawer() {
 // =========================================
 
 function closeDrawer() {
+  if (!navLinks.classList.contains("open")) return;
 
   navLinks.classList.remove("open");
 
@@ -60,6 +62,7 @@ function closeDrawer() {
     "aria-expanded",
     "false"
   );
+  burger.setAttribute("aria-label", "Open menu");
 
 
   // Unlock page
@@ -79,10 +82,11 @@ function closeDrawer() {
 
 
   // Return to previous position
-  window.scrollTo(
-    0,
-    scrollPosition
-  );
+  window.scrollTo({
+    left: 0,
+    top: scrollPosition,
+    behavior: "instant",
+  });
 }
 
 
@@ -115,6 +119,13 @@ drawerOverlay.addEventListener(
   "click",
   closeDrawer
 );
+
+// Close the mobile drawer when tapping anywhere outside the menu or toggle.
+document.addEventListener("pointerdown", (event) => {
+  if (!navLinks.classList.contains("open")) return;
+  if (navLinks.contains(event.target) || burger.contains(event.target)) return;
+  closeDrawer();
+});
 
 
 // =========================================

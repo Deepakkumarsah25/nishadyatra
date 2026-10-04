@@ -7,6 +7,17 @@ function escapeRegex(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
+function addGallerySearch(query, search) {
+  if (typeof search !== "string" || !search.trim()) return;
+
+  const fields = ["name", "district", "caption", "dateString"];
+  const terms = search.trim().slice(0, 100).split(/\s+/).filter(Boolean);
+  query.$and = terms.map((term) => {
+    const regex = new RegExp(escapeRegex(term), "i");
+    return { $or: fields.map((field) => ({ [field]: regex })) };
+  });
+}
+
 // Public Gallery Page
 exports.getGalleryPage = async (req, res) => {
   try {
@@ -17,10 +28,7 @@ exports.getGalleryPage = async (req, res) => {
     if (typeof district === "string" && district.trim() && district !== "all") {
       query.district = district.trim();
     }
-    if (search) {
-      const regex = new RegExp(escapeRegex(search), "i");
-      query.$or = [{ name: regex }, { district: regex }, { caption: regex }];
-    }
+    addGallerySearch(query, search);
 
     let [total, quickInfo, districtsWithCount] = await Promise.all([
       SankalpPhoto.countDocuments(query),
@@ -33,10 +41,14 @@ exports.getGalleryPage = async (req, res) => {
       ]),
     ]);
 
-    // If completely empty, auto-seed and reload
+    const hasActiveFilters = Boolean(
+      search || (typeof district === "string" && district.trim() && district !== "all")
+    );
+
+    // Seed defaults only for an unfiltered first visit, never for a no-match search.
     if (total === 0) {
       const totalInDb = await SankalpPhoto.countDocuments();
-      if (totalInDb === 0) {
+      if (totalInDb === 0 && !hasActiveFilters) {
         await seedGalleryData();
         districtsWithCount = await SankalpPhoto.aggregate([
           { $match: { isPublished: true } },
@@ -50,13 +62,10 @@ exports.getGalleryPage = async (req, res) => {
 
     const totalPhotos = await SankalpPhoto.countDocuments({ isPublished: true });
     const pagination = getPagination(req.query.page, total, 24);
-    let photos = await SankalpPhoto.find(query)
+    const photos = await SankalpPhoto.find(query)
       .sort({ order: 1, date: -1, createdAt: -1 })
       .skip(pagination.skip)
       .limit(pagination.pageSize);
-    if (total === 0) {
-      photos = defaultGalleryPhotos.slice(pagination.skip, pagination.skip + pagination.pageSize);
-    }
 
     res.render("gallery", {
       title: "फ़ोटो गैलरी",
@@ -70,15 +79,18 @@ exports.getGalleryPage = async (req, res) => {
     });
   } catch (error) {
     console.error("Gallery render error:", error);
+    const search = typeof req.query.search === "string" ? req.query.search.trim().slice(0, 100) : "";
+    const district = typeof req.query.district === "string" ? req.query.district : "all";
+    const hasActiveFilters = Boolean(search || (district && district !== "all"));
     res.render("gallery", {
       title: "फ़ोटो गैलरी",
-      photos: defaultGalleryPhotos,
-      selectedDistrict: "all",
+      photos: hasActiveFilters ? [] : defaultGalleryPhotos,
+      selectedDistrict: district,
       districtsWithCount: [],
       totalPhotos: defaultGalleryPhotos.length,
       quickInfo: {},
-      search: "",
-      pagination: { page: 1, pageSize: 24, total: defaultGalleryPhotos.length, totalPages: 1 },
+      search,
+      pagination: { page: 1, pageSize: 24, total: hasActiveFilters ? 0 : defaultGalleryPhotos.length, totalPages: hasActiveFilters ? 0 : 1 },
     });
   }
 };
@@ -93,10 +105,7 @@ exports.getGalleryApi = async (req, res) => {
       query.district = district.trim();
     }
 
-    if (typeof search === "string" && search.trim()) {
-      const regex = new RegExp(escapeRegex(search.trim().slice(0, 100)), "i");
-      query.$or = [{ name: regex }, { district: regex }, { caption: regex }];
-    }
+    addGallerySearch(query, search);
 
     const [total] = await Promise.all([SankalpPhoto.countDocuments(query)]);
     const pagination = getPagination(req.query.page, total, 50);

@@ -61,7 +61,6 @@
   width: 100%;
   height: 100%;
   min-height: 450px;
-  min-height: 450px;
   background: #1e1111;
 }
 
@@ -366,5 +365,154 @@
 
   .home-about-card-heading {
     font-size: 19px;
+  }
+}
+
+@media (max-width: 600px) {
+  .home-about-section {
+    padding: 24px 0 20px;
+  }
+
+  .home-about-grid {
+    gap: 18px;
+  }
+
+  .home-about-visual-col,
+  .home-about-content {
+    min-height: 0;
+  }
+
+  .image-inner-wrapper {
+    min-height: 0;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    border-width: 2px;
+    border-radius: 16px;
+  }
+
+  .home-about-slider-track,
+  .home-about-slide {
+    height: 100%;
+  }
+
+  .home-about-slide .home-about-img {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  .floating-top-badge {
+    top: 10px;
+    left: 10px;
+    max-width: calc(100% - 20px);
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+
+  .floating-top-badge > span:last-child {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .floating-stat-box {
+    right: 10px;
+    bottom: 10px;
+    max-width: calc(100% - 20px);
+    padding: 8px 11px;
+    border-left-width: 3px;
+  }
+
+  .stat-box-digit {
+    font-size: 19px;
+  }
+
+  .stat-box-text {
+    white-space: normal;
+    font-size: 10px;
+  }
+
+  .home-about-slider-dots {
+    bottom: 10px;
+    gap: 6px;
+    padding: 4px 9px;
+  }
+
+  .home-about-card {
+    min-height: 0;
+    padding: 24px 18px 18px;
+    border-radius: 16px;
+  }
+
+  .home-about-card-top {
+    min-width: 0;
+  }
+
+  .home-about-quote-mark {
+    margin-bottom: 8px;
+  }
+
+  .home-about-quote-mark svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .home-about-card-heading {
+    margin-bottom: 18px;
+    font-size: clamp(17px, 5vw, 19px);
+    line-height: 1.5;
+    letter-spacing: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .home-about-checklist {
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .checklist-item {
+    align-items: flex-start;
+    gap: 9px;
+  }
+
+  .checklist-icon {
+    margin-top: 2px;
+  }
+
+  .checklist-text {
+    min-width: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+
+  .home-about-card-bottom {
+    padding-top: 4px;
+  }
+
+  .home-about-pill-btn {
+    gap: 8px;
+    min-height: 48px;
+    padding: 12px 18px;
+    font-size: 15px;
+    line-height: 1.35;
+  }
+}
+
+@media (max-width: 360px) {
+  .home-about-card {
+    padding-inline: 15px;
+  }
+
+  .floating-stat-box {
+    right: 8px;
+    bottom: 8px;
+    padding: 7px 9px;
+  }
+
+  .home-about-pill-btn {
+    padding-inline: 14px;
+    font-size: 14px;
   }
 }

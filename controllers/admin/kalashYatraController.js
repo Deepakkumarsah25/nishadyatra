@@ -1,6 +1,7 @@
 const AdminActivityLog = require("../../models/admin/AdminActivityLog");
 const KalashYatra = require("../../models/KalashYatra");
 const { getPagination } = require("../../utils/pagination");
+const { uploadBuffer, removeAsset } = require("../../config/cloudinary");
 
 // View Kalash Yatra Manager
 exports.getKalashYatraManager = async (req, res) => {
@@ -228,14 +229,19 @@ exports.postAddVideo = async (req, res) => {
     let finalVideoUrl = videoUrl ? videoUrl.trim() : "";
     let finalThumbnail = thumbnail ? thumbnail.trim() : "";
 
-    // Check if video file was manually uploaded
+    let uploadedVideo;
+    let uploadedThumbnail;
+
+    // Upload selected media to Cloudinary and persist its secure URL.
     if (req.files && req.files.videoFile && req.files.videoFile[0]) {
-      finalVideoUrl = "/uploads/videos/" + req.files.videoFile[0].filename;
+      uploadedVideo = await uploadBuffer(req.files.videoFile[0].buffer, "nishad-yatra/videos", "video");
+      finalVideoUrl = uploadedVideo.secure_url;
     }
 
     // Check if thumbnail file was manually uploaded
     if (req.files && req.files.thumbnailFile && req.files.thumbnailFile[0]) {
-      finalThumbnail = "/uploads/videos/" + req.files.thumbnailFile[0].filename;
+      uploadedThumbnail = await uploadBuffer(req.files.thumbnailFile[0].buffer, "nishad-yatra/video-thumbnails");
+      finalThumbnail = uploadedThumbnail.secure_url;
     } else if (!finalThumbnail) {
       // Auto-resolve YouTube thumbnail if not provided
       const autoYtThumb = resolveVideoThumbnail("", finalVideoUrl, "");
@@ -274,7 +280,9 @@ exports.postAddVideo = async (req, res) => {
     doc.videos.unshift({
       title: title.trim(),
       videoUrl: finalVideoUrl,
+      videoPublicId: uploadedVideo?.public_id || "",
       thumbnail: finalThumbnail,
+      thumbnailPublicId: uploadedThumbnail?.public_id || "",
       peopleCount: formattedPeopleCount,
       personOrPlace: personOrPlace ? personOrPlace.trim() : formattedPeopleCount,
       category: category || "yatra",
@@ -336,23 +344,34 @@ exports.postUpdateVideo = async (req, res) => {
     video.title = title ? title.trim() : video.title;
 
     // Handle manual video file upload if provided
+    let uploadedVideo;
+    let uploadedThumbnail;
+    const previousVideoPublicId = video.videoPublicId;
+    const previousThumbnailPublicId = video.thumbnailPublicId;
     if (req.files && req.files.videoFile && req.files.videoFile[0]) {
-      video.videoUrl = "/uploads/videos/" + req.files.videoFile[0].filename;
+      uploadedVideo = await uploadBuffer(req.files.videoFile[0].buffer, "nishad-yatra/videos", "video");
+      video.videoUrl = uploadedVideo.secure_url;
+      video.videoPublicId = uploadedVideo.public_id;
     } else if (videoUrl && videoUrl.trim()) {
       video.videoUrl = videoUrl.trim();
+      video.videoPublicId = "";
     }
 
     // Handle manual thumbnail upload or URL update
     if (req.files && req.files.thumbnailFile && req.files.thumbnailFile[0]) {
-      video.thumbnail = "/uploads/videos/" + req.files.thumbnailFile[0].filename;
+      uploadedThumbnail = await uploadBuffer(req.files.thumbnailFile[0].buffer, "nishad-yatra/video-thumbnails");
+      video.thumbnail = uploadedThumbnail.secure_url;
+      video.thumbnailPublicId = uploadedThumbnail.public_id;
     } else if (typeof thumbnail !== "undefined") {
       const trimmedThumb = thumbnail.trim();
       if (trimmedThumb) {
         video.thumbnail = trimmedThumb;
+        video.thumbnailPublicId = "";
       } else {
         // If left empty, auto-detect YouTube thumbnail if applicable
         const ytId = getYouTubeId(video.videoUrl);
         video.thumbnail = ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : "";
+        video.thumbnailPublicId = "";
       }
     }
 
@@ -395,6 +414,12 @@ exports.postUpdateVideo = async (req, res) => {
     }
 
     await doc.save();
+    if (previousVideoPublicId && previousVideoPublicId !== video.videoPublicId) {
+      await removeAsset(previousVideoPublicId, "video").catch(() => {});
+    }
+    if (previousThumbnailPublicId && previousThumbnailPublicId !== video.thumbnailPublicId) {
+      await removeAsset(previousThumbnailPublicId).catch(() => {});
+    }
 
     await AdminActivityLog.record({
       req,
@@ -467,9 +492,15 @@ exports.postDeleteVideo = async (req, res) => {
 
     const video = doc.videos.id(videoId);
     const videoTitle = video ? video.title : videoId;
+    const videoPublicId = video?.videoPublicId;
+    const thumbnailPublicId = video?.thumbnailPublicId;
 
     doc.videos.pull({ _id: videoId });
     await doc.save();
+    await Promise.all([
+      videoPublicId && removeAsset(videoPublicId, "video"),
+      thumbnailPublicId && removeAsset(thumbnailPublicId),
+    ].filter(Boolean));
 
     await AdminActivityLog.record({
       req,
