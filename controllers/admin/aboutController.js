@@ -1,12 +1,24 @@
 const AboutPage = require("../../models/AboutPage");
+const { uploadBuffer } = require("../../config/cloudinary");
 
-// Helper to determine image path from file upload or form input
-const resolveImagePath = (req, fieldName, fallback) => {
-  if (req.file && req.file.filename) {
-    return `/uploads/about/${req.file.filename}`;
+const uploadAboutFiles = async (files = []) => {
+  const urls = new Map();
+  for (const file of files) {
+    const uploaded = await uploadBuffer(file.buffer, "nishad-yatra/about");
+    urls.set(file.fieldname, uploaded.secure_url);
   }
-  if (req.files && req.files[fieldName] && req.files[fieldName][0]) {
-    return `/uploads/about/${req.files[fieldName][0].filename}`;
+  return urls;
+};
+
+const resolveImagePath = async (req, fieldName, fallback) => {
+  const file = req.file?.fieldname === fieldName
+    ? req.file
+    : Array.isArray(req.files)
+      ? req.files.find((entry) => entry.fieldname === fieldName)
+      : null;
+  if (file?.buffer) {
+    const uploaded = await uploadBuffer(file.buffer, "nishad-yatra/about");
+    return uploaded.secure_url;
   }
   if (req.body && req.body[fieldName] && req.body[fieldName].trim() !== "") {
     return req.body[fieldName].trim();
@@ -135,8 +147,9 @@ exports.postUpdateVision = async (req, res) => {
     if (description) doc.vision.description = description.trim();
 
     // Photo: Uploaded file takes precedence, then entered URL, then fallback
-    if (req.file && req.file.filename) {
-      doc.vision.image = `/uploads/about/${req.file.filename}`;
+    if (req.file && req.file.buffer) {
+      const uploaded = await uploadBuffer(req.file.buffer, "nishad-yatra/about");
+      doc.vision.image = uploaded.secure_url;
     } else if (image && image.trim()) {
       doc.vision.image = image.trim();
     }
@@ -247,6 +260,7 @@ exports.postUpdateReservation = async (req, res) => {
 exports.postUpdateActivities = async (req, res) => {
   try {
     const doc = await AboutPage.getOrSeed();
+    const uploadedUrls = await uploadAboutFiles(req.files);
     const { navTitle, title, description } = req.body;
 
     if (navTitle) doc.activities.navTitle = navTitle.trim();
@@ -258,10 +272,7 @@ exports.postUpdateActivities = async (req, res) => {
       doc.activities.image = req.body.image.trim();
     }
     if (req.files && Array.isArray(req.files)) {
-      const showcaseFile = req.files.find(f => f.fieldname === "imageFile" || f.fieldname === "image");
-      if (showcaseFile && showcaseFile.filename) {
-        doc.activities.image = `/uploads/about/${showcaseFile.filename}`;
-      }
+      doc.activities.image = uploadedUrls.get("imageFile") || uploadedUrls.get("image") || doc.activities.image;
     }
 
     // Detail section beside/below photo
@@ -301,10 +312,7 @@ exports.postUpdateActivities = async (req, res) => {
 
           // Check if a file was uploaded for this card
           if (req.files && Array.isArray(req.files)) {
-            const uploadedFile = req.files.find(f => f.fieldname === `act_file_${i}`);
-            if (uploadedFile && uploadedFile.filename) {
-              itemImage = `/uploads/about/${uploadedFile.filename}`;
-            }
+            itemImage = uploadedUrls.get(`act_file_${i}`) || itemImage;
           }
 
           activityList.push({
@@ -318,10 +326,7 @@ exports.postUpdateActivities = async (req, res) => {
     } else if (req.body.act_name && typeof req.body.act_name === "string") {
       let itemImage = req.body.act_image ? req.body.act_image.trim() : "/images/about/nishad-sankalp-hero.jpg";
       if (req.files && Array.isArray(req.files)) {
-        const uploadedFile = req.files.find(f => f.fieldname === "act_file_0");
-        if (uploadedFile && uploadedFile.filename) {
-          itemImage = `/uploads/about/${uploadedFile.filename}`;
-        }
+        itemImage = uploadedUrls.get("act_file_0") || itemImage;
       }
       activityList.push({
         name: req.body.act_name.trim(),
@@ -344,6 +349,7 @@ exports.postUpdateActivities = async (req, res) => {
 exports.postUpdateMessages = async (req, res) => {
   try {
     const doc = await AboutPage.getOrSeed();
+    const uploadedUrls = await uploadAboutFiles(req.files);
     const { navTitle, title, description } = req.body;
 
     if (navTitle) doc.messages.navTitle = navTitle.trim();
@@ -358,10 +364,7 @@ exports.postUpdateMessages = async (req, res) => {
 
           // Check if a file was uploaded for this message card
           if (req.files && Array.isArray(req.files)) {
-            const uploadedFile = req.files.find(f => f.fieldname === `msg_file_${i}`);
-            if (uploadedFile && uploadedFile.filename) {
-              itemPhoto = `/uploads/about/${uploadedFile.filename}`;
-            }
+            itemPhoto = uploadedUrls.get(`msg_file_${i}`) || itemPhoto;
           }
 
           messagesList.push({
@@ -376,10 +379,7 @@ exports.postUpdateMessages = async (req, res) => {
     } else if (req.body.msg_sender && typeof req.body.msg_sender === "string") {
       let itemPhoto = req.body.msg_photo ? req.body.msg_photo.trim() : "/images/about/nishad-sankalp-hero.jpg";
       if (req.files && Array.isArray(req.files)) {
-        const uploadedFile = req.files.find(f => f.fieldname === "msg_file_0");
-        if (uploadedFile && uploadedFile.filename) {
-          itemPhoto = `/uploads/about/${uploadedFile.filename}`;
-        }
+        itemPhoto = uploadedUrls.get("msg_file_0") || itemPhoto;
       }
       messagesList.push({
         senderName: req.body.msg_sender.trim(),
@@ -422,7 +422,7 @@ exports.postAddGalleryPhoto = async (req, res) => {
     const doc = await AboutPage.getOrSeed();
     const { title, caption, category, imageUrl } = req.body;
 
-    const finalImage = resolveImagePath(req, "photoFile", imageUrl);
+    const finalImage = await resolveImagePath(req, "photoFile", imageUrl);
 
     if (!finalImage) {
       return res.redirect("/admin/about?tab=gallery&err=" + encodeURIComponent("कृपया फोटो अपलोड करें या फोटो URL दर्ज करें।"));

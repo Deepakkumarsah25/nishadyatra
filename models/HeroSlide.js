@@ -37,6 +37,11 @@ const heroSlideSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    imagePublicId: {
+      type: String,
+      default: "",
+      trim: true,
+    },
     primaryBtnText: {
       type: String,
       default: "Join Campaign",

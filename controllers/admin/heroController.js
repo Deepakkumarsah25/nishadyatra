@@ -1,6 +1,7 @@
 const HeroSlide = require("../../models/HeroSlide");
 const { defaultHeroSlides } = require("../../scripts/seedHomeData");
 const { getPagination } = require("../../utils/pagination");
+const { uploadBuffer, removeAsset } = require("../../config/cloudinary");
 
 // List all slides
 exports.getHeroSlides = async (req, res) => {
@@ -67,8 +68,10 @@ exports.postCreateHeroSlide = async (req, res) => {
     } = req.body;
 
     let finalImageUrl = "";
+    let uploadedImage;
     if (req.file) {
-      finalImageUrl = "/uploads/hero/" + req.file.filename;
+      uploadedImage = await uploadBuffer(req.file.buffer, "nishad-yatra/hero");
+      finalImageUrl = uploadedImage.secure_url;
     } else if (imageUrl && imageUrl.trim()) {
       finalImageUrl = imageUrl.trim();
     }
@@ -85,6 +88,7 @@ exports.postCreateHeroSlide = async (req, res) => {
       headingSuffix: (headingSuffix && headingSuffix.trim()) || "",
       description: (description && description.trim()) || "",
       imageUrl: finalImageUrl,
+      imagePublicId: uploadedImage?.public_id || "",
       primaryBtnText: (primaryBtnText && primaryBtnText.trim()) || "Join Campaign",
       primaryBtnLink: (primaryBtnLink && primaryBtnLink.trim()) || "#quickActionSidebar",
       primaryBtnInitiative: (primaryBtnInitiative && primaryBtnInitiative.trim()) || "",
@@ -158,10 +162,15 @@ exports.postEditHeroSlide = async (req, res) => {
     } = req.body;
 
     let finalImageUrl = existingSlide.imageUrl;
+    let imagePublicId = existingSlide.imagePublicId || "";
+    const previousImagePublicId = imagePublicId;
     if (req.file) {
-      finalImageUrl = "/uploads/hero/" + req.file.filename;
+      const uploaded = await uploadBuffer(req.file.buffer, "nishad-yatra/hero");
+      finalImageUrl = uploaded.secure_url;
+      imagePublicId = uploaded.public_id;
     } else if (imageUrl && imageUrl.trim()) {
       finalImageUrl = imageUrl.trim();
+      imagePublicId = "";
     }
 
     existingSlide.tag = (tag && tag.trim()) || existingSlide.tag;
@@ -171,6 +180,7 @@ exports.postEditHeroSlide = async (req, res) => {
     existingSlide.headingSuffix = typeof headingSuffix !== "undefined" ? headingSuffix.trim() : existingSlide.headingSuffix;
     existingSlide.description = typeof description !== "undefined" ? description.trim() : existingSlide.description;
     existingSlide.imageUrl = finalImageUrl;
+    existingSlide.imagePublicId = imagePublicId;
     existingSlide.primaryBtnText = (primaryBtnText && primaryBtnText.trim()) || "";
     existingSlide.primaryBtnLink = (primaryBtnLink && primaryBtnLink.trim()) || "#quickActionSidebar";
     existingSlide.primaryBtnInitiative = typeof primaryBtnInitiative !== "undefined" ? primaryBtnInitiative.trim() : "";
@@ -181,6 +191,9 @@ exports.postEditHeroSlide = async (req, res) => {
     existingSlide.isActive = isActive === "on" || isActive === "true" || isActive === true;
 
     await existingSlide.save();
+    if (previousImagePublicId && previousImagePublicId !== imagePublicId) {
+      await removeAsset(previousImagePublicId).catch(() => {});
+    }
 
     res.redirect("/admin/home/hero?msg=Slide updated successfully");
   } catch (error) {
@@ -199,7 +212,8 @@ exports.postEditHeroSlide = async (req, res) => {
 // Delete slide
 exports.deleteHeroSlide = async (req, res) => {
   try {
-    await HeroSlide.findByIdAndDelete(req.params.id);
+    const slide = await HeroSlide.findByIdAndDelete(req.params.id);
+    if (slide?.imagePublicId) await removeAsset(slide.imagePublicId).catch(() => {});
     res.redirect("/admin/home/hero?msg=Slide deleted successfully");
   } catch (error) {
     console.error("Delete slide error:", error);

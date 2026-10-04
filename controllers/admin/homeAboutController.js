@@ -1,4 +1,5 @@
 const HomeAbout = require("../../models/HomeAbout");
+const { uploadBuffer, removeAsset } = require("../../config/cloudinary");
 
 // Render Admin Home About Highlight Editor
 exports.getHomeAbout = async (req, res) => {
@@ -21,6 +22,7 @@ exports.getHomeAbout = async (req, res) => {
 
 // Update Home About Highlight Section
 exports.postUpdateHomeAbout = async (req, res) => {
+  const uploadedAssets = [];
   try {
     let doc = await HomeAbout.getOrSeed();
 
@@ -88,13 +90,11 @@ exports.postUpdateHomeAbout = async (req, res) => {
     }
 
     // Process newly uploaded files (req.files array from multer upload.any())
-    if (req.files && req.files.length > 0) {
-      req.files.forEach((file) => {
-        const uploadedPath = `/uploads/home-about/${file.filename}`;
-        currentImages.push(uploadedPath);
-      });
-    } else if (req.file) {
-      currentImages.unshift(`/uploads/home-about/${req.file.filename}`);
+    const files = Array.isArray(req.files) ? req.files : req.file ? [req.file] : [];
+    for (const file of files) {
+      const uploaded = await uploadBuffer(file.buffer, "nishad-yatra/home-about");
+      uploadedAssets.push(uploaded);
+      currentImages.push(uploaded.secure_url);
     }
 
     // Remove duplicates and save
@@ -162,6 +162,7 @@ exports.postUpdateHomeAbout = async (req, res) => {
     await doc.save();
     res.redirect("/admin/home/about?msg=होम पेज अबाउट हाईलाइट सेक्शन सफलतापूर्वक अपडेट कर दिया गया है।");
   } catch (error) {
+    await Promise.all(uploadedAssets.map((asset) => removeAsset(asset.public_id).catch(() => {})));
     console.error("Update Home About error:", error);
     res.redirect("/admin/home/about?err=" + encodeURIComponent(error.message));
   }

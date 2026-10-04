@@ -1,36 +1,22 @@
 const multer = require("multer");
 const path = require("path");
-const fs = require("fs");
 const { validatedUpload } = require("./validateUpload");
 
-const uploadDir = path.join(process.cwd(), "uploads", "contact");
-fs.mkdirSync(uploadDir, { recursive: true });
-
-const storage = multer.diskStorage({
-  destination: (_req, _file, cb) => cb(null, uploadDir),
-  filename: (_req, file, cb) => {
-    const ext = path.extname(file.originalname).toLowerCase();
-    const cleanBase = path.basename(file.originalname, ext).replace(/[^a-zA-Z0-9_-]/g, "");
-    cb(null, `contact-banner-${Date.now()}-${Math.round(Math.random() * 1e6)}${ext}`);
-  },
-});
+const allowedTypes = {
+  ".jpg": ["image/jpeg", "image/jpg"],
+  ".jpeg": ["image/jpeg", "image/jpg"],
+  ".png": ["image/png"],
+  ".webp": ["image/webp"],
+  ".avif": ["image/avif"],
+};
 
 const upload = multer({
-  storage,
+  storage: multer.memoryStorage(),
   limits: { fileSize: 8 * 1024 * 1024, files: 1 },
   fileFilter: (_req, file, cb) => {
-    const allowedTypes = {
-      ".jpg": ["image/jpeg", "image/jpg"],
-      ".jpeg": ["image/jpeg", "image/jpg"],
-      ".png": ["image/png"],
-      ".webp": ["image/webp"],
-      ".avif": ["image/avif"],
-    };
     const extension = path.extname(file.originalname).toLowerCase();
-    if (!allowedTypes[extension]?.includes(file.mimetype)) {
-      return cb(new Error("केवल इमेज फाइलें (JPG, PNG, WebP, AVIF) ही स्वीकार्य हैं।"));
-    }
-    cb(null, true);
+    if (allowedTypes[extension]?.includes(file.mimetype)) return cb(null, true);
+    cb(new Error("Only images (JPG, PNG, WebP, AVIF) are supported."));
   },
 });
 
