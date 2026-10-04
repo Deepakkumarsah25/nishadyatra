@@ -33,6 +33,11 @@ const contactInfoSchema = new mongoose.Schema(
       default: defaultContactData.bannerImage,
       trim: true,
     },
+    bannerImagePublicId: {
+      type: String,
+      default: "",
+      trim: true,
+    },
     pageBadge: {
       type: String,
       default: defaultContactData.pageBadge,

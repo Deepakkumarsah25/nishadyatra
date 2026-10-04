@@ -1,6 +1,7 @@
 const ContactInfo = require("../../models/ContactInfo");
 const ContactMessage = require("../../models/ContactMessage");
 const { getPagination } = require("../../utils/pagination");
+const { uploadBuffer, removeAsset } = require("../../config/cloudinary");
 
 /**
  * Display Admin Contact Management Hub
@@ -128,10 +129,14 @@ exports.updateContactSettings = async (req, res) => {
     }
 
     // Assign banner image (file upload priority, then URL input)
+    const previousBannerPublicId = contact.bannerImagePublicId || "";
     if (req.file) {
-      contact.bannerImage = `/uploads/contact/${req.file.filename}`;
+      const uploaded = await uploadBuffer(req.file.buffer, "nishad-yatra/contact");
+      contact.bannerImage = uploaded.secure_url;
+      contact.bannerImagePublicId = uploaded.public_id;
     } else if (bannerImage !== undefined && bannerImage.trim() !== "") {
       contact.bannerImage = bannerImage.trim();
+      contact.bannerImagePublicId = "";
     }
     if (pageBadge !== undefined) contact.pageBadge = pageBadge.trim();
     if (pageHeading !== undefined) contact.pageHeading = pageHeading.trim();
@@ -157,6 +162,9 @@ exports.updateContactSettings = async (req, res) => {
     if (telegramUrl !== undefined) contact.telegramUrl = telegramUrl.trim();
 
     await contact.save();
+    if (previousBannerPublicId && previousBannerPublicId !== contact.bannerImagePublicId) {
+      await removeAsset(previousBannerPublicId).catch(() => {});
+    }
 
     res.redirect(
       `/admin/contact?tab=settings&msg=${encodeURIComponent("संपर्क जानकारी एवं सेटिंग्स सफलतापूर्वक अपडेट हो गई हैं।")}`
