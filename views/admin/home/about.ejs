@@ -1,0 +1,373 @@
+<%- include("../common/header") %>
+<%- include("../common/sidebar") %>
+
+<div class="admin-main">
+  <!-- Topbar -->
+  <header class="admin-topbar">
+    <div class="topbar-left">
+      <button type="button" class="mobile-menu-trigger" id="adminMobileMenuBtn" aria-label="Menu">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="page-heading">
+        <h1>
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--admin-primary)" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          Home About Highlight Section
+        </h1>
+        <p>स्लाइडर के ठीक नीचे दिखने वाले अभियान परिचय, मुख्य चित्र और हाइलाइट विवरण का प्रबंधन करें</p>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <a href="/#home-about" target="_blank" class="view-site-btn">
+        <span>View Live Section</span>
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/></svg>
+      </a>
+    </div>
+  </header>
+
+  <!-- Body -->
+  <div class="admin-body">
+    <% if (message) { %>
+      <div class="admin-alert admin-alert-success">✓ <%= message %></div>
+    <% } %>
+    <% if (error) { %>
+      <div class="admin-alert admin-alert-error">⚠ <%= error %></div>
+    <% } %>
+
+    <form action="/admin/home/about/update" method="POST" enctype="multipart/form-data">
+      <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 24px;">
+        
+        <!-- Left Column: Content & Details -->
+        <div>
+          <!-- Status & Main Headings Card -->
+          <div class="admin-card" style="margin-bottom: 24px;">
+            <div class="admin-card-header" style="display: flex; justify-content: space-between; align-items: center;">
+              <h3>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                1. शीर्षक एवं मुख्य संदेश (Headings & Content)
+              </h3>
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px; font-weight: 700; color: #166534; background: #f0fdf4; padding: 6px 14px; border-radius: 20px; border: 1px solid #bbf7d0;">
+                <input type="checkbox" name="isActive" <%= homeAbout.isActive ? 'checked' : '' %> style="accent-color: #16a34a; width: 16px; height: 16px;">
+                होम पेज पर सक्रिय (Show on Home)
+              </label>
+            </div>
+
+            <div class="admin-card-body">
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label for="headingPrefix">मुख्य शीर्षक शुरूआती भाग (Prefix)</label>
+                  <input type="text" id="headingPrefix" name="headingPrefix" class="form-control" value="<%= homeAbout.headingPrefix %>" required />
+                </div>
+                <div class="form-group">
+                  <label for="highlightHeading">हाइलाइटेड शब्द (Red Accent Text)</label>
+                  <input type="text" id="highlightHeading" name="highlightHeading" class="form-control" value="<%= homeAbout.highlightHeading %>" required />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="headingSuffix">शीर्षक अंतिम भाग (Suffix - यदि हो)</label>
+                <input type="text" id="headingSuffix" name="headingSuffix" class="form-control" value="<%= homeAbout.headingSuffix || '' %>" placeholder="वैकल्पिक" />
+              </div>
+
+              <div class="form-group">
+                <label for="tagline">टैगलाइन / उप-शीर्षक (Tagline)</label>
+                <textarea id="tagline" name="tagline" class="form-control" rows="2" required><%= homeAbout.tagline %></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="description1">विस्तृत विवरण 1 (Primary Narrative)</label>
+                <textarea id="description1" name="description1" class="form-control" rows="3" required><%= homeAbout.description1 %></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="description2">विस्तृत विवरण 2 (Secondary Narrative)</label>
+                <textarea id="description2" name="description2" class="form-control" rows="3"><%= homeAbout.description2 %></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Highlight Points Card -->
+          <div class="admin-card" style="margin-bottom: 24px;">
+            <div class="admin-card-header">
+              <h3>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                2. मुख्य बिंदु / स्तम्भ (4 Key Highlight Pillars)
+              </h3>
+            </div>
+
+            <div class="admin-card-body">
+              <% const pts = homeAbout.points && homeAbout.points.length > 0 ? homeAbout.points : [
+                { title: "संवैधानिक आरक्षण न्याय", description: "अनुच्छेद 341 के अंतर्गत अनुसूचित जाति (SC) श्रेणी में आरक्षण का अधिकार।", iconKey: "scale" },
+                { title: "शिक्षा एवं युवा स्वावलंबन", description: "छात्रवृत्ति, प्रतियोगी परीक्षाओं की निशुल्क कोचिंग व तकनीकी प्रशिक्षण।", iconKey: "book" },
+                { title: "पारंपरिक जल-संसाधन अधिकार", description: "नदियों, पोखरों, मत्स्य पालन और नौकायन के अधिकारों की सुरक्षा।", iconKey: "shield" },
+                { title: "सामाजिक व राजनीतिक चेतना", description: "समानुपातिक प्रतिनिधित्व और नीति-निर्माण में समाज की सीधी भागीदारी।", iconKey: "users" }
+              ]; %>
+
+              <div style="display: flex; flex-direction: column; gap: 16px;">
+                <% pts.forEach(function(pt, idx) { %>
+                  <div style="background: #f8fafc; border: 1px solid var(--admin-border); border-radius: 10px; padding: 14px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                      <span style="font-size: 12px; font-weight: 800; color: var(--admin-primary); text-transform: uppercase;">बिंदु #<%= idx + 1 %></span>
+                      <select name="pointIcon" class="form-control" style="width: auto; padding: 4px 8px; font-size: 12px;">
+                        <option value="scale" <%= pt.iconKey === 'scale' ? 'selected' : '' %>>⚖ न्याय / तराजू (Scale)</option>
+                        <option value="book" <%= pt.iconKey === 'book' ? 'selected' : '' %>>📖 शिक्षा / पुस्तक (Book)</option>
+                        <option value="shield" <%= pt.iconKey === 'shield' ? 'selected' : '' %>>🛡 सुरक्षा / अधिकार (Shield)</option>
+                        <option value="users" <%= pt.iconKey === 'users' ? 'selected' : '' %>>👥 समाज / एकता (Users)</option>
+                        <option value="award" <%= pt.iconKey === 'award' ? 'selected' : '' %>>🏆 सम्मान / उपलब्धि (Award)</option>
+                        <option value="check" <%= pt.iconKey === 'check' ? 'selected' : '' %>>✓ संकल्प (Checkmark)</option>
+                      </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 8px;">
+                      <input type="text" name="pointTitle" class="form-control" value="<%= pt.title %>" placeholder="बिंदु का शीर्षक" required />
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                      <textarea name="pointDesc" class="form-control" rows="2" placeholder="संक्षिप्त विवरण"><%= pt.description %></textarea>
+                    </div>
+                  </div>
+                <% }); %>
+              </div>
+            </div>
+          </div>
+
+          <!-- Read More Link Settings Card -->
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                3. रीड मोर विकल्प (Read More... Option)
+              </h3>
+            </div>
+
+            <div class="admin-card-body">
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label for="readMoreText">रीड मोर टेक्स्ट (Normal Text Link Label)</label>
+                  <input type="text" id="readMoreText" name="readMoreText" class="form-control" value="<%= homeAbout.readMoreText || homeAbout.primaryBtnText || 'Read More...' %>" required />
+                  <div class="form-hint">उदा. Read More... या पूरा विवरण पढ़ें...</div>
+                </div>
+                <div class="form-group">
+                  <label for="readMoreLink">रीड मोर लिंक (Destination URL)</label>
+                  <input type="text" id="readMoreLink" name="readMoreLink" class="form-control" value="<%= homeAbout.readMoreLink || homeAbout.primaryBtnLink || '/about' %>" required />
+                  <div class="form-hint">उदा. /about</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Image & Media Badges -->
+        <div>
+          <!-- Image Management Card -->
+          <div class="admin-card" style="margin-bottom: 24px; position: sticky; top: 88px;">
+            <div class="admin-card-header">
+              <h3>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                हाइलाइट इमेज एवं बैज (Feature Image)
+              </h3>
+            </div>
+
+            <div class="admin-card-body">
+              <!-- Live Image Preview -->
+              <div style="margin-bottom: 18px; border-radius: 12px; overflow: hidden; border: 2px solid var(--admin-border); position: relative; background: #000; aspect-ratio: 4/3;">
+                <img 
+                  id="aboutImagePreview" 
+                  src="<%= homeAbout.imageUrl %>" 
+                  alt="About Section Image" 
+                  style="width: 100%; height: 100%; object-fit: cover; display: block;"
+                  onerror="this.src='/images/about/nishad-sankalp-rally.jpg'"
+                />
+                
+                <!-- Floating Badge Preview on Image -->
+                <div style="position: absolute; top: 14px; left: 14px; background: rgba(220, 38, 38, 0.95); backdrop-filter: blur(4px); color: #fff; padding: 6px 14px; border-radius: 30px; font-size: 12px; font-weight: 800; box-shadow: 0 4px 12px rgba(0,0,0,0.25); display: flex; align-items: center; gap: 6px;">
+                  <span id="previewBadgeText"><%= homeAbout.floatingBadgeText || 'ऐतिहासिक जन आंदोलन' %></span>
+                </div>
+
+                <!-- Floating Count Badge Preview on Image -->
+                <div style="position: absolute; bottom: 14px; right: 14px; background: #ffffff; color: var(--admin-text-dark); padding: 8px 14px; border-radius: 10px; font-size: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); border-left: 4px solid var(--admin-primary);">
+                  <strong id="previewBadgeNum" style="display: block; font-size: 18px; font-weight: 900; color: var(--admin-primary); line-height: 1;"><%= homeAbout.imageBadgeNumber || '18+' %></strong>
+                  <span id="previewBadgeLbl" style="font-size: 11px; font-weight: 600; color: #64748b;"><%= homeAbout.imageBadgeLabel || 'उप-जातियां एकजुट' %></span>
+                </div>
+              </div>
+
+              <!-- Current Scrolling Images Grid -->
+              <div style="font-size: 13px; font-weight: 800; color: var(--admin-primary-dark); margin: 0 0 10px; padding-bottom: 4px; border-bottom: 1px solid var(--admin-border-subtle); display: flex; justify-content: space-between; align-items: center;">
+                <span>स्क्रोलिंग इमेज गैलरी (Current Slider Images)</span>
+                <span style="font-size: 11px; color: #64748b; font-weight: 600;">(ऑटो-स्क्रोलिंग स्लाइडर)</span>
+              </div>
+
+              <% 
+                const currentImgs = (homeAbout.images && homeAbout.images.length > 0)
+                  ? homeAbout.images
+                  : [homeAbout.imageUrl || '/images/about/nishad-sankalp-rally.jpg'];
+              %>
+
+              <div id="existingImagesList" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px;">
+                <% currentImgs.forEach(function(imgUrl, idx) { %>
+                  <div class="existing-image-item" style="position: relative; border-radius: 8px; overflow: hidden; border: 1.5px solid var(--admin-border); background: #000; aspect-ratio: 16/10;">
+                    <img src="<%= imgUrl %>" alt="Slider Image <%= idx + 1 %>" style="width: 100%; height: 100%; object-fit: cover; display: block;" onerror="this.src='/images/about/nishad-sankalp-rally.jpg'" />
+                    <input type="hidden" name="existingImages" value="<%= imgUrl %>" />
+                    <button type="button" onclick="removeImageCard(this)" title="इमेज हटाएं" style="position: absolute; top: 4px; right: 4px; background: rgba(220, 38, 38, 0.9); color: #fff; border: none; border-radius: 4px; padding: 3px 6px; font-size: 11px; cursor: pointer; font-weight: 700; line-height: 1;">✕ हटाएं</button>
+                    <span style="position: absolute; bottom: 4px; left: 4px; background: rgba(0,0,0,0.65); color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 700;">#<%= idx + 1 %></span>
+                  </div>
+                <% }); %>
+              </div>
+
+              <!-- Upload Multiple New Images Input -->
+              <div class="form-group">
+                <label for="imageFiles">नई स्क्रोलिंग इमेज जोड़ें (Upload New Images)</label>
+                <input 
+                  type="file" 
+                  id="imageFiles" 
+                  name="imageFiles" 
+                  multiple
+                  class="form-control" 
+                  accept="image/jpeg,image/png,image/webp,image/avif" 
+                  onchange="previewNewImages(this)"
+                />
+                <div class="form-hint">एक साथ कई इमेज (JPG, PNG, WebP) चुन सकते हैं। वे ऑटो-स्क्रोलर में जुड़ जाएंगी।</div>
+              </div>
+
+              <!-- New Selected Images Preview Container -->
+              <div id="newImagesPreviewContainer" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px;"></div>
+
+              <!-- Add Image by URL input -->
+              <div class="form-group" style="margin-bottom: 18px;">
+                <label for="addImageUrlInput">इमेज URL से जोड़ें (Add Image by URL)</label>
+                <div style="display: flex; gap: 8px;">
+                  <input type="text" id="addImageUrlInput" placeholder="/images/about/photo.jpg या Web URL" class="form-control" />
+                  <button type="button" class="btn-admin btn-admin-outline" onclick="addImageByUrl()" style="white-space: nowrap; padding: 0 14px;">+ जोड़ें</button>
+                </div>
+              </div>
+
+              <div style="font-size: 13px; font-weight: 800; color: var(--admin-primary-dark); margin: 20px 0 10px; padding-bottom: 4px; border-bottom: 1px solid var(--admin-border-subtle);">
+                इमेज के ऊपर दिखने वाले बैज (Overlay Badges)
+              </div>
+
+              <div class="form-group">
+                <label for="floatingBadgeText">टॉप फ्लोटिंग बैज (Top Corner Badge)</label>
+                <input 
+                  type="text" 
+                  id="floatingBadgeText" 
+                  name="floatingBadgeText" 
+                  class="form-control" 
+                  value="<%= homeAbout.floatingBadgeText %>" 
+                  oninput="document.getElementById('previewBadgeText').textContent = this.value || 'ऐतिहासिक जन आंदोलन'"
+                />
+              </div>
+
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label for="imageBadgeNumber">बड़ा आंकड़ा (Stat Number)</label>
+                  <input 
+                    type="text" 
+                    id="imageBadgeNumber" 
+                    name="imageBadgeNumber" 
+                    class="form-control" 
+                    value="<%= homeAbout.imageBadgeNumber %>" 
+                    oninput="document.getElementById('previewBadgeNum').textContent = this.value || '18+'"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="imageBadgeLabel">आंकड़े का लेबल (Stat Label)</label>
+                  <input 
+                    type="text" 
+                    id="imageBadgeLabel" 
+                    name="imageBadgeLabel" 
+                    class="form-control" 
+                    value="<%= homeAbout.imageBadgeLabel %>" 
+                    oninput="document.getElementById('previewBadgeLbl').textContent = this.value || 'उप-जातियां एकजुट'"
+                  />
+                </div>
+              </div>
+
+              <!-- Quote Card -->
+              <div style="font-size: 13px; font-weight: 800; color: var(--admin-primary-dark); margin: 20px 0 10px; padding-bottom: 4px; border-bottom: 1px solid var(--admin-border-subtle);">
+                प्रेरणादायक विचार (Inspirational Quote)
+              </div>
+
+              <div class="form-group">
+                <label for="quoteText">कोटेशन / संदेश (Quote Text)</label>
+                <textarea id="quoteText" name="quoteText" class="form-control" rows="2"><%= homeAbout.quoteText %></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="quoteAuthor">कोटेशन लेखक / स्रोत (Quote Author)</label>
+                <input type="text" id="quoteAuthor" name="quoteAuthor" class="form-control" value="<%= homeAbout.quoteAuthor %>" />
+              </div>
+
+              <!-- Save Changes Button -->
+              <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--admin-border);">
+                <button type="submit" class="btn-admin btn-admin-primary" style="width: 100%; padding: 14px; font-size: 15px; font-weight: 800; justify-content: center; box-shadow: 0 4px 14px rgba(220, 38, 38, 0.35);">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                  <span>अबाउट सेक्शन सेव करें (Save All Changes)</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  function removeImageCard(btn) {
+    const card = btn.closest('.existing-image-item');
+    if (card) {
+      card.remove();
+      renumberImages();
+    }
+  }
+
+  function renumberImages() {
+    const items = document.querySelectorAll('#existingImagesList .existing-image-item');
+    items.forEach((item, idx) => {
+      const tag = item.querySelector('span');
+      if (tag) tag.textContent = '#' + (idx + 1);
+    });
+  }
+
+  function previewNewImages(input) {
+    const container = document.getElementById('newImagesPreviewContainer');
+    container.innerHTML = '';
+    if (input.files && input.files.length > 0) {
+      Array.from(input.files).forEach((file, idx) => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const div = document.createElement('div');
+          div.style.cssText = 'position: relative; border-radius: 6px; overflow: hidden; border: 1px solid #10b981; aspect-ratio: 16/10; background: #000;';
+          div.innerHTML = `
+            <img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
+            <span style="position: absolute; bottom: 3px; left: 3px; background: rgba(16, 185, 129, 0.9); color: #fff; font-size: 9px; padding: 1px 4px; border-radius: 3px; font-weight: 700;">नई +${idx + 1}</span>
+          `;
+          container.appendChild(div);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  }
+
+  function addImageByUrl() {
+    const input = document.getElementById('addImageUrlInput');
+    const url = (input.value || '').trim();
+    if (!url) return;
+
+    const list = document.getElementById('existingImagesList');
+    const count = list.querySelectorAll('.existing-image-item').length + 1;
+
+    const div = document.createElement('div');
+    div.className = 'existing-image-item';
+    div.style.cssText = 'position: relative; border-radius: 8px; overflow: hidden; border: 1.5px solid var(--admin-border); background: #000; aspect-ratio: 16/10;';
+    div.innerHTML = `
+      <img src="${url}" alt="Slider Image ${count}" style="width: 100%; height: 100%; object-fit: cover; display: block;" onerror="this.src='/images/about/nishad-sankalp-rally.jpg'" />
+      <input type="hidden" name="existingImages" value="${url}" />
+      <button type="button" onclick="removeImageCard(this)" title="इमेज हटाएं" style="position: absolute; top: 4px; right: 4px; background: rgba(220, 38, 38, 0.9); color: #fff; border: none; border-radius: 4px; padding: 3px 6px; font-size: 11px; cursor: pointer; font-weight: 700; line-height: 1;">✕ हटाएं</button>
+      <span style="position: absolute; bottom: 4px; left: 4px; background: rgba(0,0,0,0.65); color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 700;">#${count}</span>
+    `;
+
+    list.appendChild(div);
+    input.value = '';
+  }
+</script>
+
+<%- include("../common/footer") %>

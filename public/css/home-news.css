@@ -4,8 +4,8 @@
 ========================================================================== */
 
 .home-news-section {
-  padding: 85px 24px;
-  background: linear-gradient(180deg, #fdf9f6 0%, #ffffff 50%, #fff7f2 100%);
+  padding: 38px 24px 34px;
+  background: transparent;
   position: relative;
   overflow: hidden;
 }
