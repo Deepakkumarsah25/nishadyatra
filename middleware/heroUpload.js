@@ -1,6 +1,7 @@
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const { validatedUpload } = require("./validateUpload");
 
 // Ensure upload directory exists: uploads/hero
 const uploadDir = path.join(__dirname, "..", "uploads", "hero");
@@ -26,27 +27,28 @@ const storage = multer.diskStorage({
 
 // File filter: accept image formats only
 const fileFilter = (req, file, cb) => {
-  const allowedExtensions = /jpeg|jpg|png|webp|avif|gif/;
-  const extName = allowedExtensions.test(
-    path.extname(file.originalname).toLowerCase()
-  );
-  const mimeType = allowedExtensions.test(file.mimetype) || file.mimetype.startsWith("image/");
-
-  if (extName || mimeType) {
-    return cb(null, true);
-  }
+  const allowedTypes = {
+    ".jpg": ["image/jpeg", "image/jpg"],
+    ".jpeg": ["image/jpeg", "image/jpg"],
+    ".png": ["image/png"],
+    ".webp": ["image/webp"],
+    ".avif": ["image/avif"],
+    ".gif": ["image/gif"],
+  };
+  const extension = path.extname(file.originalname).toLowerCase();
+  if (allowedTypes[extension]?.includes(file.mimetype)) return cb(null, true);
   cb(new Error("Only images (JPG, PNG, WEBP, AVIF, GIF) can be uploaded!"));
 };
 
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 15 * 1024 * 1024, // 15 MB limit
+    fileSize: 8 * 1024 * 1024, // 8 MB limit
   },
   fileFilter: fileFilter,
 });
 
 module.exports = {
-  uploadHeroImage: upload.single("imageFile"),
+  uploadHeroImage: validatedUpload(upload.single("imageFile")),
   uploadDir,
 };

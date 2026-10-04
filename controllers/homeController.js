@@ -7,7 +7,6 @@ const InitiativeInquiry = require("../models/InitiativeInquiry");
 const SankalpPhoto = require("../models/SankalpPhoto");
 const KalashYatra = require("../models/KalashYatra");
 const VideoNews = require("../models/news/VideoNews");
-const HomeAbout = require("../models/HomeAbout");
 const {
   defaultHeroSlides,
   defaultInitiatives,
@@ -20,21 +19,20 @@ const { defaultGalleryPhotos } = require("../scripts/seedGalleryData");
 // Public Home Page
 exports.getHomePage = async (req, res) => {
   try {
-    const [heroSlides, initiatives, whyChooseDoc, notices, quickInfoDoc, galleryPhotos, kalashDoc, newsDocs, homeAboutDoc] =
+    const [heroSlides, initiatives, whyChooseDoc, notices, quickInfoDoc, galleryPhotos, kalashDoc, newsDocs] =
       await Promise.all([
-        HeroSlide.find({ isActive: true }).sort({ order: 1, createdAt: 1 }),
-        Initiative.find({ isActive: true }).sort({ order: 1, createdAt: 1 }),
+        HeroSlide.find({ isActive: true }).sort({ order: 1, createdAt: 1 }).limit(10),
+        Initiative.find({ isActive: true }).sort({ order: 1, createdAt: 1 }).limit(24),
         WhyChoose.findOne(),
-        SiteNotice.find({ isActive: true }).sort({ order: 1, createdAt: 1 }),
+        SiteNotice.find({ isActive: true }).sort({ order: 1, createdAt: 1 }).limit(20),
         HomeQuickInfo.findOne(),
-        SankalpPhoto.find({ isPublished: true }).sort({ order: 1, date: -1 }).limit(16),
+        SankalpPhoto.find({ isPublished: true }).sort({ order: 1, date: -1 }).limit(10),
         KalashYatra.getOrSeed().catch(() => KalashYatra.defaultData),
         VideoNews.find({ published: true })
           .sort({ publicationDate: -1, publishedAt: -1, createdAt: -1 })
-          .limit(8)
+          .limit(10)
           .lean()
           .catch(() => []),
-        HomeAbout.getOrSeed().catch(() => HomeAbout.defaultData),
       ]);
 
     // Fallbacks if database is completely empty or just initialized
@@ -47,8 +45,7 @@ exports.getHomePage = async (req, res) => {
       notices && notices.length > 0 ? notices : defaultNotices;
     const finalQuickInfo = quickInfoDoc || defaultQuickInfo;
     const finalGalleryPhotos =
-      galleryPhotos && galleryPhotos.length > 0 ? galleryPhotos : defaultGalleryPhotos;
-    const finalHomeAbout = homeAboutDoc || HomeAbout.defaultData;
+      galleryPhotos && galleryPhotos.length > 0 ? galleryPhotos : defaultGalleryPhotos.slice(0, 10);
 
     const kalash = kalashDoc || KalashYatra.defaultData;
 
@@ -107,12 +104,11 @@ exports.getHomePage = async (req, res) => {
       };
     }
 
-    // Latest videos: other videos excluding the highlighted one
+    // Show up to ten videos in the home page carousel.
     let latestVideos = [];
     if (kalash && kalash.videos && kalash.videos.length > 0) {
       latestVideos = kalash.videos
-        .filter((v) => !highlightedVidId || String(v._id) !== highlightedVidId)
-        .slice(0, 4)
+        .slice(0, 10)
         .map((v) => {
           const raw = v.toObject ? v.toObject() : { ...v };
           return {
@@ -121,19 +117,15 @@ exports.getHomePage = async (req, res) => {
           };
         });
     } else if (kalash && kalash.milestonesSection && kalash.milestonesSection.items) {
-      latestVideos = kalash.milestonesSection.items.slice(0, 4);
+      latestVideos = kalash.milestonesSection.items.slice(0, 10);
     }
 
-    // News Highlights & Recent Stories for Home Page
+    // Latest news for the home page carousel
     let highlightNews = null;
     let homeNewsList = [];
 
     if (newsDocs && newsDocs.length > 0) {
-      // Find item with isHighlighted or featured = true
-      highlightNews = newsDocs.find((n) => n.isHighlighted || n.featured) || newsDocs[0];
-      homeNewsList = newsDocs.filter(
-        (n) => String(n._id) !== String(highlightNews._id)
-      ).slice(0, 4);
+      homeNewsList = newsDocs.slice(0, 10);
     }
 
     // Convert initiatives to client-side modal dictionary
@@ -168,7 +160,6 @@ exports.getHomePage = async (req, res) => {
       latestVideos,
       highlightNews,
       homeNewsList,
-      homeAbout: finalHomeAbout,
     });
   } catch (error) {
     console.error("Home page render error:", error);
@@ -182,13 +173,12 @@ exports.getHomePage = async (req, res) => {
       whyChoose: defaultWhyChoose,
       notices: defaultNotices,
       quickInfo: defaultQuickInfo,
-      galleryPhotos: defaultGalleryPhotos,
+      galleryPhotos: defaultGalleryPhotos.slice(0, 10),
       kalash: kalashFallback,
       highlightVideo: kalashFallback?.hero?.featuredVideo || null,
-      latestVideos: (kalashFallback?.videos || []).slice(0, 4),
+      latestVideos: (kalashFallback?.videos || []).slice(0, 10),
       highlightNews: null,
       homeNewsList: [],
-      homeAbout: HomeAbout.defaultData,
     });
   }
 };

@@ -1,14 +1,28 @@
 const HeroSlide = require("../../models/HeroSlide");
 const { defaultHeroSlides } = require("../../scripts/seedHomeData");
+const { getPagination } = require("../../utils/pagination");
 
 // List all slides
 exports.getHeroSlides = async (req, res) => {
   try {
-    const slides = await HeroSlide.find().sort({ order: 1, createdAt: 1 });
+    const [total, active, hidden] = await Promise.all([
+      HeroSlide.countDocuments(),
+      HeroSlide.countDocuments({ isActive: true }),
+      HeroSlide.countDocuments({ isActive: false }),
+    ]);
+    const pagination = getPagination(req.query.page, total, 50);
+    const slides = await HeroSlide.find()
+      .sort({ order: 1, createdAt: 1 })
+      .skip(pagination.skip)
+      .limit(pagination.pageSize);
     res.render("admin/home/hero-list", {
       title: "Hero Slider Management",
       admin: req.session.admin,
       slides: slides || [],
+      pagination,
+      paginationPath: "/admin/home/hero",
+      paginationQuery: {},
+      stats: { total, active, hidden },
       currentPath: "/admin/home/hero",
       message: req.query.msg || null,
       error: req.query.err || null,

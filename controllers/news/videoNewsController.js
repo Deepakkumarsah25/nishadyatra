@@ -3,6 +3,7 @@ const path = require("path");
 const VideoNews = require("../../models/news/VideoNews");
 const NewsPageSetting = require("../../models/news/NewsPageSetting");
 const { uploadBuffer, removeImage } = require("../../config/cloudinary");
+const { getPagination } = require("../../utils/pagination");
 
 function removeUpload(file) {
   if (!file || !file.startsWith("/uploads/news/")) return;
@@ -58,9 +59,9 @@ function escapeRegex(value) {
 }
 
 function searchFilter(query) {
-  if (!query?.trim()) return null;
+  if (typeof query !== "string" || !query.trim()) return null;
 
-  const search = { $regex: escapeRegex(query.trim()), $options: "i" };
+  const search = { $regex: escapeRegex(query.trim().slice(0, 100)), $options: "i" };
   return {
     $or: [
       { title: search },
@@ -83,14 +84,37 @@ exports.adminList = async (req, res, next) => {
     const search = searchFilter(req.query.q);
     if (search) Object.assign(filter, search);
 
-    const [news, newsPageSetting] = await Promise.all([
-      VideoNews.find(filter).sort({ updatedAt: -1 }).lean(),
+    const [total, totalAll, publishedCount, draftCount, featuredCount, highlightedCount, newsPageSetting] = await Promise.all([
+      VideoNews.countDocuments(filter),
+      VideoNews.countDocuments(),
+      VideoNews.countDocuments({ published: true }),
+      VideoNews.countDocuments({ published: false }),
+      VideoNews.countDocuments({ featured: true }),
+      VideoNews.countDocuments({ $or: [{ isHighlighted: true }, { featured: true }] }),
       NewsPageSetting.findOne({ key: "news-page" }).lean(),
     ]);
+    const pagination = getPagination(req.query.page, total, 50);
+    const news = await VideoNews.find(filter)
+      .sort({ updatedAt: -1 })
+      .skip(pagination.skip)
+      .limit(pagination.pageSize)
+      .lean();
     res.render("admin/news/index", {
       title: "News & Press",
       news,
-      filters: req.query,
+      pagination,
+      paginationPath: "/admin/video_news",
+      paginationQuery: {
+        q: typeof req.query.q === "string" ? req.query.q.trim().slice(0, 100) : "",
+        category: ["Digital Media", "Print Media"].includes(req.query.category) ? req.query.category : "",
+        status: ["published", "draft"].includes(req.query.status) ? req.query.status : "",
+      },
+      stats: { total: totalAll, published: publishedCount, drafts: draftCount, featured: featuredCount, highlighted: highlightedCount },
+      filters: {
+        q: typeof req.query.q === "string" ? req.query.q.slice(0, 100) : "",
+        category: ["Digital Media", "Print Media"].includes(req.query.category) ? req.query.category : "",
+        status: ["published", "draft"].includes(req.query.status) ? req.query.status : "",
+      },
       currentPath: "/admin/video_news",
       newsPageSetting,
       posterError: req.query.posterError || "",
@@ -339,25 +363,25 @@ exports.frontend = async (req, res, next) => {
     const search = searchFilter(req.query.q);
     if (search) Object.assign(filter, search);
 
-    const state = String(req.query.state || "").trim();
-    const district = String(req.query.district || "").trim();
+    const state = typeof req.query.state === "string" ? req.query.state.trim().slice(0, 80) : "";
+    const district = typeof req.query.district === "string" ? req.query.district.trim().slice(0, 80) : "";
     if (state) filter.state = state;
     if (district) filter.district = district;
 
     const pageSize = 9;
-    const requestedPage = Number.parseInt(req.query.page, 10) || 1;
-    const page = Math.max(1, requestedPage);
     const [total, locations, stateCount, newsCount, newsPageSetting] = await Promise.all([
       VideoNews.countDocuments(filter),
       VideoNews.aggregate([
         { $match: { published: true, state: { $nin: [null, ""] }, district: { $nin: [null, ""] } } },
         { $group: { _id: { state: "$state", district: "$district" } } },
         { $sort: { "_id.state": 1, "_id.district": 1 } },
+        { $limit: 300 },
       ]),
       VideoNews.distinct("state", { published: true, state: { $nin: [null, ""] } }).then((values) => values.length),
       VideoNews.countDocuments({ published: true }),
       NewsPageSetting.findOne({ key: "news-page" }).lean(),
     ]);
+    const pagination = getPagination(req.query.page, total, pageSize);
 
     const news = await VideoNews.find(filter)
       .sort({
@@ -365,19 +389,19 @@ exports.frontend = async (req, res, next) => {
         publishedAt: -1,
         createdAt: -1,
       })
-      .skip((page - 1) * pageSize)
-      .limit(pageSize)
+      .skip(pagination.skip)
+      .limit(pagination.pageSize)
       .lean();
 
     res.render("news/video_news", {
       title: "न्यूज़ / प्रेस",
       news,
       remaining: news,
-      page,
-      pageSize,
+      page: pagination.page,
+      pageSize: pagination.pageSize,
       total,
       stats: { news: newsCount, districts: locations.length, states: stateCount },
-      totalPages: Math.max(1, Math.ceil(total / pageSize)),
+      totalPages: pagination.totalPages,
       locations,
       query: req.query,
       heroPoster: newsPageSetting?.heroPosterPath || "",

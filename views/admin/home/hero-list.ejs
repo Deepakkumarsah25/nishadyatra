@@ -129,9 +129,9 @@
     <% } %>
 
     <%
-      const totalCount = slides ? slides.length : 0;
-      const activeCount = slides ? slides.filter(s => s.isActive).length : 0;
-      const hiddenCount = totalCount - activeCount;
+      const totalCount = stats.total;
+      const activeCount = stats.active;
+      const hiddenCount = stats.hidden;
     %>
 
     <!-- Quick Stats -->
@@ -306,6 +306,7 @@
             <% } %>
           </tbody>
         </table>
+        <%- include("../common/pagination", { pagination, paginationPath, paginationQuery }) %>
       </div>
     </div>
   </div>

@@ -73,4 +73,8 @@ sankalpPhotoSchema.virtual("formattedDate").get(function () {
   }
 });
 
+sankalpPhotoSchema.index({ isPublished: 1, order: 1, date: -1, createdAt: -1 });
+sankalpPhotoSchema.index({ isPublished: 1, district: 1, order: 1, date: -1, createdAt: -1 });
+sankalpPhotoSchema.index({ order: 1, date: -1, createdAt: -1 });
+
 module.exports = mongoose.model("SankalpPhoto", sankalpPhotoSchema);

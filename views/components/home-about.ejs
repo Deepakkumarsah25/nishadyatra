@@ -1,96 +1,22 @@
-<% if (typeof homeAbout !== 'undefined' && homeAbout && homeAbout.isActive !== false) { %>
+<% const aboutData = (typeof homeAbout !== 'undefined' && homeAbout) ? homeAbout : {}; %>
+<% if (aboutData.isActive !== false) { %>
 <!-- ==========================================================================
-     HOME ABOUT HIGHLIGHT SECTION - Directly below Hero Slider
+     HOME ABOUT SECTION - Equal 50/50 Columns: Left Image Slider, Right Image 2 Style Card
      ========================================================================== -->
 <section class="home-about-section" id="home-about" aria-label="About Movement Highlight">
-  <!-- Subtle decorative sacred background element -->
   <div class="home-about-bg-accent" aria-hidden="true"></div>
 
   <div class="ny-container">
     <div class="home-about-grid">
       
-      <!-- Left Column: Content Narrative & Pillars -->
-      <div class="home-about-content">
-        <!-- Main Heading -->
-        <h2 class="home-about-heading">
-          <%= homeAbout.headingPrefix %>
-          <% if (homeAbout.highlightHeading) { %>
-            <span class="home-about-gradient-text"><%= homeAbout.highlightHeading %></span>
-          <% } %>
-          <% if (homeAbout.headingSuffix) { %>
-            <%= homeAbout.headingSuffix %>
-          <% } %>
-        </h2>
-
-        <!-- Tagline -->
-        <% if (homeAbout.tagline) { %>
-          <p class="home-about-tagline"><%= homeAbout.tagline %></p>
-        <% } %>
-
-        <!-- Descriptions -->
-        <div class="home-about-narrative">
-          <% if (homeAbout.description1) { %>
-            <p class="narrative-lead"><%= homeAbout.description1 %></p>
-          <% } %>
-          <% if (homeAbout.description2) { %>
-            <p class="narrative-sub"><%= homeAbout.description2 %></p>
-          <% } %>
-        </div>
-
-        <!-- Highlight Points (4 Core Pillars) -->
-        <% if (homeAbout.points && homeAbout.points.length > 0) { %>
-          <div class="home-about-pillars">
-            <% homeAbout.points.forEach(function(pt) { %>
-              <div class="pillar-card">
-                <div class="pillar-icon-box">
-                  <% if (pt.iconKey === 'scale') { %>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1z"/><path d="M2 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>
-                  <% } else if (pt.iconKey === 'book') { %>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                  <% } else if (pt.iconKey === 'users') { %>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                  <% } else if (pt.iconKey === 'award') { %>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
-                  <% } else if (pt.iconKey === 'check') { %>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>
-                  <% } else { %>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                  <% } %>
-                </div>
-                <div class="pillar-info">
-                  <h4 class="pillar-title"><%= pt.title %></h4>
-                  <% if (pt.description) { %>
-                    <p class="pillar-desc"><%= pt.description %></p>
-                  <% } %>
-                </div>
-              </div>
-            <% }); %>
-          </div>
-        <% } %>
-
-        <!-- Clean Normal Text Form: Read More Link -->
-        <div class="home-about-readmore-wrapper">
-          <a href="<%= homeAbout.readMoreLink || homeAbout.primaryBtnLink || '/about' %>" class="home-about-readmore-text">
-            <span><%= homeAbout.readMoreText || homeAbout.primaryBtnText || 'Read More...' %></span>
-            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-              <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
-          </a>
-        </div>
-
-      </div>
-
-      <!-- Right Column: Visual Frame, Badges & Quote Showcase -->
+      <!-- LEFT COLUMN: Image Slider (Height & Width exactly match right card) -->
       <div class="home-about-visual-col">
         <% 
-          const sliderImages = (homeAbout.images && homeAbout.images.length > 0) 
-            ? homeAbout.images 
-            : [homeAbout.imageUrl || '/images/about/nishad-sankalp-rally.jpg'];
+          const sliderImages = (aboutData.images && aboutData.images.length > 0) 
+            ? aboutData.images 
+            : [aboutData.imageUrl || '/images/about/nishad-sankalp-rally.jpg'];
         %>
         <div class="home-about-image-card">
-          
-          <!-- Image Wrapper with Scrolling Carousel -->
           <div class="image-inner-wrapper home-about-slider" id="homeAboutSlider">
             <div class="home-about-slider-track" id="homeAboutTrack">
               <% sliderImages.forEach(function(imgUrl, idx) { %>
@@ -108,16 +34,8 @@
             
             <div class="image-gradient-shade" aria-hidden="true"></div>
 
-            <!-- Arrow Navigation (Visible when multiple images exist) -->
+            <!-- Slide Indicators / Dots (Bottom Center) -->
             <% if (sliderImages.length > 1) { %>
-              <button type="button" class="home-about-slider-arrow prev" id="homeAboutPrevBtn" aria-label="Previous Image">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-              </button>
-              <button type="button" class="home-about-slider-arrow next" id="homeAboutNextBtn" aria-label="Next Image">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-              </button>
-
-              <!-- Slide Indicators / Dots -->
               <div class="home-about-slider-dots" id="homeAboutDots">
                 <% sliderImages.forEach(function(_, idx) { %>
                   <button type="button" class="home-about-dot <%= idx === 0 ? 'active' : '' %>" data-slide="<%= idx %>" aria-label="Slide <%= idx + 1 %>"></button>
@@ -126,32 +44,75 @@
             <% } %>
 
             <!-- Top Corner Floating Badge -->
-            <% if (homeAbout.floatingBadgeText) { %>
+            <% if (aboutData.floatingBadgeText) { %>
               <div class="floating-top-badge">
                 <span class="badge-flame-icon">🔥</span>
-                <span><%= homeAbout.floatingBadgeText %></span>
+                <span><%= aboutData.floatingBadgeText %></span>
               </div>
             <% } %>
 
             <!-- Corner Large Stat Box Overlay -->
-            <% if (homeAbout.imageBadgeNumber) { %>
+            <% if (aboutData.imageBadgeNumber) { %>
               <div class="floating-stat-box">
-                <span class="stat-box-digit"><%= homeAbout.imageBadgeNumber %></span>
-                <span class="stat-box-text"><%= homeAbout.imageBadgeLabel || 'उप-जातियां एकजुट' %></span>
+                <span class="stat-box-digit"><%= aboutData.imageBadgeNumber %></span>
+                <span class="stat-box-text"><%= aboutData.imageBadgeLabel || 'उप-जातियां एकजुट' %></span>
               </div>
             <% } %>
           </div>
+        </div>
+      </div>
 
-          <!-- Bottom Quote Box -->
-          <% if (homeAbout.quoteText) { %>
-            <div class="home-about-quote-box">
-              <div class="quote-symbol" aria-hidden="true">“</div>
-              <p class="quote-text"><%= homeAbout.quoteText %></p>
-              <% if (homeAbout.quoteAuthor) { %>
-                <div class="quote-author"><%= homeAbout.quoteAuthor %></div>
-              <% } %>
+      <!-- RIGHT COLUMN: Card exactly styled like User's Provided Image 2 -->
+      <div class="home-about-content">
+        <div class="home-about-card">
+          
+          <!-- Top Content Area -->
+          <div class="home-about-card-top">
+            <!-- Red Quote Marks Icon (Matching Image 2) -->
+            <div class="home-about-quote-mark" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="34" height="34" fill="#b91c1c">
+                <path d="M9.983 3v7.391c0 5.704-3.731 9.57-8.983 10.609l-.995-2.151c2.432-.917 3.995-3.638 3.995-5.849h-4v-10h9.983zm14.017 0v7.391c0 5.704-3.748 9.571-9 10.609l-.996-2.151c2.433-.917 3.996-3.638 3.996-5.849h-3.983v-10h9.983z"/>
+              </svg>
             </div>
-          <% } %>
+
+            <!-- Motivational Bold Heading (Matching Image 2) -->
+            <h3 class="home-about-card-heading">
+              <%= (aboutData.quoteText && aboutData.quoteText.trim()) ? aboutData.quoteText : 'जब समाज का एक-एक हाथ साथ जुड़ता है, तो इतिहास की दिशा बदल जाती है। निषाद संकल्प अभियान आपकी आवाज है।' %>
+            </h3>
+
+            <!-- Checklist with Green Checkmarks (Matching Image 2) -->
+            <ul class="home-about-checklist">
+              <% 
+                const pointsList = (aboutData.points && aboutData.points.length > 0) ? aboutData.points : [
+                  { title: 'निःशुल्क सदस्यता एवं पारदर्शी भागीदारी' },
+                  { title: 'गांव व ब्लॉक स्तर पर प्रत्यक्ष संवाद बैठकें' },
+                  { title: 'छात्रों और युवाओं के लिए व्यक्तिगत मार्गदर्शन' },
+                  { title: 'आपदा व संकट में तत्काल स्वयंसेवक दल सेवा' }
+                ];
+              %>
+              <% pointsList.forEach(function(pt) { %>
+                <li class="checklist-item">
+                  <span class="checklist-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#16a34a" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </span>
+                  <span class="checklist-text"><%= pt.title %></span>
+                </li>
+              <% }); %>
+            </ul>
+          </div>
+
+          <!-- Bottom Action: Red Pill Button (Matching Image 2) leading to /about -->
+          <div class="home-about-card-bottom">
+            <a href="<%= aboutData.readMoreLink || '/about' %>" class="home-about-pill-btn" id="homeAboutReadMoreBtn" title="विस्तार से जानें">
+              <span><%= aboutData.readMoreText || 'और जानें (Read More)' %></span>
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+          </div>
 
         </div>
       </div>

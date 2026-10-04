@@ -1,11 +1,25 @@
 const AdminActivityLog = require("../../models/admin/AdminActivityLog");
 const KalashYatra = require("../../models/KalashYatra");
+const { getPagination } = require("../../utils/pagination");
 
 // View Kalash Yatra Manager
 exports.getKalashYatraManager = async (req, res) => {
   try {
-    const kalash = await KalashYatra.getOrSeed();
+    let kalash = await KalashYatra.findOne().select("-videos");
+    if (!kalash) {
+      await KalashYatra.create(KalashYatra.defaultData);
+      kalash = await KalashYatra.findOne().select("-videos");
+    }
     const activeTab = req.query.tab || "videos";
+    const countRows = await KalashYatra.aggregate([
+      { $project: { total: { $size: { $ifNull: ["$videos", []] } } } },
+    ]);
+    const videoPagination = getPagination(req.query.page, countRows[0]?.total || 0, 25);
+    const videoPageDoc = await KalashYatra.findById(kalash._id)
+      .select({ videos: { $slice: [videoPagination.skip, videoPagination.pageSize] } })
+      .lean();
+    kalash.videos = videoPageDoc?.videos || [];
+    kalash.videosTotal = videoPagination.total;
 
     // Auto-seed initial 2 logs if collection is empty
     const count = await AdminActivityLog.countDocuments({ module: "kalash-yatra" });
@@ -43,6 +57,10 @@ exports.getKalashYatraManager = async (req, res) => {
       title: "संकल्प यात्रा प्रबंधन (Sankalp Yatra Management)",
       admin: req.session.admin,
       kalash,
+      videoPagination,
+      pagination: videoPagination,
+      paginationPath: "/admin/kalash-yatra",
+      paginationQuery: { tab: "videos" },
       activeTab,
       recentLogs,
       lastTwoChanges,

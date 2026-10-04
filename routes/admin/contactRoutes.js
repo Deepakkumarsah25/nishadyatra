@@ -11,7 +11,7 @@ router.use(authMiddleware);
 router.get("/", contactController.getContactManager);
 
 // Update Page Settings (Supports file upload and URL)
-router.post("/settings", contactUpload.single("bannerImageFile"), contactController.updateContactSettings);
+router.post("/settings", contactUpload, contactController.updateContactSettings);
 
 // Update Message Status & Notes
 router.post("/messages/status/:id", contactController.updateMessageStatus);

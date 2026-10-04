@@ -1,6 +1,7 @@
 const SankalpPhoto = require("../../models/SankalpPhoto");
 const fs = require("fs");
 const path = require("path");
+const { getPagination } = require("../../utils/pagination");
 
 // Format date helper for input type="date"
 const formatDateForInput = (date) => {
@@ -21,7 +22,7 @@ exports.getGalleryList = async (req, res) => {
 
     const query = {};
 
-    if (district && district.trim() && district !== "all") {
+    if (typeof district === "string" && district.trim() && district !== "all") {
       query.district = district.trim();
     }
 
@@ -31,24 +32,37 @@ exports.getGalleryList = async (req, res) => {
       query.isPublished = false;
     }
 
-    if (search && search.trim()) {
-      const regex = new RegExp(search.trim(), "i");
+    const safeSearch = typeof search === "string" ? search.trim().slice(0, 100) : "";
+    if (safeSearch) {
+      const regex = new RegExp(safeSearch.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
       query.$or = [{ name: regex }, { district: regex }, { caption: regex }];
     }
 
-    const [photos, totalCount, publishedCount, unpublishedCount, districtsList] =
+    const [filteredCount, totalCount, publishedCount, unpublishedCount, districtsList] =
       await Promise.all([
-        SankalpPhoto.find(query).sort({ order: 1, date: -1, createdAt: -1 }),
+        SankalpPhoto.countDocuments(query),
         SankalpPhoto.countDocuments(),
         SankalpPhoto.countDocuments({ isPublished: true }),
         SankalpPhoto.countDocuments({ isPublished: false }),
         SankalpPhoto.distinct("district"),
       ]);
+    const pagination = getPagination(req.query.page, filteredCount, 50);
+    const photos = await SankalpPhoto.find(query)
+      .sort({ order: 1, date: -1, createdAt: -1 })
+      .skip(pagination.skip)
+      .limit(pagination.pageSize);
 
     res.render("admin/gallery/index", {
       title: "Sankalp Photo Gallery Management",
       admin: req.session.admin,
       photos,
+      pagination,
+      paginationPath: "/admin/gallery",
+      paginationQuery: {
+        search: safeSearch,
+        district: typeof district === "string" ? district : "all",
+        status: status || "all",
+      },
       stats: {
         total: totalCount,
         published: publishedCount,
@@ -59,7 +73,7 @@ exports.getGalleryList = async (req, res) => {
       filters: {
         district: district || "all",
         status: status || "all",
-        search: search || "",
+        search: safeSearch,
       },
       currentPath: "/admin/gallery",
       message: msg || null,

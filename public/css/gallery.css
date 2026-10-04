@@ -365,10 +365,43 @@
   font-size: 16px;
   font-weight: 500;
 }
+.gallery-pagination .pagination-direction.is-disabled { opacity: .45; cursor: default; pointer-events: none; }
 .gallery-pagination .pagination-number:hover:not(:disabled) { background:var(--gallery-primary); border-color:var(--gallery-primary); color:#fff; }
 .gallery-pagination button:disabled { opacity: .45; cursor: default; }
 .gallery-pagination button:hover:not(:disabled) { color: var(--gallery-primary-dark); }
 .gallery-pagination .pagination-current-page { min-width:36px; color:var(--gallery-primary); font-size:18px; font-weight:800; text-align:center; }
+
+@media (max-width: 640px) {
+  .gallery-pagination-controls {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 5px;
+  }
+  .gallery-pagination .pagination-pages {
+    flex: 0 1 auto;
+    flex-wrap: nowrap;
+    gap: 3px;
+    min-width: 0;
+  }
+  .gallery-pagination .pagination-direction {
+    min-width: 0;
+    min-height: 46px;
+    padding: 0 9px;
+    gap: 4px;
+    font-size: 15px;
+    white-space: nowrap;
+  }
+  .gallery-pagination .pagination-number {
+    min-width: 38px;
+    height: 46px;
+    padding: 0 8px;
+    font-size: 19px;
+  }
+  .gallery-pagination .pagination-ellipsis {
+    min-width: 16px;
+    font-size: 16px;
+  }
+}
 
 .gallery-card {
   position: relative;
@@ -854,7 +887,37 @@
 
 @media (max-width: 640px) {
   .gallery-hero {
-    padding: 78px 16px 38px;
+    padding: 58px 16px 24px;
+  }
+
+  .gallery-hero h1 {
+    margin-bottom: 10px;
+    font-size: clamp(29px, 8vw, 38px);
+  }
+
+  .gallery-hero p {
+    margin-bottom: 14px;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .gallery-stats-pills {
+    flex-wrap: nowrap;
+    gap: 8px;
+  }
+
+  .gallery-stat-pill {
+    flex: 1 1 0;
+    justify-content: center;
+    gap: 5px;
+    min-width: 0;
+    padding: 7px 9px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .gallery-stat-pill strong {
+    font-size: 16px;
   }
 
   .gallery-container {
@@ -864,37 +927,48 @@
   .gallery-controls { margin: 26px 0 20px; }
 
   .gallery-list-heading {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 12px;
-    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 12px;
   }
 
   .gallery-list-heading h2 {
     font-size: 24px;
+    white-space: nowrap;
   }
 
   .gallery-search {
     width: 100%;
     flex: 1 1 auto;
     min-width: 0;
-    margin-left: 0;
+    margin-left: auto;
     height: 44px;
     padding: 0 12px;
   }
 
   .gallery-search input { font-size: 15px; }
 
-  .gallery-filters,
+  .gallery-filters {
+    display: flex;
+    justify-content: flex-start;
+    width: fit-content;
+    max-width: 100%;
+    margin-bottom: 12px;
+  }
+
   .gallery-select-label,
   .gallery-select-label select {
-    width: 100%;
+    width: auto;
+    max-width: 100%;
   }
 
   .gallery-select-label select {
     min-width: 0;
-    height: 42px;
-    font-size: 15px;
+    height: 40px;
+    padding: 0 32px 0 12px;
+    font-size: 14px;
   }
 
   .gallery-grid {

@@ -39,5 +39,6 @@ newsSchema.index({ published: 1, publicationDate: -1, publishedAt: -1 });
 newsSchema.index({ category: 1, featured: -1 });
 newsSchema.index({ published: 1, isHighlighted: -1 });
 newsSchema.index({ published: 1, state: 1, district: 1, publicationDate: -1 });
+newsSchema.index({ updatedAt: -1 });
 
 module.exports = mongoose.models.VideoNews || mongoose.model("VideoNews", newsSchema);

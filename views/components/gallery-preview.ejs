@@ -1,71 +1,34 @@
-<!-- =========================================
-     SANKALP PHOTO GALLERY — SCROLLING PREVIEW SECTION
-========================================= -->
-<section class="gallery-preview-section" id="gallery-preview" aria-label="Image Gallery Preview">
-  <div class="gallery-preview-wrapper">
-    
-    <!-- Section Header -->
-    <div class="gallery-header-row">
-      <div class="gallery-title-wrap">
-        <h2>
-          <span style="color: #d72a2a;">Image Gallery</span>
-        </h2>
-        <p class="gallery-subtitle">संकल्प पत्र, चौपाल एवं सामाजिक अभियानों की ऐतिहासिक झलकियां</p>
+<section class="gallery-preview-section home-media-section" id="gallery-preview">
+  <div class="home-media-container">
+    <header class="home-media-header">
+      <div>
+        <span class="home-media-eyebrow">Campaign moments</span>
+        <h2 class="section-title">Image <span class="text-highlight">Gallery</span></h2>
       </div>
-    </div>
+    </header>
 
-    <!-- Scrolling Cards Container (आगे-पीछे स्क्रोल करने वाला ट्रैक) -->
-    <div class="gallery-scroll-container" id="galleryScrollContainer">
-      <div class="gallery-scroll-track" id="galleryScrollTrack">
-        <% if (typeof galleryPhotos !== 'undefined' && galleryPhotos && galleryPhotos.length > 0) { %>
-          <% galleryPhotos.forEach(function(photo, idx) { %>
-            <a href="/gallery" class="gallery-card-item" data-index="<%= idx %>">
-              <div class="gallery-card-thumb">
-                <img
-                  src="<%= photo.imageUrl %>"
-                  alt="<%= photo.name %>"
-                  class="gallery-card-img"
-                  loading="lazy"
-                  onerror="this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80'"
-                />
-                <% if (photo.district) { %>
-                  <span class="gallery-card-location">
-                    📍 <%= photo.district %>
-                  </span>
-                <% } %>
-                <span class="gallery-card-date">
-                  📅 <%= photo.dateString || photo.formattedDate || (photo.date ? new Date(photo.date).toLocaleDateString('hi-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '2026') %>
-                </span>
-              </div>
-              <div class="gallery-card-body">
-                <strong class="gallery-card-title"><%= photo.name %></strong>
-                <p class="gallery-card-caption">
-                  <%= photo.caption || 'अखंड निषाद संकल्प अभियान के अंतर्गत लिया गया पावन संकल्प।' %>
-                </p>
-              </div>
-            </a>
-          <% }); %>
-        <% } %>
+    <% if (typeof galleryPhotos !== 'undefined' && galleryPhotos && galleryPhotos.length) { %>
+      <div class="home-media-rail home-photo-rail" aria-label="Latest campaign photos">
+        <% galleryPhotos.slice(0, 10).forEach(function(photo) { %>
+          <a href="/gallery" class="home-photo-card">
+            <div class="home-photo-thumb">
+              <img src="<%= photo.imageUrl %>" alt="<%= photo.name %>" loading="lazy"
+                onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80';" />
+              <% if (photo.district) { %><span class="home-photo-location"><%= photo.district %></span><% } %>
+            </div>
+            <div class="home-media-card-copy">
+              <h3><%= photo.name %></h3>
+              <% if (photo.caption) { %><p><%= photo.caption %></p><% } %>
+            </div>
+          </a>
+        <% }); %>
       </div>
-    </div>
-
-    <!-- Scroll Progress Dots Indicators -->
-    <% if (typeof galleryPhotos !== 'undefined' && galleryPhotos && galleryPhotos.length > 4) { %>
-      <% const dotCount = Math.min(6, Math.ceil(galleryPhotos.length / 2)); %>
-      <div class="gallery-scroll-dots" id="galleryScrollDots" aria-hidden="true">
-        <% for (let i = 0; i < dotCount; i++) { %>
-          <button type="button" class="gallery-scroll-dot <%= i === 0 ? 'active' : '' %>" data-dot="<%= i %>" aria-label="Go to gallery slide <%= i + 1 %>"></button>
-        <% } %>
-      </div>
+    <% } else { %>
+      <p class="home-media-empty">Campaign photos will appear here soon.</p>
     <% } %>
 
-    <!-- Bottom Action: View Full Gallery Button Below Images -->
-    <div class="gallery-bottom-action">
-      <a href="/gallery" class="gallery-view-all-btn">
-        <span>View Full Gallery</span>
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
+    <div class="home-media-cta">
+      <a href="/gallery" class="ny-btn ny-btn-primary">View More Images <span aria-hidden="true">→</span></a>
     </div>
-
   </div>
 </section>

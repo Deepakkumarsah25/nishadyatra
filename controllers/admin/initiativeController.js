@@ -1,13 +1,22 @@
 const Initiative = require("../../models/Initiative");
+const { getPagination } = require("../../utils/pagination");
 
 // List all initiatives
 exports.getInitiatives = async (req, res) => {
   try {
-    const initiatives = await Initiative.find().sort({ order: 1, createdAt: 1 });
+    const total = await Initiative.countDocuments();
+    const pagination = getPagination(req.query.page, total, 50);
+    const initiatives = await Initiative.find()
+      .sort({ order: 1, createdAt: 1 })
+      .skip(pagination.skip)
+      .limit(pagination.pageSize);
     res.render("admin/home/initiative-list", {
       title: "Key Initiatives & What We Do Management",
       admin: req.session.admin,
       initiatives,
+      pagination,
+      paginationPath: "/admin/home/initiatives",
+      paginationQuery: {},
       currentPath: "/admin/home/initiatives",
       message: req.query.msg || null,
       error: req.query.err || null,

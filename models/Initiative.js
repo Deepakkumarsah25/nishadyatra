@@ -91,4 +91,6 @@ const initiativeSchema = new mongoose.Schema(
   }
 );
 
+initiativeSchema.index({ order: 1, createdAt: 1 });
+
 module.exports = mongoose.model("Initiative", initiativeSchema);
