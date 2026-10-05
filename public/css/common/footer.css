@@ -3,7 +3,7 @@
    ========================================= */
 
 :root {
-  --footer-bg: #fbf4ec;
+  --footer-bg:rgba(252, 241, 229, 0.97);
   --footer-border: #ead8c5;
   --footer-red: #d72a2a;
   --footer-dark-red: #8c1a1a;
