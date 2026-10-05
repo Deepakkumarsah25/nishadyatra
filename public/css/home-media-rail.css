@@ -225,6 +225,24 @@
   transition: transform .35s ease;
 }
 
+.home-video-thumbnail-preview {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #17120f;
+}
+
+.home-video-thumbnail-preview iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 150%;
+  height: 150%;
+  transform: translate(-50%, -50%);
+  border: 0;
+  pointer-events: none;
+}
+
 .home-video-card:hover .home-media-thumb img,
 .home-photo-card:hover .home-photo-thumb img,
 .home-news-card:hover .home-news-thumb img {

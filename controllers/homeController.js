@@ -56,6 +56,17 @@ exports.getHomePage = async (req, res) => {
       return match ? match[1] : "";
     }
 
+    function getVimeoId(url) {
+      if (!url || typeof url !== "string") return "";
+      try {
+        const parsed = new URL(url);
+        if (!/(^|\.)vimeo\.com$/i.test(parsed.hostname)) return "";
+        return parsed.pathname.match(/\/(?:video\/)?(\d+)(?:\/|$)/)?.[1] || "";
+      } catch {
+        return "";
+      }
+    }
+
     // Helper to resolve an effective thumbnail URL
     function resolveThumb(thumb, videoUrl, fallback = "/images/kalash-yatra-hero.jpg") {
       if (thumb && thumb.trim() && !thumb.includes("/images/kalash-yatra-hero.jpg")) {
@@ -64,6 +75,10 @@ exports.getHomePage = async (req, res) => {
       const ytId = getYouTubeId(videoUrl);
       if (ytId) {
         return `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
+      }
+      const vimeoId = getVimeoId(videoUrl);
+      if (vimeoId) {
+        return `https://vumbnail.com/${vimeoId}.jpg`;
       }
       return thumb && thumb.trim() ? thumb.trim() : fallback;
     }
