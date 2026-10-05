@@ -25,7 +25,8 @@
     const match = (url || '').match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/|v\/))([\w-]{11})/);
     if (match && match[1]) return 'https://img.youtube.com/vi/' + match[1] + '/hqdefault.jpg';
     const vimeoMatch = (url || '').match(/(?:player\.)?vimeo\.com\/(?:video\/)?(\d+)/i);
-    return vimeoMatch ? 'https://vumbnail.com/' + vimeoMatch[1] + '.jpg' : '/images/kalash-yatra-featured.jpg';
+    if (vimeoMatch) return 'https://vumbnail.com/' + vimeoMatch[1] + '.jpg';
+    return '/images/kalash-yatra-featured.jpg';
   }
 
 %>
@@ -48,7 +49,8 @@
             tabindex="0" role="button" aria-label="Play <%= vid.title %>">
             <div class="home-media-thumb latest-thumb-wrap">
               <img src="<%= getThumb(vid.videoUrl, vid.thumbnail || vid.image) %>" alt="<%= vid.title %>" loading="lazy"
-                onerror="this.onerror=null; this.src='/images/kalash-yatra-featured.jpg';" />
+                onerror="this.hidden=true; const preview=this.nextElementSibling; if(preview){ const iframe=document.createElement('iframe'); iframe.src=this.parentElement.parentElement.dataset.videoUrl; iframe.title=this.alt || 'Video preview'; iframe.loading='lazy'; iframe.tabIndex=-1; iframe.setAttribute('aria-hidden','true'); iframe.allow='autoplay; fullscreen; picture-in-picture'; iframe.allowFullscreen=true; preview.appendChild(iframe); preview.hidden=false; }" />
+              <div class="home-video-thumbnail-preview" hidden></div>
               <span class="latest-thumb-play" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
               <% if (vid.duration) { %><span class="latest-duration-tag"><%= vid.duration %></span><% } %>
             </div>
@@ -79,7 +81,7 @@
       </div>
     </div>
     <div class="home-video-modal-body">
-      <div class="home-video-iframe-wrap"><iframe id="homeVideoIframe" src="" title="Video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+      <div class="home-video-iframe-wrap"><iframe id="homeVideoIframe" src="" title="Video player" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
     </div>
   </div>
 </div>
