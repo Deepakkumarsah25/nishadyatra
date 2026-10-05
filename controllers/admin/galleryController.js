@@ -23,6 +23,7 @@ exports.getGalleryList = async (req, res) => {
 
     const query = {};
 
+
     if (typeof district === "string" && district.trim() && district !== "all") {
       query.district = district.trim();
     }
@@ -161,6 +162,7 @@ exports.postCreatePhoto = async (req, res) => {
       });
     }
 
+
     const photoDate = date ? new Date(date) : new Date();
 
     await SankalpPhoto.create({
@@ -248,6 +250,7 @@ exports.postBulkUpload = async (req, res) => {
         todayStr: formatDateForInput(new Date()),
       });
     }
+
 
     const photoDate = defaultDate ? new Date(defaultDate) : new Date();
     const publishedBool =
