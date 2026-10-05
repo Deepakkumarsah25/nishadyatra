@@ -55,6 +55,9 @@
           >
             मूल प्रकाशन पर पढ़ें ↗
           </a>
+          <a class="press-read" href="<%= item.externalUrl %>" target="_blank" rel="noopener noreferrer" style="display:block; margin-top:8px; overflow-wrap:anywhere;">
+            <%= item.source ? item.source + ' — ' : '' %><%= item.externalUrl %>
+          </a>
         <% } %>
       </article>
     </main>

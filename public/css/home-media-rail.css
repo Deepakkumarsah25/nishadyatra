@@ -403,6 +403,11 @@
     padding-block: 18px !important;
   }
 
+  /* Keep the news rail's first card aligned with the homepage image rail. */
+  .home-news-section {
+    padding-inline: 0;
+  }
+
   .initiatives-section {
     padding-block: 18px !important;
   }

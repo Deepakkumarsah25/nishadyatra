@@ -3,6 +3,18 @@
 
   function toEmbedUrl(url) {
     if (!url) return "";
+    try {
+      const parsed = new URL(url, "https://local.invalid");
+      if (/(^|\.)vimeo\.com$/i.test(parsed.hostname)) {
+        const match = parsed.pathname.match(/\/(?:video\/)?(\d+)(?:\/|$)/);
+        if (match) {
+          const embed = new URL("https://player.vimeo.com/video/" + match[1]);
+          const hash = parsed.searchParams.get("h") || parsed.pathname.match(/\/(?:video\/)?\d+\/([\da-f]+)/i)?.[1];
+          if (hash) embed.searchParams.set("h", hash);
+          return embed.toString();
+        }
+      }
+    } catch (_) {}
     if (url.includes("embed/")) return url;
     const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{11})/);
     return match && match[1] ? "https://www.youtube-nocookie.com/embed/" + match[1] : url;
@@ -11,7 +23,9 @@
   function getThumb(url, explicitThumb) {
     if (explicitThumb && explicitThumb.trim()) return explicitThumb.trim();
     const match = (url || '').match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/|v\/))([\w-]{11})/);
-    return match && match[1] ? 'https://img.youtube.com/vi/' + match[1] + '/hqdefault.jpg' : '/images/kalash-yatra-featured.jpg';
+    if (match && match[1]) return 'https://img.youtube.com/vi/' + match[1] + '/hqdefault.jpg';
+    const vimeoMatch = (url || '').match(/(?:player\.)?vimeo\.com\/(?:video\/)?(\d+)/i);
+    return vimeoMatch ? 'https://vumbnail.com/' + vimeoMatch[1] + '.jpg' : '/images/kalash-yatra-featured.jpg';
   }
 
 %>

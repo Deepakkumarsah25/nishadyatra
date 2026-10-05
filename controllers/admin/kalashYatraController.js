@@ -194,6 +194,37 @@ function getYouTubeId(url) {
   return match ? match[1] : "";
 }
 
+function getVimeoId(url) {
+  if (!url || typeof url !== "string") return "";
+  try {
+    const parsed = new URL(url);
+    if (!/(^|\.)vimeo\.com$/i.test(parsed.hostname)) return "";
+    const match = parsed.pathname.match(/\/(?:video\/)?(\d+)(?:\/|$)/);
+    return match ? match[1] : "";
+  } catch {
+    return "";
+  }
+}
+
+async function getVimeoThumbnail(videoUrl) {
+  const videoId = getVimeoId(videoUrl);
+  if (!videoId) return "";
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 5000);
+  try {
+    const oembedUrl = new URL("https://vimeo.com/api/oembed.json");
+    oembedUrl.searchParams.set("url", `https://vimeo.com/${videoId}`);
+    const response = await fetch(oembedUrl, { signal: controller.signal });
+    if (!response.ok) return "";
+    const data = await response.json();
+    return typeof data.thumbnail_url === "string" ? data.thumbnail_url : "";
+  } catch {
+    return "";
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 // Helper to resolve an effective thumbnail URL
 function resolveVideoThumbnail(thumbnail, videoUrl, fallback = "/images/kalash-yatra-hero.jpg") {
   if (thumbnail && thumbnail.trim() && !thumbnail.includes("/images/kalash-yatra-hero.jpg")) {
