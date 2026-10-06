@@ -18,7 +18,13 @@ const pageUrl = (number) => {
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title><%= title %> | निषाद आरक्षण संकल्प अभियान</title>
   <link rel="icon" type="image/png" href="/images/logo.png">
-  <meta name="description" content="निषाद आरक्षण संकल्प अभियान से जुड़ी ताज़ा खबरें और मीडिया रिपोर्ट।">
+  <meta name="description" content="<%= typeof metaDescription !== 'undefined' ? metaDescription : 'निषाद आरक्षण संकल्प अभियान से जुड़ी ताज़ा खबरें और मीडिया रिपोर्ट।' %>">
+  <link rel="canonical" href="<%= typeof canonicalUrl !== 'undefined' ? canonicalUrl : 'https://nishadaarakshansankalp.com/news' %>">
+  <meta property="og:title" content="न्यूज़ और प्रेस | निषाद आरक्षण संकल्प अभियान">
+  <meta property="og:description" content="<%= typeof metaDescription !== 'undefined' ? metaDescription : 'निषाद आरक्षण संकल्प अभियान से जुड़ी ताज़ा खबरें और मीडिया रिपोर्ट।' %>">
+  <meta property="og:url" content="<%= typeof canonicalUrl !== 'undefined' ? canonicalUrl : 'https://nishadaarakshansankalp.com/news' %>">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="<%= heroPoster ? (/^https?:\/\//i.test(heroPoster) ? heroPoster : 'https://nishadaarakshansankalp.com' + heroPoster) : 'https://nishadaarakshansankalp.com/images/logo.png' %>">
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/news/video_news.css">

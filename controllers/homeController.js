@@ -16,6 +16,64 @@ const {
 } = require("../scripts/seedHomeData");
 const { defaultGalleryPhotos } = require("../scripts/seedGalleryData");
 
+const homepageKalashPipeline = [
+  { $limit: 1 },
+  {
+    $project: {
+      hero: 1,
+      milestonesSection: 1,
+      videos: { $slice: [{ $ifNull: ["$videos", []] }, 10] },
+      highlightedVideo: {
+        $arrayElemAt: [
+          {
+            $filter: {
+              input: { $ifNull: ["$videos", []] },
+              as: "video",
+              cond: { $eq: ["$$video.isHighlighted", true] },
+            },
+          },
+          0,
+        ],
+      },
+    },
+  },
+];
+
+function getHomepageKalashFallback() {
+  const defaults = KalashYatra.defaultData;
+  return {
+    hero: defaults.hero,
+    milestonesSection: defaults.milestonesSection,
+    videos: defaults.videos.slice(0, 10),
+    highlightedVideo: defaults.videos.find((video) => video.isHighlighted) || null,
+  };
+}
+
+async function getHomepageKalash() {
+  try {
+    let [kalash] = await KalashYatra.aggregate(homepageKalashPipeline);
+
+    if (!kalash) {
+      await KalashYatra.create(KalashYatra.defaultData);
+      [kalash] = await KalashYatra.aggregate(homepageKalashPipeline);
+    }
+
+    if (!kalash) return getHomepageKalashFallback();
+
+    return {
+      ...kalash,
+      hero: { ...KalashYatra.defaultData.hero, ...(kalash.hero || {}) },
+      milestonesSection: {
+        ...KalashYatra.defaultData.milestonesSection,
+        ...(kalash.milestonesSection || {}),
+      },
+      videos: kalash.videos || [],
+    };
+  } catch {
+    return getHomepageKalashFallback();
+  }
+}
+
 // Public Home Page
 exports.getHomePage = async (req, res) => {
   try {
@@ -27,7 +85,7 @@ exports.getHomePage = async (req, res) => {
         SiteNotice.find({ isActive: true }).sort({ order: 1, createdAt: 1 }).limit(20),
         HomeQuickInfo.findOne(),
         SankalpPhoto.find({ isPublished: true }).sort({ order: 1, date: -1 }).limit(10),
-        KalashYatra.getOrSeed().catch(() => KalashYatra.defaultData),
+        getHomepageKalash(),
         VideoNews.find({ published: true })
           .sort({ publicationDate: -1, publishedAt: -1, createdAt: -1 })
           .limit(10)
@@ -83,16 +141,15 @@ exports.getHomePage = async (req, res) => {
       return thumb && thumb.trim() ? thumb.trim() : fallback;
     }
 
-    // Dynamic Highlight Video: check if any video in kalash.videos is marked as isHighlighted
+    // The homepage query returns the first highlighted video in stored order.
     let highlightVideo = null;
     let highlightedVidId = null;
 
-    if (kalash && kalash.videos && kalash.videos.length > 0) {
-      const foundHighlight = kalash.videos.find((v) => v.isHighlighted);
-      if (foundHighlight) {
-        highlightedVidId = String(foundHighlight._id);
-        const resolvedPoster = resolveThumb(foundHighlight.thumbnail, foundHighlight.videoUrl);
-        highlightVideo = {
+    if (kalash && kalash.highlightedVideo) {
+      const foundHighlight = kalash.highlightedVideo;
+      highlightedVidId = String(foundHighlight._id);
+      const resolvedPoster = resolveThumb(foundHighlight.thumbnail, foundHighlight.videoUrl);
+      highlightVideo = {
           _id: foundHighlight._id,
           title: foundHighlight.title,
           videoUrl: foundHighlight.videoUrl,
@@ -104,7 +161,6 @@ exports.getHomePage = async (req, res) => {
           state: foundHighlight.state,
           description: foundHighlight.description || "",
         };
-      }
     }
 
     // Fallback to hero.featuredVideo if no video is explicitly marked isHighlighted
@@ -163,6 +219,7 @@ exports.getHomePage = async (req, res) => {
 
     res.render("index", {
       title: "Nishad Sankalp Campaign",
+      metaDescription: "Learn about the Nishad Aarakshan Sankalp campaign, its initiatives, community programs, news, videos, and the Sankalp Yatra for unity and empowerment.",
       heroSlides: finalHeroSlides,
       initiatives: finalInitiatives,
       initiativesModalMap,
@@ -182,6 +239,7 @@ exports.getHomePage = async (req, res) => {
     // Safe render with defaults so the user's site never crashes
     res.render("index", {
       title: "Nishad Sankalp Campaign",
+      metaDescription: "Learn about the Nishad Aarakshan Sankalp campaign, its initiatives, community programs, news, videos, and the Sankalp Yatra for unity and empowerment.",
       heroSlides: defaultHeroSlides,
       initiatives: defaultInitiatives,
       initiativesModalMap: {},
