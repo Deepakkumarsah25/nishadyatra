@@ -13,7 +13,6 @@
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--admin-primary)" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           Received Online Pledges & Inquiries
         </h1>
-        <p>Public messages received from the homepage sidebar pledge form and initiative modal</p>
       </div>
     </div>
     <div class="topbar-right">
@@ -38,7 +37,7 @@
         </h3>
 
         <!-- Filter tabs -->
-        <div style="display: flex; gap: 8px;">
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
           <a href="/admin/home/inquiries" class="btn-admin btn-admin-sm <%= !currentFilter.type ? 'btn-admin-primary' : 'btn-admin-outline' %>">All</a>
           <a href="/admin/home/inquiries?type=pledge" class="btn-admin btn-admin-sm <%= currentFilter.type === 'pledge' ? 'btn-admin-primary' : 'btn-admin-outline' %>">Pledges Only</a>
           <a href="/admin/home/inquiries?type=initiative" class="btn-admin btn-admin-sm <%= currentFilter.type === 'initiative' ? 'btn-admin-primary' : 'btn-admin-outline' %>">Initiative Inquiries Only</a>
@@ -56,7 +55,7 @@
               <th>District / Region</th>
               <th>Category / Message</th>
               <th style="width: 130px;">Status</th>
-              <th style="width: 100px; text-align: right;">Delete</th>
+              <th style="width: 100px; text-align: center;">Delete</th>
             </tr>
           </thead>
           <tbody>
@@ -106,7 +105,7 @@
                       </select>
                     </form>
                   </td>
-                  <td style="text-align: right;">
+                  <td style="text-align: center;">
                     <form action="/admin/home/inquiries/delete/<%= item._id %>" method="POST" onsubmit="return confirm('Are you sure you want to delete this entry?');" style="display:inline; margin: 0;">
                       <button type="submit" class="btn-del" title="Delete Entry">
                         <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>

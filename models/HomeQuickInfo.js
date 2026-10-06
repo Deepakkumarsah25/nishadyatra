@@ -24,17 +24,17 @@ const homeQuickInfoSchema = new mongoose.Schema(
     },
     helplineText: {
       type: String,
-      default: "Helpline: +91 99999 99999",
+      default: "Helpline: +91 99553 09029",
       trim: true,
     },
     helplineTel: {
       type: String,
-      default: "+919999999999",
+      default: "+919955309029",
       trim: true,
     },
     email: {
       type: String,
-      default: "info@nishadsankalp.org",
+      default: "nishadaarakshansankalp@gmail.com",
       trim: true,
     },
     sidebarFooterText: {

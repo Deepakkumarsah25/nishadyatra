@@ -1,5 +1,6 @@
 const ContactInfo = require("../models/ContactInfo");
 const ContactMessage = require("../models/ContactMessage");
+const { sendContactNotification } = require("../services/mailService");
 
 /**
  * Render Public Contact Us Page
@@ -85,6 +86,19 @@ exports.submitContactForm = async (req, res) => {
       message: message.trim(),
       status: "new",
       ipAddress,
+    });
+
+    // Send email notification to nishadaarakshansankalp@gmail.com asynchronously
+    sendContactNotification({
+      name: newMessage.name,
+      phone: newMessage.phone,
+      email: newMessage.email,
+      district: newMessage.district,
+      message: newMessage.message,
+      ipAddress: newMessage.ipAddress,
+      createdAt: newMessage.createdAt,
+    }).catch((mailErr) => {
+      console.error("Contact Form Email Notification Error:", mailErr);
     });
 
     const successMsg = "आपका संदेश सफलतापूर्वक प्राप्त हो गया है। हमारी टीम शीघ्र आपसे संपर्क करेगी।";
