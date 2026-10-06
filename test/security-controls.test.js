@@ -153,8 +153,8 @@ test("admin authorization allows both configured roles and rejects anonymous use
     return { nextCalled, redirected };
   }
 
-  assert.equal(invoke(undefined).redirected, "/admin/login");
-  assert.equal(invoke({}).redirected, "/admin/login");
+  assert.equal(invoke(undefined).redirected, "/admin/nishadaarakshansankalp/main/login");
+  assert.equal(invoke({}).redirected, "/admin/nishadaarakshansankalp/main/login");
   assert.equal(invoke({ admin: { role: "admin" } }).nextCalled, true);
   assert.equal(invoke({ admin: { role: "superadmin" } }).nextCalled, true);
 });

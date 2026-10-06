@@ -11,6 +11,7 @@
   >
 
   <title>Admin Login | Nishad Sankalp Campaign</title>
+  <meta name="robots" content="noindex, nofollow, noarchive" />
   <link rel="icon" type="image/png" href="/images/logo.png" />
 
 
@@ -1292,7 +1293,7 @@
           <!-- FORM -->
 
           <form
-            action="/admin/login"
+            action="<%= typeof loginAction !== 'undefined' ? loginAction : '/admin/nishadaarakshansankalp/main/login' %>"
             method="POST"
             class="login-form"
             id="loginForm"

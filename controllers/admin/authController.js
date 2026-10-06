@@ -1,16 +1,21 @@
 const bcrypt = require("bcryptjs");
 
 const Admin = require("../../models/admin/Admin");
+const { ADMIN_LOGIN_URL } = require("../../config/adminAuth");
 
 // ========================================
 // SHOW LOGIN
 // ========================================
 
 exports.showLogin = (req, res) => {
-  res.set("Cache-Control", "no-store");
+  // Security headers: prevent caching and search engine indexing of secret login page
+  res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
+  res.set("Pragma", "no-cache");
+  res.set("X-Robots-Tag", "noindex, nofollow, noarchive, nosnippet");
 
   return res.render("admin/auth/login", {
     title: "Admin Login",
+    loginAction: ADMIN_LOGIN_URL,
     error: null,
     success: null,
   });
@@ -21,6 +26,11 @@ exports.showLogin = (req, res) => {
 // ========================================
 
 exports.login = async (req, res) => {
+  // Prevent caching of any authentication response
+  res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
+  res.set("Pragma", "no-cache");
+  res.set("X-Robots-Tag", "noindex, nofollow, noarchive, nosnippet");
+
   try {
     const email = String(req.body.email || "")
       .trim()
@@ -35,6 +45,7 @@ exports.login = async (req, res) => {
     if (!email || !password) {
       return res.status(400).render("admin/auth/login", {
         title: "Admin Login",
+        loginAction: ADMIN_LOGIN_URL,
         error: "Both email and password are required.",
         success: null,
       });
@@ -51,6 +62,7 @@ exports.login = async (req, res) => {
     if (!admin) {
       return res.status(401).render("admin/auth/login", {
         title: "Admin Login",
+        loginAction: ADMIN_LOGIN_URL,
         error: "Invalid email or password.",
         success: null,
       });
@@ -63,6 +75,7 @@ exports.login = async (req, res) => {
     if (!admin.isActive) {
       return res.status(403).render("admin/auth/login", {
         title: "Admin Login",
+        loginAction: ADMIN_LOGIN_URL,
         error: "Admin account is inactive.",
         success: null,
       });
@@ -80,13 +93,14 @@ exports.login = async (req, res) => {
     if (!passwordMatch) {
       return res.status(401).render("admin/auth/login", {
         title: "Admin Login",
+        loginAction: ADMIN_LOGIN_URL,
         error: "Invalid email or password.",
         success: null,
       });
     }
 
     // ========================================
-    // Regenerate Session
+    // Regenerate Session (Mitigates session fixation attacks)
     // ========================================
 
     req.session.regenerate((sessionError) => {
@@ -95,6 +109,7 @@ exports.login = async (req, res) => {
 
         return res.status(500).render("admin/auth/login", {
           title: "Admin Login",
+          loginAction: ADMIN_LOGIN_URL,
           error: "Could not create login session.",
           success: null,
         });
@@ -123,6 +138,7 @@ exports.login = async (req, res) => {
             "admin/auth/login",
             {
               title: "Admin Login",
+              loginAction: ADMIN_LOGIN_URL,
               error: "Could not save login session.",
               success: null,
             }
@@ -137,6 +153,7 @@ exports.login = async (req, res) => {
 
     return res.status(500).render("admin/auth/login", {
       title: "Admin Login",
+      loginAction: ADMIN_LOGIN_URL,
       error: "Server error. Please try again.",
       success: null,
     });
@@ -163,6 +180,6 @@ exports.logout = (req, res) => {
       path: "/",
     });
 
-    return res.redirect("/admin/login");
+    return res.redirect(ADMIN_LOGIN_URL);
   });
 };
