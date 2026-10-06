@@ -9,16 +9,22 @@
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       </button>
       <div class="page-heading">
-        <h1>
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--admin-primary)" stroke-width="2.2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-          Dashboard — Main Overview
-        </h1>
-        <p>Core website metrics, received pledges, photo gallery, Sankalp Yatra (संकल्प यात्रा), and recent activity</p>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <h1 style="display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: 800; color: var(--admin-text-dark); margin: 0;">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--admin-primary)" stroke-width="2.2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+            Dashboard Overview
+          </h1>
+          <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; background: #ecfdf5; color: #047857; padding: 2px 8px; border-radius: 12px; border: 1px solid #a7f3d0;">
+            <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981; display: inline-block; animation: pulseDot 1.8s infinite;"></span>
+            Live
+          </span>
+        </div>
       </div>
     </div>
     <div class="topbar-right">
       <a href="/" target="_blank" class="view-site-btn">
-        <span>View Live Website ↗</span>
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        <span>View Live Website</span>
       </a>
       <div class="admin-user-pill">
         <div class="admin-user-avatar"><%= (admin && admin.name ? admin.name.charAt(0) : 'A').toUpperCase() %></div>
@@ -32,32 +38,880 @@
 
   <!-- Body -->
   <div class="admin-body">
-    <!-- WELCOME HERO BANNER -->
-    <div style="position: relative; overflow: hidden; padding: 28px 32px; border-radius: 16px; background: linear-gradient(135deg, #1f1212 0%, #3a1515 50%, #8c1a1a 100%); color: #ffffff; box-shadow: 0 12px 30px rgba(140, 26, 26, 0.15); margin-bottom: 26px;">
-      <div style="position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
+    <style>
+      @keyframes pulseDot {
+        0% { transform: scale(0.95); opacity: 0.8; }
+        50% { transform: scale(1.3); opacity: 1; }
+        100% { transform: scale(0.95); opacity: 0.8; }
+      }
+
+      /* Hero Welcome Banner */
+      .dash-hero {
+        position: relative;
+        overflow: hidden;
+        padding: 26px 30px;
+        border-radius: 16px;
+        background: radial-gradient(circle at 90% 10%, rgba(215, 42, 42, 0.35) 0%, transparent 60%),
+                    linear-gradient(135deg, #190909 0%, #2f0e0e 45%, #751414 100%);
+        color: #ffffff;
+        box-shadow: 0 10px 25px rgba(117, 20, 20, 0.18);
+        margin-bottom: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+      }
+      .dash-hero-content {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+      .dash-hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(8px);
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+        color: #fed7aa;
+        margin-bottom: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      .dash-hero-title {
+        font-size: 24px;
+        font-weight: 800;
+        line-height: 1.25;
+        margin: 0 0 6px 0;
+      }
+      .dash-hero-desc {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.88);
+        max-width: 620px;
+        line-height: 1.5;
+        margin: 0;
+      }
+      .dash-hero-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .dash-hero-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 16px;
+        border-radius: 9px;
+        font-size: 13px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+      }
+      .dash-hero-btn-primary {
+        background: #ffffff;
+        color: #7f1d1d;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+      }
+      .dash-hero-btn-primary:hover {
+        background: #fff7ed;
+        transform: translateY(-2px);
+      }
+      .dash-hero-btn-glass {
+        background: rgba(255, 255, 255, 0.15);
+        color: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.28);
+      }
+      .dash-hero-btn-glass:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateY(-2px);
+      }
+
+      /* ========================================================
+         BALANCED 3x2 KPI CARDS GRID & MODERN CARD SYSTEM
+         ======================================================== */
+      .dash-stats-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 16px !important;
+        margin-bottom: 24px !important;
+      }
+      .dash-stat-card {
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 18px 20px;
+        border: 1px solid #ebdcd5;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+        transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        text-decoration: none !important;
+        color: inherit !important;
+        position: relative;
+        overflow: hidden;
+      }
+      .dash-stat-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3.5px;
+        background: transparent;
+        transition: height 0.2s ease;
+      }
+      .dash-stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.07);
+        border-color: #d1b8af;
+      }
+      .dash-stat-card:hover::before {
+        height: 5px;
+      }
+      .card-accent-red::before {
+        background: linear-gradient(90deg, #f43f5e, #dc2626);
+      }
+      .card-accent-emerald::before {
+        background: linear-gradient(90deg, #10b981, #059669);
+      }
+      .card-accent-amber::before {
+        background: linear-gradient(90deg, #f59e0b, #d97706);
+      }
+      .card-accent-sky::before {
+        background: linear-gradient(90deg, #0284c7, #2563eb);
+      }
+      .card-accent-indigo::before {
+        background: linear-gradient(90deg, #6366f1, #4f46e5);
+      }
+      .card-accent-pink::before {
+        background: linear-gradient(90deg, #ec4899, #db2777);
+      }
+
+      .dash-stat-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+      }
+      .dash-stat-label-wrap {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .dash-stat-label {
+        font-size: 11.5px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        color: var(--admin-text-muted);
+      }
+      .dash-stat-arrow {
+        font-size: 12px;
+        color: var(--admin-text-muted);
+        opacity: 0;
+        transform: translateX(-4px);
+        transition: all 0.2s ease;
+      }
+      .dash-stat-card:hover .dash-stat-arrow {
+        opacity: 1;
+        transform: translateX(0);
+        color: var(--admin-primary);
+      }
+      .dash-stat-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: transform 0.2s ease;
+      }
+      .dash-stat-card:hover .dash-stat-icon {
+        transform: scale(1.08);
+      }
+      .dash-stat-main {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 6px;
+      }
+      .dash-stat-number {
+        font-size: 32px;
+        font-weight: 800;
+        color: var(--admin-text-dark);
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+      }
+      .dash-stat-pill {
+        font-size: 11px;
+        font-weight: 800;
+        padding: 3px 9px;
+        border-radius: 12px;
+        line-height: 1;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        white-space: nowrap;
+      }
+      .dash-stat-sub {
+        font-size: 11.5px;
+        color: var(--admin-text-muted);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      /* Main Grid Layout */
+      .dash-main-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 320px;
+        gap: 24px;
+        align-items: start;
+      }
+
+      @media (max-width: 1200px) {
+        .dash-main-grid {
+          grid-template-columns: 1fr;
+          gap: 20px;
+        }
+      }
+
+      /* ==========================================================
+         CRUCIAL: Dedicated Dashboard Inquiries Table Styles
+         Full-width, zero cramped columns, perfect non-wrapping
+         ========================================================== */
+      .dash-inquiries-card {
+        background: #ffffff;
+        border-radius: 14px;
+        border: 1px solid #ebdcd5;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+        margin-bottom: 24px;
+        overflow: hidden;
+      }
+      .dash-inquiries-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 20px;
+        border-bottom: 1px solid #ebdcd5;
+        background: #ffffff;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .dash-inquiries-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 0;
+        font-size: 15px;
+        font-weight: 800;
+        color: var(--admin-text-dark);
+      }
+      .dash-inquiries-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      .dash-inquiries-wrapper::-webkit-scrollbar {
+        height: 5px;
+      }
+      .dash-inquiries-wrapper::-webkit-scrollbar-track {
+        background: #faf7f5;
+      }
+      .dash-inquiries-wrapper::-webkit-scrollbar-thumb {
+        background: #d6c7c0;
+        border-radius: 4px;
+      }
+      .dash-inquiries-wrapper::-webkit-scrollbar-thumb:hover {
+        background: #b8a69e;
+      }
+
+      .dash-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        font-size: 13px;
+      }
+      .dash-table,
+      .dash-table th,
+      .dash-table td,
+      .dash-table th *,
+      .dash-table td * {
+        white-space: nowrap !important;
+      }
+      .dash-table th {
+        background: #faf7f5;
+        padding: 13px 18px;
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--admin-text-muted);
+        border-bottom: 1.5px solid #ebdcd5;
+        text-align: left;
+        position: static !important;
+        box-shadow: none !important;
+      }
+      .dash-table td {
+        padding: 13px 18px;
+        vertical-align: middle;
+        border-bottom: 1px solid #f1eae5;
+        position: static !important;
+        box-shadow: none !important;
+        background: #ffffff;
+      }
+      .dash-table tr:hover td {
+        background: #fffcfb;
+      }
+      .dash-table tr:last-child td {
+        border-bottom: none;
+      }
+
+      /* Participant avatar */
+      .dash-avatar-circle {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: #fff0ec;
+        color: var(--admin-primary);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        font-weight: 800;
+        flex-shrink: 0;
+        border: 1.5px solid #fed7aa;
+      }
+
+      /* Phone pill */
+      .dash-phone-badge {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        color: var(--admin-primary) !important;
+        font-weight: 700 !important;
+        font-size: 12.5px !important;
+        text-decoration: none !important;
+        background: #fff5f2 !important;
+        border: 1px solid #fed7aa !important;
+        padding: 5px 11px !important;
+        border-radius: 8px !important;
+        transition: all 0.18s ease !important;
+      }
+      .dash-phone-badge:hover {
+        background: #ffe8e2 !important;
+        border-color: #fca5a5 !important;
+        transform: translateY(-1px);
+      }
+
+      /* District pill */
+      .dash-district-pill {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 5px !important;
+        font-size: 11.5px !important;
+        font-weight: 700 !important;
+        background: #fffbeb !important;
+        color: #92400e !important;
+        border: 1px solid #fde68a !important;
+        padding: 4px 10px !important;
+        border-radius: 8px !important;
+      }
+
+      /* Form type pill */
+      .dash-type-pill {
+        display: inline-flex !important;
+        align-items: center !important;
+        font-size: 11px !important;
+        font-weight: 800 !important;
+        padding: 4px 10px !important;
+        border-radius: 6px !important;
+        line-height: 1 !important;
+      }
+      .dash-type-pledge {
+        background: #fff0ec;
+        color: var(--admin-primary);
+        border: 1px solid #f7c9be;
+      }
+      .dash-type-support {
+        background: #eff6ff;
+        color: #1d4ed8;
+        border: 1px solid #bfdbfe;
+      }
+
+      /* Status Pill with Dot */
+      .dash-status-pill {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        padding: 4px 12px !important;
+        border-radius: 20px !important;
+        font-size: 11px !important;
+        font-weight: 800 !important;
+        line-height: 1 !important;
+      }
+      .status-new {
+        background: #fee2e2;
+        color: #b91c1c;
+        border: 1px solid #fca5a5;
+      }
+      .status-contacted {
+        background: #fef3c7;
+        color: #b45309;
+        border: 1px solid #fde68a;
+      }
+      .status-resolved {
+        background: #ecfdf5;
+        color: #047857;
+        border: 1px solid #a7f3d0;
+      }
+      .status-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        display: inline-block;
+      }
+      .status-new .status-dot {
+        background: #dc2626;
+        animation: pulseDot 1.5s infinite;
+      }
+      .status-contacted .status-dot {
+        background: #d97706;
+      }
+      .status-resolved .status-dot {
+        background: #10b981;
+      }
+
+      .dash-action-btn {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 4px !important;
+        padding: 5px 12px !important;
+        border-radius: 7px !important;
+        font-size: 11.5px !important;
+        font-weight: 700 !important;
+        color: var(--admin-primary) !important;
+        background: #fff0ec !important;
+        border: 1px solid #fed7aa !important;
+        text-decoration: none !important;
+        transition: all 0.18s ease !important;
+      }
+      .dash-action-btn:hover {
+        background: var(--admin-primary) !important;
+        color: #ffffff !important;
+        border-color: var(--admin-primary) !important;
+        transform: translateY(-1px);
+      }
+
+      /* Visual Photo Cards */
+      .dash-photos-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+        gap: 14px;
+      }
+      .dash-photo-card {
+        background: #ffffff;
+        border: 1px solid var(--admin-border);
+        border-radius: 12px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        transition: all 0.2s ease;
+      }
+      .dash-photo-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+        border-color: var(--admin-primary);
+      }
+      .dash-photo-thumb {
+        position: relative;
+        width: 100%;
+        padding-top: 62%;
+        background: #f1eae5;
+        overflow: hidden;
+      }
+      .dash-photo-thumb img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+      }
+      .dash-photo-card:hover .dash-photo-thumb img {
+        transform: scale(1.06);
+      }
+      .dash-photo-badge {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        font-size: 10px;
+        font-weight: 800;
+        background: rgba(255, 255, 255, 0.94);
+        backdrop-filter: blur(4px);
+        color: var(--admin-primary);
+        padding: 3px 7px;
+        border-radius: 5px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+        max-width: 80%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      /* ==========================================================
+         DISTRICT DATA ANALYTICS & VISUAL METRICS STYLES
+         ========================================================== */
+      .dash-analytics-kpis {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 10px;
+        margin-bottom: 18px;
+      }
+      .dash-analytics-kpi-item {
+        background: #fbf7f4;
+        border: 1px solid #ebdcd5;
+        border-radius: 9px;
+        padding: 10px 12px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .dash-analytics-kpi-label {
+        font-size: 10px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--admin-text-muted);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin-bottom: 4px;
+      }
+      .dash-analytics-kpi-val {
+        font-size: 16px;
+        font-weight: 800;
+        color: var(--admin-text-dark);
+        line-height: 1.2;
+      }
+      .dash-analytics-kpi-sub {
+        font-size: 10px;
+        color: var(--admin-text-muted);
+        margin-top: 2px;
+      }
+
+      /* View switcher pills */
+      .dash-view-toggle {
+        display: inline-flex;
+        background: #f1eae5;
+        padding: 3px;
+        border-radius: 8px;
+        gap: 2px;
+      }
+      .dash-view-btn {
+        padding: 4px 10px;
+        font-size: 11px;
+        font-weight: 700;
+        border-radius: 6px;
+        border: none;
+        background: transparent;
+        color: var(--admin-text-muted);
+        cursor: pointer;
+        transition: all 0.18s ease;
+      }
+      .dash-view-btn.active {
+        background: #ffffff;
+        color: var(--admin-primary);
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+      }
+
+      /* Analytics Scale Axis Bar */
+      .dash-scale-axis {
+        display: flex;
+        justify-content: space-between;
+        padding: 6px 14px 6px 190px;
+        border-bottom: 1px dashed #ebdcd5;
+        margin-bottom: 12px;
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--admin-text-muted);
+        letter-spacing: 0.5px;
+      }
+      @media (max-width: 640px) {
+        .dash-scale-axis {
+          padding-left: 120px;
+        }
+      }
+
+      /* Analytics List Rows */
+      .dash-analytics-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .dash-analytics-row {
+        background: #ffffff;
+        border: 1px solid #ebdcd5;
+        border-radius: 10px;
+        padding: 10px 14px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transition: all 0.2s ease;
+        position: relative;
+      }
+      .dash-analytics-row:hover {
+        border-color: #f7c9be;
+        box-shadow: 0 4px 12px rgba(215, 42, 42, 0.06);
+        background: #fffcfb;
+      }
+      .dash-analytics-rank {
+        width: 28px;
+        height: 28px;
+        border-radius: 7px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 800;
+        flex-shrink: 0;
+      }
+      .rank-top1 {
+        background: #fef3c7;
+        color: #b45309;
+        border: 1px solid #fde68a;
+      }
+      .rank-top2 {
+        background: #f1f5f9;
+        color: #475569;
+        border: 1px solid #cbd5e1;
+      }
+      .rank-top3 {
+        background: #ffedd5;
+        color: #c2410c;
+        border: 1px solid #fed7aa;
+      }
+      .rank-other {
+        background: #f8fafc;
+        color: #64748b;
+        border: 1px solid #e2e8f0;
+      }
+
+      .dash-analytics-meta {
+        width: 150px;
+        flex-shrink: 0;
+      }
+      .dash-analytics-name {
+        font-size: 13px;
+        font-weight: 800;
+        color: var(--admin-text-dark);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .dash-analytics-tag {
+        font-size: 10px;
+        font-weight: 700;
+        display: inline-block;
+        margin-top: 2px;
+        padding: 1px 6px;
+        border-radius: 4px;
+      }
+      .tag-leader {
+        background: #fee2e2;
+        color: #b91c1c;
+      }
+      .tag-momentum {
+        background: #eff6ff;
+        color: #1d4ed8;
+      }
+      .tag-active {
+        background: #f0fdf4;
+        color: #15803d;
+      }
+
+      .dash-analytics-bar-track {
+        flex: 1;
+        height: 10px;
+        background: #f1eae5;
+        border-radius: 20px;
+        overflow: hidden;
+        position: relative;
+      }
+      .dash-analytics-bar-fill {
+        height: 100%;
+        border-radius: 20px;
+        transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .bar-fill-top1 {
+        background: linear-gradient(90deg, #ea580c, #dc2626);
+        box-shadow: 0 0 10px rgba(220, 38, 38, 0.35);
+      }
+      .bar-fill-top2 {
+        background: linear-gradient(90deg, #2563eb, #4f46e5);
+      }
+      .bar-fill-top3 {
+        background: linear-gradient(90deg, #0284c7, #0891b2);
+      }
+      .bar-fill-other {
+        background: linear-gradient(90deg, #64748b, #94a3b8);
+      }
+
+      .dash-analytics-nums {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-shrink: 0;
+      }
+      .dash-analytics-badge-count {
+        font-size: 11.5px;
+        font-weight: 800;
+        color: var(--admin-text-dark);
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        padding: 3px 8px;
+        border-radius: 6px;
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+      }
+      .dash-analytics-badge-pct {
+        font-size: 11px;
+        font-weight: 800;
+        color: var(--admin-primary);
+        background: #fff0ec;
+        border: 1px solid #fed7aa;
+        padding: 3px 8px;
+        border-radius: 6px;
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* Analytics Table inside card */
+      .dash-analytics-table-wrap {
+        width: 100%;
+        overflow-x: auto;
+      }
+      .dash-analytics-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12.5px;
+      }
+      .dash-analytics-table th {
+        background: #faf7f5;
+        padding: 9px 12px;
+        font-size: 10.5px;
+        font-weight: 800;
+        text-transform: uppercase;
+        color: var(--admin-text-muted);
+        border-bottom: 1.5px solid #ebdcd5;
+        text-align: left;
+        white-space: nowrap;
+      }
+      .dash-analytics-table td {
+        padding: 11px 12px;
+        border-bottom: 1px solid #f1eae5;
+        vertical-align: middle;
+        white-space: nowrap;
+      }
+      .dash-analytics-table tr:hover td {
+        background: #fffcfb;
+      }
+
+      /* Quick Action Grid Links */
+      .dash-quick-action {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 14px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 700;
+        border: 1px solid transparent;
+        transition: all 0.18s ease;
+      }
+      .dash-quick-action:hover {
+        transform: translateX(4px);
+      }
+      .dash-quick-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      @media (max-width: 960px) {
+        .dash-stats-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          gap: 12px;
+        }
+      }
+      @media (max-width: 520px) {
+        .dash-stats-grid {
+          grid-template-columns: 1fr !important;
+          gap: 10px;
+        }
+      }
+      @media (max-width: 640px) {
+        .dash-hero {
+          padding: 18px 16px;
+        }
+        .dash-hero-content {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 14px;
+        }
+        .dash-hero-actions {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .dash-hero-btn {
+          width: 100%;
+          justify-content: center;
+        }
+        .dash-photos-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 10px;
+        }
+      }
+      @media (max-width: 420px) {
+        .dash-photos-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+
+    <!-- 1. WELCOME HERO BANNER -->
+    <div class="dash-hero">
+      <div class="dash-hero-content">
         <div>
-          <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.12); padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; color: #ffd6cc; margin-bottom: 10px; border: 1px solid rgba(255, 255, 255, 0.2);">
-            <span>Jai Nishadraj</span>
-            <span>•</span>
-            <span>Command & Control Center</span>
-          </div>
-          <h2 style="font-size: 24px; font-weight: 800; line-height: 1.2; margin-bottom: 6px;">
-            Welcome, <%= admin && admin.name ? admin.name : 'Admin' %> 👋
+          <h2 class="dash-hero-title">
+            Welcome back, <%= admin && admin.name ? admin.name : 'Admin' %> 👋
           </h2>
-          <p style="font-size: 13px; color: rgba(255, 255, 255, 0.85); max-width: 620px; line-height: 1.5;">
-            Welcome to your dashboard. Your database currently has <strong><%= stats.inquiriesTotal %></strong> pledges & inquiries, <strong><%= stats.photosTotal %></strong> gallery photos, and <strong><%= stats.totalNews || 0 %></strong> news stories/videos recorded.
-          </p>
         </div>
 
-        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-          <a href="/admin/kalash-yatra" class="btn-admin" style="background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.3); color: #fff;">
+        <div class="dash-hero-actions">
+          <a href="/admin/kalash-yatra" class="dash-hero-btn dash-hero-btn-glass">
             <span>संकल्प यात्रा हब 🚩</span>
           </a>
-          <a href="/admin/gallery/bulk" class="btn-admin" style="background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.3); color: #fff;">
+          <a href="/admin/gallery/bulk" class="dash-hero-btn dash-hero-btn-glass">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
             <span>Bulk Photo Upload</span>
           </a>
-          <a href="/admin/home/inquiries" class="btn-admin" style="background: #ffffff; color: var(--admin-primary-dark); font-weight: 800;">
+          <a href="/admin/home/inquiries" class="dash-hero-btn dash-hero-btn-primary">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             <span>View Pledges (<%= stats.inquiriesNew %> new)</span>
           </a>
@@ -65,363 +919,539 @@
       </div>
     </div>
 
-    <!-- 6 KEY REAL STATS CARDS -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; margin-bottom: 26px;">
-      <!-- 1. Inquiries -->
-      <div class="admin-card" style="margin-bottom: 0; padding: 20px; border-left: 4px solid var(--admin-primary); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-          <span style="font-size: 11px; font-weight: 700; color: var(--admin-text-muted); text-transform: uppercase;">Pledges & Inquiries</span>
-          <div style="width: 34px; height: 34px; border-radius: 8px; background: #fff0ec; color: var(--admin-primary); display: flex; align-items: center; justify-content: center;">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <!-- 2. 6 BALANCED REAL STATS METRICS GRID (3x2 Desktop, 2x3 Tablet, 1x6 Mobile) -->
+    <div class="dash-stats-grid">
+      <!-- 1. Pledges & Inquiries -->
+      <a href="/admin/home/inquiries" class="dash-stat-card card-accent-red" title="Manage Pledges & Inquiries">
+        <div class="dash-stat-top">
+          <div class="dash-stat-label-wrap">
+            <span class="dash-stat-label">Pledges &amp; Inquiries</span>
+            <span class="dash-stat-arrow">→</span>
+          </div>
+          <div class="dash-stat-icon" style="background: #fff0ec; color: var(--admin-primary);">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           </div>
         </div>
-        <div style="display: flex; align-items: baseline; gap: 8px; margin-top: 10px;">
-          <strong style="font-size: 28px; font-weight: 800; color: var(--admin-text-dark);"><%= stats.inquiriesTotal %></strong>
+        <div class="dash-stat-main">
+          <strong class="dash-stat-number"><%= stats.inquiriesTotal %></strong>
           <% if (stats.inquiriesNew > 0) { %>
-            <span style="font-size: 11px; font-weight: 800; color: var(--admin-primary); background: #fff0ec; padding: 2px 7px; border-radius: 10px;">
+            <span class="dash-stat-pill" style="background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5;">
+              <span style="width: 6px; height: 6px; border-radius: 50%; background: #dc2626; display: inline-block;"></span>
               +<%= stats.inquiriesNew %> new
+            </span>
+          <% } else { %>
+            <span class="dash-stat-pill" style="background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0;">
+              Updated
             </span>
           <% } %>
         </div>
-        <div style="font-size: 11px; color: var(--admin-text-muted); margin-top: 6px;">
-          <%= stats.pledgesCount %> online pledge forms
+        <div class="dash-stat-sub">
+          <strong><%= stats.pledgesCount %></strong> online pledge commitments
         </div>
-      </div>
+      </a>
 
-      <!-- 2. Gallery Photos -->
-      <div class="admin-card" style="margin-bottom: 0; padding: 20px; border-left: 4px solid #8b5cf6; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-          <span style="font-size: 11px; font-weight: 700; color: var(--admin-text-muted); text-transform: uppercase;">Sankalp Photo Gallery</span>
-          <div style="width: 34px; height: 34px; border-radius: 8px; background: #f5f3ff; color: #7c3aed; display: flex; align-items: center; justify-content: center;">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      <!-- 2. Sankalp Photo Gallery -->
+      <a href="/admin/gallery" class="dash-stat-card card-accent-emerald" title="Manage Sankalp Photo Gallery">
+        <div class="dash-stat-top">
+          <div class="dash-stat-label-wrap">
+            <span class="dash-stat-label">Photo Gallery</span>
+            <span class="dash-stat-arrow">→</span>
+          </div>
+          <div class="dash-stat-icon" style="background: #ecfdf5; color: #059669;">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
           </div>
         </div>
-        <div style="display: flex; align-items: baseline; gap: 8px; margin-top: 10px;">
-          <strong style="font-size: 28px; font-weight: 800; color: var(--admin-text-dark);"><%= stats.photosTotal %></strong>
-          <span style="font-size: 11px; font-weight: 800; color: #059669; background: #ecfdf5; padding: 2px 7px; border-radius: 10px;">
-            <%= stats.photosPublished %> published
+        <div class="dash-stat-main">
+          <strong class="dash-stat-number"><%= stats.photosTotal %></strong>
+          <span class="dash-stat-pill" style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0;">
+            ✓ <%= stats.photosPublished %> live
           </span>
         </div>
-        <div style="font-size: 11px; color: var(--admin-text-muted); margin-top: 6px;">
-          Photos received from various districts
+        <div class="dash-stat-sub">
+          Photos collected across campaign
         </div>
-      </div>
+      </a>
 
       <!-- 3. Active Districts -->
-      <div class="admin-card" style="margin-bottom: 0; padding: 20px; border-left: 4px solid #f59e0b; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-          <span style="font-size: 11px; font-weight: 700; color: var(--admin-text-muted); text-transform: uppercase;">Active Districts</span>
-          <div style="width: 34px; height: 34px; border-radius: 8px; background: #fffbeb; color: #d97706; display: flex; align-items: center; justify-content: center;">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <a href="/admin/gallery" class="dash-stat-card card-accent-amber" title="View Districts Coverage">
+        <div class="dash-stat-top">
+          <div class="dash-stat-label-wrap">
+            <span class="dash-stat-label">Covered Districts</span>
+            <span class="dash-stat-arrow">→</span>
+          </div>
+          <div class="dash-stat-icon" style="background: #fffbeb; color: #d97706;">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
           </div>
         </div>
-        <div style="display: flex; align-items: baseline; gap: 8px; margin-top: 10px;">
-          <strong style="font-size: 28px; font-weight: 800; color: var(--admin-text-dark);"><%= stats.districtsCount %></strong>
-          <span style="font-size: 11px; font-weight: 800; color: #d97706; background: #fffbeb; padding: 2px 7px; border-radius: 10px;">
-            Districts joined
+        <div class="dash-stat-main">
+          <strong class="dash-stat-number"><%= stats.districtsCount %></strong>
+          <span class="dash-stat-pill" style="background: #fffbeb; color: #b45309; border: 1px solid #fde68a;">
+            📍 Active
           </span>
         </div>
-        <div style="font-size: 11px; color: var(--admin-text-muted); margin-top: 6px;">
-          Key districts across UP / Bihar
+        <div class="dash-stat-sub">
+          Active representation across states
         </div>
-      </div>
+      </a>
 
-      <!-- 4. Hero Slides -->
-      <div class="admin-card" style="margin-bottom: 0; padding: 20px; border-left: 4px solid #3b82f6; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-          <span style="font-size: 11px; font-weight: 700; color: var(--admin-text-muted); text-transform: uppercase;">Hero Slider Banners</span>
-          <div style="width: 34px; height: 34px; border-radius: 8px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center;">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      <!-- 4. Video News & Stories -->
+      <a href="/admin/video_news" class="dash-stat-card card-accent-sky" title="Manage Video News & Media">
+        <div class="dash-stat-top">
+          <div class="dash-stat-label-wrap">
+            <span class="dash-stat-label">News &amp; Media</span>
+            <span class="dash-stat-arrow">→</span>
+          </div>
+          <div class="dash-stat-icon" style="background: #e0f2fe; color: #0284c7;">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
           </div>
         </div>
-        <div style="display: flex; align-items: baseline; gap: 8px; margin-top: 10px;">
-          <strong style="font-size: 28px; font-weight: 800; color: var(--admin-text-dark);"><%= stats.heroSlidesActive %></strong>
-          <span style="font-size: 11px; font-weight: 800; color: #2563eb; background: #eff6ff; padding: 2px 7px; border-radius: 10px;">
-            Total <%= stats.heroSlidesTotal %>
-          </span>
-        </div>
-        <div style="font-size: 11px; color: var(--admin-text-muted); margin-top: 6px;">
-          Home page main sliders
-        </div>
-      </div>
-
-      <!-- 5. News & Video Content -->
-      <div class="admin-card" style="margin-bottom: 0; padding: 20px; border-left: 4px solid #06b6d4; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-          <span style="font-size: 11px; font-weight: 700; color: var(--admin-text-muted); text-transform: uppercase;">News & Videos</span>
-          <div style="width: 34px; height: 34px; border-radius: 8px; background: #ecfeff; color: #0891b2; display: flex; align-items: center; justify-content: center;">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 4h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/><path d="M7 8h10"/><path d="M7 12h10"/><path d="M7 16h6"/></svg>
-          </div>
-        </div>
-        <div style="display: flex; align-items: baseline; gap: 8px; margin-top: 10px;">
-          <strong style="font-size: 28px; font-weight: 800; color: var(--admin-text-dark);"><%= typeof stats.totalNews !== 'undefined' ? stats.totalNews : 0 %></strong>
-          <span style="font-size: 11px; font-weight: 800; color: #0891b2; background: #ecfeff; padding: 2px 7px; border-radius: 10px;">
+        <div class="dash-stat-main">
+          <strong class="dash-stat-number"><%= typeof stats.totalNews !== 'undefined' ? stats.totalNews : 0 %></strong>
+          <span class="dash-stat-pill" style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd;">
             <%= typeof stats.publishedNews !== 'undefined' ? stats.publishedNews : 0 %> live
           </span>
         </div>
-        <div style="font-size: 11px; color: var(--admin-text-muted); margin-top: 6px;">
-          Video & digital news coverage
+        <div class="dash-stat-sub">
+          Video reports &amp; media stories
+        </div>
+      </a>
+
+      <!-- 5. Hero Slider Banners -->
+      <a href="/admin/home/hero" class="dash-stat-card card-accent-indigo" title="Manage Homepage Hero Sliders">
+        <div class="dash-stat-top">
+          <div class="dash-stat-label-wrap">
+            <span class="dash-stat-label">Hero Sliders</span>
+            <span class="dash-stat-arrow">→</span>
+          </div>
+          <div class="dash-stat-icon" style="background: #eef2ff; color: #4f46e5;">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+        </div>
+        <div class="dash-stat-main">
+          <strong class="dash-stat-number"><%= stats.heroSlidesActive %></strong>
+          <span class="dash-stat-pill" style="background: #eef2ff; color: #4338ca; border: 1px solid #c7d2fe;">
+            Total <%= stats.heroSlidesTotal %>
+          </span>
+        </div>
+        <div class="dash-stat-sub">
+          Home page featured banners
+        </div>
+      </a>
+
+      <!-- 6. Notices & Alerts -->
+      <a href="/admin/home/notices" class="dash-stat-card card-accent-pink" title="Manage Urgent Notices & Helpline">
+        <div class="dash-stat-top">
+          <div class="dash-stat-label-wrap">
+            <span class="dash-stat-label">Notices &amp; Alerts</span>
+            <span class="dash-stat-arrow">→</span>
+          </div>
+          <div class="dash-stat-icon" style="background: #fdf2f8; color: #db2777;">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          </div>
+        </div>
+        <div class="dash-stat-main">
+          <strong class="dash-stat-number"><%= stats.noticesActive %></strong>
+          <span class="dash-stat-pill" style="background: #fdf2f8; color: #be185d; border: 1px solid #fbcfe8;">
+            Active
+          </span>
+        </div>
+        <div class="dash-stat-sub">
+          Live announcements &amp; ticker
+        </div>
+      </a>
+    </div>
+
+    <!-- 3. REAL-TIME ACTIVITY: RECENT PLEDGES & INQUIRIES (FULL-WIDTH CARD) -->
+    <div class="dash-inquiries-card">
+      <div class="dash-inquiries-header">
+        <h3 class="dash-inquiries-title">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--admin-primary)" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span>Recent Pledges &amp; Inquiries</span>
+          <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; background: #ecfdf5; color: #047857; padding: 2px 8px; border-radius: 12px; border: 1px solid #a7f3d0;">
+            <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981; display: inline-block; animation: pulseDot 1.8s infinite;"></span>
+            Real-time
+          </span>
+        </h3>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <a href="/admin/home/inquiries" style="font-size: 12px; font-weight: 700; color: var(--admin-primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+            <span>View All Records (<%= stats.inquiriesTotal %>)</span>
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
         </div>
       </div>
 
-      <!-- 6. Notices -->
-      <div class="admin-card" style="margin-bottom: 0; padding: 20px; border-left: 4px solid #ec4899; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-          <span style="font-size: 11px; font-weight: 700; color: var(--admin-text-muted); text-transform: uppercase;">Notices & Alerts</span>
-          <div style="width: 34px; height: 34px; border-radius: 8px; background: #fdf2f8; color: #db2777; display: flex; align-items: center; justify-content: center;">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-          </div>
-        </div>
-        <div style="display: flex; align-items: baseline; gap: 8px; margin-top: 10px;">
-          <strong style="font-size: 28px; font-weight: 800; color: var(--admin-text-dark);"><%= stats.noticesActive %></strong>
-          <span style="font-size: 11px; font-weight: 800; color: #db2777; background: #fdf2f8; padding: 2px 7px; border-radius: 10px;">
-            Active notices
-          </span>
-        </div>
-        <div style="font-size: 11px; color: var(--admin-text-muted); margin-top: 6px;">
-          Live notices in sidebar
-        </div>
+      <div class="dash-inquiries-wrapper">
+        <table class="dash-table">
+          <thead>
+            <tr>
+              <th style="min-width: 200px;">Participant</th>
+              <th style="min-width: 150px;">Contact Number</th>
+              <th style="min-width: 140px;">District / Region</th>
+              <th style="min-width: 140px;">Form Type</th>
+              <th style="min-width: 130px;">Date &amp; Time</th>
+              <th style="min-width: 110px; text-align: center;">Status</th>
+              <th style="min-width: 100px; text-align: center;">Quick Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (recentInquiries && recentInquiries.length > 0) { %>
+              <% recentInquiries.forEach(function(item) { %>
+                <tr>
+                  <!-- Participant -->
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                      <div class="dash-avatar-circle">
+                        <%= (item.name ? item.name.charAt(0) : 'N').toUpperCase() %>
+                      </div>
+                      <div>
+                        <strong style="font-size: 13.5px; font-weight: 700; color: var(--admin-text-dark); display: block; line-height: 1.3;">
+                          <%= item.name %>
+                        </strong>
+                        <span style="font-size: 11px; color: var(--admin-text-muted); display: block; line-height: 1.3;">
+                          <%= item.category || (item.type === 'pledge' ? 'Online Pledge' : 'Support Inquiry') %>
+                        </span>
+                      </div>
+                    </div>
+                  </td>
+
+                  <!-- Contact -->
+                  <td>
+                    <a href="tel:<%= item.phone %>" class="dash-phone-badge" title="Click to Call <%= item.phone %>">
+                      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                      <span><%= item.phone %></span>
+                    </a>
+                  </td>
+
+                  <!-- District -->
+                  <td>
+                    <% if (item.district) { %>
+                      <span class="dash-district-pill">
+                        📍 <%= item.district %>
+                      </span>
+                    <% } else { %>
+                      <span style="color: var(--admin-text-muted); font-size: 12px; font-weight: 500;">—</span>
+                    <% } %>
+                  </td>
+
+                  <!-- Form Type -->
+                  <td>
+                    <span class="dash-type-pill <%= item.type === 'pledge' ? 'dash-type-pledge' : 'dash-type-support' %>">
+                      <%= item.type === 'pledge' ? 'Sankalp Pledge' : (item.category || 'Support Inquiry') %>
+                    </span>
+                  </td>
+
+                  <!-- Date & Time -->
+                  <td>
+                    <div style="line-height: 1.35;">
+                      <div style="font-size: 12.5px; font-weight: 700; color: var(--admin-text-dark);">
+                        <%= item.createdAt ? new Date(item.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '-' %>
+                      </div>
+                      <div style="font-size: 11px; color: var(--admin-text-muted);">
+                        <%= item.createdAt ? new Date(item.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }) : '' %>
+                      </div>
+                    </div>
+                  </td>
+
+                  <!-- Status -->
+                  <td style="text-align: center;">
+                    <span class="dash-status-pill <%= item.status === 'new' ? 'status-new' : (item.status === 'contacted' ? 'status-contacted' : 'status-resolved') %>">
+                      <span class="status-dot"></span>
+                      <%= item.status === 'new' ? 'New' : (item.status === 'contacted' ? 'Contacted' : 'Resolved') %>
+                    </span>
+                  </td>
+
+                  <!-- Quick Action -->
+                  <td style="text-align: center;">
+                    <a href="/admin/home/inquiries" class="dash-action-btn" title="View details in inquiries">
+                      <span>Details</span>
+                      <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                    </a>
+                  </td>
+                </tr>
+              <% }); %>
+            <% } else { %>
+              <tr>
+                <td colspan="7" style="text-align: center; padding: 40px; color: var(--admin-text-muted);">
+                  <div style="font-size: 28px; margin-bottom: 6px;">📥</div>
+                  <strong>No pledges or inquiries received yet.</strong>
+                  <p style="font-size: 12px; margin-top: 4px;">Pledges submitted through the website form will appear here in real-time.</p>
+                </td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <!-- MAIN TWO COLUMN DATA SECTION -->
-    <div style="display: grid; grid-template-columns: minmax(0, 1.8fr) minmax(320px, 1fr); gap: 24px;">
+    <!-- 4. MAIN TWO-COLUMN CONTENT GRID -->
+    <div class="dash-main-grid">
       <!-- LEFT COLUMN -->
       <div>
-        <!-- 1. Recent Real Inquiries & Pledges -->
-        <div class="admin-card">
+        <!-- A. Recent Sankalp Gallery Photos -->
+        <div class="admin-card" style="margin-bottom: 24px;">
           <div class="admin-card-header">
-            <h3>
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-              Recent Pledges & Messages
+            <h3 style="display: flex; align-items: center; gap: 8px;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--admin-primary)" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              Sankalp Photo Gallery — Recent Uploads
             </h3>
-            <a href="/admin/home/inquiries" style="font-size: 12px; font-weight: 700; color: var(--admin-primary);">
-              View All (<%= stats.inquiriesTotal %>) ↗
-            </a>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <a href="/admin/gallery/bulk" style="font-size: 12px; font-weight: 700; color: #c2410c; text-decoration: none;">
+                + Bulk Upload
+              </a>
+              <a href="/admin/gallery" style="font-size: 12px; font-weight: 700; color: var(--admin-primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                <span>Manage All</span>
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+              </a>
+            </div>
           </div>
 
-          <div class="admin-table-wrapper">
-            <table class="admin-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Phone</th>
-                  <th>District</th>
-                  <th>Type</th>
-                  <th>Date</th>
-                  <th style="width: 100px;">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% if (recentInquiries && recentInquiries.length > 0) { %>
-                  <% recentInquiries.forEach(function(item) { %>
-                    <tr>
-                      <td>
-                        <strong style="font-size: 13px; color: var(--admin-text-dark);"><%= item.name %></strong>
-                      </td>
-                      <td>
-                        <a href="tel:<%= item.phone %>" style="color: var(--admin-primary); font-weight: 600; font-size: 12px;">
-                          <%= item.phone %>
-                        </a>
-                      </td>
-                      <td>
-                        <span style="font-size: 12px; color: var(--admin-text-muted);">
-                          <%= item.district ? '📍 ' + item.district : '—' %>
-                        </span>
-                      </td>
-                      <td>
-                        <span style="font-size: 11px; padding: 2px 7px; border-radius: 6px; font-weight: 700; background: <%= item.type === 'pledge' ? '#fff0ec' : '#eff6ff' %>; color: <%= item.type === 'pledge' ? 'var(--admin-primary)' : '#2563eb' %>;">
-                          <%= item.type === 'pledge' ? 'Pledge' : (item.category || 'Initiative') %>
-                        </span>
-                      </td>
-                      <td>
-                        <span style="font-size: 11px; color: var(--admin-text-muted);">
-                          <%= item.createdAt ? new Date(item.createdAt).toLocaleDateString('en-US') : '-' %>
-                        </span>
-                      </td>
-                      <td>
-                        <% if (item.status === 'new') { %>
-                          <span class="badge-status" style="background: #fee2e2; color: #b91c1c;">New</span>
-                        <% } else if (item.status === 'contacted') { %>
-                          <span class="badge-status" style="background: #fef3c7; color: #b45309;">Contacted</span>
-                        <% } else { %>
-                          <span class="badge-status badge-active">Resolved</span>
-                        <% } %>
-                      </td>
-                    </tr>
-                  <% }); %>
-                <% } else { %>
-                  <tr>
-                    <td colspan="6" style="text-align: center; padding: 30px; color: var(--admin-text-muted);">
-                      No pledges or inquiries received yet.
-                    </td>
-                  </tr>
-                <% } %>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- 2. Recent Sankalp Gallery Photos -->
-        <div class="admin-card">
-          <div class="admin-card-header">
-            <h3>
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              Sankalp Photo Gallery — Recent Photos
-            </h3>
-            <a href="/admin/gallery" style="font-size: 12px; font-weight: 700; color: var(--admin-primary);">
-              Manage Gallery ↗
-            </a>
-          </div>
-
-          <div style="padding: 20px;">
-            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 14px;">
+          <div style="padding: 18px;">
+            <div class="dash-photos-grid">
               <% if (recentPhotos && recentPhotos.length > 0) { %>
                 <% recentPhotos.forEach(function(photo) { %>
-                  <div style="background: #faf7f5; border: 1px solid var(--admin-border); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column;">
-                    <div style="position: relative; width: 100%; height: 110px; background: #eee;">
+                  <div class="dash-photo-card">
+                    <div class="dash-photo-thumb">
                       <img
                         src="<%= photo.imageUrl %>"
                         alt="<%= photo.name %>"
-                        style="width: 100%; height: 100%; object-fit: cover;"
-                        onerror="this.src='https://placehold.co/180x110/eadfd7/333?text=Photo'"
+                        onerror="this.src='https://placehold.co/240x160/eadfd7/333?text=Photo'"
                       />
-                      <span style="position: absolute; top: 6px; left: 6px; font-size: 10px; font-weight: 800; background: rgba(255,255,255,0.9); color: var(--admin-primary); padding: 2px 6px; border-radius: 4px;">
+                      <span class="dash-photo-badge" title="<%= photo.district %>">
                         📍 <%= photo.district %>
                       </span>
                     </div>
-                    <div style="padding: 10px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div style="padding: 12px; display: flex; flex-direction: column; justify-content: space-between; flex: 1;">
                       <div>
-                        <strong style="display: block; font-size: 12px; color: var(--admin-text-dark); margin-bottom: 2px;"><%= photo.name %></strong>
-                        <span style="display: block; font-size: 10px; color: var(--admin-text-muted);">
-                          <%= photo.formattedDate || (photo.date ? new Date(photo.date).toLocaleDateString('en-US') : '-') %>
+                        <strong style="display: block; font-size: 12px; color: var(--admin-text-dark); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<%= photo.name %>">
+                          <%= photo.name %>
+                        </strong>
+                        <span style="display: block; font-size: 11px; color: var(--admin-text-muted);">
+                          <%= photo.formattedDate || (photo.date ? new Date(photo.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '-') %>
                         </span>
                       </div>
-                      <div style="margin-top: 8px; display: flex; align-items: center; justify-content: space-between;">
-                        <span style="font-size: 10px; font-weight: 700; color: <%= photo.isPublished ? 'var(--admin-success)' : '#8c7870' %>;">
+                      <div style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #f1eae5; padding-top: 8px;">
+                        <span style="font-size: 10px; font-weight: 800; color: <%= photo.isPublished ? '#047857' : '#94a3b8' %>;">
                           <%= photo.isPublished ? '✓ Live' : '✕ Draft' %>
                         </span>
-                        <a href="/admin/gallery/edit/<%= photo._id %>" style="font-size: 11px; font-weight: 700; color: var(--admin-primary);">
-                          Edit
+                        <a href="/admin/gallery/edit/<%= photo._id %>" style="font-size: 11px; font-weight: 700; color: var(--admin-primary); text-decoration: none;">
+                          Edit ↗
                         </a>
                       </div>
                     </div>
                   </div>
                 <% }); %>
               <% } else { %>
-                <div style="grid-column: 1 / -1; text-align: center; padding: 24px; color: var(--admin-text-muted);">
-                  No photos available yet.
+                <div style="grid-column: 1 / -1; text-align: center; padding: 30px; color: var(--admin-text-muted);">
+                  No photos available yet. Click '+ Add Single Sankalp Photo' or 'Bulk Upload' to add gallery images.
                 </div>
               <% } %>
             </div>
           </div>
         </div>
 
-        <!-- 3. Top Active Districts Breakdown -->
+        <!-- C. Top Participating Districts (Analytics) -->
         <div class="admin-card">
           <div class="admin-card-header">
-            <h3>
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              Top Participating Districts (Gallery)
+            <h3 style="display: flex; align-items: center; gap: 8px; margin: 0; font-size: 15px; font-weight: 800; color: var(--admin-text-dark);">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--admin-primary)" stroke-width="2.2">
+                <path d="M18 20V10"/>
+                <path d="M12 20V4"/>
+                <path d="M6 20v-6"/>
+              </svg>
+              Top Participating Districts (Analytics)
             </h3>
-            <span style="font-size: 11px; color: var(--admin-text-muted);">Real database statistics</span>
+            <a href="/admin/gallery" style="font-size: 12px; font-weight: 700; color: var(--admin-primary); text-decoration: none;">
+              Filter Gallery ↗
+            </a>
           </div>
 
-          <div style="padding: 20px;">
+          <div style="padding: 18px;">
             <% if (topDistricts && topDistricts.length > 0) { %>
-              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px;">
-                <% topDistricts.forEach(function(d) { %>
-                  <div style="background: #fbf7f4; padding: 12px 16px; border-radius: 10px; border: 1px solid var(--admin-border); display: flex; align-items: center; justify-content: space-between;">
-                    <div>
-                      <strong style="display: block; font-size: 14px; color: var(--admin-text-dark);">📍 <%= d._id %></strong>
-                      <span style="font-size: 11px; color: var(--admin-text-muted);">Pledges from district</span>
+              <% 
+                const totalPhotosCount = topDistricts.reduce((acc, curr) => acc + (curr.count || 0), 0);
+                const maxDistrictCount = Math.max(...topDistricts.map(d => d.count || 1), 1);
+              %>
+
+              <div class="dash-analytics-list">
+                <% topDistricts.forEach(function(d, idx) { %>
+                  <% 
+                    const relativePct = Math.min(100, Math.round((d.count / maxDistrictCount) * 100));
+                    const sharePct = ((d.count / (totalPhotosCount || 1)) * 100).toFixed(1);
+                    const rankClass = idx === 0 ? 'rank-top1' : (idx === 1 ? 'rank-top2' : (idx === 2 ? 'rank-top3' : 'rank-other'));
+                    const barClass = idx === 0 ? 'bar-fill-top1' : (idx === 1 ? 'bar-fill-top2' : (idx === 2 ? 'bar-fill-top3' : 'bar-fill-other'));
+                    const tagClass = idx === 0 ? 'tag-leader' : (idx < 3 ? 'tag-momentum' : 'tag-active');
+                    const tagLabel = idx === 0 ? '🔥 Top Performer' : (idx < 3 ? '⚡ High Momentum' : '✓ Active Region');
+                  %>
+                  <div class="dash-analytics-row">
+                    <!-- Rank Chip -->
+                    <div class="dash-analytics-rank <%= rankClass %>" title="Rank #<%= idx + 1 %>">
+                      #<%= (idx + 1 < 10 ? '0' : '') + (idx + 1) %>
                     </div>
-                    <span style="font-size: 16px; font-weight: 800; color: var(--admin-primary); background: #fff0ec; padding: 4px 10px; border-radius: 8px;">
-                      <%= d.count %>
-                    </span>
+
+                    <!-- District Meta -->
+                    <div class="dash-analytics-meta">
+                      <div class="dash-analytics-name" title="<%= d._id %>">
+                        <span>📍</span>
+                        <strong><%= d._id %></strong>
+                      </div>
+                      <span class="dash-analytics-tag <%= tagClass %>">
+                        <%= tagLabel %>
+                      </span>
+                    </div>
+
+                    <!-- Comparative Progress Bar -->
+                    <div class="dash-analytics-bar-track">
+                      <div class="dash-analytics-bar-fill <%= barClass %>" style="width: <%= relativePct %>%;"></div>
+                    </div>
+
+                    <!-- Metric Numbers & Share -->
+                    <div class="dash-analytics-nums">
+                      <span class="dash-analytics-badge-count" title="Recorded photo count">
+                        <strong><%= d.count %></strong> photos
+                      </span>
+                      <span class="dash-analytics-badge-pct" title="Share of total campaign volume">
+                        <%= sharePct %>%
+                      </span>
+                    </div>
                   </div>
                 <% }); %>
               </div>
             <% } else { %>
-              <p style="text-align: center; color: var(--admin-text-muted); font-size: 13px;">District statistics are loading...</p>
+              <p style="text-align: center; color: var(--admin-text-muted); font-size: 13px; padding: 20px;">
+                District analytics is updating based on uploaded gallery photos...
+              </p>
             <% } %>
           </div>
         </div>
       </div>
 
-      <!-- RIGHT COLUMN -->
+      <!-- RIGHT COLUMN (SIDEBAR) -->
       <div>
-        <!-- 1. Quick Actions -->
-        <div class="admin-card">
+        <!-- 1. Quick Actions Panel -->
+        <div class="admin-card" style="margin-bottom: 24px;">
           <div class="admin-card-header">
-            <h3>
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-              Quick Actions
+            <h3 style="display: flex; align-items: center; gap: 8px;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--admin-primary)" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              Quick Management
             </h3>
           </div>
 
-          <div style="padding: 16px; display: flex; flex-direction: column; gap: 10px;">
-            <a href="/admin/kalash-yatra" class="btn-admin" style="justify-content: flex-start; background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa;">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              <span>संकल्प यात्रा हब 🚩</span>
+          <div style="padding: 14px; display: flex; flex-direction: column; gap: 8px;">
+            <!-- Kalash Yatra -->
+            <a href="/admin/kalash-yatra" class="dash-quick-action" style="background: #fff7ed; color: #c2410c; border-color: #fed7aa;">
+              <div class="dash-quick-icon" style="background: #ffedd5; color: #ea580c;">
+                🚩
+              </div>
+              <div style="flex: 1;">
+                <div style="font-size: 13px; font-weight: 800;">संकल्प यात्रा हब (Kalash Yatra)</div>
+                <div style="font-size: 11px; color: #9a3412; font-weight: 500;">Manage routes, videos &amp; highlights</div>
+              </div>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
             </a>
 
-            <a href="/admin/gallery/bulk" class="btn-admin" style="justify-content: flex-start; background: #fdf6ec; color: #b45309; border: 1px solid #fde68a;">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-              <span>+ Bulk Photo Upload</span>
+            <!-- Bulk Photo Upload -->
+            <a href="/admin/gallery/bulk" class="dash-quick-action" style="background: #fff0ec; color: var(--admin-primary-dark); border-color: #f7c9be;">
+              <div class="dash-quick-icon" style="background: #ffe3dc; color: var(--admin-primary);">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              </div>
+              <div style="flex: 1;">
+                <div style="font-size: 13px; font-weight: 800;">Bulk Photo Upload</div>
+                <div style="font-size: 11px; color: #991b1b; font-weight: 500;">Batch upload with State &amp; District</div>
+              </div>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
             </a>
 
-            <a href="/admin/gallery/new" class="btn-admin" style="justify-content: flex-start; background: #fff0ec; color: var(--admin-primary); border: 1px solid #f7c9be;">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              <span>+ Add Single Sankalp Photo</span>
+            <!-- Add Single Photo -->
+            <a href="/admin/gallery/new" class="dash-quick-action" style="background: #fbf7f4; color: var(--admin-text-dark); border-color: var(--admin-border);">
+              <div class="dash-quick-icon" style="background: #f1eae5; color: var(--admin-text-dark);">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </div>
+              <div style="flex: 1;">
+                <div style="font-size: 13px; font-weight: 800;">Add Single Photo</div>
+                <div style="font-size: 11px; color: var(--admin-text-muted); font-weight: 500;">With State &amp; District selectors</div>
+              </div>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
             </a>
 
-            <a href="/admin/home/hero" class="btn-admin btn-admin-outline" style="justify-content: flex-start;">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              <span>Manage Hero Sliders</span>
+            <!-- Video News -->
+            <a href="/admin/video_news" class="dash-quick-action" style="background: #f0fdf4; color: #166534; border-color: #bbf7d0;">
+              <div class="dash-quick-icon" style="background: #dcfce7; color: #15803d;">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+              </div>
+              <div style="flex: 1;">
+                <div style="font-size: 13px; font-weight: 800;">News &amp; Video Media</div>
+                <div style="font-size: 11px; color: #14532d; font-weight: 500;">Publish video updates &amp; coverage</div>
+              </div>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
             </a>
 
-            <a href="/admin/home/initiatives" class="btn-admin btn-admin-outline" style="justify-content: flex-start;">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-              <span>Manage Work & Initiatives</span>
+            <!-- Hero Sliders -->
+            <a href="/admin/home/hero" class="dash-quick-action" style="background: #f8fafc; color: #1e293b; border-color: #e2e8f0;">
+              <div class="dash-quick-icon" style="background: #e2e8f0; color: #334155;">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              </div>
+              <div style="flex: 1;">
+                <div style="font-size: 13px; font-weight: 800;">Hero Slider Banners</div>
+                <div style="font-size: 11px; color: var(--admin-text-muted); font-weight: 500;">Order, titles, badges &amp; images</div>
+              </div>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
             </a>
 
-            <a href="/admin/home/notices" class="btn-admin btn-admin-outline" style="justify-content: flex-start;">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-              <span>Update Notices & Helpline</span>
-            </a>
-
-            <a href="/gallery" target="_blank" class="btn-admin btn-admin-outline" style="justify-content: flex-start; border-color: #8b5cf6; color: #6d28d9;">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              <span>View Public Gallery ↗</span>
+            <!-- Notices -->
+            <a href="/admin/home/notices" class="dash-quick-action" style="background: #fdf2f8; color: #9d174d; border-color: #fbcfe8;">
+              <div class="dash-quick-icon" style="background: #fce7f3; color: #db2777;">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+              </div>
+              <div style="flex: 1;">
+                <div style="font-size: 13px; font-weight: 800;">Notices &amp; Helpline Info</div>
+                <div style="font-size: 11px; color: #831843; font-weight: 500;">Urgent alerts and contact numbers</div>
+              </div>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
             </a>
           </div>
         </div>
 
         <!-- 2. Live Contact & Helpline Info -->
-        <div class="admin-card">
+        <div class="admin-card" style="margin-bottom: 24px;">
           <div class="admin-card-header">
-            <h3>
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-              Live Contact & Helpline
+            <h3 style="display: flex; align-items: center; gap: 8px;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--admin-primary)" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              Live Contact &amp; Helpline
             </h3>
-            <a href="/admin/home/notices" style="font-size: 11px; font-weight: 700; color: var(--admin-primary);">Edit</a>
+            <a href="/admin/home/notices" style="font-size: 11px; font-weight: 700; color: var(--admin-primary); text-decoration: none;">
+              Edit ↗
+            </a>
           </div>
 
-          <div style="padding: 18px;">
-            <div style="margin-bottom: 12px;">
-              <span style="display: block; font-size: 11px; color: var(--admin-text-muted); font-weight: 600;">Helpline Number</span>
-              <strong style="font-size: 14px; color: var(--admin-text-dark);"><%= quickInfo.helplineTel || quickInfo.helplineText || '+91 99999 99999' %></strong>
+          <div style="padding: 16px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; align-items: flex-start; gap: 10px;">
+              <div style="width: 30px; height: 30px; border-radius: 8px; background: #fff0ec; color: var(--admin-primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 14px;">
+                📞
+              </div>
+              <div>
+                <span style="display: block; font-size: 11px; color: var(--admin-text-muted); font-weight: 600;">Primary Helpline</span>
+                <strong style="font-size: 13px; color: var(--admin-text-dark);"><%= quickInfo.helplineTel || quickInfo.helplineText || '+91 99999 99999' %></strong>
+              </div>
             </div>
 
-            <div style="margin-bottom: 12px;">
-              <span style="display: block; font-size: 11px; color: var(--admin-text-muted); font-weight: 600;">Email Address</span>
-              <strong style="font-size: 13px; color: var(--admin-text-dark);"><%= quickInfo.helplineEmail || 'info@nishadyatra.org' %></strong>
+            <div style="display: flex; align-items: flex-start; gap: 10px;">
+              <div style="width: 30px; height: 30px; border-radius: 8px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 14px;">
+                ✉️
+              </div>
+              <div>
+                <span style="display: block; font-size: 11px; color: var(--admin-text-muted); font-weight: 600;">Email Support</span>
+                <strong style="font-size: 12px; color: var(--admin-text-dark); word-break: break-all;"><%= quickInfo.helplineEmail || 'info@nishadyatra.org' %></strong>
+              </div>
             </div>
 
-            <div>
-              <span style="display: block; font-size: 11px; color: var(--admin-text-muted); font-weight: 600;">Headquarters Address</span>
-              <strong style="font-size: 12px; color: var(--admin-text-dark); line-height: 1.4;"><%= quickInfo.helplineAddress || 'Uttar Pradesh, India' %></strong>
+            <div style="display: flex; align-items: flex-start; gap: 10px;">
+              <div style="width: 30px; height: 30px; border-radius: 8px; background: #fef3c7; color: #b45309; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 14px;">
+                📍
+              </div>
+              <div>
+                <span style="display: block; font-size: 11px; color: var(--admin-text-muted); font-weight: 600;">HQ Address</span>
+                <strong style="font-size: 12px; color: var(--admin-text-dark); line-height: 1.4;"><%= quickInfo.helplineAddress || 'Uttar Pradesh, India' %></strong>
+              </div>
             </div>
           </div>
         </div>
@@ -429,39 +1459,39 @@
         <!-- 3. Server & System Health Status -->
         <div class="admin-card">
           <div class="admin-card-header">
-            <h3>
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              System Health & Status
+            <h3 style="display: flex; align-items: center; gap: 8px;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--admin-primary)" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              System Health
             </h3>
           </div>
 
-          <div style="padding: 18px;">
+          <div style="padding: 16px;">
             <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--admin-border-subtle); font-size: 12px;">
-              <span style="color: var(--admin-text-muted);">Database Status:</span>
-              <span style="font-weight: 700; color: var(--admin-success); display: inline-flex; align-items: center; gap: 4px;">
-                <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--admin-success); display: inline-block;"></span>
+              <span style="color: var(--admin-text-muted); font-weight: 600;">Database:</span>
+              <span style="font-weight: 800; color: #047857; display: inline-flex; align-items: center; gap: 6px; background: #ecfdf5; padding: 2px 8px; border-radius: 12px; border: 1px solid #a7f3d0;">
+                <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981; display: inline-block;"></span>
                 <%= systemInfo.dbStatus %>
               </span>
             </div>
 
             <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--admin-border-subtle); font-size: 12px;">
-              <span style="color: var(--admin-text-muted);">Server Uptime:</span>
+              <span style="color: var(--admin-text-muted); font-weight: 600;">Uptime:</span>
               <strong style="color: var(--admin-text-dark);"><%= systemInfo.uptime %></strong>
             </div>
 
             <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--admin-border-subtle); font-size: 12px;">
-              <span style="color: var(--admin-text-muted);">Node.js Version:</span>
+              <span style="color: var(--admin-text-muted); font-weight: 600;">Node.js:</span>
               <strong style="color: var(--admin-text-dark);"><%= systemInfo.nodeVersion %></strong>
             </div>
 
             <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--admin-border-subtle); font-size: 12px;">
-              <span style="color: var(--admin-text-muted);">Server Port:</span>
-              <strong style="color: var(--admin-text-dark);">Port <%= systemInfo.serverPort %></strong>
+              <span style="color: var(--admin-text-muted); font-weight: 600;">Port:</span>
+              <strong style="color: var(--admin-text-dark);"><%= systemInfo.serverPort %></strong>
             </div>
 
             <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 0; font-size: 12px;">
-              <span style="color: var(--admin-text-muted);">Active Admin Users:</span>
-              <strong style="color: var(--admin-primary);"><%= stats.adminsCount %></strong>
+              <span style="color: var(--admin-text-muted); font-weight: 600;">Admins:</span>
+              <strong style="color: var(--admin-primary); font-weight: 800;"><%= stats.adminsCount %> Superadmin</strong>
             </div>
           </div>
         </div>

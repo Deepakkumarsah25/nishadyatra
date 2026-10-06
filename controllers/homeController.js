@@ -163,6 +163,7 @@ exports.getHomePage = async (req, res) => {
 
     res.render("index", {
       title: "Nishad Sankalp Campaign",
+      metaDescription: "Learn about the Nishad Aarakshan Sankalp campaign, its initiatives, community programs, news, videos, and the Sankalp Yatra for unity and empowerment.",
       heroSlides: finalHeroSlides,
       initiatives: finalInitiatives,
       initiativesModalMap,
@@ -182,6 +183,7 @@ exports.getHomePage = async (req, res) => {
     // Safe render with defaults so the user's site never crashes
     res.render("index", {
       title: "Nishad Sankalp Campaign",
+      metaDescription: "Learn about the Nishad Aarakshan Sankalp campaign, its initiatives, community programs, news, videos, and the Sankalp Yatra for unity and empowerment.",
       heroSlides: defaultHeroSlides,
       initiatives: defaultInitiatives,
       initiativesModalMap: {},

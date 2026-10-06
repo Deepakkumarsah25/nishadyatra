@@ -90,7 +90,15 @@ test("gallery API escapes search, caps its length, and bounds page results", asy
     response,
   );
 
-  const searchRegex = capturedQuery.$or[0].name;
+  assert.equal(capturedQuery.isPublished, true);
+  assert.equal(capturedQuery.$and.length, 1);
+  const searchFields = capturedQuery.$and[0].$or;
+  assert.deepEqual(
+    searchFields.map((field) => Object.keys(field)[0]),
+    ["name", "district", "caption", "dateString"],
+  );
+  const searchRegex = searchFields.find((field) => field.name)?.name;
+  assert.ok(searchRegex instanceof RegExp);
   assert.equal(searchRegex.source.length, 102);
   assert.equal(searchRegex.source.includes("a\\.\\*"), true);
   assert.equal(capturedSkip, 100);

@@ -91,3 +91,28 @@ body { font-family: Inter, 'Segoe UI', Arial, sans-serif; }
   .hero-poster-manager { grid-template-columns:1fr; gap:18px; padding:17px; }
   .hero-poster-overlay { width:64%; }
 }
+
+/* Universal News Stats & Layout Responsiveness */
+.news-admin-list .stats {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)) !important;
+  gap: 14px;
+}
+@media (max-width: 768px) {
+  .news-admin-list .stats {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px;
+  }
+  .news-admin-list .story strong {
+    max-width: 220px;
+  }
+}
+@media (max-width: 440px) {
+  .news-admin-list .stats {
+    grid-template-columns: 1fr !important;
+  }
+  .news-admin-list .story strong {
+    max-width: 150px;
+  }
+}
+

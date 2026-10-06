@@ -395,6 +395,8 @@ exports.frontend = async (req, res, next) => {
 
     res.render("news/video_news", {
       title: "न्यूज़ / प्रेस",
+      metaDescription: "निषाद आरक्षण संकल्प अभियान से जुड़ी ताज़ा खबरें, प्रेस कवरेज और मीडिया रिपोर्ट पढ़ें।",
+      canonicalUrl: "https://nishadaarakshansankalp.com/news",
       news,
       remaining: news,
       page: pagination.page,

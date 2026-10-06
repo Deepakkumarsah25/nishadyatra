@@ -3,8 +3,15 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title><%= title %> | निषाद आरक्षण संकल्प अभियान</title>
+    <title><%= item.title %> | निषाद आरक्षण संकल्प अभियान</title>
+    <link rel="icon" type="image/png" href="/images/logo.png">
     <meta name="description" content="<%= item.summary || item.title %>">
+    <link rel="canonical" href="https://nishadaarakshansankalp.com/news/<%= item._id %>">
+    <meta property="og:title" content="<%= item.title %>">
+    <meta property="og:description" content="<%= item.summary || item.title %>">
+    <meta property="og:url" content="https://nishadaarakshansankalp.com/news/<%= item._id %>">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="<%= item.thumbnailPath ? (/^https?:\/\//i.test(item.thumbnailPath) ? item.thumbnailPath : 'https://nishadaarakshansankalp.com' + item.thumbnailPath) : 'https://nishadaarakshansankalp.com/images/logo.png' %>">
     <link rel="stylesheet" href="/css/news/video_news.css">
     <link
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap"

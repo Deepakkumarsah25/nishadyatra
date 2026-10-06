@@ -3,6 +3,12 @@ const fs = require("fs");
 const path = require("path");
 const { getPagination } = require("../../utils/pagination");
 const { uploadBuffer, removeAsset } = require("../../config/cloudinary");
+const {
+  INDIA_STATES_DISTRICTS,
+  getStatesList,
+  getDistrictsForState,
+  findStateForDistrict,
+} = require("../../utils/indiaStatesDistricts");
 
 // Format date helper for input type="date"
 const formatDateForInput = (date) => {
@@ -16,13 +22,16 @@ const formatDateForInput = (date) => {
   }
 };
 
-// 1. List all gallery photos with search, district & status filters
+// 1. List all gallery photos with search, state, district & status filters
 exports.getGalleryList = async (req, res) => {
   try {
-    const { district, status, search, msg, err } = req.query;
+    const { state, district, status, search, msg, err } = req.query;
 
     const query = {};
 
+    if (typeof state === "string" && state.trim() && state !== "all") {
+      query.state = state.trim();
+    }
 
     if (typeof district === "string" && district.trim() && district !== "all") {
       query.district = district.trim();
@@ -37,7 +46,7 @@ exports.getGalleryList = async (req, res) => {
     const safeSearch = typeof search === "string" ? search.trim().slice(0, 100) : "";
     if (safeSearch) {
       const regex = new RegExp(safeSearch.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
-      query.$or = [{ name: regex }, { district: regex }, { caption: regex }];
+      query.$or = [{ name: regex }, { district: regex }, { state: regex }, { caption: regex }];
     }
 
     const [filteredCount, totalCount, publishedCount, unpublishedCount, districtsList] =
@@ -62,6 +71,7 @@ exports.getGalleryList = async (req, res) => {
       paginationPath: "/admin/gallery",
       paginationQuery: {
         search: safeSearch,
+        state: typeof state === "string" ? state : "all",
         district: typeof district === "string" ? district : "all",
         status: status || "all",
       },
@@ -72,7 +82,10 @@ exports.getGalleryList = async (req, res) => {
         districtsCount: districtsList.length,
       },
       districtsList,
+      statesList: getStatesList(),
+      statesWithDistricts: INDIA_STATES_DISTRICTS,
       filters: {
+        state: state || "all",
         district: district || "all",
         status: status || "all",
         search: safeSearch,
@@ -96,6 +109,7 @@ exports.getCreatePhoto = async (req, res) => {
       admin: req.session.admin,
       photo: {
         name: "",
+        state: "Uttar Pradesh",
         district: "",
         date: new Date(),
         caption: "",
@@ -105,6 +119,8 @@ exports.getCreatePhoto = async (req, res) => {
       },
       formatDateForInput,
       districtsList,
+      statesList: getStatesList(),
+      statesWithDistricts: INDIA_STATES_DISTRICTS,
       currentPath: "/admin/gallery",
       isEdit: false,
       error: null,
@@ -119,8 +135,26 @@ exports.getCreatePhoto = async (req, res) => {
 exports.postCreatePhoto = async (req, res) => {
   let uploadedPublicId = "";
   try {
-    const { name, district, date, caption, imageUrl, isPublished, order } =
-      req.body;
+    const {
+      name,
+      state,
+      district,
+      customDistrict,
+      date,
+      caption,
+      imageUrl,
+      isPublished,
+      order,
+    } = req.body;
+
+    let finalDistrict = (district === "__other__" || !district) && customDistrict
+      ? customDistrict.trim()
+      : (district ? district.trim() : "");
+
+    let finalState = state && state.trim() ? state.trim() : "";
+    if (!finalState && finalDistrict) {
+      finalState = findStateForDistrict(finalDistrict) || "Uttar Pradesh";
+    }
 
     let finalImageUrl = "";
     let imageFilename = "";
@@ -138,24 +172,28 @@ exports.postCreatePhoto = async (req, res) => {
       return res.render("admin/gallery/form", {
         title: "Add New Sankalp Photo",
         admin: req.session.admin,
-        photo: req.body,
+        photo: { ...req.body, state: finalState, district: finalDistrict },
         formatDateForInput,
         districtsList,
+        statesList: getStatesList(),
+        statesWithDistricts: INDIA_STATES_DISTRICTS,
         currentPath: "/admin/gallery",
         isEdit: false,
         error: "Please choose a photo file or enter an image URL.",
       });
     }
 
-    if (!district || !district.trim()) {
+    if (!finalDistrict) {
       if (uploadedPublicId) await removeAsset(uploadedPublicId).catch(() => {});
       const districtsList = await SankalpPhoto.distinct("district");
       return res.render("admin/gallery/form", {
         title: "Add New Sankalp Photo",
         admin: req.session.admin,
-        photo: req.body,
+        photo: { ...req.body, state: finalState, district: finalDistrict },
         formatDateForInput,
         districtsList,
+        statesList: getStatesList(),
+        statesWithDistricts: INDIA_STATES_DISTRICTS,
         currentPath: "/admin/gallery",
         isEdit: false,
         error: "Please select or enter a district.",
@@ -167,7 +205,8 @@ exports.postCreatePhoto = async (req, res) => {
 
     await SankalpPhoto.create({
       name: name && name.trim() ? name.trim() : "Sanatani Nishad",
-      district: district.trim(),
+      state: finalState || "Uttar Pradesh",
+      district: finalDistrict,
       date: isNaN(photoDate.getTime()) ? new Date() : photoDate,
       caption: caption ? caption.trim() : "",
       imageUrl: finalImageUrl,
@@ -191,6 +230,8 @@ exports.postCreatePhoto = async (req, res) => {
       photo: req.body,
       formatDateForInput,
       districtsList,
+      statesList: getStatesList(),
+      statesWithDistricts: INDIA_STATES_DISTRICTS,
       currentPath: "/admin/gallery",
       isEdit: false,
       error: "Error saving photo: " + error.message,
@@ -206,6 +247,8 @@ exports.getBulkUpload = async (req, res) => {
       title: "Bulk Image Upload",
       admin: req.session.admin,
       districtsList,
+      statesList: getStatesList(),
+      statesWithDistricts: INDIA_STATES_DISTRICTS,
       formatDateForInput,
       currentPath: "/admin/gallery",
       error: null,
@@ -228,6 +271,8 @@ exports.postBulkUpload = async (req, res) => {
         title: "Bulk Image Upload",
         admin: req.session.admin,
         districtsList,
+        statesList: getStatesList(),
+        statesWithDistricts: INDIA_STATES_DISTRICTS,
         formatDateForInput,
         currentPath: "/admin/gallery",
         error: "Please select at least one or more images!",
@@ -235,15 +280,33 @@ exports.postBulkUpload = async (req, res) => {
       });
     }
 
-    const { defaultDistrict, defaultDate, defaultName, defaultCaption, isPublished } =
-      req.body;
+    const {
+      defaultState,
+      defaultDistrict,
+      customBulkDistrict,
+      defaultDate,
+      defaultName,
+      defaultCaption,
+      isPublished,
+    } = req.body;
 
-    if (!defaultDistrict || !defaultDistrict.trim()) {
+    let finalDistrict = (defaultDistrict === "__other__" || !defaultDistrict) && customBulkDistrict
+      ? customBulkDistrict.trim()
+      : (defaultDistrict ? defaultDistrict.trim() : "");
+
+    let finalState = defaultState && defaultState.trim() ? defaultState.trim() : "";
+    if (!finalState && finalDistrict) {
+      finalState = findStateForDistrict(finalDistrict) || "Uttar Pradesh";
+    }
+
+    if (!finalDistrict) {
       const districtsList = await SankalpPhoto.distinct("district");
       return res.render("admin/gallery/bulk", {
         title: "Bulk Image Upload",
         admin: req.session.admin,
         districtsList,
+        statesList: getStatesList(),
+        statesWithDistricts: INDIA_STATES_DISTRICTS,
         formatDateForInput,
         currentPath: "/admin/gallery",
         error: "Please specify a district for all photos.",
@@ -260,7 +323,6 @@ exports.postBulkUpload = async (req, res) => {
     for (const [idx, file] of files.entries()) {
       const uploaded = await uploadBuffer(file.buffer, "nishad-yatra/gallery");
       uploadedFiles.push(uploaded);
-      // Derive name if custom or fallback
       let photoName = defaultName && defaultName.trim() ? defaultName.trim() : "Sanatani Nishad";
       if (files.length > 1 && defaultName && defaultName.trim()) {
         photoName = `${defaultName.trim()} #${idx + 1}`;
@@ -268,7 +330,8 @@ exports.postBulkUpload = async (req, res) => {
 
       docsToInsert.push({
         name: photoName,
-        district: defaultDistrict.trim(),
+        state: finalState || "Uttar Pradesh",
+        district: finalDistrict,
         date: isNaN(photoDate.getTime()) ? new Date() : photoDate,
         caption: defaultCaption ? defaultCaption.trim() : "Mass Pledge Campaign",
         imageUrl: uploaded.secure_url,
@@ -298,6 +361,8 @@ exports.postBulkUpload = async (req, res) => {
       title: "Bulk Image Upload",
       admin: req.session.admin,
       districtsList,
+      statesList: getStatesList(),
+      statesWithDistricts: INDIA_STATES_DISTRICTS,
       formatDateForInput,
       currentPath: "/admin/gallery",
       error: "Error during bulk upload: " + error.message,
@@ -315,13 +380,21 @@ exports.getEditPhoto = async (req, res) => {
     }
 
     const districtsList = await SankalpPhoto.distinct("district");
+    let photoState = photo.state;
+    if (!photoState && photo.district) {
+      photoState = findStateForDistrict(photo.district) || "Uttar Pradesh";
+    }
+    const photoData = photo.toObject ? photo.toObject() : { ...photo };
+    photoData.state = photoState;
 
     res.render("admin/gallery/form", {
       title: "Edit Sankalp Photo",
       admin: req.session.admin,
-      photo,
+      photo: photoData,
       formatDateForInput,
       districtsList,
+      statesList: getStatesList(),
+      statesWithDistricts: INDIA_STATES_DISTRICTS,
       currentPath: "/admin/gallery",
       isEdit: true,
       error: null,
@@ -335,12 +408,30 @@ exports.getEditPhoto = async (req, res) => {
 // 7. Process Edit Form
 exports.postEditPhoto = async (req, res) => {
   try {
-    const { name, district, date, caption, imageUrl, isPublished, order } =
-      req.body;
+    const {
+      name,
+      state,
+      district,
+      customDistrict,
+      date,
+      caption,
+      imageUrl,
+      isPublished,
+      order,
+    } = req.body;
 
     const existing = await SankalpPhoto.findById(req.params.id);
     if (!existing) {
       return res.redirect("/admin/gallery?err=Photo not found");
+    }
+
+    let finalDistrict = (district === "__other__" || !district) && customDistrict
+      ? customDistrict.trim()
+      : (district && district.trim() ? district.trim() : existing.district);
+
+    let finalState = state && state.trim() ? state.trim() : (existing.state || "");
+    if (!finalState && finalDistrict) {
+      finalState = findStateForDistrict(finalDistrict) || "Uttar Pradesh";
     }
 
     let finalImageUrl = existing.imageUrl;
@@ -361,7 +452,8 @@ exports.postEditPhoto = async (req, res) => {
     const photoDate = date ? new Date(date) : existing.date;
 
     existing.name = name && name.trim() ? name.trim() : existing.name;
-    existing.district = district && district.trim() ? district.trim() : existing.district;
+    existing.state = finalState || "Uttar Pradesh";
+    existing.district = finalDistrict;
     existing.date = isNaN(photoDate.getTime()) ? existing.date : photoDate;
     existing.caption = typeof caption !== "undefined" ? caption.trim() : existing.caption;
     existing.imageUrl = finalImageUrl;
@@ -388,6 +480,8 @@ exports.postEditPhoto = async (req, res) => {
       photo: { ...req.body, _id: req.params.id },
       formatDateForInput,
       districtsList,
+      statesList: getStatesList(),
+      statesWithDistricts: INDIA_STATES_DISTRICTS,
       currentPath: "/admin/gallery",
       isEdit: true,
       error: "Error updating photo: " + error.message,

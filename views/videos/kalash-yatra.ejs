@@ -6,7 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>लोकतांत्रिक महा-संकल्प यात्रा वीडियो संकलन | निषाद संकल्प अभियान</title>
+  <link rel="icon" type="image/png" href="/images/logo.png" />
   <meta name="description" content="आज हम लोकतांत्रिक संकल्प लेते हैं कि आगामी चुनाव में भाजपा के पक्ष में मतदान नहीं करेंगे तथा अपने विवेक और विचार के आधार पर अपने मताधिकार का प्रयोग करेंगे। ऐतिहासिक लोकतांत्रिक महा-संकल्प यात्रा वीडियो संकलन।" />
+  <link rel="canonical" href="https://nishadaarakshansankalp.com/video" />
+  <meta property="og:title" content="लोकतांत्रिक महा-संकल्प यात्रा वीडियो संकलन | निषाद संकल्प अभियान" />
+  <meta property="og:description" content="लोकतांत्रिक महा-संकल्प यात्रा और निषाद संकल्प अभियान के वीडियो देखें।" />
+  <meta property="og:url" content="https://nishadaarakshansankalp.com/video" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://nishadaarakshansankalp.com/images/kalash-yatra-hero.jpg" />
 
   <!-- Google Fonts: Rozha One, Noto Serif Devanagari, Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -1196,7 +1203,7 @@
       margin-bottom: 12px;
     }
 
-    .video-list-heading h2 {
+    .video-list-heading h1 {
       flex: 0 0 auto;
       position: relative;
       padding-left: 16px;
@@ -1206,7 +1213,7 @@
       white-space: nowrap;
     }
 
-    .video-list-heading h2::before {
+    .video-list-heading h1::before {
       content: "";
       position: absolute;
       left: 0;
@@ -1338,7 +1345,7 @@
 
     @media (max-width: 520px) {
       .video-list-heading { gap: 10px; margin-bottom: 10px; }
-      .video-list-heading h2 { padding-left: 12px; font-size: 22px; }
+      .video-list-heading h1 { padding-left: 12px; font-size: 22px; }
       .video-list-heading .filter-col-search { flex: 1 1 auto; }
       .video-toolbar-row { align-items: center; gap: 8px; margin-bottom: 16px; }
       .video-filter-controls { flex: 0 1 auto; min-width: 0; gap: 6px; }
@@ -3293,7 +3300,7 @@
         <% const videoList = (typeof kalash !== 'undefined' && kalash.videos && kalash.videos.length > 0) ? kalash.videos : []; %>
         <form id="videoFilters" action="/video" method="get">
       <div class="video-list-heading">
-          <h2>सभी वीडियो</h2>
+          <h1>सभी वीडियो</h1>
           <div class="filter-col-search">
             <span class="filter-col-icon" aria-hidden="true">⌕</span>
             <input type="search" id="searchFilter" name="search" value="<%= videoSearch || '' %>" class="filter-normal-input" placeholder="Search.." autocomplete="off" aria-label="Search videos in Hindi or English" />

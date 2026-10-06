@@ -50,53 +50,50 @@
           method="POST"
           enctype="multipart/form-data"
         >
-          <!-- Grid 1: Name and District -->
+          <!-- Row 1: Participant Name -->
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label for="name">Participant Name (प्रतिभागी का नाम) *</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              class="form-control"
+              placeholder="e.g. Ramvriksha Nishad / Community Pledge"
+              value="<%= photo && photo.name ? photo.name : '' %>"
+              required
+            />
+            <span class="form-hint">Name of the participant or group in the photo</span>
+          </div>
+
+          <!-- Row 2: State and District Selection -->
           <div class="form-grid-2">
             <div class="form-group">
-              <label for="name">Participant Name *</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                class="form-control"
-                placeholder="e.g. Ramvriksha Nishad / Community Pledge"
-                value="<%= photo && photo.name ? photo.name : '' %>"
-                required
-              />
-              <span class="form-hint">Name of the participant or group in the photo</span>
+              <label for="state">State (राज्य) *</label>
+              <select id="state" name="state" class="form-control" required style="font-weight: 600;">
+                <option value="">-- Select State (राज्य चुनें) --</option>
+                <% if (typeof statesList !== 'undefined' && statesList.length > 0) { %>
+                  <% statesList.forEach(function(st) { %>
+                    <option value="<%= st %>" <%= (photo && photo.state === st) ? 'selected' : '' %>><%= st %></option>
+                  <% }); %>
+                <% } %>
+              </select>
+              <span class="form-hint">Select Indian State / Union Territory</span>
             </div>
 
             <div class="form-group">
-              <label for="district">District *</label>
+              <label for="district">District (ज़िला) *</label>
+              <select id="district" name="district" class="form-control" required style="font-weight: 600;">
+                <option value="">-- Select District (ज़िला चुनें) --</option>
+              </select>
               <input
                 type="text"
-                id="district"
-                name="district"
-                list="districtSuggestions"
+                id="customDistrict"
+                name="customDistrict"
                 class="form-control"
-                placeholder="e.g. Gorakhpur, Varanasi, Prayagraj..."
-                value="<%= photo && photo.district ? photo.district : '' %>"
-                required
+                placeholder="Type custom district / tehsil name here..."
+                style="display: none; margin-top: 8px;"
               />
-              <datalist id="districtSuggestions">
-                <% if (districtsList && districtsList.length > 0) { %>
-                  <% districtsList.forEach(function(d) { %>
-                    <option value="<%= d %>"></option>
-                  <% }); %>
-                <% } %>
-                <option value="Gorakhpur"></option>
-                <option value="Varanasi"></option>
-                <option value="Prayagraj"></option>
-                <option value="Ayodhya"></option>
-                <option value="Lucknow"></option>
-                <option value="Ghazipur"></option>
-                <option value="Ballia"></option>
-                <option value="Mirzapur"></option>
-                <option value="Kanpur"></option>
-                <option value="Jaunpur"></option>
-                <option value="Patna"></option>
-              </datalist>
-              <span class="form-hint">Select from suggestions or type a new district</span>
+              <span class="form-hint">Select district for selected state, or choose 'Other' to type custom</span>
             </div>
           </div>
 
@@ -233,7 +230,37 @@
   </div>
 </div>
 
+<script src="/js/admin/india-states-districts.js"></script>
 <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    if (typeof setupStateDistrictSelectors === "function") {
+      setupStateDistrictSelectors({
+        stateEl: "state",
+        districtEl: "district",
+        customDistrictEl: "customDistrict",
+        selectedState: "<%= photo && photo.state ? photo.state : '' %>",
+        selectedDistrict: "<%= photo && photo.district ? photo.district : '' %>"
+      });
+    }
+
+    // Ensure custom district is transferred to district field if '__other__' selected
+    const form = document.querySelector("form");
+    if (form) {
+      form.addEventListener("submit", function (e) {
+        const distEl = document.getElementById("district");
+        const customDistEl = document.getElementById("customDistrict");
+        if (distEl && distEl.value === "__other__") {
+          if (!customDistEl || !customDistEl.value.trim()) {
+            e.preventDefault();
+            alert("Please type the custom district name.");
+            if (customDistEl) customDistEl.focus();
+            return false;
+          }
+        }
+      });
+    }
+  });
+
   function previewUploadedImage(input) {
     const previewContainer = document.getElementById("livePreviewContainer");
     const previewImg = document.getElementById("livePreviewImg");
