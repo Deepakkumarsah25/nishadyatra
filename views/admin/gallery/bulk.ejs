@@ -102,38 +102,40 @@
               Common Details for this Batch
             </h4>
 
-            <div class="form-grid-2">
-              <div class="form-group">
-                <label for="defaultDistrict">District *</label>
-                <input
-                  type="text"
-                  id="defaultDistrict"
-                  name="defaultDistrict"
-                  list="districtSuggestions"
-                  class="form-control"
-                  placeholder="e.g. Gorakhpur, Varanasi, Prayagraj..."
-                  required
-                />
-                <datalist id="districtSuggestions">
-                  <% if (districtsList && districtsList.length > 0) { %>
-                    <% districtsList.forEach(function(d) { %>
-                      <option value="<%= d %>"></option>
+            <div class="form-grid-2" style="margin-bottom: 16px;">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label for="defaultState">State (राज्य) *</label>
+                <select id="defaultState" name="defaultState" class="form-control" required style="font-weight: 600;">
+                  <option value="">-- Select State (राज्य चुनें) --</option>
+                  <% if (typeof statesList !== 'undefined' && statesList.length > 0) { %>
+                    <% statesList.forEach(function(st) { %>
+                      <option value="<%= st %>" <%= st === 'Uttar Pradesh' ? 'selected' : '' %>><%= st %></option>
                     <% }); %>
                   <% } %>
-                  <option value="Gorakhpur"></option>
-                  <option value="Varanasi"></option>
-                  <option value="Prayagraj"></option>
-                  <option value="Ayodhya"></option>
-                  <option value="Lucknow"></option>
-                  <option value="Ghazipur"></option>
-                  <option value="Ballia"></option>
-                  <option value="Mirzapur"></option>
-                </datalist>
-                <span class="form-hint">This district will be applied to all photos in this batch</span>
+                </select>
+                <span class="form-hint">Select State / Union Territory for this batch</span>
               </div>
 
-              <div class="form-group">
-                <label for="defaultDate">Pledge Date *</label>
+              <div class="form-group" style="margin-bottom: 0;">
+                <label for="defaultDistrict">District (ज़िला) *</label>
+                <select id="defaultDistrict" name="defaultDistrict" class="form-control" required style="font-weight: 600;">
+                  <option value="">-- Select District (ज़िला चुनें) --</option>
+                </select>
+                <input
+                  type="text"
+                  id="customBulkDistrict"
+                  name="customBulkDistrict"
+                  class="form-control"
+                  placeholder="Type custom district / tehsil name here..."
+                  style="display: none; margin-top: 8px;"
+                />
+                <span class="form-hint">Applied to all photos in this batch</span>
+              </div>
+            </div>
+
+            <div class="form-grid-2" style="margin-bottom: 16px;">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label for="defaultDate">Pledge Date (संकल्प दिनांक) *</label>
                 <input
                   type="date"
                   id="defaultDate"
@@ -190,7 +192,7 @@
           </div>
 
           <!-- Submit Buttons -->
-          <div style="display: flex; align-items: center; justify-content: flex-end; gap: 12px; border-top: 1px solid var(--admin-border-subtle); padding-top: 20px;">
+          <div style="display: flex; align-items: center; justify-content: flex-end; gap: 12px; border-top: 1px solid var(--admin-border-subtle); padding-top: 20px; flex-wrap: wrap;">
             <a href="/admin/gallery" class="btn-admin btn-admin-outline">
               Cancel
             </a>
@@ -282,11 +284,37 @@
   }
 
   // Show loading state on submit
-  document.getElementById("bulkUploadForm").addEventListener("submit", function() {
+  document.getElementById("bulkUploadForm").addEventListener("submit", function(e) {
+    const distEl = document.getElementById("defaultDistrict");
+    const customDistEl = document.getElementById("customBulkDistrict");
+    if (distEl && distEl.value === "__other__") {
+      if (!customDistEl || !customDistEl.value.trim()) {
+        e.preventDefault();
+        alert("Please enter the custom district name.");
+        if (customDistEl) customDistEl.focus();
+        return false;
+      }
+    }
+
     const btn = document.getElementById("submitBtn");
     btn.disabled = true;
     btn.style.opacity = "0.7";
     btn.innerHTML = "<span>Uploading, please wait...</span>";
+  });
+</script>
+
+<script src="/js/admin/india-states-districts.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    if (typeof setupStateDistrictSelectors === "function") {
+      setupStateDistrictSelectors({
+        stateEl: "defaultState",
+        districtEl: "defaultDistrict",
+        customDistrictEl: "customBulkDistrict",
+        selectedState: "Uttar Pradesh",
+        selectedDistrict: ""
+      });
+    }
   });
 </script>
 

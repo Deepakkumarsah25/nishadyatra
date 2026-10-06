@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= typeof title !== 'undefined' ? title : 'Admin Panel' %> | Nishad Sankalp Campaign</title>
+    <link rel="icon" type="image/png" href="/images/logo.png" />
   <% if (['News & Press', 'Create News', 'Edit News'].includes(title)) { %><link rel="stylesheet" href="/css/admin/news.css"><% } %>
 
   <!-- Google Fonts: Inter & Mukta -->
@@ -415,13 +416,51 @@
     }
 
     .table-actions,
-    .admin-table-actions {
+    .admin-table-actions,
+    td .actions {
       display: inline-flex !important;
       align-items: center !important;
       gap: 8px !important;
-      justify-content: flex-end !important;
+      justify-content: center !important;
+      vertical-align: middle !important;
+      white-space: nowrap !important;
     }
 
+    /* Actions Column Sticky & Front-Alignment ("content ke samne") */
+    .admin-table th:last-child,
+    .admin-table td:last-child,
+    .video-list-table th:last-child,
+    .video-list-table td:last-child,
+    .hero-card-table th:last-child,
+    .hero-card-table td:last-child,
+    .table-wrap table th:last-child,
+    .table-wrap table td:last-child {
+      position: sticky;
+      right: 0;
+      background: #ffffff;
+      z-index: 3;
+      box-shadow: -4px 0 10px rgba(0, 0, 0, 0.05);
+      white-space: nowrap !important;
+      text-align: center !important;
+      vertical-align: middle !important;
+      width: 1%;
+    }
+
+    .admin-table th:last-child,
+    .video-list-table th:last-child,
+    .hero-card-table th:last-child,
+    .table-wrap table th:last-child {
+      background: #fbf7f4 !important;
+      z-index: 4;
+      text-align: center !important;
+    }
+
+    .admin-table tr:hover td:last-child,
+    .video-list-table tr:hover td:last-child,
+    .hero-card-table tr:hover td:last-child,
+    .table-wrap table tr:hover td:last-child {
+      background: #fdfaf8 !important;
+    }
 
     /* Aliases for admin-btn */
     .admin-btn {
@@ -627,9 +666,104 @@
     }
 
     /* =========================================================================
+       UNIVERSAL RESPONSIVE GRID UTILITIES & HELPERS
+       Used across all admin modules for guaranteed responsive alignment
+       ========================================================================= */
+    .admin-two-col-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(300px, 1fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .admin-two-col-even {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .admin-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .admin-stat-card {
+      background: #ffffff;
+      border: 1px solid var(--admin-border);
+      border-radius: 12px;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      min-width: 0;
+    }
+
+    .admin-stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+    }
+
+    /* Table Scrollbar & Mobile Hints */
+    .admin-table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 16px;
+      border-radius: 8px;
+    }
+
+    .admin-table-wrapper::-webkit-scrollbar {
+      height: 6px;
+    }
+    .admin-table-wrapper::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 99px;
+    }
+    .admin-table-wrapper::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 99px;
+    }
+
+    /* Modal Responsive Shell */
+    .admin-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .admin-modal-dialog {
+      background: #ffffff;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--admin-border);
+    }
+
+    /* =========================================================================
        RESPONSIVE BREAKPOINTS (TABLET & MOBILE)
        Prevents UI from hiding on left side and avoids horizontal scrollouts
        ========================================================================= */
+    @media (max-width: 1200px) {
+      .admin-two-col-grid {
+        grid-template-columns: minmax(0, 1.2fr) minmax(280px, 1fr);
+        gap: 18px;
+      }
+    }
+
     @media (max-width: 1100px) {
       .form-grid-3 {
         grid-template-columns: repeat(2, 1fr);
@@ -643,45 +777,72 @@
         margin-left: 0 !important;
       }
       .mobile-menu-trigger {
-        display: flex !important;
+        display: inline-flex !important;
       }
       .admin-topbar {
         padding: 0 16px;
       }
       .admin-body {
-        padding: 18px 16px 30px;
+        padding: 18px 16px 36px;
+      }
+      .admin-two-col-grid,
+      .admin-two-col-even {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+      }
+      .admin-stats-grid {
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
       }
     }
 
     @media (max-width: 768px) {
       .admin-topbar {
-        height: 62px;
+        height: 60px;
+        min-height: 60px;
         padding: 0 12px;
       }
       .page-heading h1 {
-        font-size: 16px;
+        font-size: 15.5px;
       }
       .page-heading p {
         display: none !important;
       }
       .form-grid-2, .form-grid-3 {
-        grid-template-columns: 1fr;
-        gap: 14px;
+        grid-template-columns: 1fr !important;
+        gap: 12px;
       }
       .admin-card-header {
-        padding: 14px;
+        padding: 12px 14px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
       }
       .admin-card-body {
+        padding: 14px 12px;
+      }
+      .admin-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+      .admin-stat-card {
         padding: 14px;
       }
     }
 
     @media (max-width: 520px) {
+      .admin-topbar {
+        height: 56px;
+        min-height: 56px;
+        padding: 0 10px;
+      }
+      .topbar-left {
+        gap: 10px;
+      }
       .admin-user-info {
         display: none;
       }
       .admin-user-pill {
-        padding: 3px;
+        padding: 2px;
         border-radius: 50%;
         background: transparent;
         border: none;
@@ -690,13 +851,31 @@
         display: none;
       }
       .view-site-btn {
-        padding: 7px 9px;
+        padding: 6px 8px;
+        font-size: 11px;
       }
       .page-heading h1 {
-        font-size: 15px;
+        font-size: 14.5px;
+        max-width: 170px;
       }
       .admin-body {
-        padding: 14px 12px 28px;
+        padding: 12px 10px 28px;
+      }
+      .admin-stats-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      .btn-admin {
+        padding: 8px 12px;
+        font-size: 12px;
+      }
+      .table-actions {
+        gap: 4px !important;
+      }
+      .btn-edit, .btn-del {
+        padding: 0 8px !important;
+        font-size: 11px !important;
+        height: 28px !important;
       }
     }
   </style>

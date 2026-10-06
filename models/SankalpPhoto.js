@@ -14,6 +14,12 @@ const sankalpPhotoSchema = new mongoose.Schema(
       trim: true,
       index: true,
     },
+    state: {
+      type: String,
+      trim: true,
+      default: "Uttar Pradesh",
+      index: true,
+    },
     date: {
       type: Date,
       default: Date.now,

@@ -309,9 +309,9 @@ const defaultQuickInfo = {
   pledgeBoxTitle: "Join the Campaign by Taking a Pledge",
   pledgeBoxDesc:
     "Register your online pledge for the upliftment and empowerment of our community.",
-  helplineText: "Helpline: +91 99999 99999",
-  helplineTel: "+919999999999",
-  email: "info@nishadsankalp.org",
+  helplineText: "Helpline: +91 99553 09029",
+  helplineTel: "+919955309029",
+  email: "nishadaarakshansankalp@gmail.com",
   sidebarFooterText: "Public service is our true pledge",
 };
 
