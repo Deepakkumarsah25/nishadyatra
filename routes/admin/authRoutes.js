@@ -62,11 +62,4 @@ router.post(
   logout
 );
 
-// Optional GET logout support
-router.get(
-  "/logout",
-  authMiddleware,
-  logout
-);
-
 module.exports = router;

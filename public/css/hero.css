@@ -19,7 +19,7 @@
 .hero-full-slider {
   position: relative;
   width: 100%;
-  height: clamp(500px, 82vh, 680px);
+  height: clamp(400px, 62vh, 540px);
   overflow: hidden;
   background-color: #211212;
 }
@@ -321,6 +321,9 @@
    ========================================================================== */
 
 @media (max-width: 1024px) {
+  .hero-full-slider {
+    height: clamp(360px, 54vh, 460px);
+  }
   .hero-nav-arrow.prev {
     left: 12px;
   }
@@ -345,14 +348,16 @@
   }
 
   .hero-full-slider {
-    height: clamp(450px, 78vh, 540px);
+    height: clamp(340px, 58vh, 440px);
   }
 
   .hero-slide-overlay {
-    background: linear-gradient(to bottom,
-        rgba(18, 9, 9, 0.70) 0%,
-        rgba(18, 9, 9, 0.85) 60%,
-        rgba(18, 9, 9, 0.95) 100%);
+    background: linear-gradient(
+      to bottom,
+      rgba(18, 9, 9, 0.70) 0%,
+      rgba(18, 9, 9, 0.85) 60%,
+      rgba(18, 9, 9, 0.95) 100%
+    );
   }
 
   .hero-slide-content {
@@ -361,33 +366,46 @@
     max-width: 100%;
     padding-inline: 14px;
     padding-top: 10px;
-    padding-bottom: 20px;
+    padding-bottom: 22px;
   }
 
   .hero-pill {
     margin-top: 2px;
-    margin-bottom: 14px;
-    padding: 4px 10px 4px 4px;
+    margin-bottom: 10px;
+    padding: 3px 10px 3px 4px;
     gap: 8px;
     border-radius: 7px;
     max-width: 100%;
   }
 
   .hero-pill-badge {
-    font-size: 0.70rem;
-    padding: 3px 7px;
+    font-size: 0.68rem;
+    padding: 2.5px 7px;
     border-radius: 5px;
     white-space: nowrap;
   }
 
   .hero-pill-text {
-    font-size: 0.80rem;
+    font-size: 0.78rem;
     line-height: 1.25;
+  }
+
+  .hero-heading {
+    font-size: clamp(1.4rem, 5.2vw, 1.85rem);
+    line-height: 1.24;
+    margin: 0 0 10px 0;
+  }
+
+  .hero-description {
+    font-size: 0.88rem;
+    line-height: 1.45;
+    margin: 0 0 14px 0;
   }
 
   .hero-actions {
     justify-content: center;
     width: 100%;
+    margin-bottom: 8px;
   }
 
   .hero-actions .ny-btn {
@@ -397,6 +415,20 @@
   .hero-nav-arrow {
     display: none;
     /* Hide arrows on touch mobile, rely on dots & swipe */
+  }
+
+  .hero-slider-dots {
+    bottom: 10px;
+    gap: 8px;
+  }
+
+  .hero-dot {
+    width: 10px;
+    height: 10px;
+  }
+
+  .hero-dot.active {
+    width: 26px;
   }
 
   .hero-stats-grid {
@@ -413,3 +445,264 @@
     display: none;
   }
 }
+
+/* Standalone Bootstrap carousel hero */
+.herosection-page {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  background: #fbf4ec;
+}
+
+
+
+    /* =====================================================
+       HERO SECTION
+       ===================================================== */
+
+.hero-section {
+  position: relative;
+  width: 100%;
+  padding-top: 64px;
+  overflow: hidden;
+  background: #fbf4ec;
+}
+
+
+
+    /* =====================================================
+       CAROUSEL
+       ===================================================== */
+
+.hero-carousel {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+
+.hero-carousel .carousel-inner {
+  width: 100%;
+  overflow: hidden;
+}
+
+
+
+    /* =====================================================
+       DESKTOP SLIDE
+
+       Height same rahegi = 500px
+       ===================================================== */
+
+.hero-carousel .carousel-item {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  overflow: hidden;
+  background: #ead8c5;
+}
+
+
+
+    /* =====================================================
+       IMAGE
+
+       IMPORTANT:
+       - Full width
+       - Full height
+       - No crop
+       - No empty space
+       ===================================================== */
+
+.hero-carousel .carousel-item img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  object-position: center;
+  user-select: none;
+  -webkit-user-drag: none;
+  image-rendering: auto;
+}
+
+
+
+    /* =====================================================
+       IMAGE OVERLAY
+       ===================================================== */
+
+.hero-carousel .carousel-item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.10));
+}
+
+
+
+    /* =====================================================
+       PREVIOUS / NEXT BUTTON
+       ===================================================== */
+
+.hero-carousel .carousel-control-prev,
+.hero-carousel .carousel-control-next {
+  top: 50%;
+  width: 50px;
+  height: 50px;
+  margin: 0 22px;
+  padding: 0;
+  transform: translateY(-50%);
+  border: none;
+  border-radius: 50%;
+  background: rgba(55, 31, 31, 0.55);
+  opacity: 0.85;
+  z-index: 10;
+  transition: background 0.25s ease, opacity 0.25s ease, transform 0.25s ease;
+}
+
+
+.hero-carousel .carousel-control-prev:hover,
+.hero-carousel .carousel-control-next:hover {
+  background: #d72a2a;
+  opacity: 1;
+}
+
+
+.hero-carousel .carousel-control-prev:hover {
+  transform: translateY(-50%) translateX(-2px);
+}
+
+
+.hero-carousel .carousel-control-next:hover {
+  transform: translateY(-50%) translateX(2px);
+}
+
+
+
+    /* =====================================================
+       INDICATORS
+       ===================================================== */
+
+.hero-carousel .carousel-indicators {
+  margin-bottom: 18px;
+  z-index: 10;
+}
+
+
+.hero-carousel .carousel-indicators button {
+  width: 8px;
+  height: 8px;
+  margin: 0 5px;
+  padding: 0;
+  border: 0;
+  border-radius: 20px;
+  background-color: #ffffff;
+  opacity: 0.65;
+  transition: width 0.25s ease, opacity 0.25s ease;
+}
+
+
+.hero-carousel .carousel-indicators button.active {
+  width: 25px;
+  background-color: #d72a2a;
+  opacity: 1;
+}
+
+
+
+    /* =====================================================
+       TABLET
+       ===================================================== */
+
+@media (max-width: 992px) {
+  .hero-carousel .carousel-item { height: 430px; }
+  .hero-carousel .carousel-control-prev,
+  .hero-carousel .carousel-control-next {
+    width: 44px;
+    height: 44px;
+    margin: 0 14px;
+  }
+}
+
+
+
+    /* =====================================================
+       MOBILE
+       ===================================================== */
+
+@media (max-width: 768px) {
+  .hero-section { padding-top: 60px; }
+  .hero-carousel .carousel-item { height: 260px; }
+  .hero-carousel .carousel-control-prev,
+  .hero-carousel .carousel-control-next {
+    width: 40px;
+    height: 40px;
+    margin: 0 8px;
+  }
+  .hero-carousel .carousel-indicators { margin-bottom: 12px; }
+  .hero-carousel .carousel-indicators button {
+    width: 7px;
+    height: 7px;
+    margin: 0 4px;
+  }
+  .hero-carousel .carousel-indicators button.active { width: 21px; }
+}
+
+
+
+    /* =====================================================
+       SMALL MOBILE
+       ===================================================== */
+
+@media (max-width: 480px) {
+  .hero-carousel .carousel-item { height: 210px; }
+  .hero-carousel .carousel-control-prev,
+  .hero-carousel .carousel-control-next {
+    width: 34px;
+    height: 34px;
+    margin: 0 5px;
+  }
+  .hero-carousel .carousel-indicators { margin-bottom: 9px; }
+  .hero-carousel .carousel-indicators button {
+    width: 6px;
+    height: 6px;
+    margin: 0 3px;
+  }
+  .hero-carousel .carousel-indicators button.active { width: 18px; }
+}
+
+
+
+    /* =====================================================
+       VERY SMALL MOBILE
+       ===================================================== */
+
+@media (max-width: 360px) {
+  .hero-section { padding-top: 58px; }
+  .hero-carousel .carousel-item { height: 190px; }
+  .hero-carousel .carousel-control-prev,
+  .hero-carousel .carousel-control-next {
+    width: 31px;
+    height: 31px;
+    margin: 0 3px;
+  }
+}
+
+
+
+    /* =====================================================
+       LANDSCAPE MOBILE
+       ===================================================== */
+
+@media (max-width: 900px) and (orientation: landscape) {
+  .hero-carousel .carousel-item { height: 240px; }
+}
+
+@media (max-width: 480px) {
+  .hero-full-slider {
+    height: clamp(300px, 52vh, 380px);
+  }
+}
+>>>>>>> 836d6c3f535dcabec48dfeca3aab1c9638a460a7

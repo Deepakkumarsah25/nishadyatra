@@ -1,10 +1,26 @@
 const buckets = new Map();
 let requestsSinceCleanup = 0;
+const CLEANUP_INTERVAL_MS = 60 * 1000;
+const MAX_BUCKETS = 10000;
+const OVERFLOW_KEY = "__rate_limit_capacity__";
+
+function removeExpiredBuckets(now = Date.now()) {
+  for (const [address, entry] of buckets) {
+    if (now >= entry.resetAt) buckets.delete(address);
+  }
+}
+
+const cleanupTimer = setInterval(removeExpiredBuckets, CLEANUP_INTERVAL_MS);
+cleanupTimer.unref();
 
 function rateLimit({ windowMs, max, message }) {
   return (req, res, next) => {
     const now = Date.now();
-    const key = req.ip || req.socket.remoteAddress || "unknown";
+    // No trusted proxy is configured in this app. Ignore user-supplied X-Forwarded-For.
+    const clientAddress = req.socket?.remoteAddress || "unknown";
+    const key = buckets.has(clientAddress) || buckets.size < MAX_BUCKETS - 1
+      ? clientAddress
+      : OVERFLOW_KEY;
     let bucket = buckets.get(key);
 
     if (!bucket || now >= bucket.resetAt) {
@@ -16,10 +32,7 @@ function rateLimit({ windowMs, max, message }) {
     requestsSinceCleanup += 1;
     if (requestsSinceCleanup >= 100) {
       requestsSinceCleanup = 0;
-      for (const [address, entry] of buckets) {
-        if (now >= entry.resetAt) buckets.delete(address);
-      }
-      if (buckets.size > 10000) buckets.clear();
+      removeExpiredBuckets(now);
     }
 
     res.set("RateLimit-Limit", String(max));
