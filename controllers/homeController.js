@@ -3,6 +3,7 @@ const Initiative = require("../models/Initiative");
 const WhyChoose = require("../models/WhyChoose");
 const SiteNotice = require("../models/SiteNotice");
 const HomeQuickInfo = require("../models/HomeQuickInfo");
+const HomeAbout = require("../models/HomeAbout");
 const InitiativeInquiry = require("../models/InitiativeInquiry");
 const SankalpPhoto = require("../models/SankalpPhoto");
 const KalashYatra = require("../models/KalashYatra");
@@ -77,7 +78,7 @@ async function getHomepageKalash() {
 // Public Home Page
 exports.getHomePage = async (req, res) => {
   try {
-    const [heroSlides, initiatives, whyChooseDoc, notices, quickInfoDoc, galleryPhotos, kalashDoc, newsDocs] =
+    const [heroSlides, initiatives, whyChooseDoc, notices, quickInfoDoc, galleryPhotos, kalashDoc, newsDocs, homeAboutDoc] =
       await Promise.all([
         HeroSlide.find({ isActive: true }).sort({ order: 1, createdAt: 1 }).limit(10),
         Initiative.find({ isActive: true }).sort({ order: 1, createdAt: 1 }).limit(24),
@@ -91,6 +92,7 @@ exports.getHomePage = async (req, res) => {
           .limit(10)
           .lean()
           .catch(() => []),
+        HomeAbout.findOne(),
       ]);
 
     // Fallbacks if database is completely empty or just initialized
@@ -102,6 +104,7 @@ exports.getHomePage = async (req, res) => {
     const finalNotices =
       notices && notices.length > 0 ? notices : defaultNotices;
     const finalQuickInfo = quickInfoDoc || defaultQuickInfo;
+    const finalHomeAbout = homeAboutDoc || (HomeAbout.defaultData || {});
     const finalGalleryPhotos =
       galleryPhotos && galleryPhotos.length > 0 ? galleryPhotos : defaultGalleryPhotos.slice(0, 10);
 
@@ -232,6 +235,7 @@ exports.getHomePage = async (req, res) => {
       latestVideos,
       highlightNews,
       homeNewsList,
+      homeAbout: finalHomeAbout,
     });
   } catch (error) {
     console.error("Home page render error:", error);
@@ -252,6 +256,7 @@ exports.getHomePage = async (req, res) => {
       latestVideos: (kalashFallback?.videos || []).slice(0, 10),
       highlightNews: null,
       homeNewsList: [],
+      homeAbout: HomeAbout.defaultData || {},
     });
   }
 };

@@ -283,199 +283,387 @@
          TAB 2: PAGE INFORMATION & SETTINGS
          ====================================================================== -->
     <% if (activeTab === 'settings') { %>
-      <form action="/admin/contact/settings" method="POST" enctype="multipart/form-data">
+      <form action="/admin/contact/settings" method="POST" enctype="multipart/form-data" id="contactSettingsForm">
         <div class="settings-form-layout">
 
+          <!-- Intro Info Banner -->
+          <div class="settings-intro-banner">
+            <div class="settings-intro-left">
+              <div class="settings-intro-icon">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              </div>
+              <div class="settings-intro-text">
+                <h3>पेज एवं कार्यालय सूचना प्रबंधन (Page &amp; Office Info)</h3>
+                <p>सार्वजनिक संपर्क पेज (Contact Page) के शीर्ष बैनर, केंद्रीय कार्यालय का पता, गूगल मैप लिंक, हेल्पलाइन, व्हाट्सएप एवं सोशल हैंडल्स को यहाँ से आसानी से अपडेट करें।</p>
+              </div>
+            </div>
+            <a href="/contact" target="_blank" rel="noopener noreferrer" class="btn-live-preview-pill" title="लाइव वेबसाइट संपर्क पेज खोलें">
+              <span>लाइव पेज देखें</span>
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/></svg>
+            </a>
+          </div>
+
           <!-- Card 1: Top Banner Settings -->
-          <div class="admin-card">
+          <div class="admin-card settings-card">
             <div class="admin-card-header">
-              <h3>
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                1. Top Banner Settings
-              </h3>
-              <span style="font-size: 12px; color: var(--admin-text-muted);">शीर्ष बैनर शीर्षक एवं पृष्ठभूमि छवि (Clean Photo Upload &amp; URL)</span>
+              <div class="card-header-left">
+                <div class="card-header-badge badge-indigo">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                </div>
+                <div class="card-header-titles">
+                  <h3>1. Top Banner Settings (शीर्ष बैनर)</h3>
+                  <p>वेबसाइट के मुख्य संपर्क पेज का शीर्ष बैनर शीर्षक एवं पृष्ठभूमि छवि</p>
+                </div>
+              </div>
+              <span class="card-step-tag">Section 1/5</span>
             </div>
 
             <div class="settings-grid">
               <div class="form-group-full">
-                <label class="admin-form-label" for="pageHeading">Banner Title (बैनर शीर्षक)</label>
-                <input type="text" id="pageHeading" name="pageHeading" class="form-control" value="<%= contact.pageHeading || 'Contact Us' %>" required oninput="updateBannerHeadingPreview(this.value)" />
-                <span class="field-hint">बैनर के केंद्र में प्रदर्शित मुख्य शीर्षक (उदा. Contact Us या हमसे संपर्क करें)</span>
+                <label class="admin-form-label" for="pageHeading">
+                  <span class="label-title">Banner Main Heading (बैनर मुख्य शीर्षक)</span>
+                  <span class="label-badge label-required">आवश्यक</span>
+                </label>
+                <input type="text" id="pageHeading" name="pageHeading" class="form-control" value="<%= contact.pageHeading || 'Contact Us' %>" required oninput="updateBannerHeadingPreview(this.value)" placeholder="उदा. Contact Us या हमसे संपर्क करें" />
+                <span class="field-hint">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                  संपर्क पेज पर बैनर के केंद्र में प्रदर्शित मुख्य शीर्षक
+                </span>
               </div>
 
               <div>
                 <label class="admin-form-label" for="bannerImageFile">
-                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                  Upload New Banner Photo (नई फोटो अपलोड करें)
+                  <span class="label-title">Upload New Banner Photo (नई फोटो अपलोड करें)</span>
                 </label>
-                <input type="file" id="bannerImageFile" name="bannerImageFile" class="form-control" accept="image/*" onchange="previewBannerUpload(this)" />
-                <span class="field-hint">कंप्यूटर या फोन से नई फोटो चुनें (JPG, PNG, WebP)</span>
+                <div class="file-upload-box">
+                  <input type="file" id="bannerImageFile" name="bannerImageFile" class="form-control file-input-control" accept="image/*" onchange="previewBannerUpload(this)" />
+                </div>
+                <span class="field-hint">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  कंप्यूटर या फोन से नई फोटो चुनें (JPG, PNG, WebP)
+                </span>
               </div>
 
               <div>
                 <label class="admin-form-label" for="bannerImage">
-                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px;"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-                  Or Banner Image URL / Path (या इमेज का लिंक/पाथ)
+                  <span class="label-title">Or Banner Image URL / Path (इमेज का लिंक)</span>
                 </label>
-                <input type="text" id="bannerImage" name="bannerImage" class="form-control" value="<%= contact.bannerImage || '/images/contact-banner.jpg' %>" placeholder="/images/contact-banner.jpg" oninput="previewBannerUrl(this.value)" />
-                <span class="field-hint">यदि नई फाइल अपलोड नहीं कर रहे हैं, तो यहाँ पाथ/URL दर्ज कर सकते हैं।</span>
+                <div class="input-with-icon">
+                  <span class="input-icon-slot">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                  </span>
+                  <input type="text" id="bannerImage" name="bannerImage" class="form-control has-icon-left" value="<%= contact.bannerImage || '/images/contact-banner.jpg' %>" placeholder="/images/contact-banner.jpg" oninput="previewBannerUrl(this.value)" />
+                </div>
+                <span class="field-hint">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                  यदि फोटो अपलोड नहीं कर रहे हैं, तो सीधे इमेज URL दर्ज करें
+                </span>
               </div>
 
               <!-- Banner Preview Box -->
-              <div class="form-group-full" style="margin-top: 4px;">
-                <label class="admin-form-label">Banner Image Live Preview (लाइव पूर्वावलोकन):</label>
-                <div id="bannerLivePreview" style="height: 120px; border-radius: 10px; overflow: hidden; background-image: linear-gradient(rgba(15,23,42,0.65), rgba(15,23,42,0.8)), url('<%= contact.bannerImage || '/images/contact-banner.jpg' %>'); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; border: 1px solid var(--admin-border); position: relative;">
-                  <span id="previewHeadingText" style="color: #fff; font-family: 'Rozha One', serif; font-size: 24px; font-weight: 800; text-shadow: 0 2px 8px rgba(0,0,0,0.8);"><%= contact.pageHeading || 'Contact Us' %></span>
+              <div class="form-group-full">
+                <label class="admin-form-label">
+                  <span class="label-title">Banner Live Preview (लाइव पूर्वावलोकन)</span>
+                </label>
+                <div class="banner-live-preview-box" id="bannerLivePreview" style="background-image: linear-gradient(rgba(15,23,42,0.65), rgba(15,23,42,0.8)), url('<%= contact.bannerImage || '/images/contact-banner.jpg' %>');">
+                  <div class="banner-preview-badge">
+                    <span class="live-dot"></span>
+                    <span>LIVE PREVIEW</span>
+                  </div>
+                  <h2 id="previewHeadingText" class="banner-preview-heading"><%= contact.pageHeading || 'Contact Us' %></h2>
                 </div>
               </div>
             </div>
           </div>
 
           <!-- Card 2: Central Office Details & Map Link -->
-          <div class="admin-card">
+          <div class="admin-card settings-card">
             <div class="admin-card-header">
-              <h3>
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                2. Office Address &amp; Google Maps Link
-              </h3>
-              <span style="font-size: 12px; color: var(--admin-text-muted);">मुख्यालय का पता एवं सीधे गूगल मैप पर जाने का लिंक</span>
+              <div class="card-header-left">
+                <div class="card-header-badge badge-amber">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                </div>
+                <div class="card-header-titles">
+                  <h3>2. Office Address &amp; Google Maps (कार्यालय पता व मैप)</h3>
+                  <p>मुख्यालय का पता, कार्य समय एवं गूगल मैप्स सीधा नेविगेशन लिंक</p>
+                </div>
+              </div>
+              <span class="card-step-tag">Section 2/5</span>
             </div>
 
             <div class="settings-grid">
               <div>
-                <label class="admin-form-label" for="officeTitle">Office Section Title</label>
-                <input type="text" id="officeTitle" name="officeTitle" class="form-control" value="<%= contact.officeTitle || 'कार्यालय का पता' %>" required />
+                <label class="admin-form-label" for="officeTitle">
+                  <span class="label-title">Office Section Title (शीर्षक)</span>
+                  <span class="label-badge label-required">आवश्यक</span>
+                </label>
+                <input type="text" id="officeTitle" name="officeTitle" class="form-control" value="<%= contact.officeTitle || 'कार्यालय का पता' %>" required placeholder="उदा. केंद्रीय कार्यालय का पता" />
+                <span class="field-hint">पब्लिक पेज पर पते के ऊपर प्रदर्शित मुख्य हेडिंग</span>
               </div>
 
               <div>
-                <label class="admin-form-label" for="officeTiming">Working Hours / Timings</label>
-                <input type="text" id="officeTiming" name="officeTiming" class="form-control" value="<%= contact.officeTiming || '' %>" placeholder="उदा. सोमवार से शनिवार: प्रातः 10:00 से सायं 06:00" />
-              </div>
-
-              <div class="form-group-full">
-                <label class="admin-form-label" for="officeAddress">Full Office Address</label>
-                <textarea id="officeAddress" name="officeAddress" class="form-control" rows="2" required><%= contact.officeAddress || '' %></textarea>
-              </div>
-
-              <div class="form-group-full">
-                <label class="admin-form-label" for="mapDirectionsUrl">Google Maps Location Link (सीधा मैप लिंक)</label>
-                <div style="display: flex; gap: 8px; align-items: center;">
-                  <input type="text" id="mapDirectionsUrl" name="mapDirectionsUrl" class="form-control" value="<%= contact.mapDirectionsUrl || '' %>" placeholder="https://maps.google.com/?q=Ayodhya,Uttar+Pradesh" style="flex:1; height: 42px;" />
-                  <% if (contact.mapDirectionsUrl) { %>
-                    <a href="<%= contact.mapDirectionsUrl %>" target="_blank" rel="noopener noreferrer" class="btn-admin btn-admin-outline btn-admin-sm" style="display:inline-flex; align-items:center; gap:6px; white-space:nowrap; height: 42px; padding: 0 16px; border-radius: 9px; font-weight: 700; text-decoration: none; border-color: #cbd5e1;">
-                      <span>मैप खोलें ↗</span>
-                    </a>
-                  <% } %>
+                <label class="admin-form-label" for="officeTiming">
+                  <span class="label-title">Working Hours / Timings (कार्य समय)</span>
+                </label>
+                <div class="input-with-icon">
+                  <span class="input-icon-slot">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  </span>
+                  <input type="text" id="officeTiming" name="officeTiming" class="form-control has-icon-left" value="<%= contact.officeTiming || '' %>" placeholder="उदा. सोमवार से शनिवार: 10:00 AM से 06:00 PM" />
                 </div>
-                <span class="field-hint" style="display: block; margin-top: 6px; font-size: 11.5px; color: var(--admin-text-muted); line-height: 1.5;">पब्लिक पेज पर पते के साथ "गूगल मैप्स पर देखें" बटन इसी लिंक को खोलेगा।</span>
+                <span class="field-hint">कार्यालय खुलने व बंद होने का समय</span>
+              </div>
+
+              <div class="form-group-full">
+                <label class="admin-form-label" for="officeAddress">
+                  <span class="label-title">Full Office Address (मुख्यालय का संपूर्ण डाक पता)</span>
+                  <span class="label-badge label-required">आवश्यक</span>
+                </label>
+                <textarea id="officeAddress" name="officeAddress" class="form-control form-control-textarea" rows="3" required placeholder="उदा. निषाद संकल्प अभियान भवन, निकट सरयू तट मार्ग, अयोध्या / लखनऊ, उत्तर प्रदेश"><%= contact.officeAddress || '' %></textarea>
+                <span class="field-hint">पूरा आधिकारिक पता जो वेबसाइट के संपर्क बॉक्स में दिखेगा</span>
+              </div>
+
+              <div class="form-group-full">
+                <label class="admin-form-label" for="mapDirectionsUrl">
+                  <span class="label-title">Google Maps Navigation Link (सीधा मैप लिंक)</span>
+                </label>
+                <div class="map-link-input-group">
+                  <div class="input-with-icon map-input-flex">
+                    <span class="input-icon-slot">
+                      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    </span>
+                    <input type="text" id="mapDirectionsUrl" name="mapDirectionsUrl" class="form-control has-icon-left" value="<%= contact.mapDirectionsUrl || '' %>" placeholder="https://maps.google.com/?q=Ayodhya,Uttar+Pradesh" oninput="updateMapTestLink(this.value)" />
+                  </div>
+                  <a id="mapTestLinkBtn" href="<%= contact.mapDirectionsUrl || '#' %>" target="_blank" rel="noopener noreferrer" class="btn-admin btn-admin-outline btn-map-test" title="गूगल मैप्स लिंक टेस्ट करें">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/></svg>
+                    <span>मैप खोलें ↗</span>
+                  </a>
+                </div>
+                <span class="field-hint">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                  वेबसाइट पर "Google Maps पर देखें" बटन दबाने पर यह लिंक सीधे मैप ऐप में खुलेगा।
+                </span>
               </div>
             </div>
           </div>
 
           <!-- Card 3: Phone & Email Channels -->
-          <div class="admin-card">
+          <div class="admin-card settings-card">
             <div class="admin-card-header">
-              <h3>
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                3. Phones &amp; Emails
-              </h3>
-              <span style="font-size: 12px; color: var(--admin-text-muted);">कॉल हेल्पलाइन एवं ईमेल आईडी</span>
+              <div class="card-header-left">
+                <div class="card-header-badge badge-teal">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                </div>
+                <div class="card-header-titles">
+                  <h3>3. Phones &amp; Emails (फोन एवं ईमेल हेल्पलाइन)</h3>
+                  <p>आधिकारिक कॉल हेल्पलाइन नंबर्स एवं संपर्क ईमेल पते</p>
+                </div>
+              </div>
+              <span class="card-step-tag">Section 3/5</span>
             </div>
 
             <div class="settings-grid">
               <div>
-                <label class="admin-form-label" for="primaryPhone">Primary Phone (मुख्य हेल्पलाइन)</label>
-                <input type="text" id="primaryPhone" name="primaryPhone" class="form-control" value="<%= contact.primaryPhone || '' %>" placeholder="+91 99553 09029" required />
+                <label class="admin-form-label" for="primaryPhone">
+                  <span class="label-title">Primary Phone (मुख्य हेल्पलाइन नंबर)</span>
+                  <span class="label-badge label-required">आवश्यक</span>
+                </label>
+                <div class="input-with-icon">
+                  <span class="input-icon-slot">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  </span>
+                  <input type="text" id="primaryPhone" name="primaryPhone" class="form-control has-icon-left" value="<%= contact.primaryPhone || '' %>" placeholder="+91 99553 09029" required />
+                </div>
+                <span class="field-hint">मुख्य हेल्पलाइन (वेबसाइट पर प्राथमिक कॉल लिंक)</span>
               </div>
 
               <div>
-                <label class="admin-form-label" for="secondaryPhone">Secondary Phone (वैकल्पिक नंबर)</label>
-                <input type="text" id="secondaryPhone" name="secondaryPhone" class="form-control" value="<%= contact.secondaryPhone || '' %>" placeholder="+91 99553 09029" />
+                <label class="admin-form-label" for="secondaryPhone">
+                  <span class="label-title">Secondary Phone (वैकल्पिक नंबर)</span>
+                </label>
+                <div class="input-with-icon">
+                  <span class="input-icon-slot">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  </span>
+                  <input type="text" id="secondaryPhone" name="secondaryPhone" class="form-control has-icon-left" value="<%= contact.secondaryPhone || '' %>" placeholder="+91 99553 09029" />
+                </div>
+                <span class="field-hint">द्वितीयक संपर्क नंबर (यदि उपलब्ध हो)</span>
               </div>
 
               <div>
-                <label class="admin-form-label" for="primaryEmail">Primary Email (मुख्य ईमेल)</label>
-                <input type="email" id="primaryEmail" name="primaryEmail" class="form-control" value="<%= contact.primaryEmail || '' %>" placeholder="nishadaarakshansankalp@gmail.com" required />
+                <label class="admin-form-label" for="primaryEmail">
+                  <span class="label-title">Primary Email (मुख्य आधिकारिक ईमेल)</span>
+                  <span class="label-badge label-required">आवश्यक</span>
+                </label>
+                <div class="input-with-icon">
+                  <span class="input-icon-slot">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  </span>
+                  <input type="email" id="primaryEmail" name="primaryEmail" class="form-control has-icon-left" value="<%= contact.primaryEmail || '' %>" placeholder="nishadaarakshansankalp@gmail.com" required />
+                </div>
+                <span class="field-hint">मुख्य ईमेल (वेबसाइट पर डायरेक्ट mailto लिंक)</span>
               </div>
 
               <div>
-                <label class="admin-form-label" for="secondaryEmail">Secondary Email (सहायक ईमेल)</label>
-                <input type="email" id="secondaryEmail" name="secondaryEmail" class="form-control" value="<%= contact.secondaryEmail || '' %>" placeholder="nishadaarakshansankalp@gmail.com" />
+                <label class="admin-form-label" for="secondaryEmail">
+                  <span class="label-title">Secondary Email (सहायक ईमेल आईडी)</span>
+                </label>
+                <div class="input-with-icon">
+                  <span class="input-icon-slot">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  </span>
+                  <input type="email" id="secondaryEmail" name="secondaryEmail" class="form-control has-icon-left" value="<%= contact.secondaryEmail || '' %>" placeholder="nishadaarakshansankalp@gmail.com" />
+                </div>
+                <span class="field-hint">सहायक व पूछताछ हेतु वैकल्पिक ईमेल</span>
               </div>
             </div>
           </div>
 
           <!-- Card 4: WhatsApp Direct Connect -->
-          <div class="admin-card">
+          <div class="admin-card settings-card">
             <div class="admin-card-header">
-              <h3>
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#059669" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-                4. WhatsApp Quick Chat Configuration
-              </h3>
-              <span style="font-size: 12px; color: var(--admin-text-muted);">सीधे व्हाट्सएप पर चैट लिंक</span>
+              <div class="card-header-left">
+                <div class="card-header-badge badge-green">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                </div>
+                <div class="card-header-titles">
+                  <h3>4. WhatsApp Quick Chat (व्हाट्सएप त्वरित चैट)</h3>
+                  <p>वेबसाइट से 1-क्लिक में सीधे व्हाट्सएप चैट खोलने की सुविधा</p>
+                </div>
+              </div>
+              <span class="card-step-tag">Section 4/5</span>
             </div>
 
             <div class="settings-grid">
               <div>
-                <label class="admin-form-label" for="whatsappNumber">WhatsApp Mobile Number</label>
-                <input type="text" id="whatsappNumber" name="whatsappNumber" class="form-control" value="<%= contact.whatsappNumber || '' %>" placeholder="उदा. +919876543210" />
-                <span class="field-hint">कंट्री कोड के साथ (उदा. +91...)</span>
+                <label class="admin-form-label" for="whatsappNumber">
+                  <span class="label-title">WhatsApp Mobile Number (मोबाइल नंबर)</span>
+                </label>
+                <div class="input-with-icon">
+                  <span class="input-icon-slot wa-slot">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                  </span>
+                  <input type="text" id="whatsappNumber" name="whatsappNumber" class="form-control has-icon-left" value="<%= contact.whatsappNumber || '' %>" placeholder="उदा. +919955309029" oninput="updateWhatsappPreview()" />
+                </div>
+                <span class="field-hint">कंट्री कोड सहित दर्ज करें (उदा. +91...)</span>
               </div>
 
               <div>
-                <label class="admin-form-label" for="whatsappMessage">Pre-filled Greeting Message</label>
-                <input type="text" id="whatsappMessage" name="whatsappMessage" class="form-control" value="<%= contact.whatsappMessage || '' %>" placeholder="उदा. नमस्ते, मैं निषाद संकल्प अभियान से संपर्क करना चाहता हूँ।" />
+                <label class="admin-form-label" for="whatsappMessage">
+                  <span class="label-title">Pre-filled Greeting Message (अभिवादन संदेश)</span>
+                </label>
+                <input type="text" id="whatsappMessage" name="whatsappMessage" class="form-control" value="<%= contact.whatsappMessage || '' %>" placeholder="उदा. नमस्ते, मैं निषाद संकल्प अभियान से संपर्क करना चाहता हूँ।" oninput="updateWhatsappPreview()" />
+                <span class="field-hint">उपयोगकर्ता द्वारा चैट शुरू करने पर यह टेक्स्ट पहले से लिखा रहेगा</span>
+              </div>
+
+              <!-- Live WhatsApp Link Preview Card -->
+              <div class="form-group-full">
+                <div class="whatsapp-preview-box">
+                  <div class="wa-preview-left">
+                    <div class="wa-preview-icon">
+                      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    </div>
+                    <div class="wa-preview-info">
+                      <span class="wa-preview-title">लाइव व्हाट्सएप लिंक प्रीव्यू (Auto Generated URL):</span>
+                      <span class="wa-preview-url" id="waPreviewLinkText">https://wa.me/919955309029?text=नमस्ते...</span>
+                    </div>
+                  </div>
+                  <a id="waTestBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn-admin btn-wa-test" title="व्हाट्सएप चैट टेस्ट करें">
+                    <span>चैट टेस्ट करें ↗</span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
 
           <!-- Card 5: Social Media Links -->
-          <div class="admin-card">
+          <div class="admin-card settings-card">
             <div class="admin-card-header">
-              <h3>
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-                5. Social Media Handles
-              </h3>
-              <span style="font-size: 12px; color: var(--admin-text-muted);">आधिकारिक सोशल नेटवर्क प्रोफाइल्स</span>
+              <div class="card-header-left">
+                <div class="card-header-badge badge-purple">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                </div>
+                <div class="card-header-titles">
+                  <h3>5. Social Media Handles (आधिकारिक सोशल मीडिया)</h3>
+                  <p>फेसबुक, एक्स (ट्विटर), इंस्टाग्राम, यूट्यूब और टेलीग्राम प्रोफाइल्स</p>
+                </div>
+              </div>
+              <span class="card-step-tag">Section 5/5</span>
             </div>
 
             <div class="settings-grid">
               <div>
-                <label class="admin-form-label" for="facebookUrl">Facebook URL</label>
-                <input type="url" id="facebookUrl" name="facebookUrl" class="form-control" value="<%= contact.facebookUrl || '' %>" placeholder="https://facebook.com/..." />
+                <label class="admin-form-label" for="facebookUrl">
+                  <span class="label-title">Facebook Profile / Page URL</span>
+                </label>
+                <div class="social-input-wrap brand-fb">
+                  <span class="social-brand-icon">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                  </span>
+                  <input type="url" id="facebookUrl" name="facebookUrl" class="form-control social-field" value="<%= contact.facebookUrl || '' %>" placeholder="https://facebook.com/nishadsankalp" />
+                </div>
               </div>
 
               <div>
-                <label class="admin-form-label" for="twitterUrl">X (Twitter) URL</label>
-                <input type="url" id="twitterUrl" name="twitterUrl" class="form-control" value="<%= contact.twitterUrl || '' %>" placeholder="https://x.com/..." />
+                <label class="admin-form-label" for="twitterUrl">
+                  <span class="label-title">X (Twitter) Profile URL</span>
+                </label>
+                <div class="social-input-wrap brand-x">
+                  <span class="social-brand-icon">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                  </span>
+                  <input type="url" id="twitterUrl" name="twitterUrl" class="form-control social-field" value="<%= contact.twitterUrl || '' %>" placeholder="https://x.com/nishadsankalp" />
+                </div>
               </div>
 
               <div>
-                <label class="admin-form-label" for="instagramUrl">Instagram URL</label>
-                <input type="url" id="instagramUrl" name="instagramUrl" class="form-control" value="<%= contact.instagramUrl || '' %>" placeholder="https://instagram.com/..." />
+                <label class="admin-form-label" for="instagramUrl">
+                  <span class="label-title">Instagram Profile URL</span>
+                </label>
+                <div class="social-input-wrap brand-ig">
+                  <span class="social-brand-icon">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                  </span>
+                  <input type="url" id="instagramUrl" name="instagramUrl" class="form-control social-field" value="<%= contact.instagramUrl || '' %>" placeholder="https://instagram.com/nishadsankalp" />
+                </div>
               </div>
 
               <div>
-                <label class="admin-form-label" for="youtubeUrl">YouTube Channel URL</label>
-                <input type="url" id="youtubeUrl" name="youtubeUrl" class="form-control" value="<%= contact.youtubeUrl || '' %>" placeholder="https://youtube.com/@..." />
+                <label class="admin-form-label" for="youtubeUrl">
+                  <span class="label-title">YouTube Channel URL</span>
+                </label>
+                <div class="social-input-wrap brand-yt">
+                  <span class="social-brand-icon">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                  </span>
+                  <input type="url" id="youtubeUrl" name="youtubeUrl" class="form-control social-field" value="<%= contact.youtubeUrl || '' %>" placeholder="https://youtube.com/@nishadsankalp" />
+                </div>
               </div>
 
               <div class="form-group-full">
-                <label class="admin-form-label" for="telegramUrl">Telegram Channel / Group URL</label>
-                <input type="url" id="telegramUrl" name="telegramUrl" class="form-control" value="<%= contact.telegramUrl || '' %>" placeholder="https://t.me/..." />
+                <label class="admin-form-label" for="telegramUrl">
+                  <span class="label-title">Telegram Channel / Group URL</span>
+                </label>
+                <div class="social-input-wrap brand-tg">
+                  <span class="social-brand-icon">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.121l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.458c.538-.196 1.006.128.832.943z"/></svg>
+                  </span>
+                  <input type="url" id="telegramUrl" name="telegramUrl" class="form-control social-field" value="<%= contact.telegramUrl || '' %>" placeholder="https://t.me/nishadsankalp" />
+                </div>
               </div>
             </div>
           </div>
 
-
-
-          <!-- Sticky Save Bar -->
+          <!-- Sticky Floating Save Bar -->
           <div class="settings-save-bar">
-            <div>
-              <strong>परिवर्तन सहेजें</strong>
-              <p>सभी फ़ील्ड्स को वेबसाइट पर तुरंत अपडेट करने के लिए सहेजें पर क्लिक करें।</p>
+            <div class="save-bar-info">
+              <div class="save-bar-badge">
+                <span class="live-dot"></span>
+                <strong>परिवर्तन सहेजें (Save Changes)</strong>
+              </div>
+              <p>सभी फ़ील्ड्स को वेबसाइट पर तुरंत लाइव व सुरक्षित अपडेट करने के लिए सहेजें बटन दबाएं।</p>
             </div>
-            <button type="submit" class="btn-admin btn-admin-primary btn-save-action">
+            <button type="submit" class="btn-admin btn-admin-primary btn-save-action" id="settingsSaveSubmitBtn">
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
               <span>सेटिंग्स सहेजें (Save Changes)</span>
             </button>
@@ -808,68 +996,12 @@
     margin-top: 3px;
   }
 
+  /* Communication Button & Stack */
   .comm-channel-stack {
     display: flex;
     flex-direction: column;
     gap: 4px;
   }
-
-  .comm-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 3px 8px;
-    border-radius: 6px;
-    text-decoration: none;
-    width: fit-content;
-    transition: transform 0.15s ease;
-  }
-
-  .comm-btn:hover {
-    transform: translateX(2px);
-  }
-
-  .comm-phone {
-    background: #fee2e2;
-    color: #991b1b;
-  }
-
-  .comm-wa {
-    background: #dcfce7;
-    color: #166534;
-  }
-
-  .comm-email {
-  /* Table Message Row & Sticky Overlap Removal */
-  .contact-messages-table {
-    width: 100%;
-    min-width: 900px;
-    border-collapse: collapse;
-  }
-  .contact-messages-table th:last-child,
-  .contact-messages-table td:last-child {
-    position: static !important;
-    box-shadow: none !important;
-    background: transparent !important;
-  }
-  .contact-messages-table th {
-    background: #faf7f5 !important;
-    padding: 13px 16px !important;
-    font-size: 11px !important;
-    font-weight: 800 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.6px !important;
-    color: var(--admin-text-muted) !important;
-    border-bottom: 1.5px solid #ebdcd5 !important;
-  }
-  .contact-messages-table td {
-    padding: 14px 16px !important;
-    border-bottom: 1px solid #f1eae5 !important;
-    vertical-align: middle !important;
-  }
-
   .comm-btn {
     display: inline-flex;
     align-items: center;
@@ -899,6 +1031,34 @@
     background: #f1f5f9;
     color: #334155;
     border: 1px solid #e2e8f0;
+  }
+
+  /* Table Message Row */
+  .contact-messages-table {
+    width: 100%;
+    min-width: 900px;
+    border-collapse: collapse;
+  }
+  .contact-messages-table th:last-child,
+  .contact-messages-table td:last-child {
+    position: static !important;
+    box-shadow: none !important;
+    background: transparent !important;
+  }
+  .contact-messages-table th {
+    background: #faf7f5 !important;
+    padding: 13px 16px !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.6px !important;
+    color: var(--admin-text-muted) !important;
+    border-bottom: 1.5px solid #ebdcd5 !important;
+  }
+  .contact-messages-table td {
+    padding: 14px 16px !important;
+    border-bottom: 1px solid #f1eae5 !important;
+    vertical-align: middle !important;
   }
 
   .msg-snippet {
@@ -968,25 +1128,246 @@
     margin: 12px 0 6px 0;
   }
 
-  /* Settings Form Layout & Generous Padding */
+  /* ========================================================
+     SETTINGS TAB: PAGE & OFFICE INFO MODERN STYLING
+     ======================================================== */
   .settings-form-layout {
     display: flex;
     flex-direction: column;
     gap: 22px;
+    width: 100%;
+    max-width: 100%;
   }
+
+  /* Top Info Banner */
+  .settings-intro-banner {
+    background: linear-gradient(135deg, #fff7ed 0%, #ffffff 100%);
+    border: 1.5px solid #fed7aa;
+    border-radius: 14px;
+    padding: 18px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    box-shadow: 0 2px 10px rgba(234, 88, 12, 0.05);
+  }
+
+  .settings-intro-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .settings-intro-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: #ea580c;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(234, 88, 12, 0.25);
+  }
+
+  .settings-intro-text h3 {
+    font-size: 16px;
+    font-weight: 800;
+    color: #9a3412;
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  .settings-intro-text p {
+    font-size: 12.5px;
+    color: #7c2d12;
+    margin: 3px 0 0 0;
+    line-height: 1.45;
+  }
+
+  .btn-live-preview-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 99px;
+    background: #ffffff;
+    border: 1.5px solid #fdba74;
+    color: #c2410c;
+    font-size: 12.5px;
+    font-weight: 800;
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+
+  .btn-live-preview-pill:hover {
+    background: #ea580c;
+    border-color: #ea580c;
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(234, 88, 12, 0.25);
+  }
+
+  /* Settings Card & Headers */
+  .settings-card {
+    border-radius: 14px;
+    border: 1.5px solid #ebdcd5;
+    background: #ffffff;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    overflow: hidden;
+  }
+
+  .settings-card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    border-color: #dfcac0;
+  }
+
+  .admin-card-header {
+    padding: 16px 22px;
+    border-bottom: 1.5px solid #f1eae5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+    background: #fffcfb;
+  }
+
+  .card-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .card-header-badge {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .badge-indigo {
+    background: #e0e7ff;
+    color: #4338ca;
+    border: 1px solid #c7d2fe;
+  }
+  .badge-amber {
+    background: #fef3c7;
+    color: #b45309;
+    border: 1px solid #fde68a;
+  }
+  .badge-teal {
+    background: #ccfbf1;
+    color: #0f766e;
+    border: 1px solid #99f6e4;
+  }
+  .badge-green {
+    background: #dcfce7;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+  }
+  .badge-purple {
+    background: #f3e8ff;
+    color: #7e22ce;
+    border: 1px solid #e9d5ff;
+  }
+
+  .card-header-titles h3 {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--admin-text-dark);
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  .card-header-titles p {
+    font-size: 11.5px;
+    color: var(--admin-text-muted);
+    margin: 2px 0 0 0;
+    line-height: 1.35;
+  }
+
+  .card-step-tag {
+    font-size: 11px;
+    font-weight: 800;
+    color: #64748b;
+    background: #f1f5f9;
+    padding: 3px 10px;
+    border-radius: 99px;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+  }
+
+  /* Form Grid */
   .settings-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px;
-    padding: 24px !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 22px;
+    padding: 22px !important;
   }
+
   .settings-grid .form-group-full {
     grid-column: 1 / -1;
   }
 
+  .admin-form-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 7px;
+  }
+
+  .label-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #334155;
+  }
+
+  .label-badge {
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .label-required {
+    background: #fee2e2;
+    color: #dc2626;
+  }
+
+  .field-hint {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11.5px;
+    color: var(--admin-text-muted);
+    margin-top: 5px;
+    line-height: 1.4;
+  }
+
+  .field-hint svg {
+    flex-shrink: 0;
+    color: #94a3b8;
+  }
+
+  /* Form Control Modern Elements */
   .form-control {
     width: 100%;
-    padding: 10px 14px;
+    height: 44px;
+    padding: 0 14px;
     border: 1.5px solid #ebdcd5 !important;
     border-radius: 9px;
     font-size: 13.5px;
@@ -994,82 +1375,376 @@
     background: #ffffff;
     box-sizing: border-box;
     font-family: inherit;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-  .form-control:focus {
-    border-color: var(--admin-primary) !important;
-    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.08) !important;
+    transition: all 0.18s ease;
     outline: none !important;
   }
-  .form-control:not(:focus):invalid {
-    border-color: #ebdcd5 !important;
+
+  .form-control:focus {
+    border-color: var(--admin-primary) !important;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
+    background: #ffffff;
   }
 
-  @media (max-width: 960px) {
-    .contact-stats-grid {
-      grid-template-columns: repeat(2, 1fr) !important;
-    }
-  }
-  @media (max-width: 540px) {
-    .contact-stats-grid {
-      grid-template-columns: 1fr !important;
-    }
-    .settings-grid {
-      grid-template-columns: 1fr;
-      padding: 16px !important;
-    }
+  .form-control-textarea {
+    height: auto !important;
+    min-height: 80px;
+    padding: 10px 14px !important;
+    resize: vertical;
+    line-height: 1.5;
   }
 
-  .admin-form-label {
-    display: block;
+  .file-upload-box {
+    width: 100%;
+  }
+
+  .file-input-control {
+    height: 44px;
+    padding: 7px 12px;
     font-size: 12.5px;
+    cursor: pointer;
+    background: #faf8f7;
+    border-style: dashed !important;
+  }
+
+  .input-with-icon {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  .input-icon-slot {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .input-icon-slot.wa-slot {
+    color: #16a34a;
+  }
+
+  .has-icon-left {
+    padding-left: 36px !important;
+  }
+
+  /* Live Banner Preview Box */
+  .banner-live-preview-box {
+    height: 140px;
+    border-radius: 12px;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid #cbd5e1;
+    position: relative;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    transition: background-image 0.3s ease;
+  }
+
+  .banner-preview-badge {
+    position: absolute;
+    top: 10px;
+    left: 12px;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    color: #ffffff;
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 0.6px;
+    padding: 3px 9px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .live-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #22c55e;
+    display: inline-block;
+    box-shadow: 0 0 8px #22c55e;
+  }
+
+  .banner-preview-heading {
+    color: #ffffff;
+    font-family: 'Rozha One', 'Noto Sans Devanagari', serif;
+    font-size: 26px;
+    font-weight: 800;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85);
+    text-align: center;
+    margin: 0;
+    line-height: 1.3;
+    max-width: 90%;
+  }
+
+  /* Map Link Group */
+  .map-link-input-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+  }
+
+  .map-input-flex {
+    flex: 1;
+  }
+
+  .btn-map-test {
+    height: 44px;
+    padding: 0 18px;
+    border-radius: 9px;
+    font-size: 13px;
     font-weight: 700;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    border: 1.5px solid #cbd5e1;
+    background: #f8fafc;
     color: var(--admin-text-dark);
-    margin-bottom: 6px;
+    transition: all 0.2s ease;
   }
 
-  .field-hint {
-    display: block;
+  .btn-map-test:hover {
+    border-color: var(--admin-primary);
+    background: #fef2f2;
+    color: var(--admin-primary);
+  }
+
+  .btn-map-test.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  /* WhatsApp Preview Box */
+  .whatsapp-preview-box {
+    background: #f0fdf4;
+    border: 1.5px solid #bbf7d0;
+    border-radius: 12px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .wa-preview-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .wa-preview-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: #22c55e;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .wa-preview-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .wa-preview-title {
     font-size: 11px;
-    color: var(--admin-text-muted);
-    margin-top: 4px;
+    font-weight: 800;
+    color: #166534;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
   }
 
+  .wa-preview-url {
+    font-size: 12.5px;
+    color: #15803d;
+    font-family: monospace;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 540px;
+    font-weight: 600;
+  }
+
+  .btn-wa-test {
+    background: #16a34a;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+    padding: 8px 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    transition: background 0.2s;
+    border: none;
+  }
+
+  .btn-wa-test:hover {
+    background: #15803d;
+  }
+
+  .btn-wa-test.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  /* Social Media Inputs with Brand Icons */
+  .social-input-wrap {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    border-radius: 9px;
+    overflow: hidden;
+    border: 1.5px solid #ebdcd5;
+    background: #ffffff;
+    transition: all 0.18s ease;
+  }
+
+  .social-input-wrap:focus-within {
+    border-color: var(--admin-primary) !important;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
+  }
+
+  .social-brand-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-right: 1px solid #ebdcd5;
+  }
+
+  .brand-fb .social-brand-icon {
+    color: #1877f2;
+    background: #eff6ff;
+  }
+  .brand-x .social-brand-icon {
+    color: #0f172a;
+    background: #f8fafc;
+  }
+  .brand-ig .social-brand-icon {
+    color: #e1306c;
+    background: #fff1f2;
+  }
+  .brand-yt .social-brand-icon {
+    color: #ff0000;
+    background: #fef2f2;
+  }
+  .brand-tg .social-brand-icon {
+    color: #229ed9;
+    background: #f0f9ff;
+  }
+
+  .social-field {
+    border: none !important;
+    box-shadow: none !important;
+    height: 44px;
+    padding: 0 14px;
+    width: 100%;
+    outline: none !important;
+    background: transparent;
+    font-size: 13.5px;
+  }
+
+  /* Sticky Floating Save Bar */
   .settings-save-bar {
     position: sticky;
-    bottom: 20px;
-    background: #ffffff;
-    border: 1px solid var(--admin-border);
+    bottom: 16px;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1.5px solid #ebdcd5;
     border-radius: 14px;
     padding: 16px 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    z-index: 50;
+    gap: 16px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+    z-index: 80;
+    margin-top: 10px;
   }
 
-  .settings-save-bar strong {
-    font-size: 14px;
+  .save-bar-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+  }
+
+  .save-bar-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .save-bar-info strong {
+    font-size: 14.5px;
     color: var(--admin-text-dark);
-    display: block;
+    font-weight: 800;
   }
 
-  .settings-save-bar p {
-    font-size: 11.5px;
+  .save-bar-info p {
+    font-size: 12px;
     color: var(--admin-text-muted);
     margin: 0;
+    line-height: 1.4;
   }
 
   .btn-save-action {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
-    padding: 12px 24px;
-    font-size: 13.5px;
+    padding: 12px 28px;
+    font-size: 14px;
     font-weight: 800;
     border-radius: 10px;
     cursor: pointer;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    color: #ffffff;
+    border: none;
+    box-shadow: 0 4px 14px rgba(220, 38, 38, 0.3);
+    transition: all 0.2s ease;
+  }
+
+  .btn-save-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+  }
+
+  .btn-save-action:active {
+    transform: translateY(0);
   }
 
   /* Modal */
@@ -1079,6 +1754,7 @@
     background: rgba(15, 23, 42, 0.6);
     z-index: 1000;
     backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
   }
 
   .admin-modal {
@@ -1162,49 +1838,125 @@
     justify-content: flex-end;
   }
 
-  @media (max-width: 900px) {
+  /* ========================================================
+     RESPONSIVE BREAKPOINTS (TABLETS & MOBILES)
+     ======================================================== */
+  @media (max-width: 960px) {
     .contact-stats-grid {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2, 1fr) !important;
       gap: 12px;
+    }
+    .wa-preview-url {
+      max-width: 320px;
     }
   }
 
   @media (max-width: 768px) {
     .settings-grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: 1fr !important;
+      gap: 16px;
+      padding: 18px 14px !important;
     }
+
+    .settings-intro-banner {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+      padding: 16px 14px;
+    }
+
+    .btn-live-preview-pill {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .admin-card-header {
+      padding: 14px 16px;
+      gap: 10px;
+    }
+
+    .card-step-tag {
+      display: none;
+    }
+
+    .banner-live-preview-box {
+      height: 120px;
+      padding: 12px;
+    }
+
+    .banner-preview-heading {
+      font-size: 20px;
+    }
+
+    .map-link-input-group {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+    }
+
+    .btn-map-test {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .whatsapp-preview-box {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+    }
+
+    .btn-wa-test {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .settings-save-bar {
+      position: sticky;
+      bottom: 8px;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 12px;
+    }
+
+    .btn-save-action {
+      width: 100%;
+      height: 46px;
+    }
+
+    .save-bar-info p {
+      display: none;
+    }
+
     .modal-meta-grid {
       grid-template-columns: 1fr;
     }
-    .settings-save-bar {
-      flex-direction: column;
-      gap: 12px;
-      align-items: stretch;
-      padding: 14px 16px;
-    }
-    .btn-save-action {
-      justify-content: center;
-      width: 100%;
-    }
+
     .inbox-actions-row {
       flex-direction: column;
       align-items: stretch;
       gap: 12px;
     }
+
     .search-form-wrap {
       width: 100%;
     }
+
     .search-input-box {
       flex: 1;
     }
+
     .search-field {
       width: 100%;
       min-width: 0;
     }
+
     .contact-stat-box {
       padding: 14px;
       gap: 12px;
     }
+
     .stat-box-content strong {
       font-size: 20px;
     }
@@ -1212,24 +1964,54 @@
 
   @media (max-width: 480px) {
     .contact-stats-grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: 1fr !important;
       gap: 10px;
     }
+
     .contact-tab-btn {
       padding: 8px 12px;
       font-size: 12px;
     }
+
+    .settings-grid {
+      padding: 14px 12px !important;
+    }
+
+    .card-header-left {
+      gap: 10px;
+    }
+
+    .card-header-titles h3 {
+      font-size: 14px;
+    }
+
+    .card-header-titles p {
+      font-size: 11px;
+    }
+
+    .card-header-badge {
+      width: 34px;
+      height: 34px;
+    }
+
+    .form-control {
+      font-size: 13px;
+    }
+
     .filter-pills-wrap {
       width: 100%;
     }
+
     .filter-pill {
       font-size: 11px;
       padding: 4px 10px;
     }
+
     .admin-modal {
       width: 95%;
       border-radius: 14px;
     }
+
     .admin-modal-header,
     .admin-modal-body,
     .admin-modal-footer {
@@ -1323,4 +2105,57 @@
       reader.readAsDataURL(input.files[0]);
     }
   }
+
+  // Google Maps Dynamic Test Link Handler
+  function updateMapTestLink(val) {
+    const btn = document.getElementById("mapTestLinkBtn");
+    if (!btn) return;
+    const cleanUrl = (val || "").trim();
+    if (cleanUrl && (cleanUrl.startsWith("http://") || cleanUrl.startsWith("https://"))) {
+      btn.href = cleanUrl;
+      btn.classList.remove("disabled");
+      btn.style.pointerEvents = "auto";
+      btn.style.opacity = "1";
+    } else {
+      btn.href = "#";
+      btn.classList.add("disabled");
+      btn.style.pointerEvents = "none";
+      btn.style.opacity = "0.5";
+    }
+  }
+
+  // WhatsApp Dynamic URL & Test Link Handler
+  function updateWhatsappPreview() {
+    const numInput = document.getElementById("whatsappNumber");
+    const msgInput = document.getElementById("whatsappMessage");
+    const previewText = document.getElementById("waPreviewLinkText");
+    const testBtn = document.getElementById("waTestBtn");
+    if (!numInput || !previewText || !testBtn) return;
+
+    const rawNum = (numInput.value || "").trim().replace(/[^0-9]/g, "");
+    const rawMsg = (msgInput ? msgInput.value : "").trim();
+    if (rawNum) {
+      const fullLink = `https://wa.me/${rawNum}${rawMsg ? `?text=${encodeURIComponent(rawMsg)}` : ""}`;
+      previewText.textContent = fullLink;
+      testBtn.href = fullLink;
+      testBtn.classList.remove("disabled");
+      testBtn.style.pointerEvents = "auto";
+      testBtn.style.opacity = "1";
+    } else {
+      previewText.textContent = "कृपया मान्य व्हाट्सएप नंबर दर्ज करें (उदा. +91...)";
+      testBtn.href = "#";
+      testBtn.classList.add("disabled");
+      testBtn.style.pointerEvents = "none";
+      testBtn.style.opacity = "0.5";
+    }
+  }
+
+  // Auto-initialize dynamic controls on page load
+  document.addEventListener("DOMContentLoaded", function() {
+    const mapInput = document.getElementById("mapDirectionsUrl");
+    if (mapInput) updateMapTestLink(mapInput.value);
+
+    const waInput = document.getElementById("whatsappNumber");
+    if (waInput) updateWhatsappPreview();
+  });
 </script>

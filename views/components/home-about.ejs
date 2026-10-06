@@ -77,8 +77,20 @@
 
             <!-- Motivational Bold Heading (Matching Image 2) -->
             <h3 class="home-about-card-heading">
-              <%= (aboutData.quoteText && aboutData.quoteText.trim()) ? aboutData.quoteText : 'जब समाज का एक-एक हाथ साथ जुड़ता है, तो इतिहास की दिशा बदल जाती है। निषाद संकल्प अभियान आपकी आवाज है।' %>
+              <%= (aboutData.quoteText && aboutData.quoteText.trim()) ? aboutData.quoteText : ((aboutData.headingPrefix || aboutData.highlightHeading) ? ((aboutData.headingPrefix || '') + ' ' + (aboutData.highlightHeading || '')).trim() : 'जब समाज का एक-एक हाथ साथ जुड़ता है, तो इतिहास की दिशा बदल जाती है। निषाद संकल्प अभियान आपकी आवाज है।') %>
             </h3>
+
+            <% if (aboutData.quoteAuthor && aboutData.quoteAuthor.trim()) { %>
+              <div class="home-about-author-cite" style="font-size: 13px; font-weight: 700; color: #b91c1c; margin: -16px 0 16px 0;">
+                <%= aboutData.quoteAuthor %>
+              </div>
+            <% } %>
+
+            <% if (aboutData.tagline && aboutData.tagline.trim()) { %>
+              <p class="home-about-tagline" style="font-size: 13.5px; color: #6b4f4f; line-height: 1.5; margin: -10px 0 18px 0; font-weight: 500;">
+                <%= aboutData.tagline %>
+              </p>
+            <% } %>
 
             <!-- Checklist with Green Checkmarks (Matching Image 2) -->
             <ul class="home-about-checklist">
@@ -97,7 +109,12 @@
                       <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
                   </span>
-                  <span class="checklist-text"><%= pt.title %></span>
+                  <div class="checklist-text-wrapper">
+                    <span class="checklist-text"><%= pt.title %></span>
+                    <% if (pt.description && pt.description.trim()) { %>
+                      <p class="checklist-subtext" style="margin: 2px 0 0; font-size: 13px; color: #64748b; font-weight: 500; line-height: 1.45;"><%= pt.description %></p>
+                    <% } %>
+                  </div>
                 </li>
               <% }); %>
             </ul>
