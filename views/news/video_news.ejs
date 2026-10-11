@@ -23,8 +23,7 @@ const pageUrl = (number) => {
   <meta property="og:title" content="न्यूज़ और प्रेस | निषाद आरक्षण संकल्प अभियान">
   <meta property="og:description" content="<%= typeof metaDescription !== 'undefined' ? metaDescription : 'निषाद आरक्षण संकल्प अभियान से जुड़ी ताज़ा खबरें और मीडिया रिपोर्ट।' %>">
   <meta property="og:url" content="<%= typeof canonicalUrl !== 'undefined' ? canonicalUrl : 'https://nishadaarakshansankalp.com/news' %>">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="<%= heroPoster ? (/^https?:\/\//i.test(heroPoster) ? heroPoster : 'https://nishadaarakshansankalp.com' + heroPoster) : 'https://nishadaarakshansankalp.com/images/logo.png' %>">
+  <meta property="og:image" content="https://nishadaarakshansankalp.com/images/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/index.css">
@@ -32,33 +31,26 @@ const pageUrl = (number) => {
 </head>
 <body><%- include('../common/navbar') %>
 <main class="press-page">
-  <!-- HERO BANNER (SAME AS GALLERY HERO) -->
+  <!-- HERO BANNER (SAME AS GALLERY & ABOUT HERO) -->
   <section class="gallery-hero">
-    <% if (heroPoster) { %>
-      <div style="position: absolute; inset: 0; opacity: 0.22; pointer-events: none; z-index: 0;">
-        <img src="<%= heroPoster %>" alt="" style="width: 100%; height: 100%; object-fit: cover;">
+    <h1>
+      <span>न्यूज़ और प्रेस</span>
+    </h1>
+    <p>
+      निषाद आरक्षण संकल्प अभियान से जुड़ी ताज़ा खबरें और मीडिया रिपोर्ट।
+    </p>
+    <div class="gallery-stats-pills">
+      <div class="gallery-stat-pill">
+        <span>कुल खबरें:</span>
+        <strong><%= stats.news %></strong>
       </div>
-    <% } %>
-    <div style="position: relative; z-index: 1;">
-      <h1>
-        <span>न्यूज़ और प्रेस</span>
-      </h1>
-      <p>
-        निषाद आरक्षण संकल्प अभियान से जुड़ी ताज़ा खबरें और मीडिया रिपोर्ट।
-      </p>
-      <div class="gallery-stats-pills">
-        <div class="gallery-stat-pill">
-          <span>कुल खबरें:</span>
-          <strong><%= stats.news %></strong>
-        </div>
-        <div class="gallery-stat-pill">
-          <span>शामिल ज़िले:</span>
-          <strong><%= stats.districts %></strong>
-        </div>
-        <div class="gallery-stat-pill">
-          <span>शामिल राज्य:</span>
-          <strong><%= stats.states %></strong>
-        </div>
+      <div class="gallery-stat-pill">
+        <span>शामिल ज़िले:</span>
+        <strong><%= stats.districts %></strong>
+      </div>
+      <div class="gallery-stat-pill">
+        <span>शामिल राज्य:</span>
+        <strong><%= stats.states %></strong>
       </div>
     </div>
   </section>

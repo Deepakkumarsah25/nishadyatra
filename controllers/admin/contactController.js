@@ -3,6 +3,15 @@ const ContactMessage = require("../../models/ContactMessage");
 const { getPagination } = require("../../utils/pagination");
 const { uploadBuffer, removeAsset } = require("../../config/cloudinary");
 
+function formatSocialUrl(url) {
+  if (!url) return "";
+  let trimmed = url.trim();
+  if (trimmed && !/^https?:\/\//i.test(trimmed)) {
+    return "https://" + trimmed;
+  }
+  return trimmed;
+}
+
 /**
  * Display Admin Contact Management Hub
  */
@@ -152,27 +161,60 @@ exports.updateContactSettings = async (req, res) => {
     if (primaryPhone !== undefined) contact.primaryPhone = primaryPhone.trim();
     if (secondaryPhone !== undefined) contact.secondaryPhone = secondaryPhone.trim();
     if (primaryEmail !== undefined) contact.primaryEmail = primaryEmail.trim();
+
     if (secondaryEmail !== undefined) contact.secondaryEmail = secondaryEmail.trim();
     if (whatsappNumber !== undefined) contact.whatsappNumber = whatsappNumber.trim();
     if (whatsappMessage !== undefined) contact.whatsappMessage = whatsappMessage.trim();
-    if (facebookUrl !== undefined) contact.facebookUrl = facebookUrl.trim();
-    if (twitterUrl !== undefined) contact.twitterUrl = twitterUrl.trim();
-    if (instagramUrl !== undefined) contact.instagramUrl = instagramUrl.trim();
-    if (youtubeUrl !== undefined) contact.youtubeUrl = youtubeUrl.trim();
-    if (telegramUrl !== undefined) contact.telegramUrl = telegramUrl.trim();
+    if (facebookUrl !== undefined) contact.facebookUrl = formatSocialUrl(facebookUrl);
+    if (twitterUrl !== undefined) contact.twitterUrl = formatSocialUrl(twitterUrl);
+    if (instagramUrl !== undefined) contact.instagramUrl = formatSocialUrl(instagramUrl);
+    if (youtubeUrl !== undefined) contact.youtubeUrl = formatSocialUrl(youtubeUrl);
+    if (telegramUrl !== undefined) contact.telegramUrl = formatSocialUrl(telegramUrl);
 
     await contact.save();
     if (previousBannerPublicId && previousBannerPublicId !== contact.bannerImagePublicId) {
       await removeAsset(previousBannerPublicId).catch(() => {});
     }
 
+    const redirectTab = req.body.originTab === "social" ? "social" : "settings";
     res.redirect(
-      `/admin/contact?tab=settings&msg=${encodeURIComponent("संपर्क जानकारी एवं सेटिंग्स सफलतापूर्वक अपडेट हो गई हैं।")}`
+      `/admin/contact?tab=${redirectTab}&msg=${encodeURIComponent("संपर्क जानकारी एवं सेटिंग्स सफलतापूर्वक अपडेट हो गई हैं।")}`
     );
   } catch (error) {
     console.error("Update Contact Settings Error:", error);
     res.redirect(
       `/admin/contact?tab=settings&err=${encodeURIComponent("सेटिंग्स सहेजने में विफलता: " + error.message)}`
+    );
+  }
+};
+
+/**
+ * Dedicated Controller for Social Media Links Update
+ */
+exports.updateSocialLinks = async (req, res) => {
+  try {
+    const { facebookUrl, twitterUrl, instagramUrl, youtubeUrl, telegramUrl } = req.body;
+
+    let contact = await ContactInfo.findOne();
+    if (!contact) {
+      contact = new ContactInfo();
+    }
+
+    if (facebookUrl !== undefined) contact.facebookUrl = formatSocialUrl(facebookUrl);
+    if (twitterUrl !== undefined) contact.twitterUrl = formatSocialUrl(twitterUrl);
+    if (instagramUrl !== undefined) contact.instagramUrl = formatSocialUrl(instagramUrl);
+    if (youtubeUrl !== undefined) contact.youtubeUrl = formatSocialUrl(youtubeUrl);
+    if (telegramUrl !== undefined) contact.telegramUrl = formatSocialUrl(telegramUrl);
+
+    await contact.save();
+
+    res.redirect(
+      `/admin/contact?tab=social&msg=${encodeURIComponent("सोशल मीडिया लिंक सफलतापूर्वक सहेज लिए गए हैं। वेबसाइट के फूटर और सभी पेजों पर यह तुरंत लाइव हैं।")}`
+    );
+  } catch (error) {
+    console.error("Update Social Links Error:", error);
+    res.redirect(
+      `/admin/contact?tab=social&err=${encodeURIComponent("सोशल मीडिया लिंक सहेजने में त्रुटि: " + error.message)}`
     );
   }
 };

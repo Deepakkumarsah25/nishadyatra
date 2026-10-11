@@ -120,6 +120,18 @@ app.use(
 
 // ================================
 app.use(sessionConfig);
+
+// Global Site Contact & Dynamic Social Media Links Middleware for all EJS templates (footer, navbar, etc.)
+app.use(async (req, res, next) => {
+  try {
+    const contact = await ContactInfo.findOne().lean().catch(() => null);
+    res.locals.contactInfo = contact || ContactInfo.defaultData;
+  } catch (err) {
+    res.locals.contactInfo = ContactInfo.defaultData;
+  }
+  next();
+});
+
 app.use("/admin", csrfProtection);
 app.use(videoNewsRoutes);
 
@@ -134,6 +146,7 @@ app.use("/admin/home", adminHomeRoutes);
 app.use("/admin/kalash-yatra", adminKalashYatraRoutes);
 app.use("/admin/about", adminAboutRoutes);
 app.use("/admin/contact", adminContactRoutes);
+app.get("/admin/social", (req, res) => res.redirect("/admin/contact?tab=social"));
 
 // ========================================
 // Test API

@@ -13,6 +13,9 @@ router.get("/", contactController.getContactManager);
 // Update Page Settings (Supports file upload and URL)
 router.post("/settings", contactUpload, contactController.updateContactSettings);
 
+// Update Social Media Links (Dynamic Footer & Contact links)
+router.post("/social", contactController.updateSocialLinks);
+
 // Update Message Status & Notes
 router.post("/messages/status/:id", contactController.updateMessageStatus);
 

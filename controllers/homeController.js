@@ -8,6 +8,7 @@ const InitiativeInquiry = require("../models/InitiativeInquiry");
 const SankalpPhoto = require("../models/SankalpPhoto");
 const KalashYatra = require("../models/KalashYatra");
 const VideoNews = require("../models/news/VideoNews");
+const ContactInfo = require("../models/ContactInfo");
 const {
   defaultHeroSlides,
   defaultInitiatives,
@@ -78,7 +79,7 @@ async function getHomepageKalash() {
 // Public Home Page
 exports.getHomePage = async (req, res) => {
   try {
-    const [heroSlides, initiatives, whyChooseDoc, notices, quickInfoDoc, galleryPhotos, kalashDoc, newsDocs, homeAboutDoc] =
+    const [heroSlides, initiatives, whyChooseDoc, notices, quickInfoDoc, galleryPhotos, kalashDoc, newsDocs, homeAboutDoc, contactInfoDoc] =
       await Promise.all([
         HeroSlide.find({ isActive: true }).sort({ order: 1, createdAt: 1 }).limit(10),
         Initiative.find({ isActive: true }).sort({ order: 1, createdAt: 1 }).limit(24),
@@ -93,6 +94,7 @@ exports.getHomePage = async (req, res) => {
           .lean()
           .catch(() => []),
         HomeAbout.findOne(),
+        ContactInfo.findOne().lean().catch(() => null),
       ]);
 
     // Fallbacks if database is completely empty or just initialized
@@ -239,6 +241,7 @@ exports.getHomePage = async (req, res) => {
       highlightNews,
       homeNewsList,
       homeAbout: finalHomeAbout,
+      contactInfo: contactInfoDoc || ContactInfo.defaultData || {},
     });
   } catch (error) {
     console.error("Home page render error:", error);
@@ -260,6 +263,7 @@ exports.getHomePage = async (req, res) => {
       highlightNews: null,
       homeNewsList: [],
       homeAbout: HomeAbout.defaultData || {},
+      contactInfo: ContactInfo.defaultData || {},
     });
   }
 };

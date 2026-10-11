@@ -481,45 +481,6 @@
         </article>
       </section>
 
-      <section class="hero-poster-manager">
-        <div class="hero-poster-copy">
-          <span class="eyebrow">PUBLIC NEWS PAGE</span>
-          <h2>News Hero Poster</h2>
-          <p>Use a hosted image URL or upload a wide banner for the full-width news hero. Recommended size: 1920 x 840 px (16:7).</p>
-          <% if (posterError) { %><p class="poster-message is-error" role="alert"><%= posterError %></p><% } %>
-          <% if (typeof query !== 'undefined' && query.posterSaved) { %><p class="poster-message" role="status">Hero poster updated.</p><% } %>
-          <% if (typeof query !== 'undefined' && query.posterRemoved) { %><p class="poster-message" role="status">Hero poster removed.</p><% } %>
-          <form class="poster-upload-form" action="/admin/video_news/hero-poster" method="post" enctype="multipart/form-data">
-            <label class="field">Hosted poster image URL
-              <input type="url" name="heroPosterUrl" placeholder="https://example.com/banner.jpg">
-            </label>
-            <label class="field">Or upload a poster image
-              <input type="file" name="heroPoster" accept="image/jpeg,image/png,image/webp,image/avif">
-              <small>JPG, PNG, WebP, or AVIF · Maximum 8 MB. Uploading a new image replaces the current poster.</small>
-            </label>
-            <button class="primary" type="submit">Save Hero Poster</button>
-          </form>
-        </div>
-        <div class="hero-poster-preview-wrap">
-          <% if (newsPageSetting?.heroPosterPath) { %>
-            <div class="hero-poster-mockup">
-              <img class="hero-poster-preview" src="<%= newsPageSetting.heroPosterPath %>" alt="Current news hero poster">
-              <span class="hero-poster-crop-label">VISIBLE AREA · 16:7</span>
-              <div class="hero-poster-overlay">
-                <span>NEWS &amp; PRESS</span>
-                <strong>Latest stories and updates</strong>
-                <small>Crop preview: this 16:7 area fills the banner. Text stays on the left and the image remains clear on the right.</small>
-              </div>
-            </div>
-            <form action="/admin/video_news/hero-poster/delete" method="post" onsubmit="return confirm('Remove the news hero poster?')">
-              <button class="delete poster-delete" type="submit">Remove Poster</button>
-            </form>
-          <% } else { %>
-            <div class="hero-poster-mockup hero-poster-empty"><span class="hero-poster-crop-label">VISIBLE AREA · 16:7</span><span>Banner crop preview will appear here after upload</span></div>
-          <% } %>
-        </div>
-      </section>
-
       <!-- ========================================================
            REVAMPED MODERN ARTICLES FILTER TOOLBAR & TABLE
            ======================================================== -->
