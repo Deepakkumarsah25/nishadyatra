@@ -109,7 +109,7 @@
                   <option value="">-- Select State (राज्य चुनें) --</option>
                   <% if (typeof statesList !== 'undefined' && statesList.length > 0) { %>
                     <% statesList.forEach(function(st) { %>
-                      <option value="<%= st %>" <%= st === 'Uttar Pradesh' ? 'selected' : '' %>><%= st %></option>
+                      <option value="<%= st %>" <%= (st === 'उत्तर प्रदेश' || st === 'Uttar Pradesh') ? 'selected' : '' %>><%= st %></option>
                     <% }); %>
                   <% } %>
                 </select>
@@ -311,7 +311,7 @@
         stateEl: "defaultState",
         districtEl: "defaultDistrict",
         customDistrictEl: "customBulkDistrict",
-        selectedState: "Uttar Pradesh",
+        selectedState: "उत्तर प्रदेश",
         selectedDistrict: ""
       });
     }

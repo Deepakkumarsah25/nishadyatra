@@ -1,12 +1,12 @@
-﻿/**
+/**
  * SANKALP PHOTO GALLERY — JAVASCRIPT
  * District Filter, Real-time Search, and Lightbox Viewer
  */
 
 document.addEventListener("DOMContentLoaded", () => {
   let cards = Array.from(document.querySelectorAll(".gallery-card"));
-  let emptyState = document.getElementById("galleryEmptyState");
   const searchInput = document.getElementById("gallerySearchInput");
+  const stateFilter = document.getElementById("galleryStateFilter");
   const districtFilter = document.getElementById("galleryDistrictFilter");
   const filterForm = document.getElementById("galleryFilters");
   const grid = document.getElementById("galleryGrid");
@@ -24,9 +24,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const lightboxPrevBtn = document.getElementById("lightboxPrevBtn");
   const lightboxNextBtn = document.getElementById("lightboxNextBtn");
   const lightboxDownloadBtn = document.getElementById("lightboxDownloadBtn");
+  const lightboxCounter = document.getElementById("lightboxCounter");
+  const lightboxThumbStrip = document.getElementById("lightboxThumbStrip");
+  const lightboxAlbumBadge = document.getElementById("lightboxAlbumBadge");
 
   let currentVisibleCards = [...cards];
-  let activeIndex = 0;
+  let activeCardIndex = 0;
+  let activeCardImages = [];
+  let activeImageIndex = 0;
   let filterTimer;
   let activeRequest;
 
@@ -37,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function applyFilters() {
     currentVisibleCards = [...cards];
     cards.forEach((card) => { card.style.display = ""; });
+    let emptyState = document.getElementById("galleryEmptyState");
     if (emptyState) emptyState.style.display = cards.length ? "none" : "block";
     if (visibleCountBadge) visibleCountBadge.textContent = `${cards.length} फ़ोटो`;
   }
@@ -67,7 +73,6 @@ document.addEventListener("DOMContentLoaded", () => {
       grid.innerHTML = nextGrid.innerHTML;
       paginationHost.innerHTML = nextPagination.innerHTML;
       cards = Array.from(grid.querySelectorAll(".gallery-card"));
-      emptyState = grid.querySelector("#galleryEmptyState");
       applyFilters();
       if (historyMode === "push") history.pushState({}, "", url.pathname + url.search);
       else if (historyMode === "replace") history.replaceState({}, "", url.pathname + url.search);
@@ -89,6 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
       event.preventDefault();
       scheduleFilter(0);
     });
+    stateFilter?.addEventListener("change", () => scheduleFilter(250));
     districtFilter?.addEventListener("change", () => scheduleFilter(250));
     searchInput?.addEventListener("input", () => scheduleFilter(450));
     paginationHost?.addEventListener("click", (event) => {
@@ -104,36 +110,106 @@ document.addEventListener("DOMContentLoaded", () => {
       clearTimeout(filterTimer);
       const params = new URLSearchParams(window.location.search);
       searchInput.value = params.get("search") || "";
-      districtFilter.value = params.get("district") || "all";
+      if (stateFilter) stateFilter.value = params.get("state") || "all";
+      if (window.populateDistricts) {
+        window.populateDistricts(stateFilter, districtFilter, params.get("district") || "all");
+      }
+      if (districtFilter) districtFilter.value = params.get("district") || "all";
       loadGallery(new URL(window.location.href), "none");
     });
   }
-  // LIGHTBOX LOGIC
+
+  // ==========================================
+  // LIGHTBOX LOGIC WITH MULTI-IMAGE ALBUMS
   // ==========================================
 
-  function openLightbox(index) {
+  function setActiveImage(imgIndex) {
+    if (!activeCardImages || activeCardImages.length === 0) return;
+    activeImageIndex = (imgIndex + activeCardImages.length) % activeCardImages.length;
+    const item = activeCardImages[activeImageIndex];
+    const url = typeof item === "string" ? item : (item && item.url ? item.url : "");
+
+    if (lightboxImg) {
+      lightboxImg.style.opacity = "0.7";
+      lightboxImg.src = url;
+      lightboxImg.onload = () => { lightboxImg.style.opacity = "1"; };
+      setTimeout(() => { lightboxImg.style.opacity = "1"; }, 150);
+    }
+
+    if (lightboxCounter) {
+      if (activeCardImages.length > 1) {
+        lightboxCounter.style.display = "block";
+        lightboxCounter.textContent = `${activeImageIndex + 1} / ${activeCardImages.length}`;
+      } else {
+        lightboxCounter.style.display = "none";
+      }
+    }
+
+    // Highlight thumbnail in strip
+    if (lightboxThumbStrip) {
+      const thumbs = lightboxThumbStrip.querySelectorAll(".lightbox-thumb-item");
+      thumbs.forEach((th, i) => {
+        if (i === activeImageIndex) {
+          th.classList.add("active");
+          th.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+        } else {
+          th.classList.remove("active");
+        }
+      });
+    }
+  }
+
+  function openLightbox(cardIdx) {
     if (!currentVisibleCards || currentVisibleCards.length === 0) return;
 
-    activeIndex = (index + currentVisibleCards.length) % currentVisibleCards.length;
-    const card = currentVisibleCards[activeIndex];
+    activeCardIndex = (cardIdx + currentVisibleCards.length) % currentVisibleCards.length;
+    const card = currentVisibleCards[activeCardIndex];
     if (!card) return;
 
-    const imgUrl = card.getAttribute("data-image");
-    const name = card.getAttribute("data-name") || "अभियान के सदस्य";
-    const district = card.getAttribute("data-district") || "";
-    const date = card.getAttribute("data-date") || "";
-    const caption = card.getAttribute("data-caption") || "";
-
-    lightboxImg.src = imgUrl;
-    lightboxImg.alt = name;
-    lightboxName.textContent = name;
-    lightboxDistrict.textContent = district ? `📍 ${district}` : "";
-    lightboxDate.textContent = date ? `📅 ${date}` : "";
-    lightboxCaption.textContent = caption || "निषाद संकल्प अभियान के प्रति समर्पण में लिया गया संकल्प।";
-
-    if (lightboxDownloadBtn) {
-      lightboxDownloadBtn.href = imgUrl;
+    // Parse card images
+    activeCardImages = [];
+    try {
+      const raw = card.getAttribute("data-images");
+      if (raw) activeCardImages = JSON.parse(raw);
+    } catch (e) {
+      activeCardImages = [];
     }
+
+    if (!Array.isArray(activeCardImages) || activeCardImages.length === 0) {
+      const single = card.getAttribute("data-image");
+      activeCardImages = single ? [{ url: single }] : [];
+    }
+
+    // Toggle navigation arrows visibility
+    if (lightboxPrevBtn && lightboxNextBtn) {
+      if (activeCardImages.length > 1 || currentVisibleCards.length > 1) {
+        lightboxPrevBtn.style.display = "flex";
+        lightboxNextBtn.style.display = "flex";
+      } else {
+        lightboxPrevBtn.style.display = "none";
+        lightboxNextBtn.style.display = "none";
+      }
+    }
+
+    // Populate thumbnail strip
+    if (lightboxThumbStrip) {
+      if (activeCardImages.length > 1) {
+        lightboxThumbStrip.style.display = "flex";
+        lightboxThumbStrip.innerHTML = activeCardImages.map((img, i) => {
+          const u = typeof img === "string" ? img : (img && img.url ? img.url : "");
+          return `
+            <div class="lightbox-thumb-item" data-index="${i}" title="फ़ोटो ${i + 1}">
+              <img src="${u}" alt="Thumbnail ${i + 1}" loading="lazy" />
+            </div>
+          `;
+        }).join("");
+      } else {
+        lightboxThumbStrip.style.display = "none";
+        lightboxThumbStrip.innerHTML = "";
+      }
+    }
+
+    setActiveImage(0);
 
     lightbox.classList.add("active");
     document.body.style.overflow = "hidden";
@@ -145,18 +221,37 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function showNextPhoto() {
-    openLightbox(activeIndex + 1);
+    if (activeCardImages && activeCardImages.length > 1) {
+      setActiveImage(activeImageIndex + 1);
+    } else {
+      openLightbox(activeCardIndex + 1);
+    }
   }
 
   function showPrevPhoto() {
-    openLightbox(activeIndex - 1);
+    if (activeCardImages && activeCardImages.length > 1) {
+      setActiveImage(activeImageIndex - 1);
+    } else {
+      openLightbox(activeCardIndex - 1);
+    }
   }
 
   // Event delegation keeps lightbox clicks working after AJAX filter updates.
   grid?.addEventListener("click", (event) => {
     const card = event.target.closest(".gallery-card");
+    if (!card) return;
     const index = currentVisibleCards.indexOf(card);
     if (index !== -1) openLightbox(index);
+  });
+
+  // Clicking on thumbnail strip switches active photo
+  lightboxThumbStrip?.addEventListener("click", (event) => {
+    const thumb = event.target.closest(".lightbox-thumb-item");
+    if (!thumb) return;
+    const idx = parseInt(thumb.getAttribute("data-index"), 10);
+    if (!isNaN(idx)) {
+      setActiveImage(idx);
+    }
   });
 
   // Lightbox Nav buttons

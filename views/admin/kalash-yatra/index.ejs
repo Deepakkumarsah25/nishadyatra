@@ -530,7 +530,7 @@
                                       placeholder="उदा. गोपालगंज में भव्य लोकतांत्रिक संकल्प महासम्मेलन" required />
                                   </div>
                                   <div class="form-group">
-                                    <label for="vid_people">उपस्थित लोग / जनसमूह संख्या (How many people / People Count) *</label>
+                                    <label for="vid_people">उपस्थित सदस्य / लोग संख्या (People / Member Count) *</label>
                                     <input type="text" id="vid_people" name="peopleCount" class="form-control"
                                       placeholder="उदा. 15,000+ लोग या 5,000" value="5,000+ लोग" required />
                                     <span class="help-hint">👥 यह संख्या पब्लिक वीडियो कार्ड पर दिखाई देगी</span>
@@ -669,7 +669,7 @@
                                     <th style="width: 50px;">#</th>
                                     <th style="width: 100px;">थंबनेल</th>
                                     <th>शीर्षक व विवरण</th>
-                                    <th>उपस्थित जनसमूह (People Count)</th>
+                                    <th>उपस्थित सदस्य (Member Count)</th>
                                     <th>ज़िला व राज्य</th>
                                     <th>दिनांक</th>
                                     <th style="width: 130px; text-align: center;">होम पेज हाइलाइट</th>
@@ -679,7 +679,7 @@
                                 <tbody>
                                     <% if (!videoPagination.total) { %>
                                     <tr>
-                                      <td colspan="7" style="text-align: center; color: var(--admin-text-muted); padding: 30px;">
+                                      <td colspan="8" style="text-align: center; color: var(--admin-text-muted); padding: 30px;">
                                         वर्तमान में कोई वीडियो उपलब्ध नहीं है। ऊपर दिए गए फॉर्म से वीडियो जोड़ें।
                                       </td>
                                         </td>
@@ -897,7 +897,7 @@
                         <input type="text" id="edit_vid_title" name="title" class="form-control" required />
                       </div>
                       <div class="form-group">
-                        <label for="edit_vid_people">उपस्थित लोग / जनसमूह संख्या (How many people / People Count) *</label>
+                        <label for="edit_vid_people">उपस्थित सदस्य / लोग संख्या (People / Member Count) *</label>
                         <input type="text" id="edit_vid_people" name="peopleCount" class="form-control" placeholder="उदा. 15,000+ लोग" required />
                         <span class="help-hint">👥 यह संख्या पब्लिक वीडियो कार्ड पर दिखाई देगी</span>
                       </div>

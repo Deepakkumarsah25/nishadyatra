@@ -20,6 +20,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
+  <!-- Global Site CSS -->
+  <link rel="stylesheet" href="/css/index.css" />
+
   <!-- Common Navbar CSS -->
   <link rel="stylesheet" href="/css/common/navbar.css" />
 
@@ -1882,6 +1885,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      object-position: top center;
       display: block;
       transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
@@ -1928,54 +1932,6 @@
       background: var(--primary-crimson);
       color: #ffffff;
       box-shadow: 0 10px 30px rgba(185, 28, 28, 0.5);
-    }
-
-    /* Badges on Thumbnail */
-    .badge-location-corner {
-      position: absolute;
-      bottom: 12px;
-      left: 12px;
-      z-index: 3;
-      padding: 4px 10px;
-      border-radius: var(--radius-sm);
-      background: rgba(255, 255, 255, 0.95);
-      color: var(--crimson-ultra);
-      font-size: 11px;
-      font-weight: 800;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-      backdrop-filter: blur(6px);
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .badge-location-corner svg {
-      width: 12px;
-      height: 12px;
-      fill: var(--primary-crimson);
-    }
-
-    .badge-duration-corner {
-      position: absolute;
-      bottom: 12px;
-      right: 12px;
-      z-index: 3;
-      padding: 4px 8px;
-      border-radius: var(--radius-sm);
-      background: rgba(15, 6, 6, 0.88);
-      color: #ffffff;
-      font-size: 11px;
-      font-weight: 700;
-      backdrop-filter: blur(6px);
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .badge-duration-corner svg {
-      width: 11px;
-      height: 11px;
-      fill: var(--gold-light);
     }
 
     /* Card Text Content */
@@ -2047,70 +2003,6 @@
 
     .video-card-item:hover .card-title-text {
       color: var(--primary-crimson);
-    }
-
-    /* People Count Row (उपस्थित जनसमूह / संख्या) */
-    .card-meta-line {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 12.5px;
-      margin-bottom: 10px;
-      color: var(--text-body);
-    }
-
-    .card-people-line,
-    .card-person-line {
-      background: linear-gradient(135deg, #fffaf5 0%, #fdf3eb 100%);
-      border: 1px solid #fed7aa;
-      padding: 7px 12px;
-      border-radius: var(--radius-sm);
-      margin-bottom: 12px;
-      box-shadow: 0 2px 8px rgba(185, 28, 28, 0.04);
-      transition: all 0.25s ease;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .video-card-item:hover .card-people-line,
-    .video-card-item:hover .card-person-line {
-      border-color: #fdba74;
-      background: #fff5eb;
-    }
-
-    .card-people-line .meta-icon,
-    .card-person-line .meta-icon {
-      display: inline-flex;
-      align-items: center;
-      color: var(--primary-crimson);
-      flex-shrink: 0;
-    }
-
-    .card-people-line .meta-icon svg,
-    .card-person-line .meta-icon svg {
-      width: 17px;
-      height: 17px;
-      fill: currentColor;
-    }
-
-    .card-people-line .meta-label,
-    .card-person-line .meta-label {
-      font-size: 11.5px;
-      color: var(--gold-dark);
-      font-weight: 700;
-      letter-spacing: 0.3px;
-      white-space: nowrap;
-    }
-
-    .card-people-line .meta-val,
-    .card-person-line .meta-val {
-      font-size: 13.5px;
-      font-weight: 800;
-      color: var(--crimson-deep);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
     }
 
     .card-description-text {
@@ -3291,6 +3183,29 @@
   ===================================================== -->
   <main class="kalash-page">
 
+    <!-- HERO BANNER (SAME AS GALLERY HERO) -->
+    <section class="gallery-hero">
+      <h1>
+        <span><%= (typeof kalash !== 'undefined' && kalash.hero && kalash.hero.title) ? kalash.hero.title : 'वीडियो संकलन' %></span>
+      </h1>
+      <p>
+        <%= (typeof kalash !== 'undefined' && kalash.hero && kalash.hero.description) ? kalash.hero.description : 'लोकतांत्रिक महा-संकल्प यात्रा और निषाद संकल्प अभियान के प्रेरणादायी वीडियो।' %>
+      </p>
+      <div class="gallery-stats-pills">
+        <div class="gallery-stat-pill">
+          <span>कुल वीडियो:</span>
+          <strong><%= (typeof videoPagination !== 'undefined' && videoPagination.total) ? videoPagination.total : ((typeof kalash !== 'undefined' && kalash.videos) ? kalash.videos.length : '100+') %></strong>
+        </div>
+        <div class="gallery-stat-pill">
+          <span>शामिल राज्य:</span>
+          <strong><%= (typeof videoLocations !== 'undefined' && videoLocations.length) ? [...new Set(videoLocations.map(l => l._id?.state).filter(Boolean))].length : '3+' %>+</strong>
+        </div>
+        <div class="gallery-stat-pill">
+          <span>शामिल ज़िले:</span>
+          <strong><%= (typeof videoLocations !== 'undefined' && videoLocations.length) ? videoLocations.length : '50+' %>+</strong>
+        </div>
+      </div>
+    </section>
 
     <!-- ===================================================
          VIDEO GALLERY CARDS
@@ -3308,22 +3223,19 @@
           </div>
         </div>
         <div class="video-toolbar-row">
-          <div class="video-filter-controls" aria-label="Filter videos">
-            <div class="filter-col-select">
-              <select id="stateFilter" name="state" class="filter-normal-select" aria-label="राज्य चुनें">
-  <option value="all">सभी राज्य</option>
-  <% const stateOptions = [...new Set((videoLocations || []).map((location) => location._id?.state).filter(Boolean))]; %>
-  <% stateOptions.forEach((stateOption) => { %><option value="<%= stateOption %>" <%= selectedVideoState === stateOption ? 'selected' : '' %>><%= stateOption %></option><% }); %>
-</select>
-            </div>
-            <div class="filter-col-select">
-              <select id="districtFilter" name="district" class="filter-normal-select" aria-label="ज़िला चुनें">
-  <option value="all">सभी ज़िले</option>
-  <% const districtOptions = [...new Set((videoLocations || []).map((location) => location._id?.district).filter(Boolean))]; %>
-  <% districtOptions.forEach((districtOption) => { %><option value="<%= districtOption %>" <%= selectedVideoDistrict === districtOption ? 'selected' : '' %>><%= districtOption %></option><% }); %>
-</select>
-            </div>
-          </div>
+          <%- include("../components/location-filter", {
+            selectedState: selectedVideoState,
+            selectedDistrict: selectedVideoDistrict,
+            stateId: "stateFilter",
+            districtId: "districtFilter",
+            wrapperClass: "video-filter-controls",
+            colClass: "filter-col-select",
+            stateClass: "filter-normal-select",
+            districtClass: "filter-normal-select",
+            allValue: "all",
+            stateLabel: "सभी राज्य",
+            districtLabel: "सभी ज़िले"
+          }) %>
           <span class="video-filter-count"><span id="resultCount" aria-live="polite"><%= videoPagination.total %></span> वीडियो</span>
         </div>
         </form>
@@ -3331,24 +3243,27 @@
         <div class="video-cards-grid" id="videoGrid">
           <% videoList.forEach((vid, index) => { %>
             <% 
-              let ytId = '';
-              if (vid.videoUrl) {
-                if (vid.videoUrl.includes('embed/')) {
-                  ytId = vid.videoUrl.split('embed/')[1].split(/[?&]/)[0];
-                } else if (vid.videoUrl.includes('watch?v=')) {
-                  ytId = vid.videoUrl.split('watch?v=')[1].split('&')[0];
-                } else if (vid.videoUrl.includes('youtu.be/')) {
-                  ytId = vid.videoUrl.split('youtu.be/')[1].split(/[?&]/)[0];
-                } else if (vid.videoUrl.includes('shorts/')) {
-                  ytId = vid.videoUrl.split('shorts/')[1].split(/[?&]/)[0];
+              function getKalashCardThumb(v) {
+                const rawThumb = String(v.thumbnail || '').trim();
+                const rawUrl = String(v.videoUrl || '').trim();
+                const isVideoWebpage = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be|vimeo\.com|player\.vimeo\.com)\//i.test(rawThumb);
+                if (rawThumb && !isVideoWebpage && (/\.(jpe?g|png|webp|gif|avif)($|\?)/i.test(rawThumb) || rawThumb.includes('/uploads/') || rawThumb.includes('cloudinary.com') || rawThumb.includes('unsplash.com') || rawThumb.includes('vumbnail.com') || rawThumb.includes('ytimg.com'))) {
+                  return rawThumb;
                 }
+                const ytMatch = (rawUrl || rawThumb).match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/|v\/))([\w-]{11})/i);
+                if (ytMatch && ytMatch[1]) {
+                  return 'https://img.youtube.com/vi/' + ytMatch[1] + '/hqdefault.jpg';
+                }
+                const vimeoMatch = (rawUrl || rawThumb).match(/(?:player\.)?vimeo\.com\/(?:video\/)?(\d+)/i);
+                if (vimeoMatch && vimeoMatch[1]) {
+                  return 'https://vumbnail.com/' + vimeoMatch[1] + '.jpg';
+                }
+                return '/images/kalash-yatra-featured.jpg';
               }
-              const vimeoMatch = (vid.videoUrl || '').match(/(?:player\.)?vimeo\.com\/(?:video\/)?(\d+)/i);
-              const thumbImg = vid.thumbnail || (ytId ? ('https://img.youtube.com/vi/' + ytId + '/hqdefault.jpg') : vimeoMatch ? ('https://vumbnail.com/' + vimeoMatch[1] + '.jpg') : '');
+              const thumbImg = getKalashCardThumb(vid);
             %>
             <article
-              class="video-card-item<%= index >= 9 ? ' paged-out hidden' : '' %>"
-              <%= index >= 9 ? 'style="display: none;"' : '' %>
+              class="video-card-item"
               data-category="<%= vid.category || 'yatra' %>"
               data-state="<%= vid.state || 'bihar' %>"
               data-district="<%= (vid.district || '').trim() %>"
@@ -3362,32 +3277,18 @@
               data-location="<%= vid.district ? (vid.district + ', ') : '' %><%= vid.state %>"
             >
               <div class="card-media-box">
-                <% if (thumbImg) { %>
-                  <img src="<%= thumbImg %>" alt="<%= vid.title %>" loading="lazy" onerror="this.hidden=true; this.nextElementSibling.hidden=false;" />
-                  <div class="card-video-preview" hidden aria-label="<%= vid.title %>"></div>
-                <% } else { %>
-                  <div class="card-video-preview" aria-label="<%= vid.title %>"></div>
-                <% } %>
+                <img src="<%= thumbImg %>" alt="<%= vid.title %>" loading="lazy" onerror="if(!this.dataset.fallback){ this.dataset.fallback='1'; this.src='/images/kalash-yatra-featured.jpg'; }" />
+                <div class="card-video-preview" hidden aria-label="<%= vid.title %>"></div>
                 <div class="card-gradient-vignette"></div>
 
                 <div class="card-play-symbol" aria-hidden="true">
                   <svg viewBox="0 0 24 24"><path d="M8 5.2v13.6c0 .9 1 1.4 1.8.9l10-6.8c.7-.5.7-1.5 0-2l-10-6.6C9 3.8 8 4.3 8 5.2z"/></svg>
                 </div>
-
-                <span class="badge-location-corner">
-                  <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
-                  <%= vid.district || 'प्रमुख केंद्र' %>
-                </span>
-
-                <span class="badge-duration-corner">
-                  <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
-                  <%= vid.duration || '10:00' %>
-                </span>
               </div>
 
               <div class="card-info-box">
                 <div class="card-tags-row">
-                  <span class="card-category-tag card-people-badge" title="उपस्थित जनसमूह">
+                  <span class="card-category-tag card-people-badge" title="उपस्थित सदस्य/जनसमूह">
                     <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
                     <span><%= vid.peopleCount || (vid.personOrPlace || (vid.viewsCount ? (vid.viewsCount + '+ लोग') : '5,000+ लोग')) %></span>
                   </span>
@@ -3484,11 +3385,6 @@
       <div class="modal-meta-strip">
         <div class="modal-meta-col">
           <div class="modal-meta-item">
-            <span class="m-icon">👥</span>
-            <span class="m-label">उपस्थित जनसमूह:</span>
-            <strong class="m-val" id="modalVideoPeople">—</strong>
-          </div>
-          <div class="modal-meta-item">
             <span class="m-icon">📍</span>
             <span class="m-label">ज़िला:</span>
             <strong class="m-val" id="modalVideoDistrict">—</strong>
@@ -3519,6 +3415,7 @@
   <!-- =====================================================
        SCRIPTS: DISTRICT DATA & INTERACTIVE LOGIC
   ===================================================== -->
+  <script src="/js/components/location-filter.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
 
@@ -3589,8 +3486,13 @@
           resultCount.textContent = nextCount.textContent;
           if (emptyState) emptyState.classList.toggle("show", videoCards.length === 0);
           videoGrid.setAttribute("aria-busy", "false");
-          if (historyMode === "push") history.pushState({}, "", url.pathname + url.search + url.hash);
-          else if (historyMode === "replace") history.replaceState({}, "", url.pathname + url.search + url.hash);
+          if (historyMode === "push") {
+            history.pushState({}, "", url.pathname + url.search + url.hash);
+            const gallery = document.getElementById("videoGallery");
+            if (gallery) gallery.scrollIntoView({ behavior: "smooth" });
+          } else if (historyMode === "replace") {
+            history.replaceState({}, "", url.pathname + url.search + url.hash);
+          }
         } catch (error) {
           if (error.name !== "AbortError") {
             videoGrid.setAttribute("aria-busy", "false");
@@ -3628,6 +3530,9 @@
         const params = new URLSearchParams(window.location.search);
         searchFilter.value = params.get("search") || "";
         stateFilter.value = params.get("state") || "all";
+        if (window.populateDistricts) {
+          window.populateDistricts(stateFilter, districtFilter, params.get("district") || "all");
+        }
         districtFilter.value = params.get("district") || "all";
         loadVideoResults(new URL(window.location.href), "none");
       });
@@ -3744,7 +3649,7 @@
         });
       }
 
-      function openModalVideo(url, title, category, peopleCount, district, date) {
+      function openModalVideo(url, title, category, district, date) {
         if (!url) return;
 
         const isDirectVideo = url.startsWith("/uploads/") || /\.(mp4|webm|ogg|mov|mkv)(\?.*)?$/i.test(url);
@@ -3783,8 +3688,6 @@
           if (/kalash|कलश/i.test(catText)) catText = "संकल्प यात्रा";
           modalCategoryBadge.textContent = catText;
         }
-        const modalVideoPeople = document.getElementById("modalVideoPeople");
-        if (modalVideoPeople) modalVideoPeople.textContent = peopleCount || "5,000+ लोग";
         if (modalVideoDistrict) modalVideoDistrict.textContent = district || "प्रमुख केंद्र";
         if (modalVideoDate) modalVideoDate.textContent = date || "विशेष जन-सभा";
         activeVideoShareUrl = url;
@@ -3808,11 +3711,10 @@
         const videoUrl = card.dataset.video;
         const videoTitle = card.dataset.title || card.querySelector("h3")?.textContent?.trim();
         const categoryTag = "संकल्प यात्रा";
-        const people = card.dataset.people || card.querySelector(".card-category-tag span")?.textContent?.trim() || "5,000+ लोग";
         const district = card.dataset.district || "";
         const date = card.dataset.date || "";
 
-        openModalVideo(videoUrl, videoTitle, categoryTag, people, district, date);
+        openModalVideo(videoUrl, videoTitle, categoryTag, district, date);
       });
 
       // Featured Video Trigger
@@ -3823,7 +3725,6 @@
             heroFeaturedPlayBtn.dataset.video,
             heroFeaturedPlayBtn.dataset.title,
             "लोकतांत्रिक महा-संकल्प",
-            "राष्ट्रीय जन-जागरण अभियान",
             "सम्पूर्ण भारत",
             "2026"
           );
@@ -3836,7 +3737,7 @@
         card.addEventListener("click", function () {
           const videoUrl = card.dataset.video || "https://www.youtube.com/embed/dQw4w9WgXcQ";
           const videoTitle = card.dataset.title || "लोकतांत्रिक महा-संकल्प जन-सभा";
-          openModalVideo(videoUrl, videoTitle, "जन-जागरण दर्शन", "स्वाभिमान व अधिकार चेतना", "बिहार - उत्तर प्रदेश - मध्य प्रदेश", "2026");
+          openModalVideo(videoUrl, videoTitle, "जन-जागरण दर्शन", "बिहार - उत्तर प्रदेश - मध्य प्रदेश", "2026");
         });
       });
 

@@ -162,11 +162,18 @@
   gap: 16px;
   overflow-x: auto;
   overscroll-behavior-inline: contain;
-  padding: 2px 2px 12px;
-  scroll-snap-type: inline mandatory;
-  scrollbar-width: thin;
-  scrollbar-color: #c8a99a #f4ece6;
+  padding: 4px 4px 16px;
+  scroll-behavior: smooth;
+  scrollbar-width: none; /* Firefox: hide scrolling line */
+  -ms-overflow-style: none; /* IE/Edge: hide scrolling line */
   -webkit-overflow-scrolling: touch;
+}
+
+/* Hide scrollbar line in Chrome, Safari, Opera, iOS, Android */
+.home-media-rail::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 
 .home-media-rail > * {
@@ -177,6 +184,9 @@
 .home-video-card,
 .home-photo-card,
 .home-news-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 420px;
   overflow: hidden;
   border: 1px solid #ead8c5;
   border-radius: 16px;
@@ -188,13 +198,12 @@
 }
 
 .home-video-card {
-  display: block;
   cursor: pointer;
 }
 
 .home-media-rail .latest-thumb-wrap {
   width: 100%;
-  height: 190px;
+  height: 235px;
 }
 
 .home-video-card:hover,
@@ -210,18 +219,21 @@
 .home-news-thumb {
   position: relative;
   width: 100%;
-  height: 190px;
+  height: 235px;
   overflow: hidden;
   background: #281b1b;
+  flex-shrink: 0;
 }
 
 .home-media-thumb img,
 .home-photo-thumb img,
-.home-news-thumb img {
+.home-news-thumb img,
+.latest-thumb-wrap img {
   width: 100%;
   height: 100%;
   display: block;
   object-fit: cover;
+  object-position: top center !important;
   transition: transform .35s ease;
 }
 
@@ -316,7 +328,10 @@
 }
 
 .home-media-card-copy {
-  padding: 13px 15px 15px;
+  padding: 15px 16px 18px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .home-media-card-copy h3 {
@@ -330,6 +345,7 @@
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
   min-height: 4.35em;
+  word-break: break-word;
 }
 
 .home-media-card-copy p {
@@ -473,12 +489,15 @@
 
   .home-media-thumb,
   .home-photo-thumb,
-  .home-news-thumb {
-    height: 185px;
+  .home-news-thumb,
+  .home-media-rail .latest-thumb-wrap {
+    height: 215px !important;
   }
 
-  .home-media-rail .latest-thumb-wrap {
-    height: 185px;
+  .home-video-card,
+  .home-photo-card,
+  .home-news-card {
+    min-height: 380px;
   }
 }
 

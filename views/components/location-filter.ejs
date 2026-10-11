@@ -1,0 +1,85 @@
+<%
+  // Default values and safe fallbacks
+  const _stateId = typeof stateId !== 'undefined' && stateId ? stateId : 'stateFilter';
+  const _districtId = typeof districtId !== 'undefined' && districtId ? districtId : 'districtFilter';
+  const _stateName = typeof stateName !== 'undefined' && stateName ? stateName : 'state';
+  const _districtName = typeof districtName !== 'undefined' && districtName ? districtName : 'district';
+  const _stateLabel = typeof stateLabel !== 'undefined' ? stateLabel : 'सभी राज्य';
+  const _districtLabel = typeof districtLabel !== 'undefined' ? districtLabel : 'सभी ज़िले';
+  const _allValue = typeof allValue !== 'undefined' ? allValue : 'all';
+  const _stateClass = typeof stateClass !== 'undefined' ? stateClass : 'filter-normal-select';
+  const _districtClass = typeof districtClass !== 'undefined' ? districtClass : 'filter-normal-select';
+  const _wrapperClass = typeof wrapperClass !== 'undefined' ? wrapperClass : 'filter-location-wrapper';
+  const _colClass = typeof colClass !== 'undefined' ? colClass : 'filter-col-select';
+  const _useLabels = typeof useLabels !== 'undefined' ? useLabels : false;
+  const _labelClass = typeof labelClass !== 'undefined' ? labelClass : 'filter-select-label';
+  const _autoSubmit = typeof autoSubmit !== 'undefined' ? autoSubmit : false;
+
+  const _curState = typeof selectedState !== 'undefined' ? selectedState : '';
+  const _curDistrict = typeof selectedDistrict !== 'undefined' ? selectedDistrict : '';
+
+  // Get states and districts from app.locals or fallback
+  const _states = typeof getStatesList === 'function' ? getStatesList() : (typeof INDIA_STATES_DISTRICTS !== 'undefined' ? Object.keys(INDIA_STATES_DISTRICTS) : []);
+  const _districts = (_curState && _curState !== _allValue && typeof getDistrictsForState === 'function') 
+    ? getDistrictsForState(_curState) 
+    : ((_curState && typeof INDIA_STATES_DISTRICTS !== 'undefined' && INDIA_STATES_DISTRICTS[_curState]) || []);
+%>
+
+<div class="<%= _wrapperClass %>" data-location-filter-wrapper="true">
+  <!-- राज्य चयन (State Selection) -->
+  <% if (_useLabels) { %>
+    <label class="<%= _labelClass %>">
+  <% } else if (_colClass) { %>
+    <div class="<%= _colClass %>">
+  <% } %>
+
+  <select
+    id="<%= _stateId %>"
+    name="<%= _stateName %>"
+    class="<%= _stateClass %>"
+    data-location-filter="state"
+    <% if (_autoSubmit) { %>data-auto-submit="true"<% } %>
+    aria-label="राज्य चुनें"
+  >
+    <option value="<%= _allValue %>"><%= _stateLabel %></option>
+    <% _states.forEach(function(st) { %>
+      <option value="<%= st %>" <%= (_curState === st) ? 'selected' : '' %>><%= st %></option>
+    <% }); %>
+  </select>
+
+  <% if (_useLabels) { %>
+    </label>
+  <% } else if (_colClass) { %>
+    </div>
+  <% } %>
+
+  <!-- ज़िला चयन (District Selection - State-dependent) -->
+  <% if (_useLabels) { %>
+    <label class="<%= _labelClass %>">
+  <% } else if (_colClass) { %>
+    <div class="<%= _colClass %>">
+  <% } %>
+
+  <select
+    id="<%= _districtId %>"
+    name="<%= _districtName %>"
+    class="<%= _districtClass %>"
+    data-location-filter="district"
+    data-all-value="<%= _allValue %>"
+    data-all-text="<%= _districtLabel %>"
+    data-initial-district="<%= _curDistrict %>"
+    <% if (_autoSubmit) { %>data-auto-submit="true"<% } %>
+    aria-label="ज़िला चुनें"
+  >
+    <option value="<%= _allValue %>"><%= _districtLabel %></option>
+    <% _districts.forEach(function(dt) { %>
+      <option value="<%= dt %>" <%= (_curDistrict === dt) ? 'selected' : '' %>><%= dt %></option>
+    <% }); %>
+  </select>
+
+  <% if (_useLabels) { %>
+    </label>
+  <% } else if (_colClass) { %>
+    </div>
+  <% } %>
+</div>

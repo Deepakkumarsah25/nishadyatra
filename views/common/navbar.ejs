@@ -1,23 +1,30 @@
 <link rel="icon" type="image/png" href="/images/logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap"
+  rel="stylesheet" />
 <link rel="stylesheet" href="/css/common/navbar.css" />
 
 <header class="site-header">
   <nav class="navbar">
     <a href="/" class="brand" title="निषाद आरक्षण संकल्प" aria-label="Nishad Sankalp Campaign home">
-      <img class="brand-logo" src="/images/sitelogo.png" alt="निषाद आरक्षण संकल्प" />
-      <span class="brand-name">निषाद आरक्षण संकल्प</span>
+      <img class="brand-logo" src="/images/mainlogo.png" alt="निषाद आरक्षण संकल्प" onerror="this.src='/images/logo.png'" />
+      <span class="brand-name">निषाद आरक्षण संकल्प अभियान</span>
     </a>
 
     <ul class="nav-links" id="navLinks">
-      <li><a href="/" class="<%= typeof currentUrl !== 'undefined' && currentUrl === '/' ? 'active' : '' %>">Home</a></li>
-      <li><a href="/about" class="<%= typeof currentUrl !== 'undefined' && currentUrl === '/about' ? 'active' : '' %>">About</a></li>
-      <li><a href="/video" class="<%= typeof currentUrl !== 'undefined' && currentUrl === '/video' ? 'active' : '' %>">Video</a></li>
-      <li><a href="/gallery" class="<%= typeof currentUrl !== 'undefined' && currentUrl === '/gallery' ? 'active' : '' %>">Gallery</a></li>
-      <li><a href="/news" class="<%= typeof currentUrl !== 'undefined' && currentUrl === '/news' ? 'active' : '' %>">News</a></li>
-      <li><a href="/contact" class="<%= typeof currentUrl !== 'undefined' && currentUrl === '/contact' ? 'active' : '' %>">Contact</a></li>
+      <li><a href="/" class="<%= typeof currentUrl !== 'undefined' && currentUrl === '/' ? 'active' : '' %>">Home</a>
+      </li>
+      <li><a href="/about"
+          class="<%= typeof currentUrl !== 'undefined' && currentUrl === '/about' ? 'active' : '' %>">About</a></li>
+      <li><a href="/video"
+          class="<%= typeof currentUrl !== 'undefined' && currentUrl === '/video' ? 'active' : '' %>">Video</a></li>
+      <li><a href="/gallery"
+          class="<%= typeof currentUrl !== 'undefined' && currentUrl === '/gallery' ? 'active' : '' %>">Gallery</a></li>
+      <li><a href="/news"
+          class="<%= typeof currentUrl !== 'undefined' && currentUrl === '/news' ? 'active' : '' %>">News</a></li>
+      <li><a href="/contact"
+          class="<%= typeof currentUrl !== 'undefined' && currentUrl === '/contact' ? 'active' : '' %>">Contact</a></li>
     </ul>
 
     <button class="burger" id="burgerBtn" aria-label="Open menu" aria-expanded="false" type="button">

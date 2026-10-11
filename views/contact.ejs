@@ -30,10 +30,27 @@
 
   <% const c = typeof contact !== 'undefined' && contact ? contact : {}; %>
 
-  <!-- 2. SMOOTH TOP BANNER (CLEAN & MINIMAL, NO CLUTTER) -->
-  <section class="contact-top-banner" style="background-image: linear-gradient(rgba(24, 7, 7, 0.58), rgba(24, 7, 7, 0.76)), url('<%= c.bannerImage || '/images/contact-banner.jpg' %>');">
-    <div class="contact-banner-inner">
-      <h1 class="contact-banner-title"><%= c.pageHeading || "Contact Us" %></h1>
+  <!-- 2. HERO BANNER (SAME AS GALLERY HERO) -->
+  <section class="gallery-hero">
+    <h1>
+      <span><%= c.pageHeading || "संपर्क करें" %></span>
+    </h1>
+    <p>
+      निषाद संकल्प अभियान के केंद्रीय कार्यालय, हेल्पलाइन नंबर, ईमेल और संपर्क फॉर्म के माध्यम से सीधे जुड़ें।
+    </p>
+    <div class="gallery-stats-pills">
+      <div class="gallery-stat-pill">
+        <span>हेल्पलाइन:</span>
+        <strong>+91 99553 09029</strong>
+      </div>
+      <div class="gallery-stat-pill">
+        <span>ईमेल:</span>
+        <strong>nishadaarakshansankalp@gmail.com</strong>
+      </div>
+      <div class="gallery-stat-pill">
+        <span>मुख्यालय:</span>
+        <strong>राष्ट्रीय कार्यालय</strong>
+      </div>
     </div>
   </section>
 

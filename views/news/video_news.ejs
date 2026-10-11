@@ -27,22 +27,59 @@ const pageUrl = (number) => {
   <meta property="og:image" content="<%= heroPoster ? (/^https?:\/\//i.test(heroPoster) ? heroPoster : 'https://nishadaarakshansankalp.com' + heroPoster) : 'https://nishadaarakshansankalp.com/images/logo.png' %>">
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/index.css">
   <link rel="stylesheet" href="/css/news/video_news.css">
 </head>
 <body><%- include('../common/navbar') %>
 <main class="press-page">
-  <section class="press-hero"><% if (heroPoster) { %><div class="press-hero-poster" aria-hidden="true"><img src="<%= heroPoster %>" alt=""></div><% } %><div class="press-container"><div class="press-hero-copy"><h1>न्यूज़ <span>&amp;</span> प्रेस</h1><p>निषाद आरक्षण संकल्प अभियान से जुड़ी ताज़ा खबरें और मीडिया रिपोर्ट।</p>
-    <div class="press-stats" aria-label="समाचार आंकड़े">
-      <div class="press-stat"><strong><%= stats.news %></strong><span>कुल खबरें</span></div>
-      <div class="press-stat"><strong><%= stats.districts %></strong><span>ज़िले</span></div>
-      <div class="press-stat"><strong><%= stats.states %></strong><span>राज्य</span></div>
+  <!-- HERO BANNER (SAME AS GALLERY HERO) -->
+  <section class="gallery-hero">
+    <% if (heroPoster) { %>
+      <div style="position: absolute; inset: 0; opacity: 0.22; pointer-events: none; z-index: 0;">
+        <img src="<%= heroPoster %>" alt="" style="width: 100%; height: 100%; object-fit: cover;">
+      </div>
+    <% } %>
+    <div style="position: relative; z-index: 1;">
+      <h1>
+        <span>न्यूज़ और प्रेस</span>
+      </h1>
+      <p>
+        निषाद आरक्षण संकल्प अभियान से जुड़ी ताज़ा खबरें और मीडिया रिपोर्ट।
+      </p>
+      <div class="gallery-stats-pills">
+        <div class="gallery-stat-pill">
+          <span>कुल खबरें:</span>
+          <strong><%= stats.news %></strong>
+        </div>
+        <div class="gallery-stat-pill">
+          <span>शामिल ज़िले:</span>
+          <strong><%= stats.districts %></strong>
+        </div>
+        <div class="gallery-stat-pill">
+          <span>शामिल राज्य:</span>
+          <strong><%= stats.states %></strong>
+        </div>
+      </div>
     </div>
-  </div></div></section>
+  </section>
   <section class="press-container press-content">
     <div class="press-list-heading"><div><h2>सभी समाचार</h2><span class="press-result-count"></span></div><label class="press-search" for="newsSearch"><span aria-hidden="true">⌕</span><input id="newsSearch" name="q" type="search" form="newsFilters" value="<%= query.q || '' %>" placeholder="Search.." aria-label="खबर या स्रोत खोजें"></label></div>
     <form class="press-filters" method="get" action="/news" id="newsFilters">
-      <label class="press-select-label"><select name="state" id="stateFilter" data-auto-submit><option value="">सभी राज्य</option><% [...new Set(locations.map((location) => location._id.state))].forEach((stateName) => { %><option value="<%= stateName %>" <%= query.state === stateName ? 'selected' : '' %>><%= stateName %></option><% }) %></select></label>
-      <label class="press-select-label"><select name="district" id="districtFilter" data-auto-submit><option value="">सभी ज़िले</option><% locations.forEach((location) => { %><option value="<%= location._id.district %>" data-state="<%= location._id.state %>" <%= query.district === location._id.district && (!query.state || query.state === location._id.state) ? 'selected' : '' %>><%= location._id.district %><%= !query.state ? ' · ' + location._id.state : '' %></option><% }) %></select></label>
+      <%- include("../components/location-filter", {
+        selectedState: query.state || '',
+        selectedDistrict: query.district || '',
+        stateId: "stateFilter",
+        districtId: "districtFilter",
+        useLabels: true,
+        labelClass: "press-select-label",
+        stateClass: "",
+        districtClass: "",
+        wrapperClass: "press-filter-location-group",
+        allValue: "",
+        stateLabel: "सभी राज्य",
+        districtLabel: "सभी ज़िले",
+        autoSubmit: true
+      }) %>
       <label class="press-select-label"><select name="category" data-auto-submit><option value="">सभी प्रकार</option><option value="Digital Media" <%= query.category === 'Digital Media' ? 'selected' : '' %>>डिजिटल मीडिया</option><option value="Print Media" <%= query.category === 'Print Media' ? 'selected' : '' %>>प्रिंट मीडिया</option></select></label>
     </form>
     <div class="press-results" id="pressResults" aria-live="polite" aria-busy="false">
@@ -94,10 +131,11 @@ const pageUrl = (number) => {
     </div>
   </section>
 </main><%- include('../common/footer') %>
+<script src="/js/components/location-filter.js"></script>
 <script>
 (() => {
-  const state = document.getElementById('stateFilter'); const district = document.getElementById('districtFilter');
-  const filterDistricts = () => { [...district.options].forEach((option) => { if (!option.value) return; option.hidden = !!state.value && option.dataset.state !== state.value; }); if (district.selectedOptions[0]?.hidden) district.value = ''; };
+  const state = document.getElementById('stateFilter');
+  const district = document.getElementById('districtFilter');
   const form = document.getElementById('newsFilters');
   const results = document.getElementById('pressResults');
   let debounceTimer;
@@ -142,10 +180,10 @@ const pageUrl = (number) => {
   const clearFilters = () => {
     form.querySelectorAll('select').forEach((select) => { select.value = ''; });
     document.getElementById('newsSearch').value = '';
-    filterDistricts();
+    if (window.populateDistricts) window.populateDistricts(state, district, '');
   };
   form.addEventListener('submit', (event) => { event.preventDefault(); scheduleResults(250); });
-  state?.addEventListener('change', () => { filterDistricts(); scheduleResults(300); });
+  state?.addEventListener('change', () => scheduleResults(300));
   district?.addEventListener('change', () => scheduleResults(300));
   form.querySelector('[name="category"]')?.addEventListener('change', () => scheduleResults(300));
   document.getElementById('newsSearch')?.addEventListener('input', () => scheduleResults(450));
@@ -157,8 +195,13 @@ const pageUrl = (number) => {
     event.preventDefault();
     loadResults(target, 'push');
   });
-  window.addEventListener('popstate', () => loadResults(new URL(window.location.href), 'none'));
-  filterDistricts();
+  window.addEventListener('popstate', () => {
+    const params = new URLSearchParams(window.location.search);
+    if (state) state.value = params.get('state') || '';
+    if (window.populateDistricts) window.populateDistricts(state, district, params.get('district') || '');
+    if (district) district.value = params.get('district') || '';
+    loadResults(new URL(window.location.href), 'none');
+  });
   const navigation = performance.getEntriesByType('navigation')[0];
   if (navigation?.type === 'reload') {
     clearFilters();

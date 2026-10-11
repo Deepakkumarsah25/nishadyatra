@@ -61,6 +61,13 @@ const publicVideoRateLimit = require("./middleware/rateLimit")({
 const homeRoutes = require("./routes/homeRoutes");
 const galleryRoutes = require("./routes/galleryRoutes");
 const contactRoutes = require("./routes/contactRoutes");
+const {
+  INDIA_STATES_DISTRICTS,
+  getStatesList,
+  getDistrictsForState,
+  buildStateMongoQuery,
+  buildDistrictMongoQuery
+} = require("./utils/indiaStatesDistricts");
 
 // ========================================
 // View Engine
@@ -68,6 +75,9 @@ const contactRoutes = require("./routes/contactRoutes");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+app.locals.INDIA_STATES_DISTRICTS = INDIA_STATES_DISTRICTS;
+app.locals.getStatesList = getStatesList;
+app.locals.getDistrictsForState = getDistrictsForState;
 
 // ========================================
 // Basic Security Headers
@@ -156,11 +166,13 @@ app.get("/video", publicVideoRateLimit, async (req, res) => {
     }
 
     const search = typeof req.query.search === "string" ? req.query.search.trim().slice(0, 100) : "";
-    const state = typeof req.query.state === "string" && /^[a-z0-9-]{1,40}$/i.test(req.query.state) ? req.query.state : "";
+    const state = typeof req.query.state === "string" ? req.query.state.trim().slice(0, 80) : "";
     const district = typeof req.query.district === "string" ? req.query.district.trim().slice(0, 100) : "";
     const match = {};
-    if (state && state !== "all") match["videos.state"] = state;
-    if (district && district !== "all") match["videos.district"] = district;
+    const stateQuery = buildStateMongoQuery(state);
+    if (stateQuery) match["videos.state"] = stateQuery;
+    const districtQuery = buildDistrictMongoQuery(district);
+    if (districtQuery) match["videos.district"] = districtQuery;
     if (search) {
       const safeSearch = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
       const searchRegex = new RegExp(safeSearch, "i");

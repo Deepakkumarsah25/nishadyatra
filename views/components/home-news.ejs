@@ -93,9 +93,10 @@
       if (paused || !inView || rail.scrollWidth <= rail.clientWidth + 2) return;
 
       const maxScroll = rail.scrollWidth - rail.clientWidth;
-      const nextLeft = rail.scrollLeft + getStep();
+      const step = getStep();
+      const nextLeft = rail.scrollLeft + step;
       rail.scrollTo({
-        left: nextLeft >= maxScroll - 2 ? 0 : nextLeft,
+        left: nextLeft >= maxScroll - 5 ? 0 : nextLeft,
         behavior: "smooth"
       });
     }
@@ -103,7 +104,7 @@
     function start() {
       stop();
       if (!paused && inView && !document.hidden) {
-        timer = window.setInterval(advance, 1500);
+        timer = window.setInterval(advance, 1000); // 1 second auto-scroll
       }
     }
 
@@ -118,13 +119,13 @@
     });
     rail.addEventListener("touchstart", function () { paused = true; stop(); }, { passive: true });
     rail.addEventListener("touchend", function () {
-      window.setTimeout(function () { paused = false; start(); }, 3500);
+      window.setTimeout(function () { paused = false; start(); }, 1500);
     }, { passive: true });
     rail.addEventListener("wheel", function () { paused = true; stop(); }, { passive: true });
     rail.addEventListener("scroll", function () {
       if (paused) return;
       stop();
-      window.setTimeout(start, 1800);
+      window.setTimeout(start, 1000);
     }, { passive: true });
 
     if ("IntersectionObserver" in window) {

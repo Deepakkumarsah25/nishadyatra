@@ -334,7 +334,7 @@ exports.postAddVideo = async (req, res) => {
       req,
       section: "वीडियो गैलरी (Videos)",
       action: isHighlighted ? "नया वीडियो जोड़ा गया और होम पेज पर हाइलाइट किया गया" : "नया वीडियो जोड़ा गया",
-      details: `शीर्षक: "${title.trim()}", उपस्थित जनसमूह: "${formattedPeopleCount}", ज़िला: "${district || 'गोपालगंज'}"${isHighlighted ? ' [होम पेज मुख्य वीडियो]' : ''}`,
+      details: `शीर्षक: "${title.trim()}", उपस्थित सदस्य: "${formattedPeopleCount}", ज़िला: "${district || 'गोपालगंज'}"${isHighlighted ? ' [होम पेज मुख्य वीडियो]' : ''}`,
     });
 
     res.redirect("/admin/kalash-yatra?tab=videos&msg=" + encodeURIComponent("नया वीडियो सफलतापूर्वक जोड़ दिया गया।"));
@@ -456,7 +456,7 @@ exports.postUpdateVideo = async (req, res) => {
       req,
       section: "वीडियो गैलरी (Videos)",
       action: "वीडियो विवरण संपादित किया गया (Edited)",
-      details: `शीर्षक: "${video.title}", उपस्थित जनसमूह: "${video.peopleCount || '—'}", ज़िला: "${video.district || '—'}"${video.isHighlighted ? ' [होम पेज मुख्य वीडियो]' : ''}`,
+      details: `शीर्षक: "${video.title}", उपस्थित सदस्य: "${video.peopleCount || '—'}", ज़िला: "${video.district || '—'}"${video.isHighlighted ? ' [होम पेज मुख्य वीडियो]' : ''}`,
     });
 
     res.redirect("/admin/kalash-yatra?tab=videos&msg=" + encodeURIComponent("वीडियो सफलतापूर्वक अपडेट किया गया।"));

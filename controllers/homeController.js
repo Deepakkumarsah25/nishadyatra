@@ -130,18 +130,21 @@ exports.getHomePage = async (req, res) => {
 
     // Helper to resolve an effective thumbnail URL
     function resolveThumb(thumb, videoUrl, fallback = "/images/kalash-yatra-hero.jpg") {
-      if (thumb && thumb.trim() && !thumb.includes("/images/kalash-yatra-hero.jpg")) {
-        return thumb.trim();
+      const t = String(thumb || "").trim();
+      const u = String(videoUrl || "").trim();
+      const isVideoWebpage = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be|vimeo\.com|player\.vimeo\.com)\//i.test(t);
+      if (t && !isVideoWebpage && (/\.(jpe?g|png|webp|gif|avif)($|\?)/i.test(t) || t.includes("/uploads/") || t.includes("cloudinary.com") || t.includes("unsplash.com") || t.includes("vumbnail.com") || t.includes("ytimg.com"))) {
+        return t;
       }
-      const ytId = getYouTubeId(videoUrl);
+      const ytId = getYouTubeId(u || t);
       if (ytId) {
         return `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
       }
-      const vimeoId = getVimeoId(videoUrl);
+      const vimeoId = getVimeoId(u || t);
       if (vimeoId) {
         return `https://vumbnail.com/${vimeoId}.jpg`;
       }
-      return thumb && thumb.trim() ? thumb.trim() : fallback;
+      return fallback;
     }
 
     // The homepage query returns the first highlighted video in stored order.

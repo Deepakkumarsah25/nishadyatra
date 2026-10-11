@@ -33,16 +33,30 @@
   <%- include("common/navbar") %>
 
   <!-- =====================================================================
-       1. ULTRA-COMPACT HEADER (CLEAN & MINIMAL HEIGHT)
+       1. HERO BANNER (SAME AS GALLERY HERO)
   ====================================================================== -->
-  <header class="about-hero-compact">
-    <div class="about-hero-compact-inner">
-      <h1><%= about.meta && about.meta.pageTitle ? about.meta.pageTitle : 'निषाद संकल्प अभियान का संपूर्ण परिचय' %></h1>
-      <p class="hero-tagline-text">
-        <%= about.meta && about.meta.pageSubtitle ? about.meta.pageSubtitle : 'संवैधानिक अधिकार, सामाजिक न्याय और एकता का पावन संकल्प' %>
-      </p>
+  <section class="gallery-hero">
+    <h1>
+      <span><%= (typeof about !== 'undefined' && about.meta && about.meta.pageTitle) ? about.meta.pageTitle : 'निषाद संकल्प अभियान का संपूर्ण परिचय' %></span>
+    </h1>
+    <p>
+      <%= (typeof about !== 'undefined' && about.meta && about.meta.pageSubtitle) ? about.meta.pageSubtitle : 'संवैधानिक अधिकार, सामाजिक न्याय, स्वाभिमान और एकता का ऐतिहासिक राष्ट्रीय आंदोलन।' %>
+    </p>
+    <div class="gallery-stats-pills">
+      <div class="gallery-stat-pill">
+        <span>मुख्य बिंदु:</span>
+        <strong>7</strong>
+      </div>
+      <div class="gallery-stat-pill">
+        <span>मूल लक्ष्य:</span>
+        <strong>आरक्षण व सम्मान</strong>
+      </div>
+      <div class="gallery-stat-pill">
+        <span>संकल्प:</span>
+        <strong>एकता व सामाजिक न्याय</strong>
+      </div>
     </div>
-  </header>
+  </section>
 
   <!-- =====================================================================
        2. STICKY 7-POINT QUICK NAVIGATION BAR (CLICK TO SCROLL)

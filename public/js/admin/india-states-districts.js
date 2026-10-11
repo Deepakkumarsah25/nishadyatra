@@ -1,216 +1,340 @@
 /**
- * Indian States and Districts Data & Selector Helper for Admin Panel
+ * Indian States and Districts Data & Selector Helper for Admin Panel (Hindi Standard)
  */
 (function (global) {
   const INDIA_STATES_DISTRICTS = {
-    "Uttar Pradesh": [
-      "Agra", "Aligarh", "Ambedkar Nagar", "Amethi", "Amroha", "Auraiya", "Ayodhya", "Azamgarh",
-      "Baghpat", "Bahraich", "Ballia", "Balrampur", "Banda", "Barabanki", "Bareilly", "Basti",
-      "Bijnor", "Budaun", "Bulandshahr", "Chandauli", "Chitrakoot", "Deoria", "Etah", "Etawah",
-      "Farrukhabad", "Fatehpur", "Firozabad", "Gautam Buddha Nagar", "Ghaziabad", "Ghazipur",
-      "Gonda", "Gorakhpur", "Hamirpur", "Hapur", "Hardoi", "Hathras", "Jalaun", "Jaunpur",
-      "Jhansi", "Kannauj", "Kanpur Dehat", "Kanpur Nagar", "Kasganj", "Kaushambi", "Kushinagar",
-      "Lakhimpur Kheri", "Lalitpur", "Lucknow", "Maharajganj", "Mahoba", "Mainpuri", "Mathura",
-      "Mau", "Meerut", "Mirzapur", "Moradabad", "Muzaffarnagar", "Pilibhit", "Pratapgarh",
-      "Prayagraj", "Raebareli", "Rampur", "Saharanpur", "Sambhal", "Sant Kabir Nagar",
-      "Sant Ravidas Nagar (Bhadohi)", "Shahjahanpur", "Shamli", "Shravasti", "Siddharthnagar",
-      "Sitapur", "Sonbhadra", "Sultanpur", "Unnao", "Varanasi"
+    "उत्तर प्रदेश": [
+      "आगरा", "अलीगढ़", "अम्बेडकर नगर", "अमेठी", "अमरोहा", "औरैया", "अयोध्या", "आजमगढ़",
+      "बागपत", "बहराइच", "बलिया", "बलरामपुर", "बांदा", "बाराबंकी", "बरेली", "बस्ती",
+      "बिजनौर", "बदायूँ", "बुलंदशहर", "चंदौली", "चित्रकूट", "देवरिया", "एटा", "इटावा",
+      "फर्रुखाबाद", "फतेहपुर", "फिरोजाबाद", "गौतम बुद्ध नगर", "गाजियाबाद", "गाजीपुर",
+      "गोंडा", "गोरखपुर", "हमीरपुर", "हापुड़", "हरदोई", "हाथरस", "जालौन", "जौनपुर",
+      "झाँसी", "कन्नौज", "कानपुर देहात", "कानपुर नगर", "कासगंज", "कौशाम्बी", "कुशीनगर",
+      "लखीमपुर खीरी", "ललितपुर", "लखनऊ", "महाराजगंज", "महोबा", "मैनपुरी", "मथुरा",
+      "मऊ", "मेरठ", "मिर्जापुर", "मुरादाबाद", "मुजफ्फरनगर", "पीलीभीत", "प्रतापगढ़",
+      "प्रयागराज", "रायबरेली", "रामपुर", "सहारनपुर", "सम्भल", "संत कबीर नगर",
+      "संत रविदास नगर (भदोही)", "शाहजहाँपुर", "शामली", "श्रावस्ती", "सिद्धार्थनगर",
+      "सीतापुर", "सोनभद्र", "सुल्तानपुर", "उन्नाव", "वाराणसी"
     ],
-    "Bihar": [
-      "Araria", "Arwal", "Aurangabad", "Banka", "Begusarai", "Bhagalpur", "Bhojpur", "Buxar",
-      "Darbhanga", "East Champaran", "Gaya", "Gopalganj", "Jamui", "Jehanabad", "Kaimur",
-      "Katihar", "Khagaria", "Kishanganj", "Lakhisarai", "Madhepura", "Madhubani", "Munger",
-      "Muzaffarpur", "Nalanda", "Nawada", "Patna", "Purnia", "Rohtas", "Saharsa", "Samastipur",
-      "Saran", "Sheikhpura", "Sheohar", "Sitamarhi", "Siwan", "Supaul", "Vaishali", "West Champaran"
+    "बिहार": [
+      "अररिया", "अरवल", "औरंगाबाद", "बाँका", "बेगूसराय", "भागलपुर", "भोजपुर", "बक्सर",
+      "दरभंगा", "पूर्वी चंपारण", "गया", "गोपालगंज", "जमुई", "जहानाबाद", "कैमूर",
+      "कटिहार", "खगड़िया", "किशनगंज", "लखीसराय", "मधेपुरा", "मधुबनी", "मुंगेर",
+      "मुजफ्फरपुर", "नालंदा", "नवादा", "पटना", "पूर्णिया", "रोहतास", "सहरसा", "समस्तीपुर",
+      "सारण", "शेखपुरा", "शिवहर", "सीतामढ़ी", "सिवान", "सुपौल", "वैशाली", "पश्चिमी चंपारण"
     ],
-    "Madhya Pradesh": [
-      "Agar Malwa", "Alirajpur", "Anuppur", "Ashoknagar", "Balaghat", "Barwani", "Betul", "Bhind",
-      "Bhopal", "Burhanpur", "Chhatarpur", "Chhindwara", "Damoh", "Datia", "Dewas", "Dhar",
-      "Dindori", "Guna", "Gwalior", "Harda", "Hoshangabad (Narmadapuram)", "Indore", "Jabalpur",
-      "Jhabua", "Katni", "Khandwa", "Khargone", "Maihar", "Mandla", "Mandsaur", "Mauganj",
-      "Morena", "Narsinghpur", "Neemuch", "Niwari", "Pandhurna", "Panna", "Raisen", "Rajgarh",
-      "Ratlam", "Rewa", "Sagar", "Satna", "Sehore", "Seoni", "Shahdol", "Shajapur", "Sheopur",
-      "Shivpuri", "Sidhi", "Singrauli", "Tikamgarh", "Ujjain", "Umaria", "Vidisha"
+    "मध्य प्रदेश": [
+      "आगर मालवा", "अलीराजपुर", "अनूपपुर", "अशोकनगर", "बालाघाट", "बड़वानी", "बैतूल", "भिंड",
+      "भोपाल", "बुरहानपुर", "छतरपुर", "छिंदवाड़ा", "दमोह", "दतिया", "देवास", "धार",
+      "डिंडौरी", "गुना", "ग्वालियर", "हरदा", "नर्मदापुरम (होशंगाबाद)", "इंदौर", "जबलपुर",
+      "झाबुआ", "कटनी", "खंडवा", "खरगोन", "मैहर", "मंडला", "मंदसौर", "मऊगंज",
+      "मुरैना", "नरसिंहपुर", "नीमच", "निवाड़ी", "पांढुर्णा", "पन्ना", "रायसेन", "राजगढ़",
+      "रतलाम", "रीवा", "सागर", "सतना", "सीहोर", "सिवनी", "शहडोल", "शाजापुर", "श्योपुर",
+      "शिवपुरी", "सीधी", "सिंगरौली", "टीकमगढ़", "उज्जैन", "उमरिया", "विदिशा"
     ],
-    "Jharkhand": [
-      "Bokaro", "Chatra", "Deoghar", "Dhanbad", "Dumka", "East Singhbhum", "Garhwa", "Giridih",
-      "Godda", "Gumla", "Hazaribagh", "Jamtara", "Khunti", "Koderma", "Latehar", "Lohardaga",
-      "Pakur", "Palamu", "Ramgarh", "Ranchi", "Sahibganj", "Seraikela Kharsawan", "Simdega", "West Singhbhum"
+    "झारखंड": [
+      "बोकारो", "चतरा", "देवघर", "धनबाद", "दुमका", "पूर्वी सिंहभूम", "गढ़वा", "गिरिडीह",
+      "गोड्डा", "गुमला", "हजारीबाग", "जामताड़ा", "खूंटी", "कोडरमा", "लातेहार", "लोहरदगा",
+      "पाकुड़", "पलामू", "रामगढ़", "राँची", "साहिबगंज", "सरायकेला-खरसावाँ", "सिमडेगा", "पश्चिमी सिंहभूम"
     ],
-    "Delhi": [
-      "Central Delhi", "East Delhi", "New Delhi", "North Delhi", "North East Delhi",
-      "North West Delhi", "Shahdara", "South Delhi", "South East Delhi", "South West Delhi", "West Delhi"
+    "दिल्ली": [
+      "मध्य दिल्ली", "पूर्वी दिल्ली", "नई दिल्ली", "उत्तरी दिल्ली", "उत्तर-पूर्वी दिल्ली",
+      "उत्तर-पश्चिमी दिल्ली", "शाहदरा", "दक्षिणी दिल्ली", "दक्षिण-पूर्वी दिल्ली",
+      "दक्षिण-पश्चिमी दिल्ली", "पश्चिमी दिल्ली"
     ],
-    "Rajasthan": [
-      "Ajmer", "Alwar", "Anupgarh", "Balotra", "Banswara", "Baran", "Barmer", "Beawar", "Bharatpur",
-      "Bhilwara", "Bikaner", "Bundi", "Chittorgarh", "Churu", "Dausa", "Deeg", "Dholpur",
-      "Didwana-Kuchaman", "Dudu", "Dungarpur", "Gangapur City", "Hanumangarh", "Jaipur", "Jaipur Rural",
-      "Jaisalmer", "Jalore", "Jhalawar", "Jhunjhunu", "Jodhpur", "Jodhpur Rural", "Karauli", "Kekri",
-      "Khairthal-Tijara", "Kota", "Kotputli-Behror", "Nagaur", "Neem Ka Thana", "Pali", "Phalodi",
-      "Pratapgarh", "Rajsamand", "Salumbar", "Sanchore", "Sawai Madhopur", "Shahpura", "Sikar",
-      "Sirohi", "Sri Ganganagar", "Tonk", "Udaipur"
+    "राजस्थान": [
+      "अजमेर", "अलवर", "अनूपगढ़", "बालोतरा", "बाँसवाड़ा", "बारां", "बाड़मेर", "ब्यावर", "भरतपुर",
+      "भीलवाड़ा", "बीकानेर", "बूंदी", "चित्तौड़गढ़", "चूरू", "दौसा", "डीग", "धौलपुर",
+      "डीडवाना-कुचामन", "दूदू", "डूंगरपुर", "गंगापुर सिटी", "हनुमानगढ़", "जयपुर", "जयपुर ग्रामीण",
+      "जैसलमेर", "जालौर", "झालावाड़", "झुंझुनू", "जोधपुर", "जोधपुर ग्रामीण", "करौली", "केकड़ी",
+      "खैरथल-तिजारा", "कोटा", "कोटपूतली-बहरोड़", "नागौर", "नीम का थाना", "पाली", "फलोदी",
+      "प्रतापगढ़", "राजसमंद", "सलूम्बर", "सांचौर", "सवाई माधोपुर", "शाहपुरा", "सीकर",
+      "सिरोही", "श्रीगंगानगर", "टोंक", "उदयपुर"
     ],
-    "Haryana": [
-      "Ambala", "Bhiwani", "Charkhi Dadri", "Faridabad", "Fatehabad", "Gurugram", "Hisar",
-      "Jhajjar", "Jind", "Kaithal", "Karnal", "Kurukshetra", "Mahendragarh", "Nuh", "Palwal",
-      "Panchkula", "Panipat", "Rewari", "Rohtak", "Sirsa", "Sonipat", "Yamunanagar"
+    "हरियाणा": [
+      "अंबाला", "भिवानी", "चरखी दादरी", "फरीदाबाद", "फतेहाबाद", "गुरुग्राम", "हिसार",
+      "झज्जर", "जींद", "कैथल", "करनाल", "कुरुक्षेत्र", "महेंद्रगढ़", "नूंह", "पलवल",
+      "पंचकूला", "पानीपत", "रेवाड़ी", "रोहतक", "सिरसा", "सोनीपत", "यमुनानगर"
     ],
-    "Uttarakhand": [
-      "Almora", "Bageshwar", "Chamoli", "Champawat", "Dehradun", "Haridwar", "Nainital",
-      "Pauri Garhwal", "Pithoragarh", "Rudraprayag", "Tehri Garhwal", "Udham Singh Nagar", "Uttarkashi"
+    "उत्तराखंड": [
+      "अल्मोड़ा", "बागेश्वर", "चमोली", "चंपावत", "देहरादून", "हरिद्वार", "नैनीताल",
+      "पौड़ी गढ़वाल", "पिथौरागढ़", "रुद्रप्रयाग", "टिहरी गढ़वाल", "ऊधम सिंह नगर", "उत्तरकाशी"
     ],
-    "Punjab": [
-      "Amritsar", "Barnala", "Bathinda", "Faridkot", "Fatehgarh Sahib", "Fazilka", "Ferozepur",
-      "Gurdaspur", "Hoshiarpur", "Jalandhar", "Kapurthala", "Ludhiana", "Malerkotla", "Mansa",
-      "Moga", "Muktsar", "Pathankot", "Patiala", "Rupnagar", "Sahibzada Ajit Singh Nagar (Mohali)",
-      "Shaheed Bhagat Singh Nagar", "Sangrur", "Tarn Taran"
+    "पंजाब": [
+      "अमृतसर", "बरनाला", "बठिंडा", "फरीदकोट", "फतेहगढ़ साहिब", "फाजिल्का", "फिरोजपुर",
+      "गुरदासपुर", "होशियारपुर", "जालंधर", "कपूरथला", "लुधियाना", "मलेरकोटला", "मानसा",
+      "मोगा", "श्री मुक्तसर साहिब", "पठानकोट", "पटियाला", "रूपनगर", "साहिबजादा अजीत सिंह नगर (मोहाली)",
+      "शहीद भगत सिंह नगर", "संगरूर", "तरनतारन"
     ],
-    "Maharashtra": [
-      "Ahmednagar", "Akola", "Amravati", "Beed", "Bhandara", "Buldhana", "Chandrapur",
-      "Chhatrapati Sambhajinagar (Aurangabad)", "Dharashiv (Osmanabad)", "Dhule", "Gadchiroli",
-      "Gondia", "Hingoli", "Jalgaon", "Jalna", "Kolhapur", "Latur", "Mumbai City", "Mumbai Suburban",
-      "Nagpur", "Nanded", "Nandurbar", "Nashik", "Palghar", "Parbhani", "Pune", "Raigad",
-      "Ratnagiri", "Sangli", "Satara", "Sindhudurg", "Solapur", "Thane", "Wardha", "Washim", "Yavatmal"
+    "महाराष्ट्र": [
+      "अहमदनगर", "अकोला", "अमरावती", "बीड", "भंडारा", "बुलढाणा", "चंद्रपुर",
+      "छत्रपति संभाजीनगर (औरंगाबाद)", "धाराशिव (उस्मानाबाद)", "धुले", "गड़चिरोली",
+      "गोंदिया", "हिंगोली", "जलगाँव", "जालना", "कोल्हापुर", "लातूर", "मुंबई शहर", "मुंबई उपनगर",
+      "नागपुर", "नांदेड़", "नंदुरबार", "नासिक", "पालघर", "परभणी", "पुणे", "रायगढ़",
+      "रत्नागिरी", "सांगली", "सतारा", "सिंधुदुर्ग", "सोलापुर", "ठाणे", "वर्धा", "वाशिम", "यवतमाल"
     ],
-    "Gujarat": [
-      "Ahmedabad", "Amreli", "Anand", "Aravalli", "Banaskantha", "Bharuch", "Bhavnagar", "Botad",
-      "Chhota Udaipur", "Dahod", "Dang", "Devbhoomi Dwarka", "Gandhinagar", "Gir Somnath",
-      "Jamnagar", "Junagadh", "Kheda", "Kutch", "Mahisagar", "Mehsana", "Morbi", "Narmada",
-      "Navsari", "Panchmahal", "Patan", "Porbandar", "Rajkot", "Sabarkantha", "Surat",
-      "Surendranagar", "Tapi", "Vadodara", "Valsad"
+    "गुजरात": [
+      "अहमदाबाद", "अमरेली", "आनंद", "अरावली", "बनासकांठा", "भरूच", "भावनगर", "बोटाद",
+      "छोटा उदयपुर", "दाहोद", "डांग", "देवभूमि द्वारका", "गांधीनगर", "गिर सोमनाथ",
+      "जामनगर", "जूनागढ़", "खेड़ा", "कच्छ", "महीसागर", "मेहसाणा", "मोरबी", "नर्मदा",
+      "नवसारी", "पंचमहल", "पाटन", "पोरबंदर", "राजकोट", "साबरकांठा", "सूरत",
+      "सुरेंद्रनगर", "तापी", "वडोदरा", "वलसाड"
     ],
-    "West Bengal": [
-      "Alipurduar", "Bankura", "Birbhum", "Cooch Behar", "Dakshin Dinajpur", "Darjeeling",
-      "Hooghly", "Howrah", "Jalpaiguri", "Jhargram", "Kalimpong", "Kolkata", "Malda",
-      "Murshidabad", "Nadia", "North 24 Parganas", "Paschim Bardhaman", "Paschim Medinipur",
-      "Purba Bardhaman", "Purba Medinipur", "Purulia", "South 24 Parganas", "Uttar Dinajpur"
+    "पश्चिम बंगाल": [
+      "अलीपुरद्वार", "बांकुड़ा", "बीरभूम", "कूचबिहार", "दक्षिण दिनाजपुर", "दार्जिलिंग",
+      "हुगली", "हावड़ा", "जलपाईगुड़ी", "झाड़ग्राम", "कालिम्पोंग", "कोलकाता", "मालदा",
+      "मुर्शिदाबाद", "नदिया", "उत्तर 24 परगना", "पश्चिम बर्धमान", "पश्चिम मेदिनीपुर",
+      "पूर्व बर्धमान", "पूर्व मेदिनीपुर", "पुरुलिया", "दक्षिण 24 परगना", "उत्तर दिनाजपुर"
     ],
-    "Chhattisgarh": [
-      "Balod", "Baloda Bazar", "Balrampur", "Bastar", "Bemetara", "Bijapur", "Bilaspur",
-      "Dantewada", "Dhamtari", "Durg", "Gariaband", "Gaurela-Pendra-Marwahi", "Janjgir-Champa",
-      "Jashpur", "Kabirdham", "Kanker", "Khairagarh-Chhuikhadan-Gandai", "Kondagaon", "Korba",
-      "Koriya", "Mahasamund", "Manendragarh-Chirmiri-Bharatpur", "Mohla-Manpur-Ambagarh Chowki",
-      "Mungeli", "Narayanpur", "Raigarh", "Raipur", "Rajnandgaon", "Sakti", "Sarangarh-Bilaigarh",
-      "Sukma", "Surajpur", "Surguja"
+    "छत्तीसगढ़": [
+      "बालोद", "बलौदा बाजार", "बलरामपुर", "बस्तर", "बेमेतरा", "बीजापुर", "बिलासपुर",
+      "दंतेवाड़ा", "धमतरी", "दुर्ग", "गरियाबंद", "गौरेला-पेंड्रा-मरवाही", "जांजगीर-चांपा",
+      "जशपुर", "कबीरधाम", "कांकेर", "खैरागढ़-छुईखदान-गंडई", "कोंडागांव", "कोरबा",
+      "कोरिया", "महासमुंद", "मनेंद्रगढ़-चिरमिरी-भरतपुर", "मोहला-मानपुर-अंबागढ़ चौकी",
+      "मुंगेली", "नारायणपुर", "रायगढ़", "रायपुर", "राजनांदगांव", "सक्ती", "सारंगढ़-बिलाईगढ़",
+      "सुकमा", "सूरजपुर", "सरगुजा"
     ],
-    "Odisha": [
-      "Angul", "Balangir", "Balasore", "Bargarh", "Bhadrak", "Boudh", "Cuttack", "Deogarh",
-      "Dhenkanal", "Gajapati", "Ganjam", "Jagatsinghpur", "Jajpur", "Jharsuguda", "Kalahandi",
-      "Kandhamal", "Kendrapara", "Kendujhar", "Khordha", "Koraput", "Malkangiri", "Mayurbhanj",
-      "Nabarangpur", "Nayagarh", "Nuapada", "Puri", "Rayagada", "Sambalpur", "Subarnapur", "Sundargarh"
+    "ओडिशा": [
+      "अंगुल", "बलांगीर", "बालासोर", "बरगढ़", "भद्रक", "बौध", "कटक", "देवगढ़",
+      "ढेंकानाल", "गजपति", "गंजाम", "जगतसिंहपुर", "जाजपुर", "झारसुगुड़ा", "कालाहांडी",
+      "कंधमाल", "केंद्रापड़ा", "केंदुझर", "खुर्दा", "कोरापुट", "मलकानगिरी", "मयूरभंज",
+      "नबरंगपुर", "नयागढ़", "नुआपाड़ा", "पुरी", "रायगढ़ा", "संबलपुर", "सुबर्णपुर", "सुंदरगढ़"
     ],
-    "Himachal Pradesh": [
-      "Bilaspur", "Chamba", "Hamirpur", "Kangra", "Kinnaur", "Kullu", "Lahaul and Spiti",
-      "Mandi", "Shimla", "Sirmaur", "Solan", "Una"
+    "हिमाचल प्रदेश": [
+      "बिलासपुर", "चंबा", "हमीरपुर", "कांगड़ा", "किन्नौर", "कुल्लू", "लाहौल और स्पीति",
+      "मंडी", "शिमला", "सिरमौर", "सोलन", "ऊना"
     ],
-    "Jammu and Kashmir": [
-      "Anantnag", "Bandipora", "Baramulla", "Budgam", "Doda", "Ganderbal", "Jammu", "Kathua",
-      "Kishtwar", "Kulgam", "Kupwara", "Poonch", "Pulwama", "Rajouri", "Ramban", "Reasi",
-      "Samba", "Shopian", "Srinagar", "Udhampur"
+    "जम्मू और कश्मीर": [
+      "अनंतनाग", "बांदीपोरा", "बारामूला", "बडगाम", "डोडा", "गांदरबल", "जम्मू", "कठुआ",
+      "किश्तवाड़", "कुलगाम", "कुपवाड़ा", "पुंछ", "पुलवामा", "राजौरी", "रामबन", "रियासी",
+      "सांबा", "शोपियां", "श्रीनगर", "उधमपुर"
     ],
-    "Andhra Pradesh": [
-      "Alluri Sitharama Raju", "Anakapalli", "Ananthapuramu", "Annamayya", "Bapatla", "Chittoor",
-      "East Godavari", "Eluru", "Guntur", "Kakinada", "Konaseema", "Krishna", "Kurnool",
-      "Nandyal", "NTR", "Palnadu", "Parvathipuram Manyam", "Prakasam", "Srikakulam",
-      "Sri Potti Sriramulu Nellore", "Sri Sathya Sai", "Tirupati", "Visakhapatnam", "Vizianagaram",
-      "West Godavari", "YSR Kadapa"
+    "आंध्र प्रदेश": [
+      "अल्लूरी सीताराम राजू", "अनकापल्ली", "अनंतपुरमू", "अन्नमय्या", "बापटला", "चित्तूर",
+      "पूर्वी गोदावरी", "एलुरु", "गुंटूर", "काकीनाडा", "कोनसीमा", "कृष्णा", "कुरनूल",
+      "नांद्याल", "एनटीआर", "पलनाडु", "पार्वतीपुरम मान्यम", "प्रकाशम", "श्रीकाकुलम",
+      "श्री पोट्टि श्रीरामुलु नेल्लोर", "श्री सत्य साई", "तिरुपति", "विशाखापत्तनम", "विजयनगरम",
+      "पश्चिमी गोदावरी", "वाईएसआर कडप्पा"
     ],
-    "Assam": [
-      "Bajali", "Baksa", "Barpeta", "Biswanath", "Bongaigaon", "Cachar", "Charaideo", "Chirang",
-      "Darrang", "Dhemaji", "Dhubri", "Dibrugarh", "Dima Hasao", "Goalpara", "Golaghat",
-      "Hailakandi", "Hojai", "Jorhat", "Kamrup", "Kamrup Metropolitan", "Karbi Anglong",
-      "Karimganj", "Kokrajhar", "Lakhimpur", "Majuli", "Morigaon", "Nagaon", "Nalbari",
-      "Sivasagar", "Sonitpur", "South Salmara-Mankachar", "Tamulpur", "Tinsukia", "Udalguri", "West Karbi Anglong"
+    "असम": [
+      "बजाली", "बक्सा", "बरपेटा", "बिश्वनाथ", "बोंगाईगांव", "कछार", "चराइदेव", "चिरांग",
+      "दरांग", "धेमाजी", "धुबरी", "डिब्रूगढ़", "दीमा हसाओ", "ग्वालपाड़ा", "गोलाघाट",
+      "हैलाकांडी", "होजाई", "जोरहाट", "कामरूप", "कामरूप महानगर", "कार्बी आंगलोंग",
+      "करीमगंज", "कोकराझार", "लखीमपुर", "माजुली", "मोरीगांव", "नगांव", "नलबाड़ी",
+      "शिवसागर", "सोनितपुर", "दक्षिण सालमारा-मांकाचर", "तमुलपुर", "तिनसुकिया", "उदालगुड़ी",
+      "पश्चिम कार्बी आंगलोंग"
     ],
-    "Karnataka": [
-      "Bagalkot", "Ballari", "Belagavi", "Bengaluru Rural", "Bengaluru Urban", "Bidar",
-      "Chamarajanagar", "Chikkaballapura", "Chikkamagaluru", "Chitradurga", "Dakshina Kannada",
-      "Davanagere", "Dharwad", "Gadag", "Hassan", "Haveri", "Kalaburagi", "Kodagu", "Kolar",
-      "Koppal", "Mandya", "Mysuru", "Raichur", "Ramanagara", "Shivamogga", "Tumakuru", "Udupi",
-      "Uttara Kannada", "Vijayanagara", "Vijayapura", "Yadgir"
+    "कर्नाटक": [
+      "बागलकोट", "बल्लारी", "बेलगावी", "बेंगलुरु ग्रामीण", "बेंगलुरु शहरी", "बीदर",
+      "चामराजनगर", "चिक्कबल्लापुर", "चिक्कमगलुरु", "चित्रदुर्ग", "दक्षिण कन्नड़",
+      "दावणगेरे", "धारवाड़", "गदग", "हासन", "हावेरी", "कलाबुरगी", "कोडागु", "कोलार",
+      "कोप्पल", "मांड्या", "मैसूरु", "रायचूर", "रामनगर", "शिवमोग्गा", "तुमकुरु", "उडुपी",
+      "उत्तर कन्नड़", "विजयनगर", "विजयपुरा", "यादगीर"
     ],
-    "Kerala": [
-      "Alappuzha", "Ernakulam", "Idukki", "Kannur", "Kasaragod", "Kollam", "Kottayam",
-      "Kozhikode", "Malappuram", "Palakkad", "Pathanamthitta", "Thiruvananthapuram", "Thrissur", "Wayanad"
+    "केरल": [
+      "अलप्पुझा", "एर्नाकुलम", "इडुक्की", "कन्नूर", "कासरगोड", "कोल्लम", "कोट्टायम",
+      "कोझिकोड", "मलप्पुरम", "पालक्काड", "पथनमथिट्टा", "तिरुवनंतपुरम", "त्रिशूर", "वायनाड"
     ],
-    "Tamil Nadu": [
-      "Ariyalur", "Chengalpattu", "Chennai", "Coimbatore", "Cuddalore", "Dharmapuri", "Dindigul",
-      "Erode", "Kallakurichi", "Kanchipuram", "Kanyakumari", "Karur", "Krishnagiri", "Madurai",
-      "Mayiladuthurai", "Nagapattinam", "Namakkal", "Nilgiris", "Perambalur", "Pudukkottai",
-      "Ramanathapuram", "Ranipet", "Salem", "Sivaganga", "Tenkasi", "Thanjavur", "Theni",
-      "Thoothukudi", "Tiruchirappalli", "Tirunelveli", "Tirupathur", "Tiruppur", "Tiruvallur",
-      "Tiruvannamalai", "Tiruvarur", "Vellore", "Viluppuram", "Virudhunagar"
+    "तमिलनाडु": [
+      "अरियालुर", "चेंगलपट्टू", "चेन्नई", "कोयंबटूर", "कडलूर", "धर्मपुरी", "डिंडीगुल",
+      "इरोड", "कल्लाकुरिची", "कांचीपुरम", "कन्याकुमारी", "करूर", "कृष्णागिरि", "मदुरै",
+      "मयिलादुतुरै", "नागपट्टिनम", "नमक्कल", "नीलगिरि", "पेरम्बलूर", "पुदुक्कोट्टई",
+      "रामनाथपुरम", "रानीपेट", "सेलम", "शिवगंगा", "तेनकासी", "तंजावुर", "थेनी",
+      "तूतीकोरिन", "तिरुचिरापल्ली", "तिरुनेलवेली", "तिरुपत्तूर", "तिरुप्पुर", "तिरुवल्लूर",
+      "तिरुवन्नामलाई", "तिरुवारूर", "वेल्लोर", "विल्लुपुरम", "विरुधुनगर"
     ],
-    "Telangana": [
-      "Adilabad", "Bhadradri Kothagudem", "Hanamkonda", "Hyderabad", "Jagtial", "Jangaon",
-      "Jayashankar Bhupalpally", "Jogulamba Gadwal", "Kamareddy", "Karimnagar", "Khammam",
-      "Kumuram Bheem Asifabad", "Mahabubabad", "Mahabubnagar", "Mancherial", "Medak",
-      "Medchal-Malkajgiri", "Mulugu", "Nagarkurnool", "Nalgonda", "Narayanpet", "Nirmal",
-      "Nizamabad", "Peddapalli", "Rajanna Sircilla", "Ranga Reddy", "Sangareddy", "Siddipet",
-      "Suryapet", "Vikarabad", "Wanaparthy", "Warangal", "Yadadri Bhuvanagiri"
+    "तेलंगाना": [
+      "आदिलाबाद", "भद्राद्री कोठागुडेम", "हनमकोंडा", "हैदराबाद", "जगतियाल", "जंगांव",
+      "जयशंकर भूपालपल्ली", "जोगुलाम्बा गडवाल", "कामारेड्डी", "करीमनगर", "खम्मम",
+      "कुमारम भीम आसिफाबाद", "महबूबाबाद", "महबूबनगर", "मंचेरियल", "मेदक",
+      "मेडचल-मलकाजगिरि", "मुलुगु", "नगरकुरनूल", "नलगोंडा", "नारायणपेट", "निर्मल",
+      "निजामाबाद", "पेद्दापल्ली", "राजन्ना सिरसिल्ला", "रंगा रेड्डी", "संगारेड्डी", "सिद्दीपेट",
+      "सूर्यापेट", "विकाराबाद", "वानापर्थी", "वारंगल", "यादाद्री भुवनगिरि"
     ],
-    "Goa": [
-      "North Goa", "South Goa"
+    "गोवा": ["उत्तर गोवा", "दक्षिण गोवा"],
+    "अरुणाचल प्रदेश": [
+      "अंजॉ", "चांगलांग", "दिबांग घाटी", "पूर्वी कामेंग", "पूर्वी सियांग", "ईटानगर", "कामले",
+      "क्रा दादी", "कुरुंग कुमे", "लेपा राडा", "लोहित", "लोंगडिंग", "निचली दिबांग घाटी",
+      "निचली सियांग", "निचला सुबनसिरी", "नामसाई", "पक्के केसांग", "पापुम पारे", "शी योमी",
+      "सियांग", "तवांग", "तिरप", "ऊपरी सियांग", "ऊपरी सुबनसिरी", "पश्चिमी कामेंग", "पश्चिमी सियांग"
     ],
-    "Arunachal Pradesh": [
-      "Anjaw", "Changlang", "Dibang Valley", "East Kameng", "East Siang", "Itanagar", "Kamle",
-      "Kra Daadi", "Kurung Kumey", "Lepa Rada", "Lohit", "Longding", "Lower Dibang Valley",
-      "Lower Siang", "Lower Subansiri", "Namsai", "Pakke Kessang", "Papum Pare", "Shi Yomi",
-      "Siang", "Tawang", "Tirap", "Upper Siang", "Upper Subansiri", "West Kameng", "West Siang"
+    "मणिपुर": [
+      "बिष्णुपुर", "चंदेल", "चुराचांदपुर", "पूर्वी इम्फाल", "पश्चिमी इम्फाल", "जीरीबाम",
+      "काकचिंग", "कामजोंग", "कांगपोकपी", "नोनी", "फेरजॉल", "सेनापति", "तमेंगलॉन्ग",
+      "तेनगनौपाल", "थौबल", "उखरुल"
     ],
-    "Manipur": [
-      "Bishnupur", "Chandel", "Churachandpur", "Imphal East", "Imphal West", "Jiribam",
-      "Kakching", "Kamjong", "Kangpokpi", "Noney", "Pherzawl", "Senapati", "Tamenglong",
-      "Tengnoupal", "Thoubal", "Ukhrul"
+    "मेघालय": [
+      "पूर्वी गारो हिल्स", "पूर्वी जयंतिया हिल्स", "पूर्वी खासी हिल्स", "पूर्वी पश्चिम खासी हिल्स",
+      "उत्तरी गारो हिल्स", "री भोई", "दक्षिणी गारो हिल्स", "दक्षिण-पश्चिमी गारो हिल्स",
+      "दक्षिण-पश्चिमी खासी हिल्स", "पश्चिमी गारो हिल्स", "पश्चिमी जयंतिया हिल्स", "पश्चिमी खासी हिल्स"
     ],
-    "Meghalaya": [
-      "East Garo Hills", "East Jaintia Hills", "East Khasi Hills", "Eastern West Khasi Hills",
-      "North Garo Hills", "Ri Bhoi", "South Garo Hills", "South West Garo Hills",
-      "South West Khasi Hills", "West Garo Hills", "West Jaintia Hills", "West Khasi Hills"
+    "मिजोरम": [
+      "आइजोल", "चम्फाई", "हनहथियाल", "खावजॉल", "कोलासिब", "लॉन्गतलाई", "लुंगलेई",
+      "मामित", "साइहा", "सैतुअल", "सेरछिप"
     ],
-    "Mizoram": [
-      "Aizawl", "Champhai", "Hnahthial", "Khawzawl", "Kolasib", "Lawngtlai", "Lunglei",
-      "Mamit", "Saiha", "Saitual", "Serchhip"
+    "नागालैंड": [
+      "चुमौकेदिमा", "दीमापुर", "किफिरे", "कोहिमा", "लोंगलेंग", "मोकोकचुंग", "मोन",
+      "निउलैंड", "नोकलाक", "पेरेन", "फेक", "शामाटोर", "त्सेमिन्यु", "तुएनसांग", "वोखा", "जुन्हेबोटो"
     ],
-    "Nagaland": [
-      "Chumoukedima", "Dimapur", "Kiphire", "Kohima", "Longleng", "Mokokchung", "Mon",
-      "Niuland", "Noklak", "Peren", "Phek", "Shamator", "Tseminyu", "Tuensang", "Wokha", "Zunheboto"
-    ],
-    "Sikkim": [
-      "Gangtok", "Gyalshing", "Mangan", "Namchi", "Pakyong", "Soreng"
-    ],
-    "Tripura": [
-      "Dhalai", "Gomati", "Khowai", "North Tripura", "Sepahijala", "South Tripura", "Unakoti", "West Tripura"
-    ],
-    "Chandigarh": [
-      "Chandigarh"
-    ],
-    "Ladakh": [
-      "Kargil", "Leh"
-    ],
-    "Puducherry": [
-      "Karaikal", "Mahe", "Puducherry", "Yanam"
-    ],
-    "Andaman and Nicobar Islands": [
-      "Nicobar", "North and Middle Andaman", "South Andaman"
-    ],
-    "Dadra and Nagar Haveli and Daman and Diu": [
-      "Dadra and Nagar Haveli", "Daman", "Diu"
-    ],
-    "Lakshadweep": [
-      "Lakshadweep"
-    ]
+    "सिक्किम": ["गंगटोक", "ग्यालशिंग", "मंगन", "नामची", "पाक्योंग", "सोरेंग"],
+    "त्रिपुरा": ["धलाई", "गोमती", "खोवाई", "उत्तर त्रिपुरा", "सिपाहीजला", "दक्षिण त्रिपुरा", "उनाकोटी", "पश्चिम त्रिपुरा"],
+    "चंडीगढ़": ["चंडीगढ़"],
+    "लद्दाख": ["कारगिल", "लेह"],
+    "पुडुचेरी": ["कराईकल", "माहे", "पुडुचेरी", "यानम"],
+    "अंडमान और निकोबार द्वीपसमूह": ["निकोबार", "उत्तर और मध्य अंडमान", "दक्षिण अंडमान"],
+    "दादरा और नगर हवेली और दमन और दीव": ["दादरा और नगर हवेली", "दमन", "दीव"],
+    "लक्षद्वीप": ["लक्षद्वीप"]
   };
 
+  const STATE_ALIASES = {
+    "उत्तर प्रदेश": ["उत्तर प्रदेश", "Uttar Pradesh", "uttar-pradesh", "UP", "U.P."],
+    "बिहार": ["बिहार", "Bihar", "bihar"],
+    "मध्य प्रदेश": ["मध्य प्रदेश", "Madhya Pradesh", "madhya-pradesh", "MP", "M.P."],
+    "झारखंड": ["झारखंड", "Jharkhand", "jharkhand"],
+    "दिल्ली": ["दिल्ली", "Delhi", "delhi", "New Delhi"],
+    "राजस्थान": ["राजस्थान", "Rajasthan", "rajasthan"],
+    "हरियाणा": ["हरियाणा", "Haryana", "haryana"],
+    "उत्तराखंड": ["उत्तराखंड", "Uttarakhand", "uttarakhand"],
+    "पंजाब": ["पंजाब", "Punjab", "punjab"],
+    "महाराष्ट्र": ["महाराष्ट्र", "Maharashtra", "maharashtra"],
+    "गुजरात": ["गुजरात", "Gujarat", "gujarat"],
+    "पश्चिम बंगाल": ["पश्चिम बंगाल", "West Bengal", "west-bengal"],
+    "छत्तीसगढ़": ["छत्तीसगढ़", "Chhattisgarh", "chhattisgarh"],
+    "ओडिशा": ["ओडिशा", "Odisha", "odisha", "Orissa"],
+    "हिमाचल प्रदेश": ["हिमाचल प्रदेश", "Himachal Pradesh", "himachal-pradesh"],
+    "जम्मू और कश्मीर": ["जम्मू और कश्मीर", "Jammu and Kashmir", "jammu-and-kashmir", "J&K"],
+    "आंध्र प्रदेश": ["आंध्र प्रदेश", "Andhra Pradesh", "andhra-pradesh"],
+    "असम": ["असम", "Assam", "assam"],
+    "कर्नाटक": ["कर्नाटक", "Karnataka", "karnataka"],
+    "केरल": ["केरल", "Kerala", "kerala"],
+    "तमिलनाडु": ["तमिलनाडु", "Tamil Nadu", "tamil-nadu"],
+    "तेलंगाना": ["तेलंगाना", "Telangana", "telangana"],
+    "गोवा": ["गोवा", "Goa", "goa"]
+  };
+
+  const DISTRICT_ALIASES = {
+    "वाराणसी": ["वाराणसी", "Varanasi", "Banaras", "Kashi"],
+    "प्रयागराज": ["प्रयागराज", "Prayagraj", "Allahabad"],
+    "अयोध्या": ["अयोध्या", "Ayodhya", "Faizabad"],
+    "गोरखपुर": ["गोरखपुर", "Gorakhpur"],
+    "मिर्जापुर": ["मिर्जापुर", "Mirzapur"],
+    "बलिया": ["बलिया", "Ballia", "Balia"],
+    "बरेली": ["बरेली", "Bareilly"],
+    "महाराजगंज": ["महाराजगंज", "Maharajganj", "Mahrajganj"],
+    "जौनपुर": ["जौनपुर", "Jaunpur"],
+    "गाजीपुर": ["गाजीपुर", "Ghazipur"],
+    "चंदौली": ["चंदौली", "Chandauli"],
+    "सोनभद्र": ["सोनभद्र", "Sonbhadra", "Sonebhadra"],
+    "आगरा": ["आगरा", "Agra"],
+    "अलीगढ़": ["अलीगढ़", "Aligarh"],
+    "अम्बेडकर नगर": ["अम्बेडकर नगर", "Ambedkar Nagar"],
+    "अमेठी": ["अमेठी", "Amethi"],
+    "अमरोहा": ["अमरोहा", "Amroha"],
+    "औरैया": ["औरैया", "Auraiya"],
+    "आजमगढ़": ["आजमगढ़", "Azamgarh"],
+    "बागपत": ["बागपत", "Baghpat"],
+    "बहराइच": ["बहराइच", "Bahraich"],
+    "बलरामपुर": ["बलरामपुर", "Balrampur"],
+    "बांदा": ["बांदा", "Banda"],
+    "बाराबंकी": ["बाराबंकी", "Barabanki"],
+    "बस्ती": ["बस्ती", "Basti"],
+    "बिजनौर": ["बिजनौर", "Bijnor"],
+    "बदायूँ": ["बदायूँ", "Budaun", "Badaun"],
+    "बुलंदशहर": ["बुलंदशहर", "Bulandshahr"],
+    "चित्रकूट": ["चित्रकूट", "Chitrakoot"],
+    "देवरिया": ["देवरिया", "Deoria"],
+    "एटा": ["एटा", "Etah"],
+    "इटावा": ["इटावा", "Etawah"],
+    "फर्रुखाबाद": ["फर्रुखाबाद", "Farrukhabad"],
+    "फतेहपुर": ["फतेहपुर", "Fatehpur"],
+    "फिरोजाबाद": ["फिरोजाबाद", "Firozabad"],
+    "गौतम बुद्ध नगर": ["गौतम बुद्ध नगर", "Gautam Buddha Nagar", "Noida", "Greater Noida"],
+    "गाजियाबाद": ["गाजियाबाद", "Ghaziabad"],
+    "गोंडा": ["गोंडा", "Gonda"],
+    "हमीरपुर": ["हमीरपुर", "Hamirpur"],
+    "हापुड़": ["हापुड़", "Hapur"],
+    "हरदोई": ["हरदोई", "Hardoi"],
+    "हाथरस": ["हाथरस", "Hathras"],
+    "जालौन": ["जालौन", "Jalaun"],
+    "झाँसी": ["झाँसी", "Jhansi"],
+    "कन्नौज": ["कन्नौज", "Kannauj"],
+    "कानपुर देहात": ["कानपुर देहात", "Kanpur Dehat"],
+    "कानपुर नगर": ["कानपुर नगर", "Kanpur", "Kanpur Nagar"],
+    "कासगंज": ["कासगंज", "Kasganj"],
+    "कौशाम्बी": ["कौशाम्बी", "Kaushambi"],
+    "कुशीनगर": ["कुशीनगर", "Kushinagar"],
+    "लखीमपुर खीरी": ["लखीमपुर खीरी", "Lakhimpur Kheri", "Kheri"],
+    "ललितपुर": ["ललितपुर", "Lalitpur"],
+    "लखनऊ": ["लखनऊ", "Lucknow"],
+    "महोबा": ["महोबा", "Mahoba"],
+    "मैनपुरी": ["मैनपुरी", "Mainpuri"],
+    "मथुरा": ["मथुरा", "Mathura"],
+    "मऊ": ["मऊ", "Mau"],
+    "मेरठ": ["मेरठ", "Meerut"],
+    "मुरादाबाद": ["मुरादाबाद", "Moradabad"],
+    "मुजफ्फरनगर": ["मुजफ्फरनगर", "Muzaffarnagar"],
+    "पीलीभीत": ["पीलीभीत", "Pilibhit"],
+    "प्रतापगढ़": ["प्रतापगढ़", "Pratapgarh"],
+    "रायबरेली": ["रायबरेली", "Rae Bareli", "Raebareli"],
+    "रामपुर": ["रामपुर", "Rampur"],
+    "सहारनपुर": ["सहारनपुर", "Saharanpur"],
+    "सम्भल": ["सम्भल", "Sambhal"],
+    "संत कबीर नगर": ["संत कबीर नगर", "Sant Kabir Nagar"],
+    "शाहजहाँपुर": ["शाहजहाँपुर", "Shahjahanpur"],
+    "शामली": ["शामली", "Shamli"],
+    "श्रावस्ती": ["श्रावस्ती", "Shravasti"],
+    "सिद्धार्थनगर": ["सिद्धार्थनगर", "Siddharthnagar", "Siddharth Nagar"],
+    "सीतापुर": ["सीतापुर", "Sitapur"],
+    "सोनभद्र": ["सोनभद्र", "Sonbhadra", "Sonebhadra"],
+    "सुल्तानपुर": ["सुल्तानपुर", "Sultanpur"],
+    "उन्नाव": ["उन्नाव", "Unnao"],
+    "पटना": ["पटना", "Patna"],
+    "गया": ["गया", "Gaya"],
+    "भागलपुर": ["भागलपुर", "Bhagalpur"],
+    "मुजफ्फरपुर": ["मुजफ्फरपुर", "Muzaffarpur"],
+    "दरभंगा": ["दरभंगा", "Darbhanga"],
+    "पूर्णिया": ["पूर्णिया", "Purnia"],
+    "रोहतास": ["रोहतास", "Rohtas"],
+    "सारण": ["सारण", "Saran", "Chhapra"],
+    "सिवान": ["सिवान", "Siwan"],
+    "वैशाली": ["वैशाली", "Vaishali", "Hajipur"],
+    "समस्तीपुर": ["समस्तीपुर", "Samastipur"],
+    "बेगूसराय": ["बेगूसराय", "Begusarai"],
+    "राँची": ["राँची", "Ranchi"],
+    "भोपाल": ["भोपाल", "Bhopal"],
+    "इंदौर": ["इंदौर", "Indore"],
+    "जयपुर": ["जयपुर", "Jaipur"],
+    "नई दिल्ली": ["नई दिल्ली", "New Delhi", "दिल्ली", "Delhi"]
+  };
+
+  function normalizeState(val) {
+    if (!val || val === "all") return val;
+    const trimmed = val.trim();
+    if (INDIA_STATES_DISTRICTS[trimmed]) return trimmed;
+    const lower = trimmed.toLowerCase();
+    for (const [hindiState, aliases] of Object.entries(STATE_ALIASES)) {
+      if (aliases.some(a => a.toLowerCase() === lower)) {
+        return hindiState;
+      }
+    }
+    return trimmed;
+  }
+
+  function normalizeDistrict(val) {
+    if (!val || val === "all") return val;
+    const trimmed = val.trim();
+    if (DISTRICT_ALIASES[trimmed]) return trimmed;
+    const lower = trimmed.toLowerCase();
+    for (const [hindiDist, aliases] of Object.entries(DISTRICT_ALIASES)) {
+      if (aliases.some(d => d.toLowerCase() === lower)) {
+        return hindiDist;
+      }
+    }
+    return trimmed;
+  }
+
   /**
-   * Helper to initialize linked State -> District dropdowns.
-   * @param {Object} config
-   * @param {HTMLSelectElement|string} config.stateEl - State select element or ID
-   * @param {HTMLSelectElement|string} config.districtEl - District select element or ID
-   * @param {HTMLInputElement|string} [config.customDistrictEl] - Optional input for custom typing
-   * @param {string} [config.selectedState] - Initial selected state
-   * @param {string} [config.selectedDistrict] - Initial selected district
-   * @param {boolean} [config.includeAllOption] - Whether to include "All Districts" option (useful for filters)
+   * Helper to initialize linked State -> District dropdowns with Hindi names.
    */
   function setupStateDistrictSelectors(config) {
     const stateSelect = typeof config.stateEl === "string" ? document.getElementById(config.stateEl) : config.stateEl;
@@ -221,12 +345,12 @@
 
     if (!stateSelect || !districtSelect) return;
 
-    let preselectedState = config.selectedState || stateSelect.value || "";
-    let preselectedDistrict = config.selectedDistrict || "";
+    let preselectedState = normalizeState(config.selectedState || stateSelect.value || "");
+    let preselectedDistrict = normalizeDistrict(config.selectedDistrict || "");
 
     // If preselectedDistrict exists without preselectedState, try reverse lookup
-    if (preselectedDistrict && !preselectedState) {
-      const lower = preselectedDistrict.trim().toLowerCase();
+    if (preselectedDistrict && (!preselectedState || preselectedState === "all")) {
+      const lower = preselectedDistrict.toLowerCase();
       for (const [st, dList] of Object.entries(INDIA_STATES_DISTRICTS)) {
         if (dList.some(d => d.toLowerCase() === lower)) {
           preselectedState = st;
@@ -237,7 +361,7 @@
 
     // Default to Uttar Pradesh if still empty and not a filter dropdown
     if (!preselectedState && !config.includeAllOption) {
-      preselectedState = "Uttar Pradesh";
+      preselectedState = "उत्तर प्रदेश";
     }
 
     // 1. Populate State options
@@ -247,12 +371,13 @@
     if (config.includeAllOption) {
       const allOpt = document.createElement("option");
       allOpt.value = "all";
-      allOpt.textContent = "All States (सभी राज्य)";
+      allOpt.textContent = "सभी राज्य (All States)";
+      if (preselectedState === "all") allOpt.selected = true;
       stateSelect.appendChild(allOpt);
     } else {
       const defOpt = document.createElement("option");
       defOpt.value = "";
-      defOpt.textContent = "-- Select State (राज्य चुनें) --";
+      defOpt.textContent = "-- राज्य चुनें (Select State) --";
       stateSelect.appendChild(defOpt);
     }
 
@@ -260,7 +385,7 @@
       const opt = document.createElement("option");
       opt.value = st;
       opt.textContent = st;
-      if (preselectedState && preselectedState.toLowerCase() === st.toLowerCase()) {
+      if (preselectedState && (preselectedState === st || normalizeState(preselectedState) === st)) {
         opt.selected = true;
       }
       stateSelect.appendChild(opt);
@@ -273,23 +398,22 @@
       if (config.includeAllOption) {
         const allDistOpt = document.createElement("option");
         allDistOpt.value = "all";
-        allDistOpt.textContent = "All Districts (सभी ज़िले)";
+        allDistOpt.textContent = "सभी ज़िले (All Districts)";
+        if (preselectedDistrict === "all") allDistOpt.selected = true;
         districtSelect.appendChild(allDistOpt);
       } else {
         const defDistOpt = document.createElement("option");
         defDistOpt.value = "";
-        defDistOpt.textContent = "-- Select District (ज़िला चुनें) --";
+        defDistOpt.textContent = "-- ज़िला चुनें (Select District) --";
         districtSelect.appendChild(defDistOpt);
       }
 
-      if (!stateName || stateName === "all") {
-        if (config.includeAllOption) {
-          // Flatten all districts or unique
-          return;
-        }
+      const activeState = normalizeState(stateName);
+      if (!activeState || activeState === "all") {
+        return;
       }
 
-      const districts = INDIA_STATES_DISTRICTS[stateName] || [];
+      const districts = INDIA_STATES_DISTRICTS[activeState] || [];
       let foundMatchingDistrict = false;
 
       districts.forEach((dist) => {
@@ -299,7 +423,7 @@
         if (
           keepSelection &&
           preselectedDistrict &&
-          preselectedDistrict.toLowerCase() === dist.toLowerCase()
+          (preselectedDistrict === dist || normalizeDistrict(preselectedDistrict) === dist)
         ) {
           opt.selected = true;
           foundMatchingDistrict = true;
@@ -311,7 +435,7 @@
       if (!config.includeAllOption) {
         const otherOpt = document.createElement("option");
         otherOpt.value = "__other__";
-        otherOpt.textContent = "➕ Other / Custom District (अन्य)";
+        otherOpt.textContent = "➕ अन्य / कस्टम ज़िला (Type Custom)";
         districtSelect.appendChild(otherOpt);
 
         if (keepSelection && preselectedDistrict && !foundMatchingDistrict) {

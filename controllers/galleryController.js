@@ -2,6 +2,7 @@ const SankalpPhoto = require("../models/SankalpPhoto");
 const HomeQuickInfo = require("../models/HomeQuickInfo");
 const { defaultGalleryPhotos, seedGalleryData } = require("../scripts/seedGalleryData");
 const { getPagination } = require("../utils/pagination");
+const { buildStateMongoQuery, buildDistrictMongoQuery } = require("../utils/indiaStatesDistricts");
 
 function escapeRegex(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -21,13 +22,15 @@ function addGallerySearch(query, search) {
 // Public Gallery Page
 exports.getGalleryPage = async (req, res) => {
   try {
-    const { district } = req.query;
+    const state = typeof req.query.state === "string" ? req.query.state.trim().slice(0, 80) : "";
+    const district = typeof req.query.district === "string" ? req.query.district.trim().slice(0, 100) : "";
     const search = typeof req.query.search === "string" ? req.query.search.trim().slice(0, 100) : "";
 
     const query = { isPublished: true };
-    if (typeof district === "string" && district.trim() && district !== "all") {
-      query.district = district.trim();
-    }
+    const stateQuery = buildStateMongoQuery(state);
+    if (stateQuery) query.state = stateQuery;
+    const districtQuery = buildDistrictMongoQuery(district);
+    if (districtQuery) query.district = districtQuery;
     addGallerySearch(query, search);
 
     let [total, quickInfo, districtsWithCount] = await Promise.all([
@@ -42,7 +45,7 @@ exports.getGalleryPage = async (req, res) => {
     ]);
 
     const hasActiveFilters = Boolean(
-      search || (typeof district === "string" && district.trim() && district !== "all")
+      search || (state && state !== "all") || (district && district !== "all")
     );
 
     // Seed defaults only for an unfiltered first visit, never for a no-match search.
@@ -70,7 +73,8 @@ exports.getGalleryPage = async (req, res) => {
     res.render("gallery", {
       title: "फ़ोटो गैलरी",
       photos,
-      selectedDistrict: typeof district === "string" ? district : "all",
+      selectedState: state || "all",
+      selectedDistrict: district || "all",
       search,
       pagination,
       districtsWithCount: districtsWithCount || [],
@@ -80,11 +84,13 @@ exports.getGalleryPage = async (req, res) => {
   } catch (error) {
     console.error("Gallery render error:", error);
     const search = typeof req.query.search === "string" ? req.query.search.trim().slice(0, 100) : "";
+    const state = typeof req.query.state === "string" ? req.query.state : "all";
     const district = typeof req.query.district === "string" ? req.query.district : "all";
-    const hasActiveFilters = Boolean(search || (district && district !== "all"));
+    const hasActiveFilters = Boolean(search || (state && state !== "all") || (district && district !== "all"));
     res.render("gallery", {
       title: "फ़ोटो गैलरी",
       photos: hasActiveFilters ? [] : defaultGalleryPhotos,
+      selectedState: state,
       selectedDistrict: district,
       districtsWithCount: [],
       totalPhotos: defaultGalleryPhotos.length,
@@ -98,12 +104,15 @@ exports.getGalleryPage = async (req, res) => {
 // API: Filtered photos JSON
 exports.getGalleryApi = async (req, res) => {
   try {
-    const { district, search } = req.query;
+    const state = typeof req.query.state === "string" ? req.query.state.trim().slice(0, 80) : "";
+    const district = typeof req.query.district === "string" ? req.query.district.trim().slice(0, 100) : "";
+    const search = typeof req.query.search === "string" ? req.query.search.trim().slice(0, 100) : "";
     const query = { isPublished: true };
 
-    if (typeof district === "string" && district.trim() && district !== "all") {
-      query.district = district.trim();
-    }
+    const stateQuery = buildStateMongoQuery(state);
+    if (stateQuery) query.state = stateQuery;
+    const districtQuery = buildDistrictMongoQuery(district);
+    if (districtQuery) query.district = districtQuery;
 
     addGallerySearch(query, search);
 

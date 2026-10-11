@@ -8,6 +8,8 @@ const {
   getStatesList,
   getDistrictsForState,
   findStateForDistrict,
+  getStandardHindiState,
+  getStandardHindiDistrict,
 } = require("../../utils/indiaStatesDistricts");
 
 // Format date helper for input type="date"
@@ -109,7 +111,7 @@ exports.getCreatePhoto = async (req, res) => {
       admin: req.session.admin,
       photo: {
         name: "",
-        state: "Uttar Pradesh",
+        state: "उत्तर प्रदेश",
         district: "",
         date: new Date(),
         caption: "",
@@ -153,8 +155,10 @@ exports.postCreatePhoto = async (req, res) => {
 
     let finalState = state && state.trim() ? state.trim() : "";
     if (!finalState && finalDistrict) {
-      finalState = findStateForDistrict(finalDistrict) || "Uttar Pradesh";
+      finalState = findStateForDistrict(finalDistrict) || "उत्तर प्रदेश";
     }
+    finalState = getStandardHindiState(finalState) || "उत्तर प्रदेश";
+    finalDistrict = getStandardHindiDistrict(finalDistrict) || finalDistrict;
 
     let finalImageUrl = "";
     let imageFilename = "";
@@ -212,6 +216,7 @@ exports.postCreatePhoto = async (req, res) => {
       imageUrl: finalImageUrl,
       imageFilename,
       imagePublicId,
+      images: [{ url: finalImageUrl, publicId: imagePublicId, caption: caption ? caption.trim() : "" }],
       isPublished:
         isPublished === "on" || isPublished === "true" || isPublished === true,
       order: Number(order) || 0,
@@ -296,8 +301,10 @@ exports.postBulkUpload = async (req, res) => {
 
     let finalState = defaultState && defaultState.trim() ? defaultState.trim() : "";
     if (!finalState && finalDistrict) {
-      finalState = findStateForDistrict(finalDistrict) || "Uttar Pradesh";
+      finalState = findStateForDistrict(finalDistrict) || "उत्तर प्रदेश";
     }
+    finalState = getStandardHindiState(finalState) || "उत्तर प्रदेश";
+    finalDistrict = getStandardHindiDistrict(finalDistrict) || finalDistrict;
 
     if (!finalDistrict) {
       const districtsList = await SankalpPhoto.distinct("district");
@@ -319,38 +326,44 @@ exports.postBulkUpload = async (req, res) => {
     const publishedBool =
       isPublished === "on" || isPublished === "true" || isPublished === true;
 
-    const docsToInsert = [];
+    const uploadedImages = [];
     for (const [idx, file] of files.entries()) {
       const uploaded = await uploadBuffer(file.buffer, "nishad-yatra/gallery");
       uploadedFiles.push(uploaded);
-      let photoName = defaultName && defaultName.trim() ? defaultName.trim() : "Sanatani Nishad";
-      if (files.length > 1 && defaultName && defaultName.trim()) {
-        photoName = `${defaultName.trim()} #${idx + 1}`;
-      }
-
-      docsToInsert.push({
-        name: photoName,
-        state: finalState || "Uttar Pradesh",
-        district: finalDistrict,
-        date: isNaN(photoDate.getTime()) ? new Date() : photoDate,
-        caption: defaultCaption ? defaultCaption.trim() : "Mass Pledge Campaign",
-        imageUrl: uploaded.secure_url,
-        imageFilename: "",
-        imagePublicId: uploaded.public_id,
-        isPublished: publishedBool,
-        order: idx,
+      uploadedImages.push({
+        url: uploaded.secure_url,
+        publicId: uploaded.public_id,
+        caption: defaultCaption ? defaultCaption.trim() : "",
       });
     }
 
+    const firstImage = uploadedImages[0];
+    const cardTitle = defaultName && defaultName.trim() ? defaultName.trim() : "सामूहिक संकल्प";
+    const cardCaption = defaultCaption && defaultCaption.trim() ? defaultCaption.trim() : "निषाद संकल्प अभियान के प्रति समर्पण में लिया गया संकल्प।";
+
+    const newAlbumCard = new SankalpPhoto({
+      name: cardTitle,
+      state: finalState || "उत्तर प्रदेश",
+      district: finalDistrict,
+      date: isNaN(photoDate.getTime()) ? new Date() : photoDate,
+      caption: cardCaption,
+      imageUrl: firstImage.url,
+      imageFilename: "",
+      imagePublicId: firstImage.publicId,
+      images: uploadedImages,
+      isPublished: publishedBool,
+      order: 0,
+    });
+
     try {
-      await SankalpPhoto.insertMany(docsToInsert);
+      await newAlbumCard.save();
     } catch (error) {
       await Promise.all(uploadedFiles.map((asset) => removeAsset(asset.public_id)));
       throw error;
     }
 
     res.redirect(
-      `/admin/gallery?msg=${files.length} photos successfully uploaded together!`
+      `/admin/gallery?msg=${encodeURIComponent(`बल्क अपलोड सफल! ${files.length} फ़ोटो का 1 कार्ड गैलरी में जोड़ दिया गया है।`)}`
     );
   } catch (error) {
     console.error("Bulk upload error:", error);
@@ -382,8 +395,9 @@ exports.getEditPhoto = async (req, res) => {
     const districtsList = await SankalpPhoto.distinct("district");
     let photoState = photo.state;
     if (!photoState && photo.district) {
-      photoState = findStateForDistrict(photo.district) || "Uttar Pradesh";
+      photoState = findStateForDistrict(photo.district) || "उत्तर प्रदेश";
     }
+    photoState = getStandardHindiState(photoState) || "उत्तर प्रदेश";
     const photoData = photo.toObject ? photo.toObject() : { ...photo };
     photoData.state = photoState;
 
@@ -431,8 +445,10 @@ exports.postEditPhoto = async (req, res) => {
 
     let finalState = state && state.trim() ? state.trim() : (existing.state || "");
     if (!finalState && finalDistrict) {
-      finalState = findStateForDistrict(finalDistrict) || "Uttar Pradesh";
+      finalState = findStateForDistrict(finalDistrict) || "उत्तर प्रदेश";
     }
+    finalState = getStandardHindiState(finalState) || "उत्तर प्रदेश";
+    finalDistrict = getStandardHindiDistrict(finalDistrict) || finalDistrict;
 
     let finalImageUrl = existing.imageUrl;
     let imageFilename = existing.imageFilename;
@@ -510,7 +526,14 @@ exports.togglePhotoPublish = async (req, res) => {
 exports.deletePhoto = async (req, res) => {
   try {
     const photo = await SankalpPhoto.findByIdAndDelete(req.params.id);
-    if (photo?.imagePublicId) await removeAsset(photo.imagePublicId);
+    if (photo?.imagePublicId) await removeAsset(photo.imagePublicId).catch(() => {});
+    if (photo && Array.isArray(photo.images)) {
+      for (const img of photo.images) {
+        if (img.publicId && img.publicId !== photo.imagePublicId) {
+          await removeAsset(img.publicId).catch(() => {});
+        }
+      }
+    }
     if (photo && photo.imageFilename) {
       const filePath = path.join(
         __dirname,

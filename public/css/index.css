@@ -185,3 +185,125 @@ body {
 .ny-btn:hover svg {
   transform: translateX(3px);
 }
+
+/* ==========================================================================
+   GLOBAL HERO BANNER (SHARED SAME AS GALLERY)
+   ========================================================================== */
+
+.gallery-hero,
+.page-hero {
+  position: relative;
+  background: linear-gradient(135deg, #1f1212 0%, #3a1515 50%, #8c1a1a 100%);
+  color: #ffffff;
+  padding: 86px max(24px, calc((100% - 1232px) / 2)) 48px;
+  text-align: left;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.gallery-hero::before,
+.page-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 30%, rgba(215, 42, 42, 0.3) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.gallery-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffddd3;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 6px 18px;
+  border-radius: 30px;
+  margin-bottom: 18px;
+  backdrop-filter: blur(8px);
+  margin-left: 0;
+}
+
+.gallery-hero h1,
+.page-hero h1 {
+  font-family: 'Noto Sans Devanagari', sans-serif;
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 16px;
+  color: #ffffff;
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
+}
+
+.gallery-hero h1 span,
+.page-hero h1 span {
+  color: #f7a288;
+}
+
+.gallery-hero p,
+.page-hero p {
+  max-width: 720px;
+  margin: 0 0 22px;
+  font-size: clamp(16px, 2vw, 19px);
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+.gallery-stats-pills {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.gallery-stat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 8px 18px;
+  border-radius: 40px;
+  font-size: 16px;
+  color: #fff;
+  font-weight: 600;
+  backdrop-filter: blur(6px);
+}
+
+.gallery-stat-pill strong {
+  color: #f7b733;
+  font-size: 19px;
+  font-weight: 800;
+}
+
+@media (max-width: 768px) {
+  .gallery-hero,
+  .page-hero {
+    padding: 76px 18px 36px;
+  }
+  .gallery-hero h1,
+  .page-hero h1 {
+    font-size: clamp(26px, 6vw, 36px);
+    margin-bottom: 12px;
+  }
+  .gallery-hero p,
+  .page-hero p {
+    font-size: 15px;
+    margin-bottom: 18px;
+  }
+  .gallery-stats-pills {
+    gap: 10px;
+  }
+  .gallery-stat-pill {
+    padding: 6px 14px;
+    font-size: 14px;
+  }
+  .gallery-stat-pill strong {
+    font-size: 16px;
+  }
+}
+

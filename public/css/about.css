@@ -27,7 +27,7 @@ body.about-page-body {
   color: var(--about-text-dark);
   font-family: 'Noto Sans Devanagari', sans-serif;
   line-height: 1.65;
-  padding-top: 64px; /* fixed navbar offset */
+  padding-top: 0; /* aligned with gallery-hero */
 }
 
 /* ==========================================================================

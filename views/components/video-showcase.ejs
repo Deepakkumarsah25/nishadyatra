@@ -21,11 +21,16 @@
   }
 
   function getThumb(url, explicitThumb) {
-    if (explicitThumb && explicitThumb.trim()) return explicitThumb.trim();
-    const match = (url || '').match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/|v\/))([\w-]{11})/);
-    if (match && match[1]) return 'https://img.youtube.com/vi/' + match[1] + '/hqdefault.jpg';
-    const vimeoMatch = (url || '').match(/(?:player\.)?vimeo\.com\/(?:video\/)?(\d+)/i);
-    if (vimeoMatch) return 'https://vumbnail.com/' + vimeoMatch[1] + '.jpg';
+    const t = String(explicitThumb || '').trim();
+    const u = String(url || '').trim();
+    const isVideoWebpage = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be|vimeo\.com|player\.vimeo\.com)\//i.test(t);
+    if (t && !isVideoWebpage && (/\.(jpe?g|png|webp|gif|avif)($|\?)/i.test(t) || t.includes('/uploads/') || t.includes('cloudinary.com') || t.includes('unsplash.com') || t.includes('vumbnail.com') || t.includes('ytimg.com'))) {
+      return t;
+    }
+    const ytMatch = (u || t).match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/|v\/))([\w-]{11})/i);
+    if (ytMatch && ytMatch[1]) return 'https://img.youtube.com/vi/' + ytMatch[1] + '/hqdefault.jpg';
+    const vimeoMatch = (u || t).match(/(?:player\.)?vimeo\.com\/(?:video\/)?(\d+)/i);
+    if (vimeoMatch && vimeoMatch[1]) return 'https://vumbnail.com/' + vimeoMatch[1] + '.jpg';
     return '/images/kalash-yatra-featured.jpg';
   }
 
@@ -49,10 +54,8 @@
             tabindex="0" role="button" aria-label="Play <%= vid.title %>">
             <div class="home-media-thumb latest-thumb-wrap">
               <img src="<%= getThumb(vid.videoUrl, vid.thumbnail || vid.image) %>" alt="<%= vid.title %>" loading="lazy"
-                onerror="this.hidden=true; const preview=this.nextElementSibling; if(preview){ const iframe=document.createElement('iframe'); iframe.src=this.parentElement.parentElement.dataset.videoUrl; iframe.title=this.alt || 'Video preview'; iframe.loading='lazy'; iframe.tabIndex=-1; iframe.setAttribute('aria-hidden','true'); iframe.allow='autoplay; fullscreen; picture-in-picture'; iframe.allowFullscreen=true; preview.appendChild(iframe); preview.hidden=false; }" />
-              <div class="home-video-thumbnail-preview" hidden></div>
+                onerror="if(!this.dataset.fallback){ this.dataset.fallback='1'; this.src='/images/kalash-yatra-featured.jpg'; }" />
               <span class="latest-thumb-play" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
-              <% if (vid.duration) { %><span class="latest-duration-tag"><%= vid.duration %></span><% } %>
             </div>
             <div class="home-media-card-copy">
               <span class="home-media-card-meta"><%= vid.tag || vid.category || 'Campaign' %><% if (vid.district || vid.stateName) { %> · <%= vid.district || vid.stateName %><% } %></span>
@@ -124,5 +127,73 @@
     if (closeBtn) closeBtn.addEventListener("click", closeModal);
     if (modal) modal.addEventListener("click", function (event) { if (event.target === modal) closeModal(); });
     document.addEventListener("keydown", function (event) { if (event.key === "Escape") closeModal(); });
+  })();
+
+  // 1-Second Auto-Scroll for Video Showcase Rail
+  (function () {
+    const rail = document.querySelector(".video-showcase-section .home-media-rail");
+    if (!rail) return;
+    const cards = rail.querySelectorAll(".home-video-card");
+    if (cards.length <= 1) return;
+
+    let timer = null;
+    let paused = false;
+    let inView = false;
+
+    function getStep() {
+      if (cards.length > 1) {
+        const distance = cards[1].offsetLeft - cards[0].offsetLeft;
+        if (distance > 0) return distance;
+      }
+      return cards[0].getBoundingClientRect().width + 16;
+    }
+
+    function stop() {
+      if (timer) window.clearInterval(timer);
+      timer = null;
+    }
+
+    function advance() {
+      if (paused || !inView || rail.scrollWidth <= rail.clientWidth + 2) return;
+      const maxScroll = rail.scrollWidth - rail.clientWidth;
+      const step = getStep();
+      const nextLeft = rail.scrollLeft + step;
+      rail.scrollTo({
+        left: nextLeft >= maxScroll - 5 ? 0 : nextLeft,
+        behavior: "smooth"
+      });
+    }
+
+    function start() {
+      stop();
+      if (!paused && inView && !document.hidden) {
+        timer = window.setInterval(advance, 1000); // 1-second auto-scroll
+      }
+    }
+
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          inView = entry.isIntersecting;
+          if (inView) start();
+          else stop();
+        });
+      }, { threshold: 0.15 });
+      observer.observe(rail);
+    } else {
+      inView = true;
+      start();
+    }
+
+    rail.addEventListener("mouseenter", () => { paused = true; stop(); });
+    rail.addEventListener("mouseleave", () => { paused = false; start(); });
+    rail.addEventListener("touchstart", () => { paused = true; stop(); }, { passive: true });
+    rail.addEventListener("touchend", () => {
+      window.setTimeout(() => { paused = false; start(); }, 1500);
+    }, { passive: true });
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) stop();
+      else if (inView && !paused) start();
+    });
   })();
 </script>

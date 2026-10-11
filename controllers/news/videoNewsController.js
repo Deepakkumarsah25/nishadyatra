@@ -4,6 +4,7 @@ const VideoNews = require("../../models/news/VideoNews");
 const NewsPageSetting = require("../../models/news/NewsPageSetting");
 const { uploadBuffer, removeImage } = require("../../config/cloudinary");
 const { getPagination } = require("../../utils/pagination");
+const { buildStateMongoQuery, buildDistrictMongoQuery } = require("../../utils/indiaStatesDistricts");
 
 function removeUpload(file) {
   if (!file || !file.startsWith("/uploads/news/")) return;
@@ -365,8 +366,10 @@ exports.frontend = async (req, res, next) => {
 
     const state = typeof req.query.state === "string" ? req.query.state.trim().slice(0, 80) : "";
     const district = typeof req.query.district === "string" ? req.query.district.trim().slice(0, 80) : "";
-    if (state) filter.state = state;
-    if (district) filter.district = district;
+    const stateQuery = buildStateMongoQuery(state);
+    if (stateQuery) filter.state = stateQuery;
+    const districtQuery = buildDistrictMongoQuery(district);
+    if (districtQuery) filter.district = districtQuery;
 
     const pageSize = 9;
     const [total, locations, stateCount, newsCount, newsPageSetting] = await Promise.all([

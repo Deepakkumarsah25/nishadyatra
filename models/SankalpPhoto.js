@@ -47,6 +47,25 @@ const sankalpPhotoSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    images: [
+      {
+        url: {
+          type: String,
+          required: true,
+          trim: true,
+        },
+        publicId: {
+          type: String,
+          default: "",
+          trim: true,
+        },
+        caption: {
+          type: String,
+          default: "",
+          trim: true,
+        },
+      },
+    ],
     isPublished: {
       type: Boolean,
       default: true,

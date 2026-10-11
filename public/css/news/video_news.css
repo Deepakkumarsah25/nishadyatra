@@ -544,6 +544,10 @@
   font-weight: 700;
 }
 
+.press-filter-location-group {
+  display: contents;
+}
+
 .press-select-label select {
   min-width: 155px;
   height: 44px;
