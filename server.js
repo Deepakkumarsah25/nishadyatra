@@ -35,8 +35,6 @@ if (!process.env.SESSION_SECRET) {
 const sessionConfig = require("./config/session");
 const csrfProtection = require("./middleware/csrfProtection");
 const createDefaultAdmin = require("./config/createAdmin");
-const { seedHomeData } = require("./scripts/seedHomeData");
-const { seedGalleryData } = require("./scripts/seedGalleryData");
 
 // ========================================
 // Routes
@@ -125,9 +123,9 @@ app.use(sessionConfig);
 app.use(async (req, res, next) => {
   try {
     const contact = await ContactInfo.findOne().lean().catch(() => null);
-    res.locals.contactInfo = contact || ContactInfo.defaultData;
+    res.locals.contactInfo = contact || {};
   } catch (err) {
-    res.locals.contactInfo = ContactInfo.defaultData;
+    res.locals.contactInfo = {};
   }
   next();
 });
@@ -172,11 +170,7 @@ app.get("/about", aboutController.getAboutPage);
 
 app.get("/video", publicVideoRateLimit, async (req, res) => {
   try {
-    let kalash = await KalashYatra.findOne().select("-videos").lean();
-    if (!kalash) {
-      await KalashYatra.create(KalashYatra.defaultData);
-      kalash = await KalashYatra.findOne().select("-videos").lean();
-    }
+    const kalashDoc = await KalashYatra.findOne().select("-videos").lean();
 
     const search = typeof req.query.search === "string" ? req.query.search.trim().slice(0, 100) : "";
     const state = typeof req.query.state === "string" ? req.query.state.trim().slice(0, 80) : "";
@@ -214,7 +208,7 @@ app.get("/video", publicVideoRateLimit, async (req, res) => {
         { $limit: 300 },
       ]),
     ]);
-    kalash = { ...(kalash || KalashYatra.defaultData), videos };
+    const kalash = { ...(kalashDoc || {}), videos };
     res.render("videos/kalash-yatra", {
       kalash,
       currentUrl: "/video",
@@ -226,14 +220,9 @@ app.get("/video", publicVideoRateLimit, async (req, res) => {
     });
   } catch (error) {
     console.error("Fetch kalash yatra error:", error);
-    res.render("videos/kalash-yatra", {
-      kalash: KalashYatra.defaultData,
-      currentUrl: "/video",
-      videoSearch: "",
-      selectedVideoState: "all",
-      selectedVideoDistrict: "all",
-      videoLocations: [],
-      videoPagination: getPagination("1", KalashYatra.defaultData.videos.length, 9),
+    res.status(500).render("videos/kalash-yatra", {
+      kalash: {}, currentUrl: "/video", videoSearch: "", selectedVideoState: "all",
+      selectedVideoDistrict: "all", videoLocations: [], videoPagination: getPagination("1", 0, 9),
     });
   }
 });
@@ -282,16 +271,6 @@ const startServer = async () => {
 
     // Automatically create admin if not exists
     await createDefaultAdmin();
-
-    // Automatically seed default home page data if empty
-    await seedHomeData();
-
-    // Automatically seed default gallery photos if empty
-    await seedGalleryData();
-
-    // Automatically seed default contact page data if empty
-    await ContactInfo.getOrSeed();
-
     app.listen(PORT, "0.0.0.0", () => {
       console.log(`Server running at http://localhost:${PORT}`);
       console.log(`Admin Login: http://localhost:${PORT}/admin/nishadaarakshansankalp/main/login`);

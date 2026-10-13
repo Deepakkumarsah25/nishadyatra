@@ -9,72 +9,6 @@ const SankalpPhoto = require("../models/SankalpPhoto");
 const KalashYatra = require("../models/KalashYatra");
 const VideoNews = require("../models/news/VideoNews");
 const ContactInfo = require("../models/ContactInfo");
-const {
-  defaultHeroSlides,
-  defaultInitiatives,
-  defaultWhyChoose,
-  defaultNotices,
-  defaultQuickInfo,
-} = require("../scripts/seedHomeData");
-const { defaultGalleryPhotos } = require("../scripts/seedGalleryData");
-
-const homepageKalashPipeline = [
-  { $limit: 1 },
-  {
-    $project: {
-      hero: 1,
-      milestonesSection: 1,
-      videos: { $slice: [{ $ifNull: ["$videos", []] }, 10] },
-      highlightedVideo: {
-        $arrayElemAt: [
-          {
-            $filter: {
-              input: { $ifNull: ["$videos", []] },
-              as: "video",
-              cond: { $eq: ["$$video.isHighlighted", true] },
-            },
-          },
-          0,
-        ],
-      },
-    },
-  },
-];
-
-function getHomepageKalashFallback() {
-  const defaults = KalashYatra.defaultData;
-  return {
-    hero: defaults.hero,
-    milestonesSection: defaults.milestonesSection,
-    videos: defaults.videos.slice(0, 10),
-    highlightedVideo: defaults.videos.find((video) => video.isHighlighted) || null,
-  };
-}
-
-async function getHomepageKalash() {
-  try {
-    let [kalash] = await KalashYatra.aggregate(homepageKalashPipeline);
-
-    if (!kalash) {
-      await KalashYatra.create(KalashYatra.defaultData);
-      [kalash] = await KalashYatra.aggregate(homepageKalashPipeline);
-    }
-
-    if (!kalash) return getHomepageKalashFallback();
-
-    return {
-      ...kalash,
-      hero: { ...KalashYatra.defaultData.hero, ...(kalash.hero || {}) },
-      milestonesSection: {
-        ...KalashYatra.defaultData.milestonesSection,
-        ...(kalash.milestonesSection || {}),
-      },
-      videos: kalash.videos || [],
-    };
-  } catch {
-    return getHomepageKalashFallback();
-  }
-}
 
 // Public Home Page
 exports.getHomePage = async (req, res) => {
@@ -87,7 +21,7 @@ exports.getHomePage = async (req, res) => {
         SiteNotice.find({ isActive: true }).sort({ order: 1, createdAt: 1 }).limit(20),
         HomeQuickInfo.findOne(),
         SankalpPhoto.find({ isPublished: true }).sort({ order: 1, date: -1 }).limit(10),
-        getHomepageKalash(),
+        KalashYatra.findOne().lean(),
         VideoNews.find({ published: true })
           .sort({ publicationDate: -1, publishedAt: -1, createdAt: -1 })
           .limit(10)
@@ -97,20 +31,14 @@ exports.getHomePage = async (req, res) => {
         ContactInfo.findOne().lean().catch(() => null),
       ]);
 
-    // Fallbacks if database is completely empty or just initialized
-    const finalHeroSlides =
-      heroSlides && heroSlides.length > 0 ? heroSlides : defaultHeroSlides;
-    const finalInitiatives =
-      initiatives && initiatives.length > 0 ? initiatives : defaultInitiatives;
-    const finalWhyChoose = whyChooseDoc || defaultWhyChoose;
-    const finalNotices =
-      notices && notices.length > 0 ? notices : defaultNotices;
-    const finalQuickInfo = quickInfoDoc || defaultQuickInfo;
-    const finalHomeAbout = homeAboutDoc || (HomeAbout.defaultData || {});
-    const finalGalleryPhotos =
-      galleryPhotos && galleryPhotos.length > 0 ? galleryPhotos : defaultGalleryPhotos.slice(0, 10);
-
-    const kalash = kalashDoc || KalashYatra.defaultData;
+    const finalHeroSlides = heroSlides || [];
+    const finalInitiatives = initiatives || [];
+    const finalWhyChoose = whyChooseDoc || {};
+    const finalNotices = notices || [];
+    const finalQuickInfo = quickInfoDoc || {};
+    const finalHomeAbout = homeAboutDoc || {};
+    const finalGalleryPhotos = galleryPhotos || [];
+    const kalash = kalashDoc || {};
 
     // Helper to extract YouTube video ID
     function getYouTubeId(url) {
@@ -241,29 +169,15 @@ exports.getHomePage = async (req, res) => {
       highlightNews,
       homeNewsList,
       homeAbout: finalHomeAbout,
-      contactInfo: contactInfoDoc || ContactInfo.defaultData || {},
+      contactInfo: contactInfoDoc || {},
     });
   } catch (error) {
     console.error("Home page render error:", error);
-    const kalashFallback = KalashYatra.defaultData;
-    // Safe render with defaults so the user's site never crashes
-    res.render("index", {
+    res.status(500).render("index", {
       title: "Nishad Sankalp Campaign",
-      metaDescription: "Learn about the Nishad Aarakshan Sankalp campaign, its initiatives, community programs, news, videos, and the Sankalp Yatra for unity and empowerment.",
-      heroSlides: defaultHeroSlides,
-      initiatives: defaultInitiatives,
-      initiativesModalMap: {},
-      whyChoose: defaultWhyChoose,
-      notices: defaultNotices,
-      quickInfo: defaultQuickInfo,
-      galleryPhotos: defaultGalleryPhotos.slice(0, 10),
-      kalash: kalashFallback,
-      highlightVideo: kalashFallback?.hero?.featuredVideo || null,
-      latestVideos: (kalashFallback?.videos || []).slice(0, 10),
-      highlightNews: null,
-      homeNewsList: [],
-      homeAbout: HomeAbout.defaultData || {},
-      contactInfo: ContactInfo.defaultData || {},
+      heroSlides: [], initiatives: [], initiativesModalMap: {}, whyChoose: {}, notices: [],
+      quickInfo: {}, galleryPhotos: [], kalash: {}, highlightVideo: null, latestVideos: [],
+      highlightNews: null, homeNewsList: [], homeAbout: {}, contactInfo: {},
     });
   }
 };

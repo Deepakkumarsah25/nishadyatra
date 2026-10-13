@@ -29,7 +29,7 @@ const resolveImagePath = async (req, fieldName, fallback) => {
 // 1. Render About Manager View
 exports.getAboutManager = async (req, res) => {
   try {
-    const about = await AboutPage.getOrSeed();
+    const about = await AboutPage.findOne();
     const activeTab = req.query.tab || "meta";
 
     res.render("admin/about/index", {
@@ -50,7 +50,7 @@ exports.getAboutManager = async (req, res) => {
 // 2. Update Meta (Page Title & Subtitle only)
 exports.postUpdateMeta = async (req, res) => {
   try {
-    const doc = await AboutPage.getOrSeed();
+    const doc = await AboutPage.findOne() || await AboutPage.create({});
     const { pageTitle, pageSubtitle } = req.body;
 
     if (pageTitle) doc.meta.pageTitle = pageTitle.trim();
@@ -67,7 +67,7 @@ exports.postUpdateMeta = async (req, res) => {
 // 3. Update Point 1: Objective (अभियान का उद्देश्य)
 exports.postUpdateObjective = async (req, res) => {
   try {
-    const doc = await AboutPage.getOrSeed();
+    const doc = await AboutPage.findOne() || await AboutPage.create({});
     const { navTitle, title, description } = req.body;
 
     if (navTitle) doc.objective.navTitle = navTitle.trim();
@@ -103,7 +103,7 @@ exports.postUpdateObjective = async (req, res) => {
 // 4. Update Point 2: Mission (मिशन)
 exports.postUpdateMission = async (req, res) => {
   try {
-    const doc = await AboutPage.getOrSeed();
+    const doc = await AboutPage.findOne() || await AboutPage.create({});
     const { navTitle, title, description } = req.body;
 
     if (navTitle) doc.mission.navTitle = navTitle.trim();
@@ -139,7 +139,7 @@ exports.postUpdateMission = async (req, res) => {
 // 5. Update Point 3: Vision (दृष्टिकोण - UI Displays Photo)
 exports.postUpdateVision = async (req, res) => {
   try {
-    const doc = await AboutPage.getOrSeed();
+    const doc = await AboutPage.findOne() || await AboutPage.create({});
     const { navTitle, title, description, image } = req.body;
 
     if (navTitle) doc.vision.navTitle = navTitle.trim();
@@ -183,7 +183,7 @@ exports.postUpdateVision = async (req, res) => {
 // 6. Update Point 4: Background (अभियान की पृष्ठभूमि)
 exports.postUpdateBackground = async (req, res) => {
   try {
-    const doc = await AboutPage.getOrSeed();
+    const doc = await AboutPage.findOne() || await AboutPage.create({});
     const { navTitle, title, description } = req.body;
 
     if (navTitle) doc.background.navTitle = navTitle.trim();
@@ -221,7 +221,7 @@ exports.postUpdateBackground = async (req, res) => {
 // 7. Update Point 5: Reservation (आरक्षण संकल्प अभियान)
 exports.postUpdateReservation = async (req, res) => {
   try {
-    const doc = await AboutPage.getOrSeed();
+    const doc = await AboutPage.findOne() || await AboutPage.create({});
     const { navTitle, title, description } = req.body;
 
     if (navTitle) doc.reservation.navTitle = navTitle.trim();
@@ -259,7 +259,7 @@ exports.postUpdateReservation = async (req, res) => {
 // 8. Update Point 6: Activities (प्रमुख गतिविधियां - UI Displays Activity Photos)
 exports.postUpdateActivities = async (req, res) => {
   try {
-    const doc = await AboutPage.getOrSeed();
+    const doc = await AboutPage.findOne() || await AboutPage.create({});
     const uploadedUrls = await uploadAboutFiles(req.files);
     const { navTitle, title, description } = req.body;
 
@@ -348,7 +348,7 @@ exports.postUpdateActivities = async (req, res) => {
 // 9. Update Point 7: Messages (महत्वपूर्ण संदेश - UI Displays Author Photos)
 exports.postUpdateMessages = async (req, res) => {
   try {
-    const doc = await AboutPage.getOrSeed();
+    const doc = await AboutPage.findOne() || await AboutPage.create({});
     const uploadedUrls = await uploadAboutFiles(req.files);
     const { navTitle, title, description } = req.body;
 
@@ -402,7 +402,7 @@ exports.postUpdateMessages = async (req, res) => {
 // 10. Update Gallery Info / Settings
 exports.postUpdateGalleryInfo = async (req, res) => {
   try {
-    const doc = await AboutPage.getOrSeed();
+    const doc = await AboutPage.findOne() || await AboutPage.create({});
     const { galleryTitle, galleryTagline } = req.body;
 
     doc.gallery.title = galleryTitle || doc.gallery.title;
@@ -419,7 +419,7 @@ exports.postUpdateGalleryInfo = async (req, res) => {
 // 11. Add Photo to Gallery
 exports.postAddGalleryPhoto = async (req, res) => {
   try {
-    const doc = await AboutPage.getOrSeed();
+    const doc = await AboutPage.findOne() || await AboutPage.create({});
     const { title, caption, category, imageUrl } = req.body;
 
     const finalImage = await resolveImagePath(req, "photoFile", imageUrl);
@@ -448,7 +448,7 @@ exports.postAddGalleryPhoto = async (req, res) => {
 exports.postDeleteGalleryPhoto = async (req, res) => {
   try {
     const { photoId } = req.params;
-    const doc = await AboutPage.getOrSeed();
+    const doc = await AboutPage.findOne() || await AboutPage.create({});
 
     doc.gallery.photos = doc.gallery.photos.filter((p) => p._id.toString() !== photoId);
     await doc.save();

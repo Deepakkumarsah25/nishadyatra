@@ -4,42 +4,34 @@ const homeQuickInfoSchema = new mongoose.Schema(
   {
     sidebarTitle: {
       type: String,
-      default: "Nishad Sankalp Campaign",
       trim: true,
     },
     sidebarSubtitle: {
       type: String,
-      default: "Quick Service & Support Center",
       trim: true,
     },
     pledgeBoxTitle: {
       type: String,
-      default: "Join the Campaign by Taking a Pledge",
       trim: true,
     },
     pledgeBoxDesc: {
       type: String,
-      default: "Register your online pledge for the upliftment and empowerment of our community.",
       trim: true,
     },
     helplineText: {
       type: String,
-      default: "Helpline: +91 99553 09029",
       trim: true,
     },
     helplineTel: {
       type: String,
-      default: "+919955309029",
       trim: true,
     },
     email: {
       type: String,
-      default: "nishadaarakshansankalp@gmail.com",
       trim: true,
     },
     sidebarFooterText: {
       type: String,
-      default: "Public service is our true pledge",
       trim: true,
     },
   },

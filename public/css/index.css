@@ -195,7 +195,7 @@ body {
   position: relative;
   background: linear-gradient(135deg, #1f1212 0%, #3a1515 50%, #8c1a1a 100%);
   color: #ffffff;
-  padding: 86px max(24px, calc((100% - 1232px) / 2)) 48px;
+  padding: 56px max(24px, calc((100% - 1232px) / 2)) 48px;
   text-align: left;
   overflow: hidden;
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
@@ -304,6 +304,60 @@ body {
   }
   .gallery-stat-pill strong {
     font-size: 16px;
+  }
+}
+
+/* Shared banner size for interior pages; the homepage uses its own hero. */
+.gallery-hero {
+  min-height: 350px;
+}
+
+@media (max-width: 768px) {
+  .gallery-hero {
+    min-height: 280px;
+  }
+
+  .about-page-body .gallery-hero,
+  .contact-page-body .gallery-hero {
+    min-height: 320px;
+  }
+
+  .gallery-hero .gallery-stats-pills {
+    flex-wrap: nowrap;
+    gap: 6px;
+  }
+
+  .about-page-body .gallery-hero .gallery-stats-pills {
+    flex-wrap: wrap;
+  }
+
+  .about-page-body .gallery-hero .gallery-stat-pill {
+    flex: 1 1 calc(50% - 6px);
+  }
+
+  .contact-page-body .gallery-hero .gallery-stats-pills {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .contact-page-body .gallery-hero .gallery-stat-pill {
+    width: 100%;
+  }
+
+  .gallery-hero .gallery-stat-pill {
+    flex: 1 1 0;
+    justify-content: center;
+    min-width: 0;
+    gap: 4px;
+    padding: 6px 5px;
+    font-size: 11px;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .gallery-hero .gallery-stat-pill strong {
+    font-size: 14px;
+    overflow-wrap: anywhere;
   }
 }
 

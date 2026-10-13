@@ -1,5 +1,4 @@
 const HeroSlide = require("../../models/HeroSlide");
-const { defaultHeroSlides } = require("../../scripts/seedHomeData");
 const { getPagination } = require("../../utils/pagination");
 const { uploadBuffer, removeAsset } = require("../../config/cloudinary");
 
@@ -236,17 +235,6 @@ exports.toggleHeroSlideStatus = async (req, res) => {
   }
 };
 
-// Seed default slides if list is empty
 exports.restoreDefaultSlides = async (req, res) => {
-  try {
-    const count = await HeroSlide.countDocuments();
-    if (count === 0) {
-      await HeroSlide.insertMany(defaultHeroSlides);
-      return res.redirect("/admin/home/hero?msg=Default hero slides restored successfully");
-    }
-    res.redirect("/admin/home/hero?msg=Hero slides already exist");
-  } catch (error) {
-    console.error("Restore slides error:", error);
-    res.redirect("/admin/home/hero?err=Failed to restore default slides");
-  }
+  res.redirect("/admin/home/hero?msg=No default slides are configured");
 };

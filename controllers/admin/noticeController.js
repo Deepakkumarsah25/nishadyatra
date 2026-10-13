@@ -1,6 +1,5 @@
 const SiteNotice = require("../../models/SiteNotice");
 const HomeQuickInfo = require("../../models/HomeQuickInfo");
-const { defaultQuickInfo } = require("../../scripts/seedHomeData");
 const { getPagination } = require("../../utils/pagination");
 
 // View all notices and sidebar quick info
@@ -14,7 +13,7 @@ exports.getNotices = async (req, res) => {
       .limit(pagination.pageSize);
     let quickInfo = await HomeQuickInfo.findOne();
     if (!quickInfo) {
-      quickInfo = await HomeQuickInfo.create(defaultQuickInfo);
+      quickInfo = null;
     }
 
     res.render("admin/home/notices", {

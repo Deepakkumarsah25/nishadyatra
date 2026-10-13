@@ -13,6 +13,29 @@
     <meta property="og:type" content="article">
     <meta property="og:image" content="<%= item.thumbnailPath ? (/^https?:\/\//i.test(item.thumbnailPath) ? item.thumbnailPath : 'https://nishadaarakshansankalp.com' + item.thumbnailPath) : 'https://nishadaarakshansankalp.com/images/logo.png' %>">
     <link rel="stylesheet" href="/css/news/video_news.css">
+    <style>
+      .press-page { padding: 36px 18px 64px; background: linear-gradient(180deg, #f7f8fb 0, #fff 420px); }
+      .press-article { max-width: 900px; padding: clamp(22px, 5vw, 52px); background: #fff; border: 1px solid #e8ebf0; border-radius: 22px; box-shadow: 0 18px 55px rgba(24, 39, 75, .08); }
+      .press-article h1 { margin: 18px 0 14px; color: #182230; font-size: clamp(1.3rem, 2.6vw, 1.8rem); line-height: 1.4; letter-spacing: -.02em; }
+      .press-article .press-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
+      .press-article-meta-row { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+      .press-article-publisher { margin: 0; color: #667085; font-size: 13px; font-weight: 700; text-align: right; }
+      .press-article-publisher a { color: #111827; text-decoration: underline; text-underline-offset: 3px; }
+      .press-article-publisher a:hover { color: #000; }
+      .press-article-image { max-height: 480px; border-radius: 16px; }
+      .press-article-summary { margin: 22px 0; padding: 16px 20px; color: #344054; background: #f7f9fc; border-left: 4px solid #c63d32; border-radius: 0 12px 12px 0; }
+      .press-article-content { font-size: 16px; line-height: 2; }
+      .press-article-content strong { color: inherit; font-weight: 800; }
+      .press-article-source-link { margin-top: 2.25rem; padding: 18px 20px; background: #f5f8ff; border: 1px solid #e1eaff; border-radius: 14px; }
+      .press-article-source-link .press-source { margin: 0; color: #344054; font-weight: 700; }
+      .press-article-source-link a { color: #1769d2; overflow-wrap: anywhere; text-decoration: underline; text-underline-offset: 3px; }
+      @media (max-width: 600px) {
+        .press-page { width: 100%; max-width: none; padding: 14px 4px 32px; }
+        .press-article { width: 100%; max-width: none; padding: 20px 14px; border-radius: 12px; }
+        .press-article-content { font-size: 15px; }
+        .press-article-meta-row { align-items: flex-start; }
+      }
+    </style>
     <link
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
@@ -25,19 +48,23 @@
       <article class="press-article press-container">
         <a class="press-back" href="/news">← सभी खबरें</a>
 
-        <div class="press-meta">
-          <span class="press-category"><%= item.category %></span>
-          <time>
-            <%= new Date(item.publicationDate || item.publishedAt).toLocaleDateString('hi-IN', {
-              day: 'numeric',
-              month: 'long',
-              year: 'numeric'
-            }) %>
-          </time>
+        <div class="press-article-meta-row">
+          <div class="press-meta">
+            <span class="press-category"><%= item.category %></span>
+            <time>
+              <%= new Date(item.publicationDate || item.publishedAt).toLocaleDateString('hi-IN', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+              }) %>
+            </time>
+          </div>
+          <% if (item.source) { %>
+            <p class="press-article-publisher">Source: <% if (item.externalUrl) { %><a href="<%= item.externalUrl %>" target="_blank" rel="noopener noreferrer"><%= item.source %></a><% } else { %><%= item.source %><% } %></p>
+          <% } %>
         </div>
 
         <h1><%= item.title %></h1>
-        <p class="press-source">स्रोत: <strong><%= item.source %></strong></p>
 
         <% if (item.thumbnailPath) { %>
           <img
@@ -51,20 +78,14 @@
           <p class="press-article-summary"><%= item.summary %></p>
         <% } %>
 
-        <div class="press-article-content"><%= item.content %></div>
+        <div class="press-article-content"><%- String(item.content || '').split(/(\[\[(?:bold|highlight)\]\][\s\S]*?\[\[\/(?:bold|highlight)\]\])/g).map((part) => { const match = part.match(/^\[\[(?:bold|highlight)\]\]([\s\S]*?)\[\[\/(?:bold|highlight)\]\]$/); const safeText = (match ? match[1] : part).replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" })[char]); return match ? `<strong>${safeText}</strong>` : safeText; }).join('') %></div>
 
         <% if (item.externalUrl) { %>
-          <a
-            class="press-read"
-            href="<%= item.externalUrl %>"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            मूल प्रकाशन पर पढ़ें ↗
-          </a>
-          <a class="press-read" href="<%= item.externalUrl %>" target="_blank" rel="noopener noreferrer" style="display:block; margin-top:8px; overflow-wrap:anywhere;">
-            <%= item.source ? item.source + ' — ' : '' %><%= item.externalUrl %>
-          </a>
+          <div class="press-article-source-link">
+            <p class="press-source">Source: <a href="<%= item.externalUrl %>" target="_blank" rel="noopener noreferrer">
+              <%= item.externalUrl %>
+            </a></p>
+          </div>
         <% } %>
       </article>
     </main>

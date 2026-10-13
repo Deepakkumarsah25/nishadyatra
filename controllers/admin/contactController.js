@@ -22,7 +22,7 @@ exports.getContactManager = async (req, res) => {
     const search = typeof req.query.search === "string" ? req.query.search.trim().slice(0, 100) : "";
 
     // 1. Fetch Contact Info Configuration
-    const contact = await ContactInfo.getOrSeed();
+    const contact = await ContactInfo.findOne();
 
     // 2. Compute Message Statistics
     const [totalMessages, newMessages, contactedMessages, resolvedMessages] =
@@ -88,7 +88,7 @@ exports.getContactManager = async (req, res) => {
       admin: req.session.admin,
       currentPath: "/admin/contact",
       activeTab: "messages",
-      contact: ContactInfo.defaultData,
+      contact: {},
       messages: [],
       pagination: { page: 1, pageSize: 50, total: 0, totalPages: 1, skip: 0 },
       paginationPath: "/admin/contact",

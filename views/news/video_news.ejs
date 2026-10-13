@@ -97,9 +97,9 @@ const pageUrl = (number) => {
                 </p>
               <% } %>
             </div>
-            <h3><a class="press-title-link" href="<%= item.externalUrl || '/news/' + item._id %>" <%= item.externalUrl ? 'target="_blank" rel="noopener noreferrer"' : '' %>><%= item.title %></a></h3>
+            <h3><a class="press-title-link" href="<%= '/news/' + item._id %>"><%= item.title %></a></h3>
             <% if(item.summary){ %><p class="press-summary"><%= item.summary %></p><% } %>
-            <a class="press-read" href="<%= item.externalUrl || '/news/' + item._id %>" <%= item.externalUrl ? 'target="_blank" rel="noopener noreferrer"' : '' %>>पूरी खबर पढ़ें <span aria-hidden="true">↗</span></a>
+            <a class="press-read" href="<%= '/news/' + item._id %>">पूरी खबर पढ़ें <span aria-hidden="true">↗</span></a>
           </div>
         </article><% }) %>
       </div>
