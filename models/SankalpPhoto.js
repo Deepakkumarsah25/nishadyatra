@@ -6,8 +6,7 @@ const sankalpPhotoSchema = new mongoose.Schema(
       type: String,
       required: [true, "Name is required"],
       trim: true,
-      default: "Sanatani Nishad",
-    },
+          },
     district: {
       type: String,
       required: [true, "District is required"],
@@ -17,8 +16,7 @@ const sankalpPhotoSchema = new mongoose.Schema(
     state: {
       type: String,
       trim: true,
-      default: "Uttar Pradesh",
-      index: true,
+            index: true,
     },
     date: {
       type: Date,

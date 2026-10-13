@@ -7,10 +7,7 @@ const { uploadBuffer, removeAsset } = require("../../config/cloudinary");
 exports.getKalashYatraManager = async (req, res) => {
   try {
     let kalash = await KalashYatra.findOne().select("-videos");
-    if (!kalash) {
-      await KalashYatra.create(KalashYatra.defaultData);
-      kalash = await KalashYatra.findOne().select("-videos");
-    }
+    if (!kalash) kalash = await KalashYatra.create({});
     const activeTab = req.query.tab || "videos";
     const countRows = await KalashYatra.aggregate([
       { $project: { total: { $size: { $ifNull: ["$videos", []] } } } },
@@ -63,6 +60,7 @@ exports.getKalashYatraManager = async (req, res) => {
       paginationPath: "/admin/kalash-yatra",
       paginationQuery: { tab: "videos" },
       activeTab,
+      addVideoOpen: req.query.add === "1",
       recentLogs,
       lastTwoChanges,
       currentPath: "/admin/kalash-yatra",
@@ -78,7 +76,7 @@ exports.getKalashYatraManager = async (req, res) => {
 // 1. Update Hero Section
 exports.postUpdateHero = async (req, res) => {
   try {
-    const doc = await KalashYatra.getOrSeed();
+    const doc = await KalashYatra.findOne() || await KalashYatra.create({});
     const {
       liveBadgeText,
       headingMain,
@@ -149,7 +147,7 @@ exports.postUpdateHero = async (req, res) => {
 // 2. Update Milestones Showcase
 exports.postUpdateMilestones = async (req, res) => {
   try {
-    const doc = await KalashYatra.getOrSeed();
+    const doc = await KalashYatra.findOne() || await KalashYatra.create({});
     const { kicker, title, titleHighlight, subtitle, milestones } = req.body;
 
     doc.milestonesSection.kicker = kicker || doc.milestonesSection.kicker;
@@ -240,11 +238,10 @@ function resolveVideoThumbnail(thumbnail, videoUrl, fallback = "/images/kalash-y
 // 3. Add Video to Gallery
 exports.postAddVideo = async (req, res) => {
   try {
-    const doc = await KalashYatra.getOrSeed();
+    const doc = await KalashYatra.findOne() || await KalashYatra.create({});
     const {
       title,
       videoUrl,
-      peopleCount,
       thumbnail,
       personOrPlace,
       category,
@@ -283,12 +280,10 @@ exports.postAddVideo = async (req, res) => {
 
     if (!title || !finalVideoUrl) {
       return res.redirect(
-        "/admin/kalash-yatra?tab=videos&err=" +
+        "/admin/kalash-yatra?tab=videos&add=1&err=" +
           encodeURIComponent("वीडियो शीर्षक और URL या वीडियो फ़ाइल आवश्यक है।")
       );
     }
-
-    const formattedPeopleCount = peopleCount && peopleCount.trim() ? peopleCount.trim() : "5,000+ लोग";
 
     const isHighlighted =
       req.body.isHighlighted === "on" ||
@@ -314,8 +309,7 @@ exports.postAddVideo = async (req, res) => {
       videoPublicId: uploadedVideo?.public_id || "",
       thumbnail: finalThumbnail,
       thumbnailPublicId: uploadedThumbnail?.public_id || "",
-      peopleCount: formattedPeopleCount,
-      personOrPlace: personOrPlace ? personOrPlace.trim() : formattedPeopleCount,
+      personOrPlace: personOrPlace ? personOrPlace.trim() : "",
       category: category || "yatra",
       state: state || "bihar",
       district: district ? district.trim() : "गोपालगंज",
@@ -334,13 +328,13 @@ exports.postAddVideo = async (req, res) => {
       req,
       section: "वीडियो गैलरी (Videos)",
       action: isHighlighted ? "नया वीडियो जोड़ा गया और होम पेज पर हाइलाइट किया गया" : "नया वीडियो जोड़ा गया",
-      details: `शीर्षक: "${title.trim()}", उपस्थित सदस्य: "${formattedPeopleCount}", ज़िला: "${district || 'गोपालगंज'}"${isHighlighted ? ' [होम पेज मुख्य वीडियो]' : ''}`,
+      details: `शीर्षक: "${title.trim()}", ज़िला: "${district || 'गोपालगंज'}"${isHighlighted ? ' [होम पेज मुख्य वीडियो]' : ''}`,
     });
 
     res.redirect("/admin/kalash-yatra?tab=videos&msg=" + encodeURIComponent("नया वीडियो सफलतापूर्वक जोड़ दिया गया।"));
   } catch (error) {
     console.error("Add Video error:", error);
-    res.redirect("/admin/kalash-yatra?tab=videos&err=" + encodeURIComponent(error.message));
+    res.redirect("/admin/kalash-yatra?tab=videos&add=1&err=" + encodeURIComponent(error.message));
   }
 };
 
@@ -348,7 +342,7 @@ exports.postAddVideo = async (req, res) => {
 exports.postUpdateVideo = async (req, res) => {
   try {
     const { videoId } = req.params;
-    const doc = await KalashYatra.getOrSeed();
+    const doc = await KalashYatra.findOne() || await KalashYatra.create({});
     const video = doc.videos.id(videoId);
 
     if (!video) {
@@ -358,7 +352,6 @@ exports.postUpdateVideo = async (req, res) => {
     const {
       title,
       videoUrl,
-      peopleCount,
       thumbnail,
       personOrPlace,
       category,
@@ -406,9 +399,6 @@ exports.postUpdateVideo = async (req, res) => {
       }
     }
 
-    if (typeof peopleCount !== "undefined") {
-      video.peopleCount = peopleCount.trim();
-    }
     if (typeof personOrPlace !== "undefined") {
       video.personOrPlace = personOrPlace.trim();
     }
@@ -456,7 +446,7 @@ exports.postUpdateVideo = async (req, res) => {
       req,
       section: "वीडियो गैलरी (Videos)",
       action: "वीडियो विवरण संपादित किया गया (Edited)",
-      details: `शीर्षक: "${video.title}", उपस्थित सदस्य: "${video.peopleCount || '—'}", ज़िला: "${video.district || '—'}"${video.isHighlighted ? ' [होम पेज मुख्य वीडियो]' : ''}`,
+      details: `शीर्षक: "${video.title}", ज़िला: "${video.district || '—'}"${video.isHighlighted ? ' [होम पेज मुख्य वीडियो]' : ''}`,
     });
 
     res.redirect("/admin/kalash-yatra?tab=videos&msg=" + encodeURIComponent("वीडियो सफलतापूर्वक अपडेट किया गया।"));
@@ -470,7 +460,7 @@ exports.postUpdateVideo = async (req, res) => {
 exports.postHighlightVideo = async (req, res) => {
   try {
     const { videoId } = req.params;
-    const doc = await KalashYatra.getOrSeed();
+    const doc = await KalashYatra.findOne() || await KalashYatra.create({});
     const video = doc.videos.id(videoId);
 
     if (!video) {
@@ -519,7 +509,7 @@ exports.postHighlightVideo = async (req, res) => {
 exports.postDeleteVideo = async (req, res) => {
   try {
     const { videoId } = req.params;
-    const doc = await KalashYatra.getOrSeed();
+    const doc = await KalashYatra.findOne() || await KalashYatra.create({});
 
     const video = doc.videos.id(videoId);
     const videoTitle = video ? video.title : videoId;
@@ -550,7 +540,7 @@ exports.postDeleteVideo = async (req, res) => {
 // 6. Update Pillars Section & Collage Photos
 exports.postUpdatePillars = async (req, res) => {
   try {
-    const doc = await KalashYatra.getOrSeed();
+    const doc = await KalashYatra.findOne() || await KalashYatra.create({});
     const {
       kicker,
       title,
@@ -648,7 +638,7 @@ exports.postUpdatePillars = async (req, res) => {
 // 7. Update Democratic Pledge (लोकतांत्रिक महा-संकल्प)
 exports.postUpdatePledge = async (req, res) => {
   try {
-    const doc = await KalashYatra.getOrSeed();
+    const doc = await KalashYatra.findOne() || await KalashYatra.create({});
     const {
       enabled,
       badge,

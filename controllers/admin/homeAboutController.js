@@ -4,7 +4,7 @@ const { uploadBuffer, removeAsset } = require("../../config/cloudinary");
 // Render Admin Home About Highlight Editor
 exports.getHomeAbout = async (req, res) => {
   try {
-    const homeAbout = await HomeAbout.getOrSeed();
+    const homeAbout = await HomeAbout.findOne();
 
     res.render("admin/home/about", {
       title: "Home About Highlight Section",
@@ -24,7 +24,7 @@ exports.getHomeAbout = async (req, res) => {
 exports.postUpdateHomeAbout = async (req, res) => {
   const uploadedAssets = [];
   try {
-    let doc = await HomeAbout.getOrSeed();
+    let doc = await HomeAbout.findOne();
 
     const {
       isActive,

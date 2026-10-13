@@ -30,8 +30,7 @@ const initiativeSchema = new mongoose.Schema(
     },
     btnText: {
       type: String,
-      default: "Support or Join",
-      trim: true,
+            trim: true,
     },
     modalTag: {
       type: String,
@@ -54,28 +53,23 @@ const initiativeSchema = new mongoose.Schema(
     },
     helplineText: {
       type: String,
-      default: "Helpline: +91 99999 99999",
-      trim: true,
+            trim: true,
     },
     helplineTel: {
       type: String,
-      default: "+919999999999",
-      trim: true,
+            trim: true,
     },
     formTitle: {
       type: String,
-      default: "Registration for Support & Assistance",
-      trim: true,
+            trim: true,
     },
     formSubmitText: {
       type: String,
-      default: "Send Support Request",
-      trim: true,
+            trim: true,
     },
     iconKey: {
       type: String,
-      default: "scale",
-      trim: true,
+            trim: true,
     },
     order: {
       type: Number,

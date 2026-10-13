@@ -1,12 +1,11 @@
 const WhyChoose = require("../../models/WhyChoose");
-const { defaultWhyChoose } = require("../../scripts/seedHomeData");
 
 // View and edit Why Choose Us section
 exports.getWhyChoose = async (req, res) => {
   try {
     let whyChoose = await WhyChoose.findOne();
     if (!whyChoose) {
-      whyChoose = await WhyChoose.create(defaultWhyChoose);
+      whyChoose = null;
     }
 
     res.render("admin/home/why-choose", {
@@ -75,7 +74,7 @@ exports.postAddPillar = async (req, res) => {
     const { title, description, iconKey, order } = req.body;
     let doc = await WhyChoose.findOne();
     if (!doc) {
-      doc = await WhyChoose.create(defaultWhyChoose);
+      doc = await WhyChoose.create({});
     }
 
     doc.pillars.push({

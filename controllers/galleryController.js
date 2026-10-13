@@ -1,6 +1,6 @@
 const SankalpPhoto = require("../models/SankalpPhoto");
 const HomeQuickInfo = require("../models/HomeQuickInfo");
-const { defaultGalleryPhotos, seedGalleryData } = require("../scripts/seedGalleryData");
+
 const { getPagination } = require("../utils/pagination");
 const { buildStateMongoQuery, buildDistrictMongoQuery } = require("../utils/indiaStatesDistricts");
 
@@ -48,21 +48,6 @@ exports.getGalleryPage = async (req, res) => {
       search || (state && state !== "all") || (district && district !== "all")
     );
 
-    // Seed defaults only for an unfiltered first visit, never for a no-match search.
-    if (total === 0) {
-      const totalInDb = await SankalpPhoto.countDocuments();
-      if (totalInDb === 0 && !hasActiveFilters) {
-        await seedGalleryData();
-        districtsWithCount = await SankalpPhoto.aggregate([
-          { $match: { isPublished: true } },
-          { $group: { _id: "$district", count: { $sum: 1 } } },
-          { $sort: { count: -1, _id: 1 } },
-          { $limit: 200 },
-        ]);
-        total = await SankalpPhoto.countDocuments(query);
-      }
-    }
-
     const totalPhotos = await SankalpPhoto.countDocuments({ isPublished: true });
     const pagination = getPagination(req.query.page, total, 24);
     const photos = await SankalpPhoto.find(query)
@@ -78,7 +63,7 @@ exports.getGalleryPage = async (req, res) => {
       search,
       pagination,
       districtsWithCount: districtsWithCount || [],
-      totalPhotos: totalPhotos || defaultGalleryPhotos.length,
+      totalPhotos,
       quickInfo: quickInfo || {},
     });
   } catch (error) {
@@ -89,14 +74,14 @@ exports.getGalleryPage = async (req, res) => {
     const hasActiveFilters = Boolean(search || (state && state !== "all") || (district && district !== "all"));
     res.render("gallery", {
       title: "फ़ोटो गैलरी",
-      photos: hasActiveFilters ? [] : defaultGalleryPhotos,
+      photos: [],
       selectedState: state,
       selectedDistrict: district,
       districtsWithCount: [],
-      totalPhotos: defaultGalleryPhotos.length,
+      totalPhotos: 0,
       quickInfo: {},
       search,
-      pagination: { page: 1, pageSize: 24, total: hasActiveFilters ? 0 : defaultGalleryPhotos.length, totalPages: hasActiveFilters ? 0 : 1 },
+      pagination: { page: 1, pageSize: 24, total: 0, totalPages: 0 },
     });
   }
 };

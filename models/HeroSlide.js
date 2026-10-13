@@ -4,27 +4,22 @@ const heroSlideSchema = new mongoose.Schema(
   {
     tag: {
       type: String,
-      default: "National & Social Service",
       trim: true,
     },
     badgeText: {
       type: String,
-      default: "Jai Nishadraj • Sacred Consciousness & Empowerment Pledge",
       trim: true,
     },
     headingPrefix: {
       type: String,
-      default: "Unity, Self-Respect and",
       trim: true,
     },
     highlightText: {
       type: String,
-      default: "a Brighter Future",
       trim: true,
     },
     headingSuffix: {
       type: String,
-      default: "A Resolute Step Ahead",
       trim: true,
     },
     description: {
@@ -44,12 +39,10 @@ const heroSlideSchema = new mongoose.Schema(
     },
     primaryBtnText: {
       type: String,
-      default: "Join Campaign",
       trim: true,
     },
     primaryBtnLink: {
       type: String,
-      default: "#quickActionSidebar",
       trim: true,
     },
     primaryBtnInitiative: {
@@ -59,12 +52,10 @@ const heroSlideSchema = new mongoose.Schema(
     },
     secondaryBtnText: {
       type: String,
-      default: "Our Key Initiatives",
       trim: true,
     },
     secondaryBtnLink: {
       type: String,
-      default: "#what-we-do",
       trim: true,
     },
     secondaryBtnInitiative: {

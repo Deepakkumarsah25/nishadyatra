@@ -508,8 +508,14 @@
                      TAB: VIDEO GALLERY (VIDEO MANAGEMENT)
                 ===================================================== -->
                 <% if (activeTab === 'videos' || !activeTab || activeTab !== 'history') { %>
+                          <div style="display:flex; justify-content:flex-end; margin: 0 0 16px;">
+                            <button type="button" id="toggleAddVideo" class="admin-btn admin-btn-primary" aria-expanded="<%= addVideoOpen ? 'true' : 'false' %>" aria-controls="addVideoPanel">
+                              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                              <span>Add New Video</span>
+                            </button>
+                          </div>
                           <!-- Add New Video Card -->
-                          <div class="admin-card" style="margin-bottom: 24px;">
+                          <div class="admin-card" id="addVideoPanel" style="margin-bottom: 24px; <%= addVideoOpen ? '' : 'display:none;' %>">
                             <div class="admin-card-header">
                               <h3>
                                 <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
@@ -519,6 +525,7 @@
                                 </svg>
                                 Add New Video
                               </h3>
+                              <button type="button" id="closeAddVideo" class="admin-btn" style="margin-left:auto;">Cancel</button>
                             </div>
 
                             <div class="admin-card-body">
@@ -528,12 +535,6 @@
                                     <label for="vid_title">Video Title (वीडियो शीर्षक) *</label>
                                     <input type="text" id="vid_title" name="title" class="form-control"
                                       placeholder="उदा. गोपालगंज में भव्य लोकतांत्रिक संकल्प महासम्मेलन" required />
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="vid_people">उपस्थित सदस्य / लोग संख्या (People / Member Count) *</label>
-                                    <input type="text" id="vid_people" name="peopleCount" class="form-control"
-                                      placeholder="उदा. 15,000+ लोग या 5,000" value="5,000+ लोग" required />
-                                    <span class="help-hint">👥 यह संख्या पब्लिक वीडियो कार्ड पर दिखाई देगी</span>
                                   </div>
                                 </div>
 
@@ -669,7 +670,6 @@
                                     <th style="width: 50px;">#</th>
                                     <th style="width: 100px;">थंबनेल</th>
                                     <th>शीर्षक व विवरण</th>
-                                    <th>उपस्थित सदस्य (Member Count)</th>
                                     <th>ज़िला व राज्य</th>
                                     <th>दिनांक</th>
                                     <th style="width: 130px; text-align: center;">होम पेज हाइलाइट</th>
@@ -679,7 +679,7 @@
                                 <tbody>
                                     <% if (!videoPagination.total) { %>
                                     <tr>
-                                      <td colspan="8" style="text-align: center; color: var(--admin-text-muted); padding: 30px;">
+                                      <td colspan="7" style="text-align: center; color: var(--admin-text-muted); padding: 30px;">
                                         वर्तमान में कोई वीडियो उपलब्ध नहीं है। ऊपर दिए गए फॉर्म से वीडियो जोड़ें।
                                       </td>
                                         </td>
@@ -712,11 +712,6 @@
                       <small style="color: var(--admin-text-muted); font-size: 11px;"><%= vid.duration %> • <%= vid.category === 'yatra' ? 'संकल्प यात्रा' : vid.category %></small>
                     </td>
                     <td>
-                      <span style="font-weight: 700; color: #7f1d1d; background: #fff5f2; border: 1px solid #fed7aa; padding: 4px 8px; border-radius: 6px; font-size: 12px; display: inline-flex; align-items: center; gap: 4px;">
-                        👥 <%= vid.peopleCount || (vid.personOrPlace || '5,000+ लोग') %>
-                      </span>
-                    </td>
-                    <td>
                       <strong style="color: #b45309;"><%= vid.district %></strong>
                       <div style="color: var(--admin-text-muted); font-size: 11px; text-transform: capitalize;"><%= vid.state %></div>
                     </td>
@@ -744,7 +739,6 @@
                           data-id="<%= vid._id %>"
                           data-title="<%= vid.title %>"
                           data-videourl="<%= vid.videoUrl %>"
-                          data-people="<%= vid.peopleCount || '' %>"
                           data-thumbnail="<%= vid.thumbnail || '' %>"
                           data-category="<%= vid.category || 'yatra' %>"
                           data-state="<%= vid.state || 'bihar' %>"
@@ -896,11 +890,6 @@
                         <label for="edit_vid_title">Video Title (शीर्षक) *</label>
                         <input type="text" id="edit_vid_title" name="title" class="form-control" required />
                       </div>
-                      <div class="form-group">
-                        <label for="edit_vid_people">उपस्थित सदस्य / लोग संख्या (People / Member Count) *</label>
-                        <input type="text" id="edit_vid_people" name="peopleCount" class="form-control" placeholder="उदा. 15,000+ लोग" required />
-                        <span class="help-hint">👥 यह संख्या पब्लिक वीडियो कार्ड पर दिखाई देगी</span>
-                      </div>
                     </div>
 
                     <div class="form-grid-2" style="background: #fffbf9; border: 1.5px dashed #fbd5c6; border-radius: 10px; padding: 14px 16px; margin-bottom: 16px;">
@@ -1013,6 +1002,23 @@
             <!-- Client Script for Dynamic State to District and Pledge Presets -->
             <script>
               document.addEventListener("DOMContentLoaded", function () {
+                const addVideoPanel = document.getElementById("addVideoPanel");
+                const toggleAddVideo = document.getElementById("toggleAddVideo");
+                const closeAddVideo = document.getElementById("closeAddVideo");
+                const setAddVideoOpen = (open) => {
+                  if (!addVideoPanel || !toggleAddVideo) return;
+                  addVideoPanel.style.display = open ? "block" : "none";
+                  toggleAddVideo.setAttribute("aria-expanded", String(open));
+                  if (open) {
+                    addVideoPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+                    document.getElementById("vid_title")?.focus({ preventScroll: true });
+                  }
+                };
+                toggleAddVideo?.addEventListener("click", () => {
+                  setAddVideoOpen(addVideoPanel?.style.display === "none");
+                });
+                closeAddVideo?.addEventListener("click", () => setAddVideoOpen(false));
+
                 // Complete District Mapping for 5 States
                 const stateDistricts = {
                   "bihar": [
@@ -1066,7 +1072,6 @@
                   editForm.action = "/admin/kalash-yatra/videos/update/" + data.id;
 
                   document.getElementById("edit_vid_title").value = data.title || "";
-                  document.getElementById("edit_vid_people").value = data.people || "5,000+ लोग";
                   document.getElementById("edit_vid_url").value = data.videourl || "";
                   document.getElementById("edit_vid_file").value = "";
                   document.getElementById("edit_vid_cat").value = data.category || "yatra";

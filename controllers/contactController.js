@@ -7,7 +7,7 @@ const { sendContactNotification } = require("../services/mailService");
  */
 exports.getContactPage = async (req, res) => {
   try {
-    const contact = await ContactInfo.getOrSeed();
+    const contact = await ContactInfo.findOne().lean();
 
     res.render("contact", {
       title: "संपर्क करें | निषाद संकल्प अभियान",
@@ -21,7 +21,7 @@ exports.getContactPage = async (req, res) => {
     res.status(500).render("contact", {
       title: "संपर्क करें | निषाद संकल्प अभियान",
       currentUrl: "/contact",
-      contact: ContactInfo.defaultData,
+      contact: {},
       message: null,
       error: "पेज लोड करने में अस्थायी समस्या आई। कृपया पुनः प्रयास करें।",
     });

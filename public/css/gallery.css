@@ -33,7 +33,7 @@
   position: relative;
   background: linear-gradient(135deg, #1f1212 0%, #3a1515 50%, #8c1a1a 100%);
   color: #ffffff;
-  padding: 86px max(24px, calc((100% - 1232px) / 2)) 48px;
+  padding: 56px max(24px, calc((100% - 1232px) / 2)) 48px;
   text-align: left;
   overflow: hidden;
 }

@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const crypto = require("crypto");
 const VideoNews = require("../../models/news/VideoNews");
 const NewsPageSetting = require("../../models/news/NewsPageSetting");
 const { uploadBuffer, removeImage } = require("../../config/cloudinary");
@@ -195,6 +196,7 @@ exports.create = async (req, res, next) => {
   const file = req.file;
   let existing;
   let uploaded;
+  let saved = false;
 
   try {
     existing = req.params.id ? await VideoNews.findById(req.params.id) : null;
@@ -231,11 +233,24 @@ exports.create = async (req, res, next) => {
     const externalUrl = safeExternalUrl(req.body.externalUrl);
     const hostedThumbnail = safeImageUrl(req.body.thumbnailUrl);
     const publishNow = req.body.action === "publish";
+    if (req.body.thumbnailUploadSelected === "true" && !file) {
+      throw new Error("The selected image did not reach the server. Please choose it again and save.");
+    }
     uploaded = file
-      ? await uploadBuffer(file.buffer, "nishad-yatra/news/articles")
+      ? await uploadBuffer(file.buffer, "nishad-yatra/news/articles", {
+          resource_type: "image",
+          public_id: `news-article-${crypto.randomUUID()}`,
+          overwrite: false,
+        })
       : null;
+    if (file && (!uploaded?.secure_url || !uploaded?.public_id)) {
+      throw new Error("Cloudinary did not return a saved image URL. Please try uploading again.");
+    }
     const doc = existing || new VideoNews();
     const previousThumbnail = existing?.thumbnailPath;
+    const thumbnailChanged = Boolean(
+      uploaded || (hostedThumbnail && hostedThumbnail !== existing?.thumbnailPath),
+    );
 
     const isHighlighted =
       req.body.isHighlighted === "on" ||
@@ -253,8 +268,12 @@ exports.create = async (req, res, next) => {
       publicationDate,
       externalUrl,
       featured: req.body.featured === "on",
-      thumbnailPath: hostedThumbnail || uploaded?.secure_url || existing?.thumbnailPath || "",
-      thumbnailPublicId: uploaded?.public_id || (hostedThumbnail ? "" : existing?.thumbnailPublicId || ""),
+      thumbnailPath: uploaded?.secure_url || hostedThumbnail || existing?.thumbnailPath || "",
+      thumbnailPublicId:
+        uploaded?.public_id ||
+        (hostedThumbnail && hostedThumbnail !== existing?.thumbnailPath
+          ? ""
+          : existing?.thumbnailPublicId || ""),
       published: publishNow,
       publishedAt: publishNow ? existing?.publishedAt || new Date() : null,
       author: req.session.admin.name,
@@ -265,14 +284,22 @@ exports.create = async (req, res, next) => {
     });
 
     await doc.save();
-    if (existing?.thumbnailPublicId && (uploaded || hostedThumbnail)) {
-      await removeImage(existing.thumbnailPublicId);
+    saved = true;
+    const replacementPublicId = uploaded?.public_id;
+    if (
+      existing?.thumbnailPublicId &&
+      thumbnailChanged &&
+      existing.thumbnailPublicId !== replacementPublicId
+    ) {
+      await removeImage(existing.thumbnailPublicId).catch((cleanupError) => {
+        console.error("Could not remove replaced news thumbnail:", cleanupError.message);
+      });
     }
     if ((file || hostedThumbnail) && previousThumbnail) removeUpload(previousThumbnail);
 
     res.redirect("/admin/video_news?saved=1");
   } catch (error) {
-    if (uploaded?.public_id) await removeImage(uploaded.public_id).catch(() => {});
+    if (!saved && uploaded?.public_id) await removeImage(uploaded.public_id).catch(() => {});
 
     const validationMessages = [
       "Headline, source name and full article are required.",
@@ -282,6 +309,8 @@ exports.create = async (req, res, next) => {
       "External news links must use HTTP or HTTPS.",
       "Enter a valid hosted image URL.",
       "Hosted image URLs must use HTTP or HTTPS.",
+      "The selected image did not reach the server. Please choose it again and save.",
+      "Cloudinary did not return a saved image URL. Please try uploading again.",
     ];
 
     if (
