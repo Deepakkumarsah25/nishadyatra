@@ -3198,25 +3198,12 @@
     <!-- HERO BANNER (SAME AS GALLERY HERO) -->
     <section class="gallery-hero">
       <h1>
-        <span><%= (typeof kalash !== 'undefined' && kalash.hero && kalash.hero.title) ? kalash.hero.title : 'वीडियो संकलन' %></span>
+        <span><%= (typeof kalash !== 'undefined' && kalash.hero && kalash.hero.title) ? kalash.hero.title : 'निषाद आरक्षण संकल्प वीडियो' %></span>
       </h1>
       <p>
-        <%= (typeof kalash !== 'undefined' && kalash.hero && kalash.hero.description) ? kalash.hero.description : 'लोकतांत्रिक महा-संकल्प यात्रा और निषाद संकल्प अभियान के प्रेरणादायी वीडियो।' %>
+        <%= (typeof kalash !== 'undefined' && kalash.hero && kalash.hero.description) ? kalash.hero.description : 'निषाद आरक्षण संकल्प अभियान के अंतर्गत गाँव, पंचायत, ब्लॉक और जनपदों से प्राप्त संकल्प वीडियो देखें, जो निषाद समाज की एकजुटता, जनभागीदारी और आरक्षण की मांग को दर्शाता है।' %>
       </p>
-      <div class="gallery-stats-pills">
-        <div class="gallery-stat-pill">
-          <span>कुल वीडियो:</span>
-          <strong><%= (typeof videoPagination !== 'undefined' && videoPagination.total) ? videoPagination.total : ((typeof kalash !== 'undefined' && kalash.videos) ? kalash.videos.length : '100+') %></strong>
-        </div>
-        <div class="gallery-stat-pill">
-          <span>शामिल राज्य:</span>
-          <strong><%= (typeof videoLocations !== 'undefined' && videoLocations.length) ? [...new Set(videoLocations.map(l => l._id?.state).filter(Boolean))].length : '3+' %>+</strong>
-        </div>
-        <div class="gallery-stat-pill">
-          <span>शामिल ज़िले:</span>
-          <strong><%= (typeof videoLocations !== 'undefined' && videoLocations.length) ? videoLocations.length : '50+' %>+</strong>
-        </div>
-      </div>
+      
     </section>
 
     <!-- ===================================================
@@ -3248,7 +3235,7 @@
             stateLabel: "सभी राज्य",
             districtLabel: "सभी ज़िले"
           }) %>
-          <span class="video-filter-count"><span id="resultCount" aria-live="polite"><%= videoPagination.total %></span> वीडियो</span>
+          
         </div>
         </form>
         <span id="districtLabel" hidden>ज़िला चुनें</span>

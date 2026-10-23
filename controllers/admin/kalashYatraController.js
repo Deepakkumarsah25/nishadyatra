@@ -2,6 +2,14 @@ const AdminActivityLog = require("../../models/admin/AdminActivityLog");
 const KalashYatra = require("../../models/KalashYatra");
 const { getPagination } = require("../../utils/pagination");
 const { uploadBuffer, removeAsset } = require("../../config/cloudinary");
+const { DISTRICT_ALIASES } = require("../../utils/indiaStatesDistricts");
+
+const districtEnglishNames = Object.fromEntries(
+  Object.entries(DISTRICT_ALIASES).map(([district, aliases]) => [
+    district,
+    aliases.find((alias) => /^[A-Za-z]/.test(alias)) || district,
+  ])
+);
 
 // View Kalash Yatra Manager
 exports.getKalashYatraManager = async (req, res) => {
@@ -63,6 +71,7 @@ exports.getKalashYatraManager = async (req, res) => {
       addVideoOpen: req.query.add === "1",
       recentLogs,
       lastTwoChanges,
+      districtEnglishNames,
       currentPath: "/admin/kalash-yatra",
       message: req.query.msg || null,
       error: req.query.err || null,
