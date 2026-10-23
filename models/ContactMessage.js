@@ -16,15 +16,15 @@ const contactMessageSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      required: [true, "Email is required"],
+      default: "",
       trim: true,
       lowercase: true,
       maxlength: 120,
     },
     district: {
       type: String,
+      required: [true, "District is required"],
       trim: true,
-      default: "",
       maxlength: 100,
     },
     message: {
