@@ -3510,15 +3510,9 @@
         scheduleVideoFilter(0);
       });
       if (districtFilter) districtFilter.addEventListener("change", () => scheduleVideoFilter(0));
-      videoPaginationHost.addEventListener("click", (event) => {
-        const link = event.target.closest(".gallery-pagination-container a");
-        if (!link) return;
-        const target = new URL(link.href, window.location.origin);
-        if (target.origin !== window.location.origin) return;
-        event.preventDefault();
-        clearTimeout(videoFilterTimer);
-        loadVideoResults(target, "push");
-      });
+      // Let pagination anchors navigate normally. Their href already carries
+      // the active filters, and a full request avoids clicks silently failing
+      // when the AJAX request is interrupted or rejected by the server.
       window.addEventListener("popstate", () => {
         clearTimeout(videoFilterTimer);
         const params = new URLSearchParams(window.location.search);
