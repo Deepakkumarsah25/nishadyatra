@@ -1001,24 +1001,30 @@
   .gallery-search input { font-size: 15px; }
 
   .gallery-filters {
-    display: flex;
-    justify-content: flex-start;
-    width: fit-content;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    justify-content: stretch;
+    width: 100%;
     max-width: 100%;
     margin-bottom: 12px;
+    gap: 8px;
   }
 
-  .gallery-select-label,
-  .gallery-select-label select {
-    width: auto;
-    max-width: 100%;
-  }
-
-  .gallery-select-label select {
+  .gallery-select-label {
+    display: block;
     min-width: 0;
+    width: 100%;
+  }
+
+  .gallery-select-label select {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
     height: 40px;
-    padding: 0 32px 0 12px;
-    font-size: 14px;
+    padding: 0 26px 0 9px;
+    font-size: 13px;
+    text-overflow: ellipsis;
   }
 
   .gallery-grid {

@@ -57,13 +57,22 @@ exports.submitContactForm = async (req, res) => {
 
     // 3. Validation: Email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email || !emailRegex.test(email.trim())) {
+    const normalizedEmail = typeof email === "string" ? email.trim().toLowerCase() : "";
+    if (normalizedEmail && !emailRegex.test(normalizedEmail)) {
       const errMsg = "कृपया एक वैध ईमेल आईडी दर्ज करें।";
       if (isAjax) return res.status(400).json({ success: false, message: errMsg });
       return res.redirect(`/contact?err=${encodeURIComponent(errMsg)}`);
     }
 
-    // 4. Validation: Message
+    // 4. Validation: District
+    const normalizedDistrict = typeof district === "string" ? district.trim() : "";
+    if (!normalizedDistrict) {
+      const errMsg = "District is required.";
+      if (isAjax) return res.status(400).json({ success: false, message: errMsg });
+      return res.redirect(`/contact?err=${encodeURIComponent(errMsg)}`);
+    }
+
+    // 5. Validation: Message
     if (!message || message.trim().length < 5) {
       const errMsg = "कृपया अपना संदेश विस्तार से लिखें (कम से कम 5 अक्षर)।";
       if (isAjax) return res.status(400).json({ success: false, message: errMsg });
@@ -81,8 +90,8 @@ exports.submitContactForm = async (req, res) => {
     const newMessage = await ContactMessage.create({
       name: name.trim(),
       phone: cleanedPhone,
-      email: email.trim().toLowerCase(),
-      district: (district || "").trim(),
+      email: normalizedEmail,
+      district: normalizedDistrict,
       message: message.trim(),
       status: "new",
       ipAddress,

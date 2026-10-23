@@ -19,7 +19,7 @@
         </h2>
 
         <p class="pledge-info-desc">
-          निषाद समाज के संवैधानिक अधिकार, आरक्षण, शिक्षा, स्वाभिमान और सामाजिक न्याय के इस ऐतिहासिक महा-अभियान में अपनी सहभागिता सुनिश्चित करें। आपका एक कदम समाज को नई ऊर्जा और शक्ति प्रदान करेगा।
+         निषाद समाज के संवैधानिक अधिकारों, अनुसूचित जाति (SC) आरक्षण की मांग, शिक्षा, स्वाभिमान और सामाजिक न्याय के लिए अपनी सहभागिता दर्ज करें। एकजुट होकर अपनी आवाज़ मजबूत बनाएँ।
         </p>
 
         <div class="pledge-trust-list">
@@ -28,8 +28,8 @@
               <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
             </div>
             <div>
-              <h4>निःशुल्क व सीधा संकल्प</h4>
-              <p>फॉर्म भरकर बिना किसी शुल्क के अभियान के सक्रिय सदस्य बनें।</p>
+              <h4>निःशुल्क संकल्प पंजीकरण</h4>
+              <p>बिना किसी शुल्क के अभियान से जुड़ें और अपनी सहभागिता दर्ज करें।</p>
             </div>
           </div>
 
@@ -38,8 +38,8 @@
               <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             </div>
             <div>
-              <h4>एकजुटता और सामाजिक शक्ति</h4>
-              <p>लाखों लोगों के साथ मिलकर समाज की आवाज़ को राष्ट्रीय स्तर पर बुलंद करें।</p>
+              <h4>एकजुटता और सामाजिक जागरूकता</h4>
+              <p>समाज के संवैधानिक अधिकारों और सामाजिक न्याय की मांग के प्रति जागरूकता बढ़ाएँ।</p>
             </div>
           </div>
 
@@ -48,8 +48,8 @@
               <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
             </div>
             <div>
-              <h4>सीधा संपर्क व हेल्पलाइन</h4>
-              <p>किसी भी सहयोग व जानकारी हेतु सीधे कॉल करें: <strong>+91 99553 09029</strong></p>
+              <h4>सीधा संपर्क एवं सहायता</h4>
+              <p>किसी भी सहायता या जानकारी के लिए संपर्क करें:<strong>+91 99553 09029</strong></p>
             </div>
           </div>
         </div>
@@ -62,14 +62,13 @@
             <div class="pledge-badge-row">
               <img src="/images/mainlogo.png" alt="लोगो" class="pledge-badge-logo" onerror="this.src='/images/logo.png'" />
               <div>
-                <h3 class="pledge-form-title">ऑनलाइन संकल्प फॉर्म</h3>
-                <span class="pledge-form-subtitle">Quick Movement Action</span>
+                <h3 class="pledge-form-title">संदेश भेजें</h3>
               </div>
             </div>
-            <p class="pledge-form-note">कृपया अपना सही विवरण दर्ज करें ताकि टीम आपसे संपर्क कर सके।</p>
+            <p class="pledge-form-note">अभियान से जुड़ने, सुझाव देने या किसी भी सहयोग हेतु अपना संदेश यहाँ लिखें।</p>
           </div>
 
-          <form id="homeSectionPledgeForm" class="home-pledge-form" novalidate>
+          <form id="homeSectionPledgeForm" class="home-pledge-form" action="/contact/submit" method="POST" novalidate>
             <!-- 1. Full Name -->
             <div class="pledge-input-group">
               <label for="homePledgeName" class="pledge-label">
@@ -104,12 +103,17 @@
               />
             </div>
 
+            <div class="pledge-input-group">
+              <label for="homePledgeEmail" class="pledge-label">ईमेल पता (Email ID) (Optional)</label>
+              <input type="email" id="homePledgeEmail" name="email" class="pledge-control" placeholder="name@example.com" autocomplete="email" />
+            </div>
+
             <!-- 3. District / Region -->
             <div class="pledge-input-group">
               <label for="homePledgeDistrict" class="pledge-label">
-                ज़िला / क्षेत्र (District / Region)
+                जिला / क्षेत्र (District / City) <span class="req">*</span>
               </label>
-              <select id="homePledgeDistrict" name="district" class="pledge-control pledge-select-control">
+              <select id="homePledgeDistrict" name="district" class="pledge-control pledge-select-control" required>
                 <option value="Prayagraj">प्रयागराज (Prayagraj)</option>
                 <option value="Varanasi">वाराणसी (Varanasi)</option>
                 <option value="Gorakhpur">गोरखपुर (Gorakhpur)</option>
@@ -124,9 +128,14 @@
               </select>
             </div>
 
+            <div class="pledge-input-group">
+              <label for="homePledgeMessage" class="pledge-label">संदेश अथवा सुझाव (Your Message) <span class="req">*</span></label>
+              <textarea id="homePledgeMessage" name="message" class="pledge-control pledge-textarea" rows="4" placeholder="अपना संदेश यहाँ लिखें..." required></textarea>
+            </div>
+
             <!-- Submit Button -->
             <button type="submit" class="ny-btn ny-btn-primary pledge-submit-button" id="homePledgeSubmitBtn">
-              <span>संकल्प दर्ज करें (Submit Pledge)</span>
+              <span id="homePledgeSubmitText">संदेश भेजें (Submit)</span>
               <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" fill="none"/></svg>
             </button>
           </form>
@@ -159,6 +168,7 @@
     const successMsg = document.getElementById("homePledgeSuccessMsg");
     const errorMsg = document.getElementById("homePledgeErrorMsg");
     const errorText = document.getElementById("homePledgeErrorText");
+    const submitText = document.getElementById("homePledgeSubmitText");
 
     if (!form) return;
 
@@ -185,19 +195,33 @@
         return;
       }
 
+      const messageInput = document.getElementById("homePledgeMessage");
+      if (!districtVal) {
+        showError("कृपया अपना जिला दर्ज करें।");
+        if (districtInput) districtInput.focus();
+        return;
+      }
+      if (!messageInput || messageInput.value.trim().length < 5) {
+        showError("कृपया अपना संदेश कम से कम 5 अक्षरों में लिखें।");
+        if (messageInput) messageInput.focus();
+        return;
+      }
+
       // Disable button
       const origHtml = submitBtn.innerHTML;
       submitBtn.disabled = true;
-      submitBtn.innerHTML = "<span>दर्ज किया जा रहा है...</span>";
+      if (submitText) submitText.textContent = "भेजा जा रहा है...";
 
       try {
-        const response = await fetch("/api/submit-pledge", {
+        const response = await fetch(form.action, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             name: nameVal,
             phone: phoneVal,
-            district: districtVal
+            email: document.getElementById("homePledgeEmail").value.trim(),
+            district: districtVal,
+            message: messageInput.value.trim()
           })
         });
 
@@ -217,7 +241,7 @@
         showError("सर्वर से संपर्क नहीं हो सका। कृपया इंटरनेट जांचें और पुनः प्रयास करें।");
       } finally {
         submitBtn.disabled = false;
-        submitBtn.innerHTML = origHtml;
+        if (submitText) submitText.textContent = "संदेश भेजें (Submit)";
       }
     });
 
