@@ -41,19 +41,10 @@
       </h1>
 
       <p>
-        निषाद समाज के लोग आरक्षण का अधिकार पाने के संकल्प के साथ एकजुट होकर अपनी आवाज़ बुलंद कर रहे हैं।
+        निषाद आरक्षण संकल्प अभियान के अंतर्गत गाँव, पंचायत, ब्लॉक और जनपदों से प्राप्त तस्वीरें देखें, जो निषाद समाज की एकजुटता, जनभागीदारी और आरक्षण की मांग को दर्शाती हैं।
       </p>
 
-      <div class="gallery-stats-pills">
-        <div class="gallery-stat-pill">
-          <span>कुल संकल्प फ़ोटो:</span>
-          <strong><%= totalPhotos %></strong>
-        </div>
-        <div class="gallery-stat-pill">
-          <span>शामिल ज़िले:</span>
-          <strong><%= districtsWithCount && districtsWithCount.length ? districtsWithCount.length : 12 %>+</strong>
-        </div>
-      </div>
+
     </section>
 
     <!-- MAIN GALLERY CONTENT -->
@@ -148,23 +139,8 @@
                   <span><%= photo.name %></span>
                 </div>
 
-                <p class="gallery-card-caption">
-                  <%= photo.caption ? photo.caption : 'निषाद संकल्प अभियान के प्रति समर्पण में लिया गया संकल्प।' %>
-                </p>
 
-                <div class="gallery-card-footer">
-                  <span style="font-size: 13px; font-weight: 700; color: var(--gallery-text-muted);">
-                    <% if (cardImagesList.length > 1) { %>
-                      📸 <%= cardImagesList.length %> फ़ोटो एल्बम
-                    <% } else { %>
-                      अभियान के सदस्य
-                    <% } %>
-                  </span>
-                  <span class="card-action-link">
-                    <%= cardImagesList.length > 1 ? 'सभी फ़ोटो देखें' : 'फ़ोटो देखें' %>
-                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                  </span>
-                </div>
+
               </div>
             </article>
           <% }); %>
