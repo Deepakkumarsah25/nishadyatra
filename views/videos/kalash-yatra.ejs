@@ -3449,6 +3449,7 @@
       const videoFilterForm = document.getElementById("videoFilters");
       let videoFilterTimer;
       let activeVideoFilterRequest;
+      let previewObserver = null;
       const buildVideoFilterUrl = () => {
         const url = new URL(videoFilterForm.action, window.location.origin);
         const params = new URLSearchParams(new FormData(videoFilterForm));
@@ -3471,13 +3472,20 @@
           const nextGrid = nextDocument.getElementById("videoGrid");
           const nextPagination = nextDocument.getElementById("videoPaginationHost");
           const nextCount = nextDocument.getElementById("resultCount");
-          if (!nextGrid || !nextPagination || !nextCount) throw new Error("Video results were not found in the response.");
+          if (!nextGrid || !nextPagination) throw new Error("Video results were not found in the response.");
 
           videoGrid.innerHTML = nextGrid.innerHTML;
           videoPaginationHost.innerHTML = nextPagination.innerHTML;
           videoCards = Array.from(videoGrid.querySelectorAll(".video-card-item"));
           emptyState = videoGrid.querySelector("#emptyState");
-          resultCount.textContent = nextCount.textContent;
+          if (resultCount && nextCount) {
+            resultCount.textContent = nextCount.textContent;
+          }
+          if (previewObserver) {
+            videoCards.forEach((card) => {
+              if (card.querySelector('.card-video-preview')) previewObserver.observe(card);
+            });
+          }
           if (emptyState) emptyState.classList.toggle("show", videoCards.length === 0);
           videoGrid.setAttribute("aria-busy", "false");
           if (historyMode === "push") {
@@ -3491,6 +3499,7 @@
           if (error.name !== "AbortError") {
             videoGrid.setAttribute("aria-busy", "false");
             console.error(error);
+            window.location.assign(url.pathname + url.search);
           }
         }
       };
@@ -3510,6 +3519,17 @@
         scheduleVideoFilter(0);
       });
       if (districtFilter) districtFilter.addEventListener("change", () => scheduleVideoFilter(0));
+      if (videoPaginationHost) {
+        videoPaginationHost.addEventListener("click", (event) => {
+          const link = event.target.closest("a.btn-pagination-nav, a.pagination-number");
+          if (!link || !link.href) return;
+          const target = new URL(link.href, window.location.origin);
+          if (target.origin !== window.location.origin) return;
+          event.preventDefault();
+          clearTimeout(videoFilterTimer);
+          loadVideoResults(target, "push");
+        });
+      }
       // Let pagination anchors navigate normally. Their href already carries
       // the active filters, and a full request avoids clicks silently failing
       // when the AJAX request is interrupted or rejected by the server.
@@ -3625,7 +3645,7 @@
       }
 
       if ('IntersectionObserver' in window) {
-        const previewObserver = new IntersectionObserver((entries) => {
+        previewObserver = new IntersectionObserver((entries) => {
           entries.forEach((entry) => {
             if (!entry.isIntersecting) return;
             loadCardVideoPreview(entry.target);
